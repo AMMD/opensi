@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_compta_user_saisie_rechmodele"
+	onload="init()"
+	title="OpenSi - Recherche de modèle"
+	width="900"
+	height="400"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="rechModele.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+		<label class="label_16" id="titre" label="Recherche de modèle" />
+	</hbox>
+	<hbox style="height:20px" />
+	<hbox pack="center" flex="1" style="overflow: auto;">
+		<vbox flex="1">
+			<hbox flex="1">
+				<tree id="treeModele"
+						ref="http://www.opensi.org/compta/saisie"
+						hidecolumnpicker="true"
+						seltype="single"
+						datasources="rdf:null"
+						flex="1"
+						ondblclick="dblClickOnTreeModele()"
+						onselect="selectOnTreeModele()">
+					<treecols>
+						<treecol id="colTextRaccourci" label="Racc." flex="1" tooltiptext="Raccourci" /> 
+						<treecol id="colRaccourci" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="colLibelle" label="Libellé" flex="10" />
+						<treecol id="colModeleId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#textRaccourci" />
+									<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Raccourci" />
+									<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Libelle" />
+									<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Mod_Ecr_Id" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+				<groupbox flex="4">
+					<caption label="Aperçu du modèle" />
+					<vbox flex="1">
+						<hbox>
+							<grid>
+								<columns>
+									<column flex="1" />
+									<column flex="1" />
+								</columns>
+								<rows>
+							 		<row align="center">
+								 		<label class="label" value="Libellé : " />
+								 		<label id="libelleModele" value="" />
+								 	</row>
+								 	<row align="center">
+								 		<label class="label" value="Raccourci : " />
+								 		<label id="raccourciModele" value="" />
+								 	</row>
+								</rows>
+							</grid>
+						</hbox>
+						<hbox style="height:20px" />
+						
+				 		<hbox>
+				 			<label value="Modèle d'écriture :" />
+				 		</hbox>
+						<tree id="treeLigne"
+								flags="dont-build-content"
+								datasources="rdf:null" 
+								ref="http://www.opensi.org/compta/saisie"
+				 				flex="1"
+				 				hidecolumnpicker="true"
+								seltype="none">
+							<treecols>
+								<treecol id="colCompte" label="N° Compte" flex="1" />
+								<treecol id="colLibelle" label="Libellé" flex="1" />
+								<treecol id="colReglement" label="Règlement" flex="1" />
+								<treecol id="colInfos" label="Infos" flex="1" />
+								<treecol class="nombre" id="colDebit" label="Débit" flex="1" />
+								<treecol class="nombre" id="colCredit" label="Crédit" flex="1" />
+								<treecol id="colPiece" label="N° Pièce" flex="1" />
+								<treecol id="colCalcul" label="Type de calcul" flex="1" />
+							</treecols>
+							<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Compte" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Libelle" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Reglement" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Infos" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Debit" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Credit" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Piece" />
+										<treecell label="rdf:http://www.opensi.org/compta/saisie/rdf#Calcul" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+							</template>
+						</tree>
+						<hbox style="height:10px" />
+					</vbox>
+				</groupbox>
+			</hbox>
+			<hbox style="height:20px" />
+			<hbox pack="center">
+				<button class="bAnnuler" label="Annuler" oncommand="window.close()" />
+				<button class="bValider" label="Ok" oncommand="pressOnValider()" />
+			</hbox>
+			<hbox style="height:10px" />
+		</vbox>
+	</hbox>
+
+</window>

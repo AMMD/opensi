@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_majtarifs_majtarifs"
+	onload="init()"
+  flex="1"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="majtarifs.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bRetourMajTarifs" oncommand="retour_maj_tarifs();" collapsed="true"/>
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<deck id="deck" flex="1">
+		<vbox flex="1">
+			<box style="height:15px" />
+		  <hbox pack="center">
+		  	<label value="MISE A JOUR DES TARIFS" class="label_16" />
+		  </hbox>
+		  <box style="height:10px" />
+			<hbox>
+				<groupbox flex="1">
+					<caption label="Choix de l'opération"/>
+					<vbox>
+						<label value="Elément à modifier :"/>
+						<radiogroup id="rgp_element" oncommand="pressOnElement();">
+							<hbox>
+								<vbox>
+									<radio label="Prix de vente HT" value="0" />
+									<radio label="Coefficient de vente" value="2"/>
+									<radio label="Prix d'achat HT" value="4"/>
+								</vbox>
+								<vbox>
+									<radio label="Prix de vente TTC" value="1"/>
+									<radio label="Marge HT" value="3"/>
+								</vbox>
+							</hbox>
+						</radiogroup>
+					</vbox>
+					
+					<box style="height:10px" />
+					
+					<vbox id="box_tarifs" pack="center">
+						<label value="Tarifs à mettre à jour :"/>
+						<grid>
+							<columns>
+								<column />
+								<column />
+								<column />
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<hbox pack="center"><label value="" /></hbox>
+									<hbox pack="center" id="Col_Pourc_PV_0"><label value="%" /></hbox>
+									<hbox pack="center" id="Col_Eur_PV_0"><label id="lbl_unite_2" /></hbox>
+									<hbox pack="center" id="Col_Coeff_0" collapsed="true"><label value="Coeff" /></hbox>
+									<hbox pack="center" id="Col_Marge_0" collapsed="true"><label value="%" /></hbox>
+								</row>
+								<row align="center">
+									<label id="lblTarif1" />
+									<hbox id="Col_Pourc_PV_1"><textbox id="Pourc_PV_T1" size="8" maxlength="8" onkeypress="vider('Eur_PV_T1');" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_1"><textbox id="Eur_PV_T1" size="8" maxlength="19" onkeypress="vider('Pourc_PV_T1');" class="nombre" /></hbox>
+									<hbox id="Col_Coeff_1" collapsed="true"><textbox id="Coeff_T1" size="8" maxlength="17" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Marge_1" collapsed="true"><textbox id="Marge_T1" size="8" maxlength="5" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label id="lblTarif2" />
+									<hbox id="Col_Pourc_PV_2"><textbox id="Pourc_PV_T2" size="8" maxlength="8" onkeypress="vider('Eur_PV_T2');" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_2"><textbox id="Eur_PV_T2" size="8" maxlength="19" onkeypress="vider('Pourc_PV_T2');" class="nombre" /></hbox>
+									<hbox id="Col_Coeff_2" collapsed="true"><textbox id="Coeff_T2" size="8" maxlength="17" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Marge_2" collapsed="true"><textbox id="Marge_T2" size="8" maxlength="5" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label id="lblTarif3" />
+									<hbox id="Col_Pourc_PV_3"><textbox id="Pourc_PV_T3" size="8" maxlength="8" onkeypress="vider('Eur_PV_T3');" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_3"><textbox id="Eur_PV_T3" size="8" maxlength="19" onkeypress="vider('Pourc_PV_T3');" class="nombre" /></hbox>
+									<hbox id="Col_Coeff_3" collapsed="true"><textbox id="Coeff_T3" size="8" maxlength="17" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Marge_3" collapsed="true"><textbox id="Marge_T3" size="8" maxlength="5" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label id="lblTarif4" />
+									<hbox id="Col_Pourc_PV_4"><textbox id="Pourc_PV_T4" size="8" maxlength="8" onkeypress="vider('Eur_PV_T4');" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_4"><textbox id="Eur_PV_T4" size="8" maxlength="19" onkeypress="vider('Pourc_PV_T4');" class="nombre" /></hbox>
+									<hbox id="Col_Coeff_4" collapsed="true"><textbox id="Coeff_T4" size="8" maxlength="17" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Marge_4" collapsed="true"><textbox id="Marge_T4" size="8" maxlength="5" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label id="lblTarif5" />
+									<hbox id="Col_Pourc_PV_5"><textbox id="Pourc_PV_T5" size="8" maxlength="8" onkeypress="vider('Eur_PV_T5');" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_5"><textbox id="Eur_PV_T5" size="8" maxlength="19" onkeypress="vider('Pourc_PV_T5');" class="nombre" /></hbox>
+									<hbox id="Col_Coeff_5" collapsed="true"><textbox id="Coeff_T5" size="8" maxlength="17" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Marge_5" collapsed="true"><textbox id="Marge_T5" size="8" maxlength="5" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+								</row>
+								<row align="center" id="ligne_ts">
+									<label value="Tarifs Spéciaux" />
+									<hbox id="Col_Pourc_PV_6"><textbox id="Pourc_PV_TS" size="8" maxlength="8" onkeypress="desactiverValidation();" class="nombre" /></hbox>
+									<hbox id="Col_Eur_PV_6"><label value="" /></hbox>
+									<hbox id="Col_Coeff_6" collapsed="true"><label value="" /></hbox>
+									<hbox id="Col_Marge_6" collapsed="true"><label value="" /></hbox>
+								</row>
+							</rows>
+						</grid>
+						
+						<vbox id="aide_pv">
+							<label value="La valeur saisie sera ajoutée à la valeur actuelle."/>
+							<label value="Elle doit être préfixée par moins (-) lors d'une baisse."/>
+						</vbox>
+						<vbox id="aide_coeff" collapsed="true">
+							<label value="Le coefficient saisi remplacera l'ancien."/>
+						</vbox>
+						<vbox id="aide_marge" collapsed="true">
+							<label value="Le pourcentage de marge saisi remplacera l'ancien."/>
+						</vbox>
+					</vbox>
+					
+					<vbox id="calcul_pa" collapsed="true">
+						<label value="Mode de calcul : "/>
+						<radiogroup id="rgp_calcul" oncommand="pressOnCalcul()">
+							<vbox>
+								<grid>
+									<columns>
+										<column />
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<radio label="Pourcentage" value="0"/>
+											<textbox id="txt_pourcentage" size="4" maxlength="8" onkeypress="desactiverValidation();"/>
+											<label value="%"/>
+										</row>
+										<row align="center" id="montant">
+											<radio label="Montant" value="1"/>
+											<textbox id="txt_montant" size="4" maxlength="19" onkeypress="desactiverValidation();" disabled="true"/>
+											<label id="lbl_unite"/>
+										</row>
+									</rows>
+								</grid>
+								
+								<label value="La valeur saisie sera ajoutée à la valeur actuelle."/>
+								<label value="Elle doit être préfixée par moins (-) lors d'une baisse."/>
+							</vbox>
+						</radiogroup>
+					</vbox>
+				</groupbox>
+								
+				<groupbox flex="1">
+					<caption label="Etendue d'application"/>
+					<vbox>
+						<label value="Critère : "/>
+						<radiogroup id="rgp_critere" oncommand="pressOnCritere()">
+							<radio label="Tous les articles" value="0"/>
+							<hbox>
+								<radio label="Les articles dont la référence commence par" value="1"/>
+								<textbox id="txt_refArticle" maxlength="40" size="20" onkeypress="desactiverValidation();" disabled="true" />
+							</hbox>
+							<hbox align="top">
+								<radio label="Une famille ou sous-famille" value="2"/>
+								<vbox>
+									<hbox>
+										<menulist id="Famille_1" oncommand="pressOnFamille1();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px" disabled="true">
+										<menupopup>
+											<menuitem label="[Toutes les familles 1]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									</hbox>
+									<hbox>
+										<menulist id="Famille_2" oncommand="pressOnFamille2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px" disabled="true">
+											<menupopup>
+												<menuitem label="[Toutes les familles 2]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+									<hbox>
+										<menulist id="Famille_3" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px" disabled="true">
+											<menupopup>
+												<menuitem label="[Toutes les familles 3]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+									<hbox>
+										<checkbox id="chk_marque" label="de la marque" oncommand="checkMarque(this.checked);" disabled="true" />
+										<menulist id="liste_marques" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" oncommand="desactiverValidation();" disabled="true">
+											<menupopup>
+					    					<menuitem label="[Choisir une marque]" style="font-size:80%" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</vbox>
+							</hbox>
+							<hbox id="fournisseur" collapsed="true">
+								<radio label="Un fournisseur" value="3"/>
+								<menulist id="liste_fournisseurs" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_fournisseurs_tous_article" datasources="rdf:null" oncommand="desactiverValidation();" disabled="true">
+									<menupopup>
+			    					<menuitem label="[Choisir un fournisseur]" style="font-size:80%" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_tous_article/rdf#Denomination" value="rdf:http://www.opensi.org/facturation/liste_fournisseurs_tous_article/rdf#Fournisseur_Id" style="font-size:80%" />
+										</menupopup>
+									</template>
+								</menulist>
+							</hbox>
+						</radiogroup>
+					</vbox>
+					
+					<box style="height:10px" />
+					
+					<vbox id="options_achat" collapsed="true">
+						<checkbox id="chk_repercution" label="Répercuter la modification du prix d'achat sur le prix de vente HT" oncommand="checkRepercution(this.checked);" checked="true"/>
+						<radiogroup id="rgp_repercution">
+							<vbox>
+								<radio label="Recalculer le prix de vente en fonction du coefficient" value="0" />
+								<radio label="Recalculer le prix de vente en fonction de la marge HT" value="1"/>
+							</vbox>
+						</radiogroup>
+						<checkbox id="chk_spec" label="Appliquer les modifications aux tarifs spécifiques" oncommand="checkTarifSpecifique(this.checked);" />
+						<radiogroup id="rgp_repercution_spec">
+							<vbox>
+								<radio label="Recalculer le prix de vente en fonction du pourcentage du PV" value="0" />
+								<radio label="Recalculer le prix de vente en fonction de la marge HT" value="1"/>
+							</vbox>
+						</radiogroup>
+					</vbox>
+					
+					<box style="height:10px" />
+					
+					<vbox>
+						<hbox pack="center">
+							<button id="bCalculer" label="Calculer" oncommand="calculer();"/>
+							<button id="bEditerPdf" class="bPDF" label="Prévisualisation PDF" oncommand="editerPdf();" disabled="true"/>
+							<button id="bEditerCsv" class="bCSV" label="Prévisualisation CSV" oncommand="editerCsv();" disabled="true"/>
+						</hbox>
+					</vbox>
+				</groupbox>
+				
+				<vbox>
+					<groupbox flex="1">
+						<caption label="Suppression des tarifs spécifiques"/>
+						<vbox flex="1">
+							<hbox flex="1" />
+							<hbox pack="center">
+								<button id="bSupprTarifsSpec" label="Supprimer les tarifs spécifiques" oncommand="supprimerTarifsSpec()"/>
+							</hbox>
+							<hbox flex="1" />
+						</vbox>
+					</groupbox>
+					<groupbox flex="1">
+						<caption label="Validation de la mise à jour"/>
+						<vbox flex="1">
+							<hbox flex="1" />
+							<hbox pack="center">
+								<button id="bValider" label="Valider" oncommand="valider()" disabled="true"/>
+							</hbox>
+							<hbox flex="1" />
+						</vbox>
+					</groupbox>
+				</vbox>
+			</hbox>
+			
+			<hbox pack="center" id="pagination" collapsed="true">
+				<button class="bIcoRetour" style="margin-right:0px" id="bPrecTarifs" oncommand="pageTarifsPrec();" tooltiptext="Page précédente" />
+				<vbox pack="center">
+					<hbox>
+						<label value="Page" />
+						<label id="PageDebTarifs" />
+						<label value="/" />
+						<label id="PageFinTarifs" />
+					</hbox>
+				</vbox>
+				<button class="bIcoAvance" id="bSuivTarifs" oncommand="pageTarifsSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+			<hbox pack="center" flex="1">				
+				<tree id="tarifs"
+							flex="1"
+							seltype="single"
+							flags="dont-build-content"
+							ref="http://www.opensi.org/facturation/majtarifs"
+							datasources="rdf:null">
+					<treecols>
+						<treecol id="ColRefArticle" label="Réf. Article" flex="1" />
+						<splitter class="tree-splitter"/>
+						<treecol id="ColAncPrixAchat" label="Anc. Prix d'Achat" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvPrixAchat" label="Nv. Prix d'Achat" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncCoeff1" label="Anc. Coeff 1"	style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvCoeff1" label="Nv. Coeff 1" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncCoeff2" label="Anc. Coeff 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvCoeff2" label="Nv. Coeff 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncCoeff3" label="Anc. Coeff 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvCoeff3" label="Nv. Coeff 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncCoeff4" label="Anc. Coeff 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvCoeff4" label="Nv. Coeff 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncCoeff5" label="Anc. Coeff 5" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColNvCoeff5" label="Nv. Coeff 5" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVHT1" label="Anc. PV HT 1" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVHT1" label="Nv. PV HT 1" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVHT2" label="Anc. PV HT 2" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVHT2" label="Nv. PV HT 2" style="text-align:right"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVHT3" label="Anc. PV HT 3" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVHT3" label="Nv. PV HT 3" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVHT4" label="Anc. PV HT 4" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVHT4" label="Nv. PV HT 4" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVHT5" label="Anc. PV HT 5" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVHT5" label="Nv. PV HT 5" style="text-align:right" flex="1"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColTVA" label="% TVA" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVTTC1" label="Anc. PV TTC 1" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVTTC1" label="Nv. PV TTC 1" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColAncPVTTC2" label="Anc. PV TTC 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVTTC2" label="Nv. PV TTC 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVTTC3" label="Anc. PV TTC 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVTTC3" label="Nv. PV TTC 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVTTC4" label="Anc. PV TTC 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVTTC4" label="Nv. PV TTC 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncPVTTC5" label="Anc. PV TTC 5" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvPVTTC5" label="Nv. PV TTC 5" style="text-align:right" flex="1" hidden="true"/>
+		      	<splitter class="tree-splitter" />
+						<treecol id="ColAncMarge1" label="Anc. Marge 1" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvMarge1" label="Nv. Marge 1" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncMarge2" label="Anc. Marge 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvMarge2" label="Nv. Marge 2" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncMarge3" label="Anc. Marge 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvMarge3" label="Nv. Marge 3" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncMarge4" label="Anc. Marge 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvMarge4" label="Nv. Marge 4" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id="ColAncMarge5" label="Anc. Marge 5" style="text-align:right" flex="1" hidden="true"/>
+						<splitter class="tree-splitter" />
+		      	<treecol id="ColNvMarge5" label="Nv. Marge 5" style="text-align:right" flex="1" hidden="true"/>
+					</treecols>
+		    	<template>
+	        	<treechildren>
+	          	<treeitem uri="rdf:*">
+	            	<treerow>
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Ref_Article" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Prix_Achat" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Prix_Achat" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Coeff_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Coeff_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Coeff_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Coeff_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Coeff_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Coeff_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Coeff_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Coeff_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Coeff_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Coeff_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_HT_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_HT_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_HT_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_HT_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_HT_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_HT_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_HT_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_HT_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_HT_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_HT_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Taux_TVA" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_TTC_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_TTC_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_TTC_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_TTC_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_TTC_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_TTC_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_TTC_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_TTC_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_PV_TTC_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_PV_TTC_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Marge_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Marge_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Marge_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Marge_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Marge_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Marge_3" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Marge_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Marge_4" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Anc_Marge_5" />
+									<treecell label="rdf:http://www.opensi.org/facturation/majtarifs/rdf#Nv_Marge_5" />
+	            	</treerow>
+	          	</treeitem>
+	        	</treechildren>
+	      	</template>
+		  	</tree>
+		  </hbox>
+		</vbox>
+		
+		<vbox flex="1">
+			<iframe type="content" id="pdf" flex="1" />
+		</vbox>
+	</deck>
+</window>
+

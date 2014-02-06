@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_retoursFournisseurs_overlayEditionBonRetour"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-editionBonRetour.js" />
+
+	<vbox id="editionBonRetour" flex="1">
+		<deck id="oebr-deckBonRetour" selectedIndex="0" flex="1">
+			<vbox class="auto-overflow">
+				<hbox>
+					<tabbox flex="1" pack="center" id="oebr-tabBoxBon">
+						<tabs>
+							<tab label="Bon de retour" id="oebr-tabBon" />
+							<tab label="Versions" id="oebr-tabVersionDocument" />
+						</tabs>
+						<tabpanels flex="1">
+			    		<tabpanel pack="center" align="start" orient="horizontal">
+								<grid>
+					       	<columns>
+					        	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					       		<row align="center">
+					          	<label class="label" value="N° Bon de retour :" />
+					           	<label id="oebr-numero" />
+					         	</row>
+					          <row align="center">
+					          	<label class="label" value="N° Fournisseur :" />
+					           	<label id="oebr-numFournisseur" />
+					          </row>
+										<row align="center">
+					          	<label class="label" value="Date retour :" />
+					           	<label id="oebr-dateBon" />
+					          </row>
+										<row align="center">
+					          	<label class="label" value="Etat :" />
+					           	<label id="oebr-etat" />
+					          </row>
+					          <row align="center">
+					          	<label class="label" value="Date de réception :" />
+					          	<label id="oebr-dateRetour" />
+					          </row>
+					      	</rows>
+					     	</grid>
+							</tabpanel>
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<tree id="oebr-listeVersion"
+									hidecolumnpicker="true"
+					        seltype="single"
+					        ref="http://www.opensi.org/facturation/historiqueEditions"
+					        datasources="rdf:null"
+					        flex="1">
+							    <treecols>
+							      <treecol flex="1" label="N° Edition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Date d'édition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Login" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Envoyé à" />
+							    </treecols>
+							    <template>
+							      <treechildren>
+							        <treeitem uri="rdf:*">
+							          <treerow>
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+							          </treerow>
+							        </treeitem>
+							      </treechildren>
+							    </template>
+							  </tree>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+					
+					<groupbox flex="1" pack="center" align="start" orient="horizontal">
+      			<caption label="Fournisseur" />
+
+	 		      <grid>
+			        <columns>
+			        	<column />
+			         	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			         	<row align="center">
+			          	<label class="label" value="Raison sociale :" />						
+			    				<hbox align="center">
+			    					<vbox><textbox id="oebr-denomination" maxlength="50" size="40" oninput="oebr_setModifie(true);" /></vbox>
+			    					<button id="oebr-bRechFournisseur" collapsed="true" class="bIcoRechercher" tooltiptext="rechercher un fournisseur" oncommand="oebr_rechercherFournisseur();" flex="1" />
+			    				</hbox>
+			    				<label value="" />
+			         	</row>
+			         	<row align="center">
+			          	<label class="label" value="Adresse :" />
+			   				  <textbox id="oebr-adresse1" maxlength="80" size="30" oninput="oebr_setModifie(true);" />
+			   				  <hbox align="center">
+										<button id="oebr-bChercherAdresse" class="bIcoEnveloppe" tooltiptext="changer l'adresse de facturation" oncommand="oebr_rechercherAdr();" />
+									</hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			      			<hbox>
+										<textbox id="oebr-adresse2" maxlength="50" flex="1" oninput="oebr_setModifie(true);" />
+										<textbox id="oebr-adresse3" maxlength="50" flex="1" oninput="oebr_setModifie(true);" />
+									</hbox>
+									<label value="" />
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Code postal :" />
+									<hbox align="center">
+			      				<textbox id="oebr-codePostal" class="rv_cp" idville="oebr-ville" idnextfocus="oebr-codePays" maxlength="10" size="6" oninput="oebr_setModifie(true);" />
+			            	<label class="label" value="Ville :" />
+			            	<textbox id="oebr-ville" class="rv_ville" idcp="oebr-codePostal" idnextfocus="oebr-codePays" maxlength="50" size="30" oninput="oebr_setModifie(true);" />
+			          	</hbox>
+			          	<label value="" />
+			          </row>
+								<row align="center">
+			            <label class="label" value="Pays :" />
+			            <hbox>
+			            	<menulist id="oebr-codePays" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="oebr_setModifie(true);">
+										<template>
+			             		<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+			             		</menupopup>
+										</template>
+										</menulist>
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center">
+			            <label class="label" value="Contact :" />
+									<hbox>
+										<menulist id="oebr-civInter" oncommand="oebr_setModifie(true);">
+											<menupopup>
+			                  <menuitem label="" value="0" />
+												<menuitem label="M." value="1" />
+												<menuitem label="Mme" value="2" />
+												<menuitem label="Mlle" value="3" />
+											</menupopup>
+										</menulist>
+										<hbox align="center">
+			              	<textbox id="oebr-nomInter" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oebr_setModifie(true);" />
+											<textbox id="oebr-prenomInter" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oebr_setModifie(true);" />
+										</hbox>
+			            </hbox>
+			            <hbox align="center">
+										<button id="oebr-bChercherInter" class="bIcoContact" tooltiptext="changer de contact" oncommand="oebr_rechercherInterlocuteur();" />
+									</hbox>
+			          </row>
+							  <row align="center">
+			            <label class="label" value="Tél :" />
+									<hbox align="center">
+			              <textbox id="oebr-telInter" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oebr_setModifie(true);" />
+			             	<label class="label" value="Fax :" />
+			              <textbox id="oebr-faxInter" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oebr_setModifie(true);" />
+			            </hbox>
+			            <label value="" />
+			          </row>
+								<row align="center">
+					        <label class="label" value="Email :" />
+					        <textbox id="oebr-emailInter" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="oebr_setModifie(true);" />
+					        <label value="" />
+					      </row>
+					    </rows>
+					  </grid>
+					</groupbox>
+				</hbox>
+			
+				<hbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires" />
+			      <vbox pack="center">
+			      	<grid>
+				       	<columns>
+				        	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				       		<row align="center">
+				       			<label value="Commentaires de fin de bon de retour :" />
+				       			<label value="Commentaires non imprimables :" />
+				       		</row>
+				       		<row align="center">
+				       			<textbox id="oebr-commentairesFin" multiline="true" cols="35" rows="6" oninput="oebr_setModifie(true);" />
+				       			<textbox id="oebr-commentairesInt" multiline="true" cols="35" rows="6" oninput="oebr_setModifie(true);" />
+				       		</row>
+				       	</rows>
+				      </grid>
+				      <box style="height:5px" />
+							<hbox pack="center">
+								<button id="oebr-bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="oebr_editerCommentairesCaches();" />
+								<button id="oebr-bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="oebr_choisirMentions();" />
+							</hbox>
+							<box style="height:5px" />
+			      </vbox>
+					</groupbox>
+					
+					<groupbox align="center">
+						<caption label="Type de retour" />
+						
+						<radiogroup id="oebr-rgpTypeRetour" pack="center" flex="1">
+							<radio label="Echange de marchandises" value="E" />
+							<radio label="Reprise de marchandises" value="R" />
+						</radiogroup>
+					</groupbox>
+				</hbox>
+		
+				<deck flex="1" id="oebr-deckEdition">
+					<hbox flex="1">
+						<hbox flex="1" id="oebr-corpsTransfert">
+							<vbox flex="1">
+								<hbox align="center">
+									<label value="Référence :" />
+									<textbox id="oebr-refArticle" size="10" maxlength="40" onkeypress="oebr_pressOnRefArticle(event);" />
+									<vbox><button id="oebr-bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="oebr_rechercherStock();" style="margin-left:0px" /></vbox>
+									<vbox><button id="oebr-bActualiser" class="bIcoActualiser" tooltiptext="actualiser" oncommand="oebr_initListeBonsReceptions();" /></vbox>
+								</hbox>
+								<tree id="oebr-listeBRArticlesFourn"
+				        			flex="1"
+				              style="min-height: 150px;"
+											flags="dont-build-content"
+											onselect="oebr_reporterQteEntree();oebr_disableAjouter(false,true);oebr_disableEnlever(true,false);"
+				        			seltype="single"
+				        			ref="http://www.opensi.org/facturation/articles_bon"
+				        			datasources="rdf:null">
+				    			<treecols>
+				    				<treecol label="N° BR" flex="1" />
+										<splitter class="tree-splitter" />
+										<treecol label="N° Commande" flex="1" />
+										<splitter class="tree-splitter" />
+				      			<treecol label="Référence" flex="1" />
+										<splitter class="tree-splitter" />
+				      			<treecol label="Désignation" flex="3" />
+										<splitter class="tree-splitter" />
+										<treecol id="oebr-colNbPiecesRecep" label="Nb pièces restantes" flex="1" class="nombre" />
+										<splitter class="tree-splitter" />
+				      			<treecol id="oebr-colQuantiteRecep" label="Qté restante" flex="1" class="nombre" />
+										<treecol id="oebr-colLigneRecep" collapsed="true"  ignoreincolumnpicker="true"/>
+				    			</treecols>
+				    			<template>
+				      			<treechildren>
+				        			<treeitem uri="rdf:*">
+				          			<treerow>
+				          				<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Num_BR" />
+				          				<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Num_Commande" />
+				            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reference" />
+				            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Designation" />
+				            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Nb_Pieces_Restantes" />
+													<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Qte_Restante" />
+													<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Ligne_Id" />
+				          			</treerow>
+				        			</treeitem>
+				      			</treechildren>
+				    			</template>
+				  			</tree>
+							</vbox>
+				
+							<vbox pack="center">
+								<vbox id="oebr-prodFraisEntree" pack="center">
+									<hbox align="center">
+										<label value="Nb Pièces :" />
+										<vbox><textbox id="oebr-nbPiecesEntree" size="6" maxlength="10" /></vbox>
+									</hbox>
+								</vbox>
+								<vbox>
+									<label value="Quantité :" />
+									<hbox align="center">						
+										<textbox id="oebr-qteEntree" size="6" maxlength="10" />
+										<vbox><button id="oebr-bAjouter" class="bIcoAvance" oncommand="oebr_ajouter();" style="margin-right:0px" flex="1" /></vbox>
+									</hbox>
+								</vbox>
+								<box style="height:70px" />
+				
+								<vbox pack="center">
+									<vbox id="oebr-prodFraisSortie" pack="center">
+										<hbox align="center">
+											<label value="Nb Pièces :" />
+											<vbox><textbox id="oebr-nbPiecesSortie" size="6" maxlength="10" /></vbox>
+										</hbox>
+									</vbox>
+									<vbox>						
+										<label class="label" value="Quantité :" />
+										<hbox align="center">
+											<button id="oebr-bEnlever" class="bIcoRetour" oncommand="oebr_enlever();" style="margin-right:0px" flex="1" />
+											<vbox><textbox id="oebr-qteSortie" size="6" maxlength="10" /></vbox>
+										</hbox>
+									</vbox>
+								</vbox>
+							</vbox>
+						</hbox>
+						
+						<hbox flex="1">
+							<vbox flex="1">
+								<label value="Articles du bon de retour :" />
+								<tree id="oebr-listeArticlesBonRetour"
+				        			flex="1"
+				              style="min-height: 150px;"
+				        			hidecolumnpicker="true"
+				        			seltype="single"
+											flags="dont-build-content"
+											onselect="oebr_reporterQteSortie();oebr_disableEnlever(false,true);oebr_disableAjouter(true,false);"
+				        			ref="http://www.opensi.org/facturation/articles_bon"
+				        			datasources="rdf:null">
+				
+				    			<treecols>
+				      			<treecol label="Référence" flex="1" />
+										<splitter class="tree-splitter" />
+				      			<treecol label="Désignation" flex="3" />
+										<splitter class="tree-splitter" />
+										<treecol id="oebr-colNbPiecesRetour" label="Nb pièces" flex="1" class="nombre" />
+										<splitter class="tree-splitter" />
+										<treecol id="oebr-colQuantiteRetour" label="Quantité" flex="1" class="nombre" />
+										<treecol id="oebr-colLigneRetour" collapsed="true" />
+				    			</treecols>
+				    			<template>
+				      			<treechildren>
+				        			<treeitem uri="rdf:*">
+				          			<treerow>
+				            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reference" />
+				            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Designation" />
+													<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Nb_Pieces" />
+													<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Quantite" />
+													<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Ligne_Id" />
+				          			</treerow>
+				        			</treeitem>
+				      			</treechildren>
+				    			</template>
+				  			</tree>
+							</vbox>
+						</hbox>
+					</hbox>
+					
+					<vbox flex="1">
+						<hbox align="center">
+							<label value="Articles du bon de retour :" />
+							<hbox pack="end" flex="1">
+								<button id="oebr-bToutCocher" class="bIcoCocher" tooltiptext="Tout cocher" oncommand="oebr_toutCocherArticles(true)" />
+								<button id="oebr-bToutDecocher" class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="oebr_toutCocherArticles(false)" />
+							</hbox>
+						</hbox>
+						<listbox flex="1" id="oebr-listeArticlesEnAttente" ref="http://www.opensi.org/facturation/articles_bon" datasources="rdf:null" onselect="oebr_selectOnListeArticlesEnAttente();">
+							<listhead>
+								<listheader label="Référence" />
+								<listheader label="Désignation" />
+								<listheader label="Quantité" style="text-align: right" />
+								<listheader label="Reliquat" style="text-align: right" />
+								<listheader label="Quantité réceptionnée" style="text-align: right" />
+							</listhead>
+							<listcols>
+								<listcol flex="1" />
+								<listcol flex="1" />
+								<listcol flex="1" />
+								<listcol flex="1" />
+								<listcol flex="1" />
+							</listcols>
+							<template>
+								<listitem value="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Ligne_Id" uri="rdf:*" allowevents="true">
+									<listcell type="checkbox" checked="false" label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reference" onclick="oebr_testCheck(this.parentNode);" />
+									<listcell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Designation" />
+									<listcell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Quantite" style="text-align:right" />
+									<listcell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reliquat" style="text-align:right" />
+									<listcell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reliquat" style="text-align:right; padding-right:20px" />
+								</listitem>
+							</template>
+						</listbox>
+						<hbox align="center" pack="end">
+							<label value="Quantité réceptionnée :" />
+							<hbox align="center">
+								<vbox><textbox id="oebr-qteReceptionnee" maxlength="14" onkeypress="oebr_pressOnQteRecep(event);" class="nombre" /></vbox>
+								<button id="oebr-bValiderQteRecep" class="bIcoValider" oncommand="oebr_changerQteRecep();" style="margin-left:0px" />
+							</hbox>
+						</hbox>
+					</vbox>
+				</deck>
+	
+				<hbox pack="center">
+					<button id="oebr-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oebr_enregistrerBon(true);" tooltiptext="enregistrer le BR" />
+					<button id="oebr-bValiderBR" class="bValider" label="Valider le BR" oncommand="oebr_validerBon();" tooltiptext="valider le BR" />
+					<button id="oebr-bValiderReception" class="bValider" label="Valider la réception" oncommand="oebr_validerReception();" tooltiptext="valider la réception" />
+					<button id="oebr-bAnnuler" class="bAnnuler" label="Annuler le BR" oncommand="oebr_annulerBon();" tooltiptext="annuler le BR" />
+					<button id="oebr-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="oebr_supprimerBon();" tooltiptext="supprimer le BR" />
+					<button id="oebr-bVisualiser" class="bPDF" label="Edition PDF" oncommand="oebr_visualiserBon();" tooltiptext="visualiser le BR" />
+				</hbox>
+				<statusbar>
+					<statusbarpanel id="oebr-creation" />
+					<statusbarpanel id="oebr-modification" />
+					<statusbarpanel id="oebr-fiche" flex="1" style="text-align:right;font-weight:bold;" />
+				</statusbar>
+		
+		  </vbox>
+			<vbox>
+				<iframe type="content" id="oebr-pdfBonRetour" flex="1" />		
+			</vbox>
+		</deck>
+  </vbox>
+</overlay>

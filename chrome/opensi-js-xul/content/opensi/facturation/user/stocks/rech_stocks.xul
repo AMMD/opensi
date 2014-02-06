@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'un article"
+  id="opensi_facturation_user_stocks_rechStocks"
+	width="1200"
+	height="600"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_stocks.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="RECHERCHE D'UN ARTICLE" />
+	</hbox>
+	<hbox style="height:20px" />
+
+	<hbox>
+		<grid>
+  		<columns>
+    		<column />
+    		<column />
+  		</columns>
+  		<rows>
+    		<row align="center">
+      		<label class="label" value="Référence :" />
+      		<hbox>
+        		<textbox id="Article_Id" maxlength="40" size="25" onkeypress="pressOnId(event);"/>
+      		</hbox>
+    		</row>
+    		<row align="center">
+      		<label class="label" value="Réf. Modèle :" />
+      		<hbox>
+        		<textbox id="refModele" maxlength="40" size="25" onkeypress="pressOnRefModele(event);" />
+      		</hbox>
+    		</row>
+				<row align="center">
+      		<label class="label" value="Marque :" />
+      		<hbox>
+        		<menulist id="Marque" oncommand="rechercher();" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[toutes]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</row>
+    		<row align="center">
+      		<label class="label" value="Famille 1 :" />
+      		<hbox>
+						<menulist id="Famille_1" oncommand="pressOnFamille1();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[toutes]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</row>
+				<row align="center">
+      		<label class="label" value="Famille 2 :" />
+      		<hbox>
+						<menulist id="Famille_2" oncommand="pressOnFamille2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[toutes]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</row>
+    		<row align="center">
+      		<label class="label" value="Famille 3 :" />
+      		<hbox>
+						<menulist id="Famille_3" oncommand="pressOnFamille3();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[toutes]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</row>
+    		<row align="center">
+          <label class="label" value="Site Web :" />
+					<menulist id="siteweb" oncommand="rechercher();" ref="http://www.opensi.org/facturation/siteweb" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/siteweb/rdf#Valeur" value="rdf:http://www.opensi.org/facturation/siteweb/rdf#id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+  		</rows>
+		</grid>
+
+		<box style="width:40px" />
+
+		<grid>
+			<rows>
+				<row align="center">
+      		<label class="label" value="Désignation :" />
+      		<hbox>
+        		<textbox id="Designation" maxlength="100" size="25" onkeypress="pressOnNom(event);"/>
+      		</hbox>
+    		</row>
+				<row align="center">
+          <label class="label" id="lblAttribut1" />
+					<menulist id="attribut1" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+				<row align="center">
+          <label class="label" id="lblAttribut2" />
+					<menulist id="attribut2" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+				<row align="center">
+          <label class="label" id="lblAttribut3" />
+					<menulist id="attribut3" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+        <row align="center">
+          <label class="label" id="lblAttribut4" />
+					<menulist id="attribut4" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+				<row align="center">
+          <label class="label" id="lblAttribut5" />
+					<menulist id="attribut5" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+				<row align="center">
+          <label class="label" id="lblAttribut6" />
+					<menulist id="attribut6" oncommand="rechercher();" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" flex="1" style="width:250px">
+						<menupopup>
+							<menuitem label="[tous]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+							</menupopup>
+						</template>
+					</menulist>
+        </row>
+        <row align="center">
+        	<label value="" />
+        	<hbox flex="1" pack="end">
+						<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="rechercher();" />
+						<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="reinitialiser();" />
+					</hbox>
+        </row>
+			</rows>
+		</grid>
+		
+		<box style="width:40px" />
+		
+		<vbox flex="1">
+			<label value="Disponibilités fournisseur :" />
+			<tree id="listeDispoFournisseur"
+						flex="1"
+						hidecolumnpicker="true"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/facturation/dispoFournisseur"
+						datasources="rdf:null">
+						
+				<treecols>
+					<treecol label="N° Fournisseur" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol label="Fournisseur" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol label="Stock dispo" flex="1" class="nombre" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/facturation/dispoFournisseur/rdf#Fournisseur_Id" />
+								<treecell label="rdf:http://www.opensi.org/facturation/dispoFournisseur/rdf#Ref_Fournisseur" />
+								<treecell label="rdf:http://www.opensi.org/facturation/dispoFournisseur/rdf#Qte_Stock" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+		</vbox>
+	</hbox>
+
+	<box style="height:10px" />
+
+	<label value="Articles trouvés :" />
+  <tree id="tree-articles"
+        flex="1"
+        hidecolumnpicker="false"
+        seltype="single"
+        flags="dont-build-content"
+        ref="http://www.opensi.org/facturation/rechArticles"
+        datasources="rdf:null"
+        onkeypress="pressOnTree(event);"
+				ondblclick="choixArticle();"
+				onselect="pressOnListeArticles();">
+
+    <treecols>
+      <treecol id="ColArticle_Id" label="Référence" flex="2" persist="hidden" ignoreincolumnpicker="true"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Article_Id" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColRef_Modele" label="Réf. Modèle" flex="2" persist="hidden" hidden="true"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Ref_Modele" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColMarque" label="Marque" flex="2" persist="hidden"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Marque" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDesignation" flex="3" label="Désignation" persist="hidden" ignoreincolumnpicker="true"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Designation" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColFamille1" flex="2" label="Famille 1" persist="hidden"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille1" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColFamille2" flex="1" label="Famille 2" persist="hidden"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille2" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColFamille3" flex="1" label="Famille 3" persist="hidden" hidden="true"
+      	sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille3" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut1" flex="1" persist="hidden" hidden="true"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_1" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut2" flex="1" persist="hidden"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_2" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut3" flex="1" persist="hidden"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_3" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut4" flex="1" persist="hidden" hidden="true"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_4" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut5" flex="1" persist="hidden" hidden="true"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_5" />
+			<splitter class="tree-splitter" />
+			<treecol id="colAttribut6" flex="1" persist="hidden" hidden="true"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_6" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColQteStock" label="Qté stock" flex="1" persist="hidden" style="text-align:right"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStock" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColQteStockDispo" label="Stock dispo" flex="1" persist="hidden" style="text-align:right"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStockDispo" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColQteStockVirtuel" label="Stock virtuel" flex="1" persist="hidden" style="text-align:right"
+				sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStockVirtuel" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColTarifHT" label="Tarif HT" flex="1" persist="hidden" style="text-align:right" collapsed="true"
+				ignoreincolumnpicker="true" sort="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triTarif_HT" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Article_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Ref_Modele" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Marque" />
+            <treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Designation" />
+            <treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille1" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille2" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Famille3" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_1" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_2" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_3" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_4" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_5" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Attribut_6" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#QteStock" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#QteStockDispo" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#QteStockVirtuel" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Tarif_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStock" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStockDispo" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triQteStockVirtuel" />
+						<treecell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#triTarif_HT" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+	<box style="height:20px" />
+	<hbox pack="center">
+		<hbox style="width:100px;" pack="left">
+			<hbox style="width:20px" />
+			<button class="bNouveau" id="bouton_nouveau" label="Nouveau" oncommand="nouveauArticle();" collapsed="true" />
+		</hbox>
+		<hbox flex="1" pack="center">
+			<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+			<button class="bValider" label="Ok" oncommand="choixArticle();" />
+		</hbox>
+		<hbox style="width:100px;" />
+	</hbox>
+	<box style="height:20px" />
+
+</window>

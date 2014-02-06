@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_abonnement_overlay-ecriture"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-listeEcheance.js" />
+
+	<tabpanel id="tabEcriture" flex="1">
+	
+		<vbox flex="1" class="auto-overflow">
+		
+			<hbox>
+				<hbox flex="1" align="center">
+					<label class="label" value="Journal de destination :" />
+					<menulist id="ole-filtreJournal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="selectOnFiltreJournal();">
+						<menupopup>
+							<menuitem label="[Tous]" value="0" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#Libelle_Long" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+							</menupopup>
+						</template>
+					</menulist>
+					
+					<box width="20px" />
+					<label value="Date d'échéance du" />
+					<textbox id="ole-dateDebut" maxlength="10" size="10" onkeypress="ole_keyPressOnDateDebut(event);" tooltiptext="Date au format : jj/mm/aaaa" />
+					<label value="au" />
+					<textbox id="ole-dateFin" maxlength="10" size="10" onkeypress="ole_keyPressOnDateFin(event);" tooltiptext="Date au format : jj/mm/aaaa" />
+					
+					<box width="20px" />
+					<checkbox id="ole-chkAffEcheancesNonEchues" label="Afficher les échéances non échues" oncommand="ole_chkAffEcheances()" />
+					
+					<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="ole_pressOnActualiser();" />
+					<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="ole_pressOnReinit();" />
+					
+					<box flex="1" />
+					<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="ole_toutCocher('ole-listEcheance', true)" />
+					<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="ole_toutCocher('ole-listEcheance', false)" />
+				</hbox>
+			</hbox>
+			
+			<vbox flex="1">
+				<listbox id="ole-listEcheance" flex="1"
+					flags="dont-build-content"
+					datasources="rdf:null" 
+					ref="http://www.opensi.org/compta/abonnement">
+					<listhead>
+						<listheader label="Libellé" />
+						<listheader label="Journal" />
+						<listheader label="Date d'échéance" />
+					</listhead>
+				    <listcols>
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol id="ole-colEcheanceId" collapsed="true" />
+			  		</listcols>
+			  		<template>
+				    	<listitem onclick="ole_cocher();" uri="rdf:*">
+							<listcell type="checkbox" checked="true" label="rdf:http://www.opensi.org/compta/abonnement/rdf#Libelle"/>
+							<listcell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Journal" />
+							<listcell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Date" />
+							<listcell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Id" />
+			  			</listitem>
+			  		</template>
+				</listbox>
+			</vbox>
+			
+			<hbox>
+				<hbox flex="1" align="center">
+					<box flex="1" />
+					<button id="ole-generer" class="bEdition" label="Générer les écritures" oncommand="ole_pressOnGenerer();" />
+				</hbox>
+			</hbox>
+			
+		</vbox>
+		
+	</tabpanel>
+
+</overlay>

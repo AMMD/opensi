@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Adresse de remboursement"
+  id="opensi_facturation_user_commun_popup-adresseRemboursement"
+  onload="init();"
+	height="400"
+	width="800"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-adresseRemboursement.js" />
+  
+  <box class="rv_pop" id="rv" />
+  
+ 	<vbox pack="center" flex="1" class="auto-overflow">
+
+	  <hbox style="height:10px" />
+	 	<hbox pack="center">
+	  	<label class="label_14" value="ADRESSE DE REMBOURSEMENT" />
+	 	</hbox>
+	  <box style="height:20px" />
+	  
+	  <groupbox pack="center" flex="1" align="center">
+			<caption label="Adresse" />
+			<hbox>
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+		          <label class="label" value="* Raison sociale :" />
+		          <hbox><textbox id="denomination" maxlength="50" size="30" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="* Adresse :" />
+		          <hbox><textbox id="adresse1" maxlength="80" size="50" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="" />
+		          <hbox><textbox id="adresse2" maxlength="50" size="50" /></hbox>
+		        </row>
+						<row align="center">
+		          <label class="label" value="" />
+		          <hbox><textbox id="adresse3" maxlength="50" size="50" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="Code postal :" />
+		          <hbox><textbox id="codePostal" class="rv_cp" idville="ville" idnextfocus="codePays" maxlength="10" size="5" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="* Ville :" />
+		          <hbox><textbox id="ville" class="rv_ville" idcp="codePostal" idnextfocus="codePays" maxlength="50" size="30" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="Pays :" />
+		          <hbox>
+		          	<menulist id="codePays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+			            	</menupopup>
+									</template>
+								</menulist>
+		          </hbox>
+		        </row>
+		      </rows>
+				</grid>
+			</hbox>
+		</groupbox>
+
+	  <box style="height:20px" />
+	  <hbox pack="center">
+			<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+	  	<button label="Ok" class="bValider" oncommand="valider();" />
+	  </hbox>
+	  <box style="height:20px" />
+  
+  </vbox>
+
+</window>
+
+

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="Création d'un acompte client"
+  id="opensi_facturation_user_affaires_popupCreerAcompte"
+  onload="init()"
+	width="800"
+	height="300"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-creerAcompte.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="Création d'un acompte client" />
+	</hbox>
+	<hbox style="height:20px" />
+	<hbox align="center">
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label value="" />
+					<checkbox id="chkExonerationTVA" label="Acompte exonéré de TVA" checked="true" oncommand="pressOnExoneration();" />
+				</row>
+				<row id="rowCodeTVA" align="center" collapsed="true">
+					<label class="label" value="* Taux de TVA :" />
+					<hbox>
+						<menulist id="codeTVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null" oncommand="calculerMontantTTC();">
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" style="font-size:80%;padding-left:0px" label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA" value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA" />
+								</menupopup>
+							</template>
+						</menulist>
+					</hbox>
+				</row>
+				<row align="center">
+					<label id="lblMontantHT" class="label" value="* Montant :" />
+					<hbox>
+						<textbox class="nombre" id="montantHT" maxlength="14" size="14" timeout="200" oncommand="calculerMontantTTC();" type="timed" />
+					</hbox>
+				</row>
+				<row id="rowMontantTTC" align="center" collapsed="true">
+					<label class="label" value="* Montant TTC :" />
+					<hbox>
+						<textbox class="nombre" id="montantTTC" maxlength="14" size="14" timeout="200" oncommand="calculerMontantHT();" type="timed" />
+					</hbox>
+				</row>
+				<row align="center">
+      		<label class="label" value="* Mode de règlement :" />
+      		<hbox>
+						<menulist id="modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null">
+							<menupopup>
+								<menuitem label="[Choisir]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+								</menupopup>
+							</template>
+						</menulist>
+					</hbox>
+      	</row>
+			</rows>
+		</grid>
+		
+		<box style="width:30px" />
+		
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="* Libellé :" />
+					<textbox id="libelle" maxlength="100" />
+				</row>
+				<row align="top">
+					<label class="label" value="Commentaires :" />
+					<hbox>
+						<textbox id="commentaires" multiline="true" cols="35" rows="6" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</hbox>
+
+	<box style="height:30px" />
+	
+	<hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+		<button label="Valider" class="bValider" oncommand="valider();" />
+	</hbox>
+
+</window>

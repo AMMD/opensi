@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_fabrication_fabrication"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="fabrication.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bMenuFabrication" oncommand="retour_fabrication();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  
+  <deck id="deck" flex="1">
+		<vbox flex="1">
+
+		  <hbox style="height: 15px" />
+			<hbox pack="center"><label value="Fabrication des articles nomenclaturés" class="label_16" /></hbox>
+			<hbox style="height: 10px" />
+			
+			
+			<groupbox flex="1" pack="center">
+				<caption label="Historique des articles fabriqués" />
+				<hbox pack="center" flex="1">
+					<tree id="historique_fabrication"
+				        flex="1"
+				        hidecolumnpicker="true"
+				        seltype="single"
+				        flags="dont-build-content"
+				        ref="http://www.opensi.org/facturation/historique_fabrication"
+				        datasources="rdf:null">
+				
+				    <treecols>
+				    	<treecol id="ColDateFabrication" label="Date Fabrication" flex="1" />
+							<splitter class="tree-splitter" />
+				      <treecol id="ColRefArticle" label="Réf. Article" flex="1" />
+							<splitter class="tree-splitter" />
+				      <treecol id="ColDesignation" label="Désignation" flex="1" />
+				      <splitter class="tree-splitter" />
+				      <treecol id="ColQuantite" label="Quantité" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColType" label="Type" flex="1" />
+				    </treecols>
+				    <template>
+				      <treechildren>
+				        <treeitem uri="rdf:*">
+				          <treerow>
+				          	<treecell label="rdf:http://www.opensi.org/facturation/historique_fabrication/rdf#Date_Fabrication" />
+				            <treecell label="rdf:http://www.opensi.org/facturation/historique_fabrication/rdf#Ref_Article" />
+				            <treecell label="rdf:http://www.opensi.org/facturation/historique_fabrication/rdf#Designation" />
+				            <treecell label="rdf:http://www.opensi.org/facturation/historique_fabrication/rdf#Quantite" />
+				            <treecell label="rdf:http://www.opensi.org/facturation/historique_fabrication/rdf#Type" />
+				          </treerow>
+				        </treeitem>
+				      </treechildren>
+				    </template>
+				  </tree>
+				</hbox>
+			</groupbox>
+			
+			<hbox pack="center">			
+				<groupbox pack="center" align="center" flex="1">
+					<caption label="Période d'édition" />
+					<radiogroup id="Periode">
+						<radio value="MC" label="Mois en cours" selected="true" oncommand="enableDates(false);" />
+						<radio value="MP" label="Mois précédent" oncommand="enableDates(false);" />
+						<hbox align="center">
+							<radio value="DD" label="De date à date :" oncommand="enableDates(true);" />
+							<label value="du" />
+							<textbox id="DateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="DateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						</hbox>
+					</radiogroup>
+					<box style="height:10px" />
+					<hbox pack="center">
+						<button label="Afficher" oncommand="afficherHistorique();" />
+					</hbox>
+				</groupbox>
+			
+				<groupbox pack="center" align="center" flex="1">
+					<caption label="Sortie" />
+					<radiogroup id="Sortie">
+						<radio value="PDF" label="PDF" />
+						<radio value="CSV" label="CSV" />
+					</radiogroup>
+					<box style="height:10px" />
+					<hbox pack="center">
+						<button label="Editer" oncommand="editerHistorique();" />
+					</hbox>
+				</groupbox>
+			</hbox>
+			
+			<groupbox pack="center" align="center">
+      	<caption label="Saisie" />
+      	<hbox pack="center">
+					<vbox>
+						<hbox><label value="Référence :" /></hbox>
+						<hbox pack="center">
+							<textbox id="Reference" disabled="true" size="15" />
+							<button id="bRechArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="rechercherStock();" />
+						</hbox>
+					</vbox>
+					<vbox>
+						<hbox><label value="Quantité :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Quantite" maxlength="15" size="8" style="margin-left:0px" class="nombre" /></hbox>
+					</vbox>
+					<vbox>
+						<hbox><label value="Type d'opération :" style="margin-left:0px" /></hbox>
+						<radiogroup id="Type">
+							<hbox>
+								<radio value="A" label="Assembler" />
+								<radio value="D" label="Désassembler" />
+							</hbox>
+						</radiogroup>
+					</vbox>
+					<vbox>
+						<hbox><label value="Stock réel :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Stock_Reel" disabled="true" size="8" style="margin-left:0px" class="nombre" /></hbox>
+					</vbox>
+					<vbox>
+						<hbox><label value="Commentaires :" /></hbox>
+						<hbox><textbox id="Commentaires" multiline="true" cols="45" rows="6" /></hbox>
+					</vbox>
+					<vbox>
+						<hbox><label value="" /></hbox>
+						<hbox>
+							<button id="bAnnuler" class="bAnnuler" label="Annuler" tooltiptext="annuler la saisie" oncommand="nouvelleSaisie();" style="margin-left:0px" />
+							<button id="bValider" class="bValider" label="Valider" tooltiptext="valider la saisie" oncommand="validerSaisie();" style="margin-left:0px" />
+						</hbox>
+					</vbox>
+				</hbox>
+			</groupbox>
+
+		</vbox>
+		
+		<vbox>
+			<iframe type="content" id="fabrication" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

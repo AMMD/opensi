@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_editions_overlayFournisseurs"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-fournisseurs.js" />
+
+	<vbox id="tab-fournisseurs">
+		<vbox flex="1">
+		  <hbox style="height: 60px" />
+		  <hbox pack="center">
+		  	<label value="EDITIONS FOURNISSEURS" class="label_16" />
+		  </hbox>
+		  <hbox style="height:40px" />
+			<hbox pack="center">
+				<button type="radio" group="of-Etat" label="Palmarès fournisseur" oncommand="of_switchOptions('PF');" checked="true" />
+				<button type="radio" group="of-Etat" label="Liste des fournisseurs" oncommand="of_switchOptions('LF');" />
+				<button type="radio" group="of-Etat" label="Fiches fournisseurs" oncommand="of_switchOptions('FF');" collapsed="true" />
+				<button type="radio" group="of-Etat" label="Activité fournisseur" oncommand="of_switchOptions('AF');" collapsed="true" />
+			</hbox>
+			<hbox style="height:20px" />
+		
+			<hbox>
+				<groupbox id="of-gPeriode" flex="1" pack="center" align="center">
+					<caption label="Période d'édition" />
+					<radiogroup id="of-Periode">
+						<radio id="of-PeriodeMC" value="MC" label="Mois en cours" selected="true" oncommand="of_enableDates(false);" />
+						<radio id="of-PeriodeMP" value="MP" label="Mois précédent" oncommand="of_enableDates(false);" />
+						<radio id="of-PeriodeAC" value="AC" label="Année en cours" oncommand="of_enableDates(false);" />
+						<radio id="of-PeriodeAP" value="AP" label="Année précédente" oncommand="of_enableDates(false);" />
+						<hbox align="center">
+							<radio id="of-PeriodeDD" value="DD" label="De date à date :" oncommand="of_enableDates(true);" />
+							<label value="du" />
+							<textbox id="of-DateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="of-DateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						</hbox>
+					</radiogroup>
+				</groupbox>
+		
+				<groupbox id="of-gSelection" flex="1" pack="center" align="center">
+					<caption label="Sélection fournisseurs" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+		      			<label class="label" value="Famille :" />
+		      			<hbox>
+		        			<menulist id="of-Famille" ref="http://www.opensi.org/facturation/familles_fournisseur" datasources="rdf:null" style="width:180px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+		            			<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Famille_Id" />
+		            			</menupopup>
+										</template>
+		        			</menulist>
+								</hbox>
+		    			</row>
+						</rows>
+					</grid>
+				</groupbox>
+		
+				<groupbox id="of-gTri" flex="1" pack="center" align="center">
+					<caption label="Ordre de tri" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+		      			<label class="label" value="Tri 1 :" />
+		      			<hbox>
+		        			<menulist id="of-Tri1">
+										<menupopup>
+											<menuitem label="Numéro fournisseur" value="Fournisseur_Id" />
+											<menuitem label="Nom fournisseur" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+		      			<label class="label" value="Tri 2 :" />
+		      			<hbox>
+		        			<menulist id="of-Tri2">
+										<menupopup>
+											<menuitem label="[aucun]" value="" />
+											<menuitem label="Numéro fournisseur" value="Fournisseur_Id" />
+											<menuitem label="Nom fournisseur" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+		      			<label class="label" value="Tri 3 :" />
+		      			<hbox>
+		        			<menulist id="of-Tri3">
+										<menupopup>
+											<menuitem label="[aucun]" value="" />
+											<menuitem label="Numéro fournisseur" value="Fournisseur_Id" />
+											<menuitem label="Nom fournisseur" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+		
+			<hbox>
+				<groupbox id="of-gDetailCA" flex="1" pack="center" align="center">
+					<caption label="Détail du CA" />
+					<radiogroup id="of-DetailCA">
+						<radio id="of-DetailCAN" value="N" label="Pas de détail" selected="true" />
+						<radio id="of-DetailCAD" value="D" label="Par date" />
+						<radio id="of-DetailCAF1" value="F1" label="Par famille 1 d'article" />
+						<radio id="of-DetailCAF2" value="F2" label="Par famille 2 d'article" />
+						<radio id="of-DetailCAF3" value="F3" label="Par famille 3 d'article" />
+						<radio id="of-DetailCAA" value="A" label="Par article" />
+					</radiogroup>
+				</groupbox>
+				
+				<groupbox id="of-gSortie" flex="1" pack="center" align="center">
+					<caption label="Sortie" />
+					<radiogroup id="of-Sortie">
+						<radio id="of-SortiePDF" value="PDF" label="PDF" selected="true" />
+						<radio id="of-SortieCSV" value="CSV" label="CSV" />
+					</radiogroup>
+				</groupbox>
+			</hbox>
+		
+			<box style="height:10px" />
+			<hbox pack="center"><button label="Edition" oncommand="of_editerPalmares();" /></hbox>
+			<box style="height:10px" />
+		</vbox>
+	</vbox>
+
+</overlay>

@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_commerciaux_interfaceCommerciaux"
+ 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="interface_commerciaux.js" />
+
+	<tabpanel id="infos">
+		<vbox flex="1">	
+			<groupbox pack="center" align="center">
+		  	<caption id="labelCommercial" label="Commercial" />
+				<grid>
+		  		<columns>
+						<column />
+		    		<column />
+						<column />
+		    		<column />
+						<column />
+		    		<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="* Login :" />
+							<hbox>
+								<menulist tabindex="0" id="login_utilisateur" ref="http://www.opensi.org/facturation/liste_utilisateurs_hors_commerciaux" datasources="rdf:null" oncommand="selectLogin(); setModifie(true);">
+									<menupopup>
+										<menuitem label="[Choisir]" value="" style="font-size:80%" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_utilisateurs_hors_commerciaux/rdf#Login" value="rdf:http://www.opensi.org/facturation/liste_utilisateurs_hors_commerciaux/rdf#Utilisateur_Id" style="font-size:80%" />
+										</menupopup>
+									</template>
+								</menulist>
+								<label class="label" id="lab_login_utilisateur" />
+							</hbox>
+							<label class="label" value="* Code du commercial :" />
+							<hbox><textbox tabindex="3" id="txt_codeComm" size="20" oninput="setModifie(true);" /></hbox>					
+							<label class="label" value="Secteur :" />
+							<hbox><textbox tabindex="9" id="txt_secteur" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row style="height:20px" />
+						<row align="center">
+							<label class="label" value="Civilité :" />
+							<label id="lab_civilite" />
+							<label class="label" value="* Adresse :" />
+							<hbox><textbox tabindex="4" id="txt_adresse" size="20" flex="3" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="* Tél.1 :" />
+							<hbox><textbox tabindex="10" id="txt_tel1" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Nom :" />
+							<label id="lab_nom" />
+							<label class="label" value="" />
+							<hbox><textbox tabindex="5" id="txt_adresse2" size="20" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="Tél.2 :" />
+							<hbox><textbox tabindex="11" id="txt_tel2" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Prénom :" />
+							<label id="lab_prenom" />
+							<label class="label" value="Code postal :" />
+							<hbox><textbox tabindex="6" id="txt_codePost" size="6" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="Tél.3 :" />
+							<hbox><textbox tabindex="12" id="txt_tel3" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="E-Mail 1 :" />
+							<hbox><textbox tabindex="1" id="txt_email1" size="20" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="* Ville :" />
+							<hbox><textbox tabindex="7" id="txt_ville" size="20" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="Fax 1 :" />
+							<hbox><textbox tabindex="13" id="txt_fax1" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="E-Mail 2 :" />
+							<hbox><textbox tabindex="2" id="txt_email2" size="20" oninput="setModifie(true);" /></hbox>
+							<label class="label" value="Pays :" />
+							<hbox>
+								<menulist tabindex="8" id="Code_Pays" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="setModifie(true);">
+									<template>
+		             		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		             		</menupopup>
+									</template>
+								</menulist>
+							</hbox>
+							<label class="label" value="Fax 2 :" />
+							<hbox><textbox tabindex="14" id="txt_fax2" size="20" oninput="setModifie(true);" /></hbox>
+						</row>
+					</rows>
+				</grid>
+				<box style="height:20px" />
+				<hbox pack="center">
+					<button id="enregistre" class="bEnregistrer" label="Enregistrer le commercial" onclick="enregistrerCommercial();" />
+					<button id="delete" class="bSupprimer" label="Supprimer le commercial" onclick="supprimerCommercial();" />
+				</hbox>
+				<box style="height:10px" />
+			</groupbox>
+		
+			<hbox flex="1">
+				<groupbox id="Commissionnements" flex="1">
+			  	<caption label="Calcul des commissionnements" />	
+					<tree id="liste_regles_commissions"
+			          ref="http://www.opensi.org/facturation/liste_regles_commissions"
+			        	seltype="single"
+			        	datasources="rdf:null"
+							  onclick="select_regle();"
+							  onselect="select_regle();"
+							  flex="1"
+								hidecolumnpicker="true"
+								flags="dont-build-content">	
+			    	<treecols>
+							<treecol id="art-fam" flex="1" label="Intitulé" primary="true" />
+							<splitter class="tree-splitter" />
+			      	<treecol id="bCalc" flex="1" label="Base de calcul" />
+							<splitter class="tree-splitter" />
+			      	<treecol id="result" flex="1" label="Résultat" />
+							<splitter class="tree-splitter" />      	
+			      	<treecol id="type_commission" collapsed="true" />
+			      	<treecol id="idcomm" collapsed="true" />
+						</treecols>
+			    	<template>
+			      	<treechildren>
+			        	<treeitem uri="rdf:*">
+			          	<treerow>
+								  	<treecell label="rdf:http://www.opensi.org/facturation/liste_regles_commissions/rdf#Type" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_regles_commissions/rdf#Base_Calcul" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_regles_commissions/rdf#Resultat" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_regles_commissions/rdf#Type_Commission" />
+										<treecell label="rdf:http://www.opensi.org/facturation/liste_regles_commissions/rdf#Commission_Id" />
+								  </treerow>
+								</treeitem>
+							</treechildren>
+			      </template>
+			    </tree>	
+					<box height="10px" />
+					<hbox pack="center" id="edition_regles">
+						<button id="bNewRule" class="bNouveau" label="Nouvelle règle" align="center" oncommand="nouvelle_regle();" />
+						<button id="bChangeRule" label="Modifier la règle" align="center" oncommand="charger_regle(false);" />
+						<button id="bDeleteRule" class="bSupprimer" label="Supprimer la règle" align="center" oncommand="supprimer_regle();" />
+						<button id="bDuplicateRule" class="bCopier" label="Dupliquer la règle" align="center" oncommand="dupliquer_regle();" />
+						<button id="bReinitRules" label="Réinitialisation" align="center" oncommand="reinit_regles();" />
+					</hbox>	
+				</groupbox>
+				
+				<groupbox id="param_commissions" flex="1" class="auto-overflow">
+			  	<caption label="Paramètrage" />
+					<vbox>
+						<label value="Appliquer une commission de type :" />
+						<radiogroup id="rgp_typeComm" oncommand="action_typeCommission();">
+							<hbox>
+								<radio id="tMarque" value="MQ" label="Marque" selected="true" />
+								<hbox flex="1">
+									<menulist id="liste_marques" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/marques_article_commercial" datasources="rdf:null">
+										<menupopup>
+				    					<menuitem label="[Choisir une marque]" value="" style="font-size:80%" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/marques_article_commercial/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/marques_article_commercial/rdf#Marque_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+								<hbox flex="1" />
+							</hbox>
+							<hbox flex="1">
+								<radio id="tFamilleArticle" value="FA" label="Famille ou sous-famille" />
+								<hbox flex="1">
+									<menulist id="liste_familles_1" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/familles_article_commercial" datasources="rdf:null" oncommand="pressOnFamille1();">
+										<menupopup>
+				    					<menuitem label="[Choisir une famille 1]" value="" style="font-size:80%" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<menulist id="liste_familles_2" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/familles_article_commercial" datasources="rdf:null" oncommand="pressOnFamille2();">
+										<menupopup>
+				    					<menuitem label="[Choisir une famille 2]" value="" style="font-size:80%" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<menulist id="liste_familles_3" style="width:220px" sizetopopup="none" ref="http://www.opensi.org/facturation/familles_article_commercial" datasources="rdf:null">
+										<menupopup>
+				    					<menuitem label="[Choisir une famille 3]" value="" style="font-size:80%" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_article_commercial/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+							</hbox>
+							<hbox>
+								<radio id="tArticleDirect" value="A" label="Article" />
+								<textbox id="article_id" disabled="true" size="15" />
+								<button id="bRechArticle" class="bIcoRechercher" oncommand="rechercherStock();" />
+							</hbox>
+							<radio id="tGlobaleComm" value="G" label="Globale (sur toutes les ventes effectuées)" />
+							<radio id="tAllArticle" value="AS" label="Tous les articles en stock" />
+							<radio id="tHorsStock" value="HS" label="Tous les articles hors-stock" />			
+						</radiogroup>
+					</vbox>	
+					<box height="10px" />	
+					<hbox flex="1">
+						<vbox>
+							<label value="Base de calcul de la formule :" />
+							<radiogroup id="rgp_baseCalcul" oncommand="action_baseCalcul();">
+								<vbox>
+									<radio id="bCA" value="CA" label="Chiffre d'affaires (CA)" selected="true" />
+									<radio id="bCAE" value="CAE" label="Chiffre d'affaires encaissé (CAE), frais de port inclus" />
+									<radio id="bMarge" value="M" label="Marge réalisée" />
+									<radio id="bQuantite" value="Q" label="Quantité d'articles" />
+								</vbox>
+							</radiogroup>
+						</vbox>	
+						<box width="40px" />	
+						<vbox>
+							<checkbox id="Tranche" checked="false" label="Appliquer une tranche sur cette base de calcul" oncommand="activer_tranches(this.checked);" />
+							<hbox id="box_tranche" align="center">
+								<label id="lbl_binf" value="De :" />
+								<hbox><textbox id="txt_bInf" disabled="true" size="8" /></hbox>
+								<label id="lbl_bsup" value="à :" />
+								<hbox><textbox id="txt_bSup" size="8" /></hbox>
+								<label id="lbl_unite" value="" />
+								<checkbox id="tr_infini" checked="false" label="Dernière tranche" oncommand="action_derniere_tranche(this.checked);" />
+							</hbox>
+							<hbox align="center">
+								<label id="lbl_val" />
+								<hbox>
+									<textbox id="txt_val" size="8" />
+									<hbox id="infosQte" align="center">
+										<button id="bModeCalculQte" class="mini_bouton" oncommand="switchModeCalculQte();" />
+										<hbox id="baseCalculQte" align="center">
+											<label value="calculé sur" />
+											<button id="bBaseCalculQte" oncommand="switchBaseCalculQte();" />
+										</hbox>
+									</hbox>
+								</hbox>
+							</hbox>	
+							<hbox id="btn_box_tranche">
+								<button id="btn_nouvelle_tranche" class="bNouveau" label="Nouvelle tranche" oncommand="nouvelle_tranche();" />
+								<button id="btn_valider_tranche" class="bEnregistrer" label="Enregistrer la tranche" oncommand="valider_tranche();" />
+								<button id="btn_delete_tranche" class="bSupprimer" label="Supprimer la tranche" oncommand="supprimer_tranche();" />
+							</hbox>
+						</vbox>
+					</hbox>
+			
+					<box height="10px" />	
+					<tree id="liste_tranches"
+			        	ref="http://www.opensi.org/facturation/liste_tranches"
+			        	seltype="single"
+			        	datasources="rdf:null"
+			        	onclick="select_tranche();"
+			        	onselect="select_tranche();"
+								hidecolumnpicker="true"
+								flex="1"
+								flags="dont-build-content"
+								minheight="100px">	
+			    	<treecols>
+							<treecol id="binf" flex="1" label="De" style="text-align:right" />
+							<splitter class="tree-splitter" />
+			        <treecol id="bsup" flex="1" label="A" style="text-align:right" />
+							<splitter class="tree-splitter" />
+			        <treecol id="tranche_val" flex="1" label="Valeur" style="text-align:right" />
+			        <treecol id="tranche_id" collapsed="true" />
+			    	</treecols>
+						<template>
+			      	<treechildren>
+			        	<treeitem uri="rdf:*">
+			          	<treerow>
+								  	<treecell label="rdf:http://www.opensi.org/facturation/liste_tranches/rdf#BInf" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_tranches/rdf#BSup" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_tranches/rdf#Val" />
+			            	<treecell label="rdf:http://www.opensi.org/facturation/liste_tranches/rdf#Tranche_Id" />
+			            </treerow>
+			        	</treeitem>
+			        </treechildren>
+			    	</template>
+			    </tree>	
+					<box height="10px" />	
+					<hbox pack="center">
+						<button id="bValider" class="bValider" label="Valider la règle" oncommand="enregistrer_regle();" />
+						<button id="bAnnuler" class="bAnnuler" label="Abandonner les modifications" oncommand="annuler_regle();" />
+					</hbox>
+				</groupbox>
+			</hbox>
+			<label id="Modifie" collapsed="true" value="n" />
+		</vbox>
+	</tabpanel>
+</overlay>

@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_config_comptabilite_overlay-journaux"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-journaux.js" />
+
+	<tabpanel id="tabJournaux">
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+			<hbox style="height:30px" />
+			<hbox pack="center" flex="10" style="overflow:auto">
+		  	<hbox pack="center" flex="1">
+		    	<tree id="oj-listeJournaux"
+						hidecolumnpicker="true"
+          	ref="http://www.opensi.org/compta/liste-journaux"
+          	seltype="single"
+          	datasources="rdf:null"
+						onselect="oj_chargerJournal()"
+						flex="1">
+		      	<treecols>
+		        	<treecol id="oj-ColCode_Journal" flex="2" label="Code" />
+		        	<treecol id="oj-ColIntitule" flex="4" label="Intitulé" />
+		        	<treecol id="oj-ColType_Journal" collapsed="true" />
+		        	<treecol label="Type de journal" flex="2" />
+		        	<treecol id="oj-ColContrepartie" flex="1" label="Contrepartie" />
+		      	</treecols>
+		      	<template>
+		          <treechildren>
+		            <treeitem uri="rdf:*">
+		              <treerow>
+		                <treecell label="rdf:http://www.opensi.org/compta/liste-journaux/rdf#Code_Journal" />
+		                <treecell label="rdf:http://www.opensi.org/compta/liste-journaux/rdf#Intitule" />
+		                <treecell label="rdf:http://www.opensi.org/compta/liste-journaux/rdf#Type_Journal" />
+		                <treecell label="rdf:http://www.opensi.org/compta/liste-journaux/rdf#Lbl_Type_Journal" />
+		                <treecell label="rdf:http://www.opensi.org/compta/liste-journaux/rdf#Contrepartie" />
+		              </treerow>
+		            </treeitem>
+		          </treechildren>
+		      	</template>
+		    	</tree>
+					<hbox width="50px" />
+					<vbox align="top" width="560px">					
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="* Code journal : " />
+									<hbox><textbox id="oj-Code_Journal" size="4" maxlength="3" /></hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="* Intitulé : " />
+									<hbox><textbox id="oj-Intitule" size="30" maxlength="50" /></hbox>
+								</row>
+								<row align="center">
+									<hbox align="right"><label class="label" value="Type de journal : " /></hbox>
+									<menulist id="oj-Type_Journal" oncommand="oj_enableContrepartie()">
+			        			<menupopup>
+			          			<menuitem label="TR: Trésorerie" value="TR" />
+											<menuitem label="AC: Achats" value="AC" />
+											<menuitem label="VE: Ventes" value="VE" />
+											<menuitem label="OD: Opérations Diverses" value="OD" />
+											<menuitem id="oj-AN" label="AN: A Nouveau" value="AN" collapsed="true" />
+			        			</menupopup>
+			    				</menulist>
+								</row>
+								<row id="oj-rowContrepartie" align="center">
+									<label class="label" value="* Compte de contrepartie :" />
+									<hbox>
+			              <textbox id="oj-Contrepartie" size="9" maxlength="8" readonly="true" />
+			              <button class="bIcoRechercher" oncommand="oj_rechercherCompte()" />
+			            </hbox>
+								</row>
+							</rows>
+						</grid>						
+						<hbox height="40px" />
+						<hbox>
+							<button id="oj-bNouveau" class="bNouveau" label="Nouveau" oncommand="oj_nouveauJournal()" />
+							<button label="Enregistrer" class="bEnregistrer" oncommand="oj_enregistrerJournal()" />
+							<button id="oj-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="oj_supprimerJournal()" />							
+						</hbox>						
+						<hbox style="height:100px" />
+						<hbox pack="center" align="center">
+							<label value="Importer les journaux du dossier :" />   
+			     		<menulist id="oj-dossier" ref="http://www.opensi.org/compta/config/liste_dossier" datasources="rdf:null" onkeypress="oj_keypress(event);">
+			          <template>
+			            <menupopup>
+			              <menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/config/liste_dossier/rdf#code" label="rdf:http://www.opensi.org/compta/config/liste_dossier/rdf#libelle"  />      
+			            </menupopup>
+			          </template>
+			        </menulist>
+							<button label="Importer" oncommand="oj_importerJournaux()" />
+						</hbox>
+					</vbox>
+				</hbox>
+			</hbox>
+			<hbox flex="1"/>
+
+		</vbox>
+	</tabpanel>
+</overlay>

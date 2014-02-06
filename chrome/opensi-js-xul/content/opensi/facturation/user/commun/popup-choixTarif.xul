@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Choix du tarif"
+  id="opensi_facturation_user_affaires_choixTarif"
+  onload="init()"
+  width="710"
+  height="600"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-choixTarif.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="Choix du tarif" style="text-align:center" />
+	</hbox>
+	<hbox style="height:20px" />
+	<hbox pack="center" flex="1">
+		<vbox pack="center" flex="1">
+			<hbox align="center">
+				<checkbox id="SwitchMode" label="Mode ajout/modification de tarif" oncommand="switchMode();" />
+				<hbox pack="end" flex="1" align="center" id="boxRevient">
+					<label id="lblPrix_Revient" class="label" value="Prix de revient :" />
+					<textbox id="Prix_Revient" size="12" class="nombre" disabled="true" />
+				</hbox>
+			</hbox>
+			
+	    <tree id="tarifs_qte"
+						flex="1"
+	      		hidecolumnpicker="true"
+	      		seltype="single"
+	      		ref="http://www.opensi.org/facturation/tarifs_qte"
+	      		datasources="rdf:null"
+						onselect="reporterLigne();"
+						ondblclick="ouvrirTarif();"
+						flags="dont-build-content">
+	
+	      <treecols>
+	        <treecol id="ColLibInt" label="Libellé interne" width="120px" />
+					<splitter class="tree-splitter" />
+	        <treecol id="ColLibExt" label="Libellé externe" width="120px" />
+					<splitter class="tree-splitter" />
+	        <treecol id="ColQuantite" label="Quantité" class="nombre" width="80px" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColCoeff" label="Coeff." class="nombre" width="80px" />
+					<splitter class="tree-splitter" />
+	        <treecol id="ColHT" label="Prix HT" class="nombre" width="100px" />
+					<splitter class="tree-splitter" />
+	        <treecol id="ColTTC" label="Prix TTC" class="nombre" width="100px" />
+					<splitter class="tree-splitter" />
+	        <treecol id="ColMarge" label="Marge (%)" class="nombre" width="100px" />
+					<treecol id="ColTarif_Id" collapsed="true" />
+	      </treecols>
+	      <template>
+	        <treechildren>
+	          <treeitem uri="rdf:*">
+	            <treerow>
+	              <treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Lib_Int" />
+	              <treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Lib_Ext" />
+	              <treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Quantite" class="nombre" />
+								<treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Coeff" class="nombre" />
+	              <treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Prix" class="nombre" />
+	              <treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Prix_TTC" class="nombre" />
+								<treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Marge" class="nombre" />
+								<treecell label="rdf:http://www.opensi.org/facturation/tarifs_qte/rdf#Tarif_Id" />
+	            </treerow>
+	          </treeitem>
+	        </treechildren>
+	      </template>
+	    </tree>
+			
+			<hbox id="boxLigne">
+				<textbox id="Lib_Int" width="120px" maxlength="20" />
+				<textbox id="Lib_Ext" width="120px" maxlength="20" style="margin-left:0px" />
+				<textbox id="Quantite_Ligne" width="80px" style="margin-left:0px" class="nombre" />
+				<textbox id="Coeff_Ligne" width="80px" style="margin-left:0px" oninput="calculerLigne('c');" class="nombre" />
+				<textbox id="Prix_Ligne" width="90px" style="margin-left:0px" oninput="calculerLigne('h');" class="nombre" />
+				<textbox id="Prix_Ligne_TTC" width="90px" style="margin-left:0px" oninput="calculerLigne('t');" class="nombre" />
+				<textbox id="Marge_Ligne" width="100px" maxlength="5" style="margin-left:0px" oninput="calculerLigne('m');" class="nombre" />
+			</hbox>
+	
+			<hbox id="boxBoutons">
+				<button id="bAnnuler" class="bIcoAnnuler" label="Annuler" oncommand="annulerLigne();" />
+				<button id="bValider" class="bIcoValider" label="Valider" oncommand="validerLigne();" />
+				<button id="bSupprimer" class="bIcoSupprimer" label="Supprimer" oncommand="supprimerLigne();" />
+			</hbox>
+		</vbox>
+	</hbox>
+
+	<box style="height:30px" />
+	<hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+		<button label="Ok" class="bValider" oncommand="ouvrirTarif();" />
+	</hbox>
+	<box style="height:10px" />
+
+	<label id="Tarif_Id" collapsed="true" />
+
+</window>

@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_factuFournisseur_overlayEditionAvoir"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-editionAvoir.js" />
+
+	<vbox id="editionAvoir" flex="1">
+		<deck id="oea-deckAvoir" flex="1">
+  		<vbox flex="1" class="auto-overflow">
+  			<vbox flex="1">
+				  <hbox>
+				  	<tabbox flex="1" pack="center" id="oea-tabBoxAvoir">
+							<tabs>
+								<tab label="Avoir" id="oea-tabAvoir" />
+								<tab label="Versions" id="oea-tabVersionDocument" collapsed="true" />
+							</tabs>
+							<tabpanels flex="1">
+				    		<tabpanel pack="center" align="start" orient="horizontal">
+						      <grid>
+						       	<columns>
+						        	<column />
+						         	<column />
+						       	</columns>
+						       	<rows>
+						         	<row align="center">
+						          	<label class="label" value="N° Avoir :" />
+						           	<textbox id="oea-numAvoir" maxlength="10" size="10" oninput="oea_setModifie(true);"/>
+						         	</row>
+											<row align="center">
+						          	<label class="label" value="Date :" />
+						           	<textbox id="oea-dateAvoir" maxlength="10" size="10" oninput="oea_setModifie(true);"/>
+						          </row>
+						          <row align="center">
+						          	<label class="label" value="N° Fournisseur :" />
+						          	<hbox>
+													<label id="oea-fournisseurId" collapsed="true" />
+													<label id="oea-labelFournisseur" />
+												</hbox>
+						          </row>
+						          <row align="center">
+						          	<label value="Pôle d'activité :" class="label" />
+						          	<hbox>
+						        			<menulist id="oea-secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px" oncommand="oea_setModifie(true);">
+														<menupopup>
+															<menuitem label="[Aucun]" value="0" />
+														</menupopup>
+														<template>
+						          				<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+						          				</menupopup>
+														</template>
+						        			</menulist>
+						          	</hbox>
+						          </row>
+											<row align="center">
+						           	<label class="label" value="Responsable :" />
+											 	<hbox>
+													<menulist id="oea-responsable" oncommand="oea_setModifie(true);" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null">
+														<menupopup>
+															<menuitem label="[Aucun]" value="0" />
+						             		</menupopup>
+														<template>
+						              		<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+						              		</menupopup>
+														</template>
+						            	</menulist>
+												</hbox>
+						         	</row>
+						      	</rows>
+									</grid>
+								</tabpanel>
+								<tabpanel flex="1" pack="center" orient="vertical">
+									<tree id="oea-listeVersion"
+										hidecolumnpicker="true"
+						        seltype="single"
+						        ref="http://www.opensi.org/facturation/historiqueEditions"
+						        datasources="rdf:null"
+						        flex="1">
+								    <treecols>
+								      <treecol flex="1" label="N° Edition" />
+											<splitter class="tree-splitter" />
+											<treecol flex="1" label="Date d'édition" />
+											<splitter class="tree-splitter" />
+											<treecol flex="1" label="Login" />
+											<splitter class="tree-splitter" />
+											<treecol flex="1" label="Envoyé à" />
+								    </treecols>
+								    <template>
+								      <treechildren>
+								        <treeitem uri="rdf:*">
+								          <treerow>
+								            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+								            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+								            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+								            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+								          </treerow>
+								        </treeitem>
+								      </treechildren>
+								    </template>
+								  </tree>
+								</tabpanel>
+							</tabpanels>
+						</tabbox>
+				
+				    <groupbox flex="1" pack="center" align="center">
+				      <caption label="Fournisseur" />
+				      <grid>
+				        <columns>
+				        	<column />
+				         	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				         	<row align="center">
+				          	<label class="label" value="Raison sociale :" />
+										<hbox align="center">
+				    					<textbox id="oea-denomination" maxlength="50" size="40" oninput="oea_setModifie(true);" />
+											<button id="oea-bRechFournisseur" collapsed="true" class="bIcoRechercher" tooltiptext="rechercher un fournisseur" oncommand="oea_rechercherFournisseur();" flex="1" />
+										</hbox>						
+										<hbox />
+				         	</row>
+				         	<row align="center">
+				          	<label class="label" value="Adresse :" />
+				   				  <textbox id="oea-adresse1" maxlength="80" size="30" oninput="oea_setModifie(true);" />
+				   				  <hbox align="center">
+											<button id="oea-bChercherAdr" class="bIcoEnveloppe" tooltiptext="changer l'adresse" oncommand="oea_rechercherAdr();" />
+										</hbox>
+				          </row>
+									<row align="center">
+				            <label class="label" value="" />
+				      			<hbox>
+											<textbox id="oea-adresse2" maxlength="50" flex="1" oninput="oea_setModifie(true);" />
+											<textbox id="oea-adresse3" maxlength="50" flex="1" oninput="oea_setModifie(true);" />
+										</hbox>
+										<label value="" />
+				          </row>
+				          <row align="center">
+				            <label class="label" value="Code postal :" />
+										<hbox align="center">
+				      				<textbox id="oea-codePostal" class="rv_cp" idville="oea-ville" idnextfocus="oea-codePays" maxlength="10" size="6" oninput="oea_setModifie(true);" />
+				            	<label class="label" value="Ville :" />
+				            	<textbox id="oea-ville" class="rv_ville" idcp="oea-codePostal" idnextfocus="oea-codePays" maxlength="50" size="30" oninput="oea_setModifie(true);" />
+				          	</hbox>
+				          	<label value="" />
+				          </row>
+									<row align="center">
+				            <label class="label" value="Pays :" />
+				            <hbox>
+				            	<menulist id="oea-codePays" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="oea_calculerTvaPort(); oea_selectPays(); oea_setModifie(true);">
+											<template>
+				             		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+				             		</menupopup>
+											</template>
+											</menulist>
+				            </hbox>
+				            <label value="" />
+				          </row>
+				          <row align="center">
+				            <label class="label" value="Contact :" />
+										<hbox>
+											<menulist id="oea-civInter" oncommand="oea_setModifie(true);">
+												<menupopup>
+				                  <menuitem label="" value="0" />
+													<menuitem label="M." value="1" />
+													<menuitem label="Mme" value="2" />
+													<menuitem label="Mlle" value="3" />
+												</menupopup>
+											</menulist>
+											<hbox align="center">
+				              	<textbox id="oea-nomInter" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oea_setModifie(true);" />
+												<textbox id="oea-prenomInter" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oea_setModifie(true);" />
+											</hbox>
+				            </hbox>
+				            <hbox align="center">
+											<button id="oea-bChercherInter" class="bIcoContact" tooltiptext="changer de contact" oncommand="oea_rechercherInterlocuteur();" />
+										</hbox>
+				          </row>
+								  <row align="center">
+				            <label class="label" value="Tél :" />
+										<hbox align="center">
+				             	<textbox id="oea-telInter" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oea_setModifie(true);" />
+				            	<label class="label" value="Fax :" />
+				             	<textbox id="oea-faxInter" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oea_setModifie(true);" />
+				            </hbox>
+				            <label value="" />
+				          </row>
+								  <row align="center">
+				            <label class="label" value="Email :" />
+				           	<textbox id="oea-emailInter" size="15" maxlength="64" tooltiptext="e-mail de l'interlocuteur" oninput="oea_setModifie(true);" />
+				          	<label value="" />
+				          </row>
+				        </rows>
+				      </grid>
+				    </groupbox>
+				
+					</hbox>
+				
+			    <vbox flex="1">
+			    	<hbox flex="1">
+				    	<tree id="oea-articles"
+				            flex="1"
+				            style="min-height: 100px;"
+										flags="dont-build-content"
+				            seltype="single"
+				            ref="http://www.opensi.org/facturation/articles_avoir"
+				            datasources="rdf:null"
+										ondblclick="oea_ouvrirCommentaire();"
+										onselect="oea_ouvrirLigne();"
+				            width="800px">
+				
+				        <treecols>
+				          <treecol id="oea-colReference" label="Référence" flex="2" />
+									<splitter class="tree-splitter" />
+				          <treecol id="oea-colDesignation" label="Désignation" flex="5" />
+									<splitter class="tree-splitter" />
+									<treecol id="oea-colNumLot" label="N° Lot" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+									<treecol id="oea-colNbPieces" label="Nb Pièces" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+				          <treecol id="oea-colQuantite" label="Quantité" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+									<treecol id="oea-colUnite" label="Unité" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+									<treecol id="oea-colDatePeremption" label="DLC" tooltiptext="Date Limite de Consommation" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+				          <treecol id="oea-colPU" label="P.U HT" flex="2" style="text-align:right" />
+									<splitter class="tree-splitter" />
+									<treecol id="oea-colRistourne" label="Ristourne (%)" flex="1" style="text-align:right" />
+									<splitter class="tree-splitter" />
+				          <treecol id="oea-colTotal" label="Total HT" flex="2" style="text-align:right" />
+				          <splitter class="tree-splitter" />
+									<treecol label="Taux TVA" flex="1" style="text-align:right" hidden="true" />
+									<treecol id="oea-colCodeTVA" collapsed="true" ignoreincolumnpicker="true" />
+									<treecol id="oea-colTypeLigne" collapsed="true" ignoreincolumnpicker="true" />
+									<treecol id="oea-colLigneId" collapsed="true" ignoreincolumnpicker="true" />
+									<treecol id="oea-colLibelle" collapsed="true" ignoreincolumnpicker="true" />
+				        </treecols>
+				        <template>
+				        	<treechildren>
+				            <treeitem uri="rdf:*">
+				              <treerow>
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Reference" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Designation" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Num_Lot" />
+				             	 	<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Nb_Pieces" />
+				              	<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Quantite" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Unite" />
+				              	<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Date_Peremption" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Prix" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Ristourne" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Total" />
+				                <treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Taux_TVA" />
+												<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Code_TVA" />
+												<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Type_Ligne" />
+												<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Ligne_Id" />
+												<treecell label="rdf:http://www.opensi.org/facturation/articles_avoir/rdf#Libelle" />
+				              </treerow>
+				            </treeitem>
+				        	</treechildren>
+				        </template>
+				      </tree>
+				      <vbox>
+					    	<button class="bIcoFlecheHaut" id="oea-bFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="oea_deplacerLigneHaut();" />
+					    	<button class="bIcoFlecheBas" id="oea-bFlecheBas" tooltiptext="déplacer vers le bas" oncommand="oea_deplacerLigneBas();" />
+					    </vbox>
+						</hbox>
+			
+						<grid>
+							<rows>
+								<row />
+								<row />
+							</rows>
+							<columns>
+								<column>
+									<hbox align="end">
+			              <label value="Référence :" /></hbox>
+									<hbox><textbox id="oea-reference" maxlength="40" size="15" onkeypress="oea_pressOnReference(event);" /></hbox>
+								</column>
+								<column flex="1">
+									<hbox align="end"><label value="Désignation :" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-designation" flex="1" maxlength="100" style="margin-left:0px" /></hbox>
+								</column>
+								<column id="oea-produitFrais1">
+									<hbox align="end"><label value="N° Lot :" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-numLot" maxlength="15" size="10" style="margin-left:0px" /></hbox>
+								</column>
+								<column id="oea-produitFrais2">
+									<hbox align="end"><label value="Nb Pc :" tooltiptext="Nombre de Pièces" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-nbPieces" maxlength="15" size="6" style="margin-left:0px" class="nombre" /></hbox>
+								</column>
+								<column>
+									<hbox align="end"><label value="Qté :" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-quantite" maxlength="15" size="7" style="margin-left:0px" class="nombre" onkeypress="oea_pressOnQuantite(event);" /></hbox>
+								</column>
+								<column id="oea-produitFrais3">
+									<hbox align="end"><label class="label" value="Unité :" style="margin-left:0px" /></hbox>
+				        	<hbox>
+										<menulist id="oea-unite" ref="http://www.opensi.org/facturation/unites_vente" datasources="rdf:null" style="margin-left:0px">
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" value="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</column>
+								<column id="oea-produitFrais4">
+									<hbox align="end"><label value="DLC :" tooltiptext="Date Limite de Consommation" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-datePeremption" maxlength="10" size="8" style="margin-left:0px" /></hbox>
+								</column>
+								<column>
+									<hbox align="end"><label value="P.U HT :" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-PU" maxlength="16" size="14" style="margin-left:0px" class="nombre" onkeypress="oea_evaluer(this, event);" /></hbox>
+								</column>
+								<column>
+									<hbox align="end"><label value="Ristourne :" style="margin-left:0px" /></hbox>
+									<hbox><textbox id="oea-ristourne" maxlength="15" size="8" style="margin-left:0px" class="nombre" /></hbox>
+								</column>
+								<column>
+									<hbox align="end"><label class="label" value="Tva :" style="margin-left:0px" /></hbox>
+			        		<hbox>
+										<menulist id="oea-codeTVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null" style="margin-left:0px">
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" style="font-size:80%;padding-left:0px" label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA" value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</column>
+								<column>						
+									<hbox align="center">
+										<button id="oea-bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="oea_rechercherStock();" style="margin-left:0px" flex="1" />
+										<button id="oea-bCommentaire" class="bIcoCommentaire" tooltiptext="éditer les commentaires sur ligne" oncommand="oea_editerCommentaire();" style="margin-left:0px" flex="1" />
+									</hbox>
+									<hbox>
+										<button id="oea-bAnnuler" class="bIcoAnnuler" tooltiptext="annuler la ligne" oncommand="oea_annulerLigne();" style="margin-left:0px" />
+										<button id="oea-bValider" class="bIcoValider" tooltiptext="valider la ligne" oncommand="oea_validerLigne();" style="margin-left:0px" />
+										<button id="oea-bSupprimer" class="bIcoSupprimer" tooltiptext="supprimer la ligne" oncommand="oea_supprimerLigne();" style="margin-left:0px" />
+									</hbox>						
+								</column>
+							</columns>
+						</grid>
+			
+					</vbox>
+				
+					<hbox>
+				
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Commentaires" />
+				      <vbox pack="center">
+				        <grid>
+					       	<columns>
+					        	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					       		<row align="center">
+					       			<label value="Commentaires de fin d'avoir :" />
+					       			<label value="Commentaires non imprimables :" />
+					       		</row>
+					       		<row align="center">
+					       			<textbox id="oea-commentairesFin" multiline="true" cols="35" rows="6" oninput="oea_setModifie(true);" />
+					       			<textbox id="oea-commentairesInt" multiline="true" cols="35" rows="6" oninput="oea_setModifie(true);" />
+					       		</row>
+					       	</rows>
+					      </grid>
+					      <box style="height:5px" />
+								<hbox pack="center">
+									<button id="oea-bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="oea_editerCommentairesCaches();" />
+									<button id="oea-bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="oea_choisirMentions();" />
+								</hbox>
+								<box style="height:5px" />
+				      </vbox>
+						</groupbox>
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Paramètres" />
+							<command id="oea-maj" oncommand="oea_calculTotaux();" />
+							<grid>
+				       	<columns>
+				        	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				       		<row align="center">
+										<hbox align="center" pack="end">
+											<label class="label" value="Remise en" />
+											<button id="oea-bRemise" oncommand="oea_switchRemise();" class="bIcoPourcentage" />
+											<label value=":" />
+										</hbox>
+										<hbox><textbox id="oea-remise" onkeypress="oea_oea_evaluer(this, event);" maxlength="7" size="10" timeout="200" command="oea-maj" type="timed" oninput="oea_setModifie(true);" class="nombre" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Frais de port :" />
+										<hbox><textbox id="oea-fraisPort" onkeypress="oea_evaluer(this, event);" maxlength="12" size="10" timeout="200" command="oea-maj" type="timed" oninput="oea_setModifie(true);" class="nombre" /></hbox>
+									</row>
+									<row align="center">
+										<hbox align="center" pack="end">
+											<label class="label" value="Remise sur frais de port en" />
+											<button id="oea-bRemiseFP" oncommand="oea_switchRemiseFP();" class="bIcoPourcentage" />
+											<label value=":" />
+										</hbox>
+										<hbox><textbox id="oea-remiseFP" onkeypress="oea_evaluer(this, event);" maxlength="7" size="10" timeout="200" command="oea-maj" type="timed" oninput="oea_setModifie(true);" class="nombre" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Escompte (%) :" />
+										<hbox><textbox id="oea-escompte" onkeypress="oea_evaluer(this, event);" maxlength="5" size="10" timeout="200" command="oea-maj" type="timed" oninput="oea_setModifie(true);" class="nombre" /></hbox>
+									</row>
+								</rows>
+							</grid>
+				    </groupbox>
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Totaux" />
+				      <grid>
+				        <columns>
+				          <column />
+				          <column />
+				        </columns>
+				        <rows>
+				        	<row align="center">
+				            <label class="label" value="Montant HT :" />
+				            <label id="oea-montantHT" style="text-align:right" />
+									</row>
+									<row id="oea-rowRemiseHT" align="center">
+				  					<label class="label" value="Remise :" />
+				  					<label id="oea-montantRemise" style="text-align:right" />
+									</row>
+									<row align="center">
+				  					<label class="label" value="Frais de port :" />
+				  					<label id="oea-montantFraisPort" style="text-align:right" />
+									</row>
+									<row align="center" id="oea-rowRemiseFPHT">
+				  					<label class="label" value="Remise sur frais de port :" />
+				  					<label id="oea-montantRemiseFP" style="text-align:right" />
+									</row>
+									<row align="center">
+				  					<label class="label" value="Total HT :" />
+				  					<label id="oea-totalHT" style="text-align:right" />
+									</row>
+									<row align="center">
+				  					<label class="label" value="TVA :" />
+				  					<label id="oea-TVA" style="text-align:right" />
+									</row>
+									<row id="oea-rowMontantTTC" align="center">
+				  					<label class="label" value="Montant TTC :" />
+				  					<label id="oea-montantTTC" style="text-align:right" />
+									</row>
+									<row id="oea-rowEscompteHT" align="center">
+				  					<label class="label" value="Escompte :" />
+				  					<label id="oea-montantEscompte" style="text-align:right" />
+									</row>
+									<row align="center">
+				  					<label class="label" value="Total TTC :" />
+				  					<label id="oea-totalTTC" style="text-align:right"  />
+									</row>
+				        </rows>
+				      </grid>
+						</groupbox>
+				
+				  </hbox>
+				
+					<hbox pack="center">
+						<button id="oea-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oea_enregistrerAvoir();" tooltiptext="enregistrer l'avoir" />
+						<button id="oea-bSupAvoir" class="bSupprimer" label="Supprimer" oncommand="oea_supprimerAvoir();" tooltiptext="supprimer l'avoir" />
+				    <button id="oea-bVisualiser" class="bPDF" label="Edition PDF" oncommand="oea_visualiserAvoir();" />
+					</hbox>
+					<box style="height:5px" />
+				</vbox>
+				<vbox>
+					<statusbar>
+						<statusbarpanel id="oea-creation" />
+						<statusbarpanel id="oea-modification" />
+						<statusbarpanel id="oea-fiche" flex="1" style="text-align:right;font-weight:bold;" />
+					</statusbar>
+				</vbox>
+			</vbox>
+
+			<vbox>
+				<hbox pack="end" id="oea-boxMail">
+					<button class="bEnvoyer" label="Envoyer par e-mail" oncommand="oea_envoyerMail();" />
+				</hbox>
+				<iframe type="content" id="oea-pdfAvoir" flex="1" />
+			</vbox>
+		</deck>
+
+	</vbox>
+
+</overlay>

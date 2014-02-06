@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_paramserveur" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rapports.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<button class="bouton_menu" id="bMenuSites" oncommand="menuSite()"/>
+		<button class="bouton_menu" id="bGestionSite" oncommand="menuGestionSite()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="" align="end" class="etape" />
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Rapports de mise à jour" class="label_14"/></box>
+		</vbox>
+
+		<!-- Titre -->
+		
+		<box height="50px"/>
+		<hbox>
+			<box width="10px"/>
+		<vbox flex="1" pack="center">
+		<hbox flex="1">
+			<vbox>
+			<label value="Mise à jour des prix"/>
+			<menulist id="menulist_majPrix" oncommand="afficher_majPrix()" ref="http://www.opensi.org/WebManager/listeRapportMajPrix" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportMajPrix/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportMajPrix/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			
+			<vbox>
+			<label value="Mise à jour des stock"/>
+			<menulist id="menulist_majStock" oncommand="afficher_majStock()" ref="http://www.opensi.org/WebManager/listeRapportMajStock" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportMajStock/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportMajStock/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			
+			
+			<vbox>
+			<label value="Mise à jour des détails"/>
+			<menulist id="menulist_majInfo" oncommand="afficher_majInfo()" ref="http://www.opensi.org/WebManager/listeRapportMajInfo" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportMajInfo/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportMajInfo/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			
+			<vbox>
+			<label value="Mise à jour des articles"/>
+			<menulist id="menulist_majArticle" oncommand="afficher_majArt()" ref="http://www.opensi.org/WebManager/listeRapportMajArt" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportMajArt/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportMajArt/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			</hbox>
+			
+			<hbox flex="1">
+			<vbox>
+			<label value="Upload des commandes"/>
+			<menulist id="menulist_majCom" oncommand="afficher_majCom()" ref="http://www.opensi.org/WebManager/listeRapportMajCom" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportMajCom/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportMajCom/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			
+			<vbox>
+			<label value="Upload des articles"/>
+			<menulist id="menulist_upArt" oncommand="afficher_upArt()" ref="http://www.opensi.org/WebManager/listeRapportUpArt" datasources="rdf:null" style="max-width:250px;min-width:250px">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeRapportUpArt/rdf#nom" value="rdf:http://www.opensi.org/WebManager/listeRapportUpArt/rdf#nom" style="font-size:80%" />
+					</menupopup>
+				</template>
+			</menulist>
+			</vbox>
+			
+			<box width="320px"/>
+			<hbox align="end" pack="left" flex="1">
+				<vbox align="center" pack="center">
+					<button label="Administrer les mise à jour" oncommand="admin_maj()" />
+				</vbox>
+			</hbox>
+			</hbox>
+			
+		</vbox>
+		</hbox>
+		<box height="20px"/>
+		<hox flex="5">
+			<box width="10px"/>
+			<iframe type="content" id="frame_rapport" src="" flex="1" style="border-style:groove;"/>
+			<box width="10px"/>
+		</hox>
+		<box height="10px"/>
+		
+		
+	</vbox>
+	
+
+	
+
+</window>

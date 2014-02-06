@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'un fournisseur"
+  id="opensi_facturation_user_fournisseurs_rechFournissseur"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_fournisseur.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+		<label class="label_14" value="RECHERCHE D'UN FOURNISSEUR" />
+	</hbox>
+	<hbox style="height:20px" />
+	<hbox pack="center" flex="1">
+  	<grid>
+    	<columns>
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+      	<row align="center">
+        	<label class="label" value="Numéro fournisseur :" />
+        	<hbox><textbox id="Fournisseur_Id" maxlength="10" size="11" onkeypress="pressOnId(event);" /></hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Raison sociale :" />
+        	<hbox><textbox id="Nom" maxlength="30" size="30" onkeypress="pressOnNom(event);"/></hbox>
+      	</row>
+				<row align="center">
+          <label class="label" value="Famille :" />
+          <hbox>
+            <menulist id="Famille" oncommand="pressOnFamille();" ref="http://www.opensi.org/facturation/familles_fournisseur" datasources="rdf:null" style="width:180px">
+              <menupopup>
+								<menuitem label="[Toutes]" value="0" />
+              </menupopup>
+							<template>
+              	<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Famille_Id" />
+              	</menupopup>
+							</template>
+            </menulist>
+					</hbox>
+        </row>
+      	<row align="center">
+        	<label class="label" value="Code couleur :" />
+					<hbox>
+            <menulist id="Code_Couleur" oncommand="pressOnCouleur();">
+              <menupopup>
+								<menuitem label="[Tous]" value="-1" />
+                <menuitem id="vert" label="Vert" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_vert.jpg" value="2" />
+                <menuitem id="bleu" label="Bleu" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_bleu.jpg" value="3" />
+								<menuitem id="rouge" label="Rouge" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_rouge.jpg" value="1" />
+								<menuitem id="noir" label="Noir" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_noir.jpg" value="0" />
+              </menupopup>
+            </menulist>
+					</hbox>
+      	</row>
+				<row style="height:10px" />
+      	<row>
+        	<label class="label" value="Fournisseurs trouvés :" />
+        	<tree
+						id="fournisseurs"
+          	flex="1"
+          	hidecolumnpicker="true"
+          	seltype="single"
+          	ref="http://www.opensi.org/facturation/fournisseurs"
+          	datasources="rdf:null"
+          	onkeypress="pressOnTree(event);"
+						ondblclick="choixFournisseur();"
+            style="min-height: 150px;"
+          	height="150px"
+          	width="600px">
+
+          	<treecols>
+            	<treecol id="ColFournisseur_Id" label="Numéro" flex="1" />
+							<splitter class="tree-splitter" />
+            	<treecol id="ColDenomination" label="Raison sociale" flex="3" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColFamille" label="Famille" flex="2" />
+							<splitter class="tree-splitter" />
+            	<treecol id="ColCouleur" label="Couleur" flex="1" />
+          	</treecols>
+          	<template>
+            	<treechildren>
+              	<treeitem uri="rdf:*">
+                	<treerow>
+                  	<treecell label="rdf:http://www.opensi.org/facturation/fournisseurs/rdf#Fournisseur_Id" />
+                  	<treecell label="rdf:http://www.opensi.org/facturation/fournisseurs/rdf#Denomination" />
+										<treecell label="rdf:http://www.opensi.org/facturation/fournisseurs/rdf#Famille" />
+										<treecell src="rdf:http://www.opensi.org/facturation/fournisseurs/rdf#Url_Image" />
+                	</treerow>
+              	</treeitem>
+            	</treechildren>
+          	</template>
+        	</tree>
+      	</row>
+    	</rows>
+  	</grid>
+	</hbox>
+
+	<hbox style="height:20px" />
+  <hbox pack="center">
+		<hbox style="width:100px;" pack="left">
+			<hbox style="width:20px" />
+			<button class="bNouveau" id="bouton_nouveau" label="Nouveau" oncommand="nouveauFournisseur();" />
+		</hbox>
+		<hbox flex="1" pack="center">
+			<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+			<button class="bValider" label="Ok" oncommand="choixFournisseur();" />
+		</hbox>
+		<hbox style="width:100px;" />
+  </hbox>
+	<box style="height:20px" />
+
+</window>

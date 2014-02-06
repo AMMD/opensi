@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_factu_auto_choixProduit"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="choixProduit.js" />
+
+		<vbox>	
+			<label class="label_14" value="Codes produits en attente de facturation" />
+			
+			<groupbox>
+				<caption label="Filtres" />
+				
+				<hbox pack="end">
+					<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher();" />
+					<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutDecocher();" />
+				</hbox>
+			</groupbox>
+
+			<listbox flex="1" id="listeProduitsEnAttente" ref="http://www.opensi.org/facturation/produitsEnAttente" datasources="rdf:null">
+				<listhead>
+					<listheader label="Numero" />
+					<listheader label="Article" />	
+				</listhead>
+				<listcols>
+					<listcol flex="1" />
+					<listcol flex="3" />
+				</listcols>
+				<template>
+					<listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/produitsEnAttente/rdf#Produit_Id" allowevents="true">
+						<listcell type="checkbox" checked="rdf:http://www.opensi.org/facturation/produitsEnAttente/rdf#Checked" label="rdf:http://www.opensi.org/facturation/produitsEnAttente/rdf#Numero" disabled="false" onclick="testCheck(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/produitsEnAttente/rdf#Article_Id" />
+					</listitem>
+				</template>
+			</listbox>
+
+			<box style="height:10px;" />			
+			<hbox pack="center" align="center">
+				<button id="bValider" label="Valider" class="bValider" oncommand="valider()" />
+				<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+			</hbox>
+		</vbox>
+
+</window>

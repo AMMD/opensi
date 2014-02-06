@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_suiviReglementsClients_overlayRelances"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-relances.js" />
+	
+	<tabpanel id="tabRelances" flex="1">
+		<vbox flex="1" class="auto-overflow">
+		
+			<hbox>
+				<label class="label_14" value="Relances à générer" />
+				<hbox flex="1" pack="end">
+					<button class="bPDF" id="or-bGenererRelancesEnvoi" label="Générer les relances à envoyer" oncommand="or_genererRelancesEnvoi();" />
+				</hbox>
+			</hbox>
+
+
+			<tree id="or-listeRelances"
+						flex="1"
+						hidecolumnpicker="true"
+						seltype="single"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/compta/relances"
+						ondblclick="or_ouvrirRelance(false);"
+						datasources="rdf:null">
+				<treecols>
+					<treecol label="N° Client" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Client_Id"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Client" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Libelle"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Echéance" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#dateechtri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="N° Facture" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Num_Fact"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantdutri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Réglé" flex="1" hidden="true" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantregletri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Restant dû" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantrestetri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="N° Relance" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#nbrelances"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Dernière relance" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#derrelancetri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Mode règlement" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Mode_R"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Compte" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Numero_Compte"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Journal" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Journal_Banque"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Num Pièce" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Num_Piece"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Banque Client" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Banque_Client"/>
+					<treecol id="or-colOpId" collapsed="true" ignoreincolumnpicker="true"/>
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Client_Id" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Libelle" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Date_Echeance" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Num_Fact" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_TTC" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_regle" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_du" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#nbrelances" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#derrelance" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Mode_R" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Numero_Compte" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Journal_Banque" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Num_Piece" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Banque_Client" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Op_Id" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#dateoptri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#dateechtri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantdutri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantregletri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantrestetri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#derrelancetri" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+			
+			<hbox>
+				<label class="label_14" value="Relances en cours" />
+				<hbox flex="1" pack="center">
+					<button id="or-bGenererRelancesEnCours" class="bPDF" label="Générer les relances en cours" oncommand="or_genererRelancesEnCours();" />
+				</hbox>
+				<hbox flex="1" pack="end">
+					<menulist id="or-dernieresRelances" ref="http://www.opensi.org/facturation/dernieresRelances" style="width:160px" sizetopopup="none" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Choisir]" value="0" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/dernieresRelances/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/dernieresRelances/rdf#Date_Relance" />
+							</menupopup>
+						</template>
+					</menulist>
+					<button id="or-bReediterRelances" class="bPDF" label="Rééditer" oncommand="or_reediterRelance();" />
+				</hbox>
+			</hbox>
+			
+			<tree id="or-listeRelancesEnCours"
+						flex="1"
+						hidecolumnpicker="true"
+						seltype="single"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/compta/relances"
+						ondblclick="or_ouvrirRelance(true);"
+						datasources="rdf:null">
+				<treecols>
+					<treecol label="N° Client" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Client_Id"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Client" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Libelle"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Echéance" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#dateechtri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="N° Facture" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Num_Fact"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantdutri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Réglé" flex="1" hidden="true" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantregletri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Restant dû" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#montantrestetri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="N° Relance" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#nbrelances"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Dernière relance" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/compta/relances/rdf#derrelancetri"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Mode règlement" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Mode_R"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Compte" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Numero_Compte"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Journal" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Journal_Banque"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Num Pièce" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Num_Piece"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Banque Client" hidden="true" flex="1" sort="rdf:http://www.opensi.org/compta/relances/rdf#Banque_Client"/>
+					<treecol id="or-colOpIdEnCours" collapsed="true" ignoreincolumnpicker="true"/>
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Client_Id" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Libelle" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Date_Echeance" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Num_Fact" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_TTC" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_regle" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Montant_du" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#nbrelances" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#derrelance" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Mode_R" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Numero_Compte" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Journal_Banque" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Num_Piece" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Banque_Client" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#Op_Id" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#dateoptri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#dateechtri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantdutri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantregletri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#montantrestetri" />
+									<treecell label="rdf:http://www.opensi.org/compta/relances/rdf#derrelancetri" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+			
+		</vbox>
+	</tabpanel>
+
+</overlay>

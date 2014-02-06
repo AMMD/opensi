@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_edition_optionsplancomptable"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_plancomptable.js" />
+
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+    	<button class="bouton_menu" id="bRetourOptions" oncommand="retour_options_plan();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" style="margin-right:5px" />
+		</hbox>
+  </hbox>
+  <deck id="deck" flex="1">
+	<vbox pack="center" flex="1">
+			<hbox style="height:50px" />
+			<hbox pack="center">
+				<label value="OPTIONS POUR L'EDITION DES PLANS COMPTABLE" class="label_16" />
+			</hbox>
+			<hbox style="height:30px" />
+		
+			<hbox pack="center" flex="1" class="auto-overflow">
+				<vbox pack="center">
+				<hbox  pack="center">
+					<groupbox  flex="1" pack="center" class="pad_groupbox">
+						<caption label="1-Plan comptable" />			
+						 	<grid>
+							<rows>
+								<row align="center">
+									<radiogroup id="Plan" orient="horizontal" oncommand="cachechoix(this.value);">	
+										<radio id="pcd"  value="2" label="Plan comptable du dossier" selected="true"/>													
+										<radio id="pcg"  value="1" label="Plan comptable général" />
+										
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>	
+					</groupbox>
+					<groupbox id="gpchoix" flex="1" pack="center" class="pad_groupbox">
+						<caption label="2-Choix" />				
+						 	<grid>
+							<rows>
+								<row pack="center">
+									<radiogroup id="Choix" orient="horizontal">		
+										<radio value="G" label="Général" selected="true"/>												
+										<radio value="F" label="Fournisseur"  />
+										<radio value="C" label="Client" />
+										<radio value="A" label="Auxiliaire" />
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>	
+					</groupbox>
+					</hbox>
+					<hbox pack="center">
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="3-Sortie" />				
+						 	<grid>
+							<rows>
+								<row  pack="center">
+									<radiogroup id="Sortie" orient="horizontal">		
+										<radio id="pdf" value="2" label="PDF" selected="true"/>												
+										<radio id="csv" value="1" label="CSV"  />									
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>	
+					</groupbox>
+					</hbox>
+				</vbox>
+			</hbox>
+
+	<hbox style="height:30px" />
+
+	<hbox pack="center">
+		<button id="BoutonEdition" label="EDITER PLAN COMPTABLE" oncommand="editerPlan();" />
+	</hbox>
+
+	<hbox style="height:10px" />
+	<hbox flex="1" />
+</vbox>
+
+
+<vbox>
+		<iframe type="content" id="pdf_plan" flex="1" />
+</vbox>
+</deck>
+</window>
+

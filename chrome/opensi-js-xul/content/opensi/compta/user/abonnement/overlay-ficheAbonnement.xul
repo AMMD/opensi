@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_test_overlay-contact"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-ficheAbonnement.js" />
+
+	<vbox id="deckFicheAbonnement" flex="1">
+	  	
+			<label class="label_16" value="Fiche abonnement d'écriture" />
+			
+			<groupbox>
+				<caption label="Paramètres" />
+				
+				<hbox flex="1">
+					<grid>
+						<columns>
+							<column flex="1" />
+							<column flex="1" />
+							<column flex="1" />
+							<column flex="1" />
+						</columns>
+						<rows>
+					 		<row align="center">
+						 		<label class="label" value="*Libellé : " />
+						 		<textbox id="ofa-libelle" onkeypress="ofa_keyPressOnFormHaut(event);" maxlength="50" />
+						 		<label class="label" value="Journal de destination : " />
+						 		<menulist id="ofa-journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="ofa_changeOnListeHaut();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#Libelle_Long" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+										</menupopup>
+									</template>
+								</menulist>
+						 	</row>
+					 		<row align="center">
+						 		<label class="label" value="Etat : " />
+						 		<label id ="ofa-etat" value="-" onkeypress="ofa_keyPressOnFormHaut(event);" />
+						 		<label class="label" value="Périodicité : " />
+						 		<menulist id="ofa-periodicite" style="width:160px" sizetopopup="none" oncommand="ofa_changeOnPeriodicite();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+										<menuitem label="Journalière" value="J" />
+										<menuitem label="Mensuelle" value="M" />
+										<menuitem label="Bimestrielle" value="B" />
+										<menuitem label="Trimestrielle" value="T" />
+										<menuitem label="Semestrielle" value="S" />
+										<menuitem label="Annuelle" value="A" />
+									</menupopup>
+								</menulist>
+						 	</row>
+					 		<row align="center">
+						 		<label class="label" value="*Date de début : " />
+						 		<textbox id="ofa-debut" onkeypress="ofa_keyPressOnFormHaut(event);" tooltiptext="Date au format : jj/mm/aaaa" maxlength="10" />
+					 			<box />
+					 			<checkbox id='ofa-chkFinMois' label="Date en fin de mois" oncommand="ofa_chkFinMois();" />
+						 	</row>
+					 		<row align="center">
+						 		<label class="label" value="Date de fin : " />
+						 		<textbox id="ofa-fin" onkeypress="ofa_keyPressOnFormHaut(event);" tooltiptext="Date au format : jj/mm/aaaa" maxlength="10" />
+					 			<label id="ofa-labelEcriture" class="label" value="Jour d'écriture : " />
+						 		<textbox id="ofa-ecriture" onkeypress="ofa_keyPressOnFormHaut(event);" maxlength="2" />
+						 	</row>
+					 	</rows>
+			 		</grid>
+		 		</hbox>
+		 		
+		 		<box height="10px" />
+		 		
+		 		<hbox flex="1" pack="center">
+	 				<button id="ofa-bCopier" class="bCopier" label="Copier" oncommand="ofa_pressOnCopier();" disabled="true" />
+	 				<button id="ofa-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="ofa_pressOnSupprimer();" disabled="true" />
+	 				<button id="ofa-bAnnuler" class="bAnnuler" label="Annuler" oncommand="ofa_pressOnAnnuler();" disabled="true" />
+	 				<button id="ofa-bNouveau" class="bNouveau" label="Nouveau" oncommand="ofa_pressOnNouveau();" />
+	 				<button id="ofa-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="ofa_pressOnEnregistrer();" disabled ="true" />
+	 				<button id="ofa-bValider" class="bValider" label="Valider" oncommand="ofa_pressOnValider();" disabled="true" />
+		 		</hbox>
+		 		
+			</groupbox>
+			
+			<hbox flex="1">
+			
+				<groupbox>
+					<caption label="Modèle de l'écriture" />
+					
+					<tree id="ofa-modeleEcriture" flex="1"
+						flags="dont-build-content"
+						datasources="rdf:null" 
+						ref="http://www.opensi.org/compta/abonnement"
+						onselect="ofa_selectOnTreeModele();"
+						hidecolumnpicker="true">
+						<treecols>
+							<treecol id="ofa-colCompte" label="N° Compte" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ofa-colLibelle" label="Libellé" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ofa-colReglement" label="Règlement" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ofa-colInfos" label="Infos" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol class="nombre" id="ofa-colDebit" label="Débit" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol class="nombre" id="ofa-colCredit" label="Crédit" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ofa-colPiece" label="N° Pièce" flex="1" />
+							<treecol id="ofa-colLigneId" collapsed="true" ignoreincolumnpicker="true" />
+							<treecol id="ofa-colReglementId" collapsed="true" ignoreincolumnpicker="true" />
+							<treecol id="ofa-colPeriode" collapsed="true" ignoreincolumnpicker="true" />
+						</treecols>
+						
+						<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Compte" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Libelle" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Reglement" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Infos" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Debit" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Credit" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Piece" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Id" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#IdReg" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Periode" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</template>
+					</tree>
+					
+					<box height="10px" />
+					
+					<hbox>
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column pack="center" />
+								<column pack="center" />
+								<column pack="center" />
+							</columns>
+							<rows>
+								<row align="center" flex="1">
+									<label value="N° Compte :" />
+									<label value="Libellé :" />
+									<label value="Règlement :" />
+									<label value="Infos :" />
+									<label value="Débit :" />
+									<label value="Crédit :" />
+									<label value="N° Pièce :" />
+								</row>
+								<row align="center" flex="1">
+									<hbox flex="1">
+										<textbox id="ofa-compteLigne" maxlength="8" size="10" onkeypress="ofa_keyPressOnCompte(event);" />
+									</hbox>
+									<hbox flex="1">
+										<textbox id="ofa-libelleLigne" maxlength="70" flex="1" />
+									</hbox>
+									<menulist id="ofa-filtreModesLigne" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:160px" sizetopopup="none">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+									<hbox flex="1">
+										<textbox id="ofa-infosLigne" maxlength="20" flex="1" />
+									</hbox>
+									<hbox flex="1">
+										<textbox class="nombre" id="ofa-debitLigne" value="0.00" maxlength="17" size="8" />
+									</hbox>
+									<hbox flex="1">
+										<textbox class="nombre" id="ofa-creditLigne" value="0.00" maxlength="17" size="8" />
+									</hbox>
+									<hbox flex="1">
+										<textbox id="ofa-pieceLigne" maxlength="20" flex="1" />
+									</hbox>
+									<button id="ofa-annulerLigne" class="bIcoAnnuler" tooltiptext="Annuler" oncommand="ofa_pressOnAnnulerLigne();" />
+									<button id="ofa-validerLigne" class="bIcoValider" tooltiptext="Valider" oncommand="ofa_pressOnValiderLigne();" />
+									<button id="ofa-supprimerLigne" class="bIcoSupprimer" tooltiptext="Supprimer" oncommand="ofa_pressOnSupprimerLigne();" />
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+					
+					<hbox>
+						<checkbox id='ofa-chkPeriode' label="Insérer la période en fin de libellé" />
+					</hbox>
+					
+				</groupbox>
+				
+				<groupbox flex="1">
+					<caption label="Echéances d'écritures" />
+					
+					<tree id="ofa-listeEcheance" flex="1"
+						flags="dont-build-content"
+						datasources="rdf:null" 
+						ref="http://www.opensi.org/compta/abonnement"
+						onselect="ofa_selectOnEcheance();"
+						hidecolumnpicker="true">
+						<treecols>
+							<treecol label="Date échéance" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol label="Statut" flex="10" />
+							<treecol id="ofa-colEcheanceId" collapsed="true" ignoreincolumnpicker="true" />
+							<treecol id="ofa-colStatutId" collapsed="true" ignoreincolumnpicker="true" />
+						</treecols>
+						
+						<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Date" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Statut" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#Id" />
+										<treecell label="rdf:http://www.opensi.org/compta/abonnement/rdf#StatutId" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</template>
+					</tree>
+					
+					<hbox pack="end">
+						<button id="ofa-generer" class="bEdition" label="Générer les écritures" oncommand="ofa_pressOnGenerer();" />
+					</hbox>
+				</groupbox>
+			
+			</hbox>
+
+		</vbox>
+
+</overlay>

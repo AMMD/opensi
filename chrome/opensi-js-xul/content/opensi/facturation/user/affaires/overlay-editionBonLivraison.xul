@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_affaires_overlayEditionBonlivraison"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-editionBonLivraison.js" />
+
+	<vbox id="editionBonLivraison" flex="1">
+		<deck id="oebl-deckBonLivraison" selectedIndex="0" flex="1">
+			<vbox class="auto-overflow">
+				<hbox>
+					<tabbox flex="1" pack="center" id="oebl-tabBoxBon">
+						<tabs>
+							<tab label="Bon de livraison" id="oebl-tabBon" />
+							<tab label="Versions" id="oebl-tabVersionDocument" />
+						</tabs>
+						<tabpanels flex="1">
+			    		<tabpanel pack="center" align="start" orient="horizontal">
+					      <grid>
+					       	<columns>
+					        	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					       		<row align="center">
+					          	<label class="label" value="N° Affaire :" />
+					           	<label id="oebl-affaire" />
+					          </row>
+					          <row align="center">
+					          	<label class="label" value="N° Client :" />
+					           	<label id="oebl-client" />
+					          </row>
+					          <row align="center" id="oebl-rowLoginWeb">
+											<label class="label" value="Login :" />
+											<label id="oebl-labelLogin" />
+					          </row>
+					         	<row align="center">
+					          	<label class="label" value="N° Bon de livraison :" />
+					           	<label id="oebl-numero" />
+					         	</row>
+										<row align="center">
+					          	<label class="label" value="Date BL :" />
+					           	<label id="oebl-dateLiv" />
+					          </row>
+										<row align="center">
+					          	<label class="label" value="Etat :" />
+					           	<label id="oebl-etat" />
+					          </row>
+										<row align="center">
+					          	<label class="label" value="Expédition :" />
+					           	<label id="oebl-statutExpedition" />
+					          </row>
+					          <row align="center">
+											<label class="label" value="Mode d'expédition :" />
+											<menulist id="oebl-modeExpedition" ref="http://www.opensi.org/facturation/liste_modes_expedition" datasources="rdf:null" style="width:120px" sizetopopup="none" oncommand="oebl_setModifie(true);">
+												<menupopup>
+													<menuitem label="[Aucun]" value="0" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Nom" value="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Mode_Liv_Id" />
+													</menupopup>
+												</template>
+											</menulist>
+					          </row>
+					      	</rows>
+					     	</grid>
+							</tabpanel>
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<tree id="oebl-listeVersion"
+									hidecolumnpicker="true"
+					        seltype="single"
+					        ref="http://www.opensi.org/facturation/historiqueEditions"
+					        datasources="rdf:null"
+					        flex="1">
+							    <treecols>
+							      <treecol flex="1" label="N° Edition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Date d'édition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Login" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Envoyé à" />
+							    </treecols>
+							    <template>
+							      <treechildren>
+							        <treeitem uri="rdf:*">
+							          <treerow>
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+							          </treerow>
+							        </treeitem>
+							      </treechildren>
+							    </template>
+							  </tree>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+
+			    <tabbox flex="1" pack="center" id="oebl-tabBoxAdresses">
+						<tabs>
+			      	<tab label="Facturation" />
+			      	<tab label="Livraison" />
+			     	</tabs>
+			  		<tabpanels flex="1">
+			    		<tabpanel pack="center" align="center" orient="vertical">
+								<label id="oebl-raisonSociale" />
+								<label id="oebl-adresseFact" />
+								<label id="oebl-adresse2Fact" />
+								<label id="oebl-adresse3Fact" />
+								<hbox><label id="oebl-codePostalFact" /><label id="oebl-villeFact" /></hbox>
+			    		</tabpanel>
+			 				<tabpanel pack="center" align="start" orient="horizontal">
+			 		      <grid>
+					        <columns>
+					        	<column />
+					         	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					       		<row>
+					            <label value="" collapsed="true" />
+					            <label id="oebl-labelClientLiv" value="Client" />
+					            <label value="" />
+					          </row>
+					         	<row align="center">
+					          	<label class="label" value="Raison sociale :" />						
+					    				<hbox><textbox id="oebl-denominationLiv" maxlength="50" size="40" oninput="oebl_setModifie(true);" /></hbox>
+					    				<label value="" />
+					         	</row>
+					         	<row align="center">
+					          	<label class="label" value="Adresse :" />
+					   				  <textbox id="oebl-adresse1Liv" maxlength="80" size="30" oninput="oebl_setModifie(true);" />
+					   				  <hbox align="center">
+												<button id="oebl-chercherAdrLiv" class="bIcoEnveloppe" tooltiptext="changer l'adresse de livraison" oncommand="oebl_rechercherAdrLiv();" />
+											</hbox>
+					          </row>
+										<row align="center">
+					            <label class="label" value="" />
+					      			<hbox>
+												<textbox id="oebl-adresse2Liv" maxlength="50" flex="1" oninput="oebl_setModifie(true);" />
+												<textbox id="oebl-adresse3Liv" maxlength="50" flex="1" oninput="oebl_setModifie(true);" />
+											</hbox>
+											<label value="" />
+					          </row>
+					          <row align="center">
+					            <label class="label" value="Code postal :" />
+											<hbox align="center">
+					      				<textbox id="oebl-codePostalLiv" class="rv_cp" idville="oebl-villeLiv" idnextfocus="oebl-codePaysLiv" maxlength="10" size="6" oninput="oebl_setModifie(true);" />
+					            	<label class="label" value="Ville :" />
+					            	<textbox id="oebl-villeLiv" class="rv_ville" idcp="oebl-codePostalLiv" idnextfocus="oebl-codePaysLiv" maxlength="50" size="30" oninput="oebl_setModifie(true);" />
+					          	</hbox>
+					          	<label value="" />
+					          </row>
+										<row align="center">
+					            <label class="label" value="Pays :" />
+					            <hbox>
+					            	<menulist id="oebl-codePaysLiv" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="oebl_setModifie(true);">
+												<template>
+					             		<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+					             		</menupopup>
+												</template>
+												</menulist>
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oebl-rowInterLiv">
+					            <label class="label" value="Contact :" />
+											<hbox>
+												<menulist id="oebl-civInterLiv" oncommand="oebl_setModifie(true);">
+													<menupopup>
+					                  <menuitem label="" value="0" />
+														<menuitem label="M." value="1" />
+														<menuitem label="Mme" value="2" />
+														<menuitem label="Mlle" value="3" />
+													</menupopup>
+												</menulist>
+												<hbox align="center">
+					              	<textbox id="oebl-nomInterLiv" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oebl_setModifie(true);" />
+													<textbox id="oebl-prenomInterLiv" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oebl_setModifie(true);" />
+												</hbox>
+					            </hbox>
+					            <hbox align="center">
+												<button id="oebl-chercherInterLiv" class="bIcoContact" tooltiptext="changer de contact" oncommand="oebl_rechercherInterlocuteurLiv();" />
+											</hbox>
+					          </row>
+									  <row align="center" id="oebl-rowTelFaxLiv">
+					            <label class="label" value="Tél :" />
+											<hbox align="center">
+					              <textbox id="oebl-telInterLiv" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oebl_setModifie(true);" />
+					             	<label class="label" value="Fax :" />
+					              <textbox id="oebl-faxInterLiv" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oebl_setModifie(true);" />
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oebl-rowEmailLiv">
+					            <label class="label" value="Email :" />
+					           	<textbox id="oebl-emailInterLiv" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="oebl_setModifie(true);" />
+					          	<label value="" />
+					          </row>
+					        </rows>
+					      </grid>
+			    		</tabpanel>
+			    	</tabpanels>
+			    </tabbox>
+			    
+				</hbox>
+			
+				<hbox>
+					<groupbox flex="1" pack="center" align="center" id="oebl-groupboxFournisseur" collapsed="true">
+						<caption label="Fournisseur" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Choisir :" />
+									<hbox align="center">
+										<button id="oebl-btFournisseur" oncommand="oebl_changerFournisseur()" label="Changer" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Numéro :" />
+									<hbox align="center">
+										<label id="Fournisseur" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Raison sociale :" />
+									<hbox align="center">
+										<label id="oebl-raisonSocialeFournisseur" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Adresse :" />
+									<hbox align="center">
+										<label id="oebl-adresseFournisseur" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="" />
+									<hbox align="center">
+										<label id="oebl-adresse2Fournisseur" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="" />
+									<hbox align="center">
+										<label id="oebl-adresse3Fournisseur" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label value="" />
+									<hbox align="center">
+										<label id="oebl-cpFournisseur" />
+										<label id="oebl-villeFournisseur" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					<groupbox flex="1" pack="center" align="center" id="oebl-groupboxColis">
+			      <caption label="Colis" />
+			      <vbox align="center" ref="http://www.opensi.org/facturation/colis" id="oebl-liensColis" datasources="rdf:null">
+							<template>
+								<hbox uri="rdf:*">
+									<label class="rdf:http://www.opensi.org/facturation/colis/rdf#Class" tooltiptext="rdf:http://www.opensi.org/facturation/colis/rdf#Lien_tooltiptext" value="rdf:http://www.opensi.org/facturation/colis/rdf#Valeur" onclick="rdf:http://www.opensi.org/facturation/colis/rdf#Lien" />
+								</hbox>
+							</template>
+						</vbox>
+			    </groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires" />
+			      <vbox pack="center">
+			      	<grid>
+				       	<columns>
+				        	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				       		<row align="center">
+				       			<label value="Commentaires de fin de bon de livraison :" />
+				       			<label value="Commentaires non imprimables :" />
+				       		</row>
+				       		<row align="center">
+				       			<textbox id="oebl-commentairesFin" multiline="true" cols="35" rows="6" oninput="oebl_setModifie(true);" />
+				       			<textbox id="oebl-commentairesInt" multiline="true" cols="35" rows="6" oninput="oebl_setModifie(true);" />
+				       		</row>
+				       	</rows>
+				      </grid>
+				      <box style="height:5px" />
+							<hbox pack="center">
+								<button id="oebl-bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="oebl_editerCommentairesCaches();" />
+								<button id="oebl-bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="oebl_choisirMentions();" />
+							</hbox>
+							<box style="height:5px" />
+			      </vbox>
+					</groupbox>
+			
+					<vbox>
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Nombre de colis" />
+							<textbox id="oebl-nbColis" size="5" maxlength="5" oninput="oebl_setModifie(true);" class="nombre" />
+						</groupbox>
+			
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Ajout de frais de port" />
+							<textbox id="oebl-fraisSup" size="5" maxlength="8" class="nombre" oninput="oebl_setModifie(true);" />
+						</groupbox>
+					</vbox>
+			
+				</hbox>
+		
+				<hbox flex="1">
+		
+					<vbox flex="1" id="oebl-corpsCommande">
+						<label value="Articles restant à livrer :" />
+						<tree id="oebl-commande"
+		        			flex="1"
+		              style="min-height: 150px;"
+									flags="dont-build-content"
+									onselect="oebl_reporterQteEntree();oebl_disableAjouter(false,true);oebl_disableEnlever(true,false);"
+		        			seltype="single"
+		        			ref="http://www.opensi.org/facturation/articles_a_livrer"
+		        			datasources="rdf:null">
+		
+		    			<treecols>
+		      			<treecol id="oebl-colReferenceDev" label="Référence" flex="1" />
+								<splitter class="tree-splitter" />
+		      			<treecol id="oebl-colDesignationDev" label="Désignation" flex="3" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colNumLotDev" label="N° Lot" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colDatePeremptionDev" label="DLC" flex="3" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colNbPiecesDev" label="Nb pièces restantes" flex="1" class="nombre" />
+								<splitter class="tree-splitter" />
+		      			<treecol id="oebl-colQuantiteDev" label="Qté restante" flex="1" class="nombre" />
+								<treecol id="oebl-colQuantiteDispo" label="Qté disponible" flex="1" class="nombre" hidden="true" persist="true"/>
+								<treecol id="oebl-colLigneDev" collapsed="true"  ignoreincolumnpicker="true"/>
+		    			</treecols>
+		    			<template>
+		      			<treechildren>
+		        			<treeitem uri="rdf:*">
+		          			<treerow properties="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Couleur">
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Reference" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Designation" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Num_Lot" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Date_Peremption" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Nb_Pieces" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Quantite" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Stock" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_a_livrer/rdf#Ligne_Id" />
+		          			</treerow>
+		        			</treeitem>
+		      			</treechildren>
+		    			</template>
+		  			</tree>
+						<checkbox id="oebl-solder" label="Solder la commande à la validation" />
+					</vbox>
+		
+					<vbox pack="center" id="oebl-corpsTransfert">
+						<vbox id="oebl-prodFraisEntree" pack="center">
+							<hbox>
+								<label value="N° Lot :" />
+								<textbox id="oebl-numLotEntree" size="6" maxlength="15" />
+							</hbox>
+							<hbox>
+								<label value="DLC :" />
+								<textbox id="oebl-datePeremptionEntree" size="6" maxlength="10" />
+							</hbox>
+							<hbox>
+								<label value="Nb Pièces :" />
+								<textbox id="oebl-nbPiecesEntree" size="6" maxlength="10" />
+							</hbox>
+						</vbox>
+						<vbox>
+							<label value="Quantité :" />
+							<hbox>						
+								<textbox id="oebl-qteEntree" size="6" maxlength="10" />
+								<button id="oebl-bAjouter" class="bIcoAvance" oncommand="oebl_ajouter();" style="margin-right:0px" flex="1" />
+							</hbox>
+						</vbox>
+						<box style="height:10px" />
+						<button id="oebl-bToutAjouter" class="bIcoAvanceRapide" label="Tout transférer" oncommand="oebl_toutTransferer();" style="margin-right:0px" />
+						<box style="height:5px" />
+						<button id="oebl-bToutAjouterDispo" class="bIcoAvanceRapide" label="Transférer stock dispo" oncommand="oebl_toutTransfererDispo();" style="margin-right:0px" />
+		
+						<box style="height:30px" />
+		
+						<vbox pack="center">
+							<vbox id="oebl-prodFraisSortie" pack="center">
+								<hbox>
+									<label value="Nb Pièces :" />
+									<textbox id="oebl-nbPiecesSortie" size="6" maxlength="10" />
+								</hbox>
+							</vbox>
+							<vbox>						
+								<label class="label" value="Quantité :" />
+								<hbox>
+									<button id="oebl-bEnlever" class="bIcoRetour" oncommand="oebl_enlever();" style="margin-right:0px" flex="1" />
+									<textbox id="oebl-qteSortie" size="6" maxlength="10" />
+								</hbox>
+							</vbox>
+						</vbox>
+						<box style="height:10px" />
+						<button id="oebl-bToutEnlever" label="Tout enlever" class="bIcoRetourRapide" dir="reverse" oncommand="oebl_toutEnlever();" style="margin-right:0px" />
+					</vbox>
+		
+					<vbox flex="1">
+						<label value="Articles du bon de livraison :" id="oebl-titre_corps" />
+						<tree id="oebl-bonLivraison"
+		        			flex="1"
+		              style="min-height: 150px;"
+		        			hidecolumnpicker="true"
+		        			seltype="single"
+									flags="dont-build-content"
+									onselect="oebl_reporterQteSortie();oebl_disableEnlever(false,true);oebl_disableAjouter(true,false);"
+		        			ref="http://www.opensi.org/facturation/articles_bon"
+		        			datasources="rdf:null">
+		
+		    			<treecols>
+		      			<treecol id="oebl-colReferenceLiv" label="Référence" flex="1" />
+								<splitter class="tree-splitter" />
+		      			<treecol id="oebl-colDesignationLiv" label="Désignation" flex="3" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colNumLotLiv" label="N° Lot" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colDatePeremptionLiv" label="DLC" flex="2" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colNbPiecesLiv" label="Nb pièces" flex="1" class="nombre" />
+								<splitter class="tree-splitter" />
+								<treecol id="oebl-colQuantiteLiv" label="Quantité" flex="1" class="nombre" />
+								<treecol id="oebl-colLigneLiv" collapsed="true" />
+		    			</treecols>
+		    			<template>
+		      			<treechildren>
+		        			<treeitem uri="rdf:*">
+		          			<treerow>
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Reference" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Designation" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Num_Lot" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Date_Peremption" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Nb_Pieces" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Quantite" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_bon/rdf#Ligne_Id" />
+		          			</treerow>
+		        			</treeitem>
+		      			</treechildren>
+		    			</template>
+		  			</tree>
+					</vbox>
+		
+				</hbox>
+		
+			<hbox pack="center">
+				<button id="oebl-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oebl_enregistrerBon(true);" tooltiptext="enregistrer le BL" />
+				<button id="oebl-bValider" class="bValider" label="Valider le BL" oncommand="oebl_validerBon();" tooltiptext="valider le BL" />
+				<button id="oebl-bAnnuler" class="bAnnuler" label="Annuler le BL" oncommand="oebl_annulerBon();" tooltiptext="annuler le BL" />
+				<button id="oebl-bConfirmerExpedition" class="bConfirmerExpedition" label="Confirmer l'expédition" oncommand="oebl_validerExpedition();" tooltiptext="Confirmer l'expédition" />
+				<button id="oebl-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="oebl_supprimerBon();" tooltiptext="supprimer le BL" />
+				<button id="oebl-bVisualiser" class="bPDF" label="Edition PDF" oncommand="oebl_changerTypeEdition('BL');" tooltiptext="visualiser le BL" />
+				<button id="oebl-bColisage" class="bColisage" label="Colisage" oncommand="oebl_colisage();" tooltiptext="préparation des colis"/>
+				<button id="oebl-bEditionBP" class="bPDFBleu" label="Bon de préparation" oncommand="oebl_changerTypeEdition('BP');" tooltiptext="edition d'un bon de préparation" />
+			</hbox>
+			<statusbar>
+				<statusbarpanel id="oebl-creation" />
+				<statusbarpanel id="oebl-modification" />
+				<statusbarpanel id="oebl-fiche" flex="1" style="text-align:right;font-weight:bold;" />
+			</statusbar>
+		
+		  </vbox>
+			<vbox>		
+		    <hbox id="oebl-barEdition">
+		    	<hbox align="center" id="oebl-boxLangue">
+						<label value="Langue d'édition :" />
+						<menulist id="oebl-langueDefaut" ref="http://www.opensi.org/config/listeLangues" oncommand="oebl_editerBon();" datasources="rdf:null" style="width:200px">
+							<template>
+			          <menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeLangues/rdf#Libelle" value="rdf:http://www.opensi.org/config/listeLangues/rdf#Langue_Id" />
+			          </menupopup>
+							</template>
+			      </menulist>
+					</hbox>
+					<hbox flex="1" pack="end">
+						<checkbox id="oebl-chkBonChiffre" label="Bon chiffré" oncommand="oebl_editerBon();" />
+					</hbox>
+		    </hbox>
+				<iframe type="content" id="oebl-pdfBonLivraison" flex="1" />		
+			</vbox>
+		</deck>
+  </vbox>
+</overlay>

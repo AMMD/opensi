@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="import.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_autres_import" 
+  onload="init()"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="import.js" /> 
+
+  <hbox pack="left" align="center" class="bar_menu">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:60px" />
+	<hbox pack="center">
+    <label value="IMPORT DE DONNEES" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">		
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>			
+				<row>
+					<label class="label" value="Fichier à importer :" style="padding-right:4px" />					
+    			<html:form enctype="multipart/form-data" method="POST" id="uploadform" style="padding-left:4px">
+      			<html:center>
+        			<html:input type="file" size="40" name="uploadfile" value="" id="FichierImport" />
+      			</html:center>
+    			</html:form>					
+				</row>
+				<row align="center">
+					<label class="label" value="Format d'import : " />
+					<hbox>
+						<menulist id="Type_Import" ref="http://www.opensi.org/compta/types_import" datasources="rdf:null" oncommand="loadFormats(this.value);">
+							<template>
+        				<menupopup>
+          				<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/types_import/rdf#Nom_Import" value="rdf:http://www.opensi.org/compta/types_import/rdf#Import_Id" />
+        				</menupopup>
+							</template>
+    				</menulist>
+						<menulist id="Format_Import" ref="http://www.opensi.org/compta/formats_import" datasources="rdf:null">
+							<template>
+        				<menupopup>
+          				<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/formats_import/rdf#Nom_Format" value="rdf:http://www.opensi.org/compta/formats_import/rdf#Code_Import" />
+        				</menupopup>
+							</template>
+    				</menulist>
+					</hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Importer dans l'exercice :" />
+					<hbox>
+						<menulist id="Exercice" ref="http://www.opensi.org/compta/exercices" datasources="rdf:null">
+							<template>			
+        				<menupopup>
+          				<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/exercices/rdf#dates" value="rdf:http://www.opensi.org/compta/exercices/rdf#nom_base" />
+        				</menupopup>
+							</template>
+    				</menulist>
+					</hbox>
+				</row>		
+				<row id="jour" align="center" collapsed="true">
+					<label class="label" value="Importer dans le journal : " />
+					<hbox>
+						<menulist id="Journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+							<template>			
+        				<menupopup>
+      						<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+        				</menupopup>
+							</template>
+    				</menulist>
+					</hbox>
+				</row>		
+			</rows>
+		</grid>		
+	</hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<button id="bImporter" class="bImporter" label="Importer" oncommand="importer()" />
+  </hbox>	
+	<hbox style="height:60px" />
+	<vbox id="progression" align="center" collapsed="true">
+		<label value="Veuillez patienter..." />		
+		<hbox style="height:30px" />
+		<progressmeter id="pm" />
+	</vbox>
+	
+	<vbox id="boxJournal" collapsed="true" flex="3">
+		<vbox align="center">
+			<label value="Résultats de l'import" class="label_14" />
+			<box style="height:20px" />
+		</vbox>
+		<hbox flex="1">
+			<hbox flex="1" />
+			<tree id="rapport" 
+      			flex="2"
+      			hidecolumnpicker="true"
+      			seltype="single"
+      			ref="http://www.opensi.org/compta/import_errors"
+      			datasources="rdf:null"
+						flags="dont-build-content">
+
+      	<treecols>
+					<treecol id="ColType" label="" flex="2" />
+					<splitter class="tree-splitter" />
+        	<treecol id="ColDesc" label="Message" flex="4" />
+					<splitter class="tree-splitter" />        
+					<treecol id="ColLine" label="N° de ligne" flex="1" />
+      	</treecols>
+      	<template>
+        	<treechildren>
+          	<treeitem uri="rdf:*">
+            	<treerow>
+								<treecell label="rdf:http://www.opensi.org/compta/import_errors/rdf#Type" properties="rdf:http://www.opensi.org/compta/import_errors/rdf#Prop" />
+              	<treecell label="rdf:http://www.opensi.org/compta/import_errors/rdf#Desc" />
+								<treecell label="rdf:http://www.opensi.org/compta/import_errors/rdf#Line" />
+            	</treerow>
+          	</treeitem>
+        	</treechildren>
+      	</template>
+    	</tree>
+			<hbox flex="1" />
+		</hbox>
+	</vbox>
+	
+	<hbox flex="1" />
+  
+</window>

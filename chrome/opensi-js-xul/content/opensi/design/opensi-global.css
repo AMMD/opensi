@@ -1,0 +1,845 @@
+/******************************************************************************/
+/* OpenSi : Outils libres de gestion d'entreprise                             */
+/* Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   */
+/* Contact: contact@opensi.org                                                */
+/*                                                                            */
+/* This program is free software; you can redistribute it and/or              */
+/* modify it under the terms of the GNU General Public License                */
+/* as published by the Free Software Foundation; either version 2             */
+/* of the License, or (at your option) any later version.                     */
+/*                                                                            */
+/* This program is distributed in the hope that it will be useful,            */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of             */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               */
+/* GNU General Public License for more details.                               */
+/*                                                                            */
+/* You should have received a copy of the GNU General Public License          */
+/* along with this program; if not, write to the Free Software                */
+/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/******************************************************************************/
+
+
+@import url("chrome://global/skin/");
+
+
+* {
+	font-family: helvetica, arial, sans-serif;
+	font-size: 9pt;
+	outline: none;
+}
+
+window {
+	-moz-appearance: none;
+	background-color: #EEEEEE;
+	font-family: helvetica, arial, sans-serif;
+	font-size: 9pt;
+}
+
+page {
+	-moz-appearance: none;
+	background-color: #EEEEEE;
+}
+
+
+treechildren::-moz-tree-row(selected) {
+  background-color: #0000BB;
+	border: none;
+}
+
+treechildren::-moz-tree-cell-text(selected) {
+	color: #FFFFFF;
+}
+
+
+tabbox {
+	margin:5px;
+}
+
+tabpanels {
+	-moz-appearance: none;
+	background-color: #E8E8E8;
+	border: 1px solid #DDDDDD;
+	padding: 5px;
+	-moz-border-right-colors: none;
+  -moz-border-bottom-colors: none;
+  -moz-border-left-colors: none;
+}
+
+tab {
+  -moz-appearance: none;
+  -moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+	-moz-border-right-colors: ThreeDShadow;
+	border: 1px solid #DDDDDD;
+	border-bottom: none;
+	padding: 3px 5px 3px 5px;
+	background: url(tab-disabled.jpg);
+	height: 30px;
+}
+
+tab[selected=true] {
+	padding: 3px 6px 5px 6px;
+	background: url(tab-enabled.jpg);
+}
+
+caption {
+	background-color: #E8E8E8;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #DDDDDD;
+	padding-left: 3px;
+	padding-right: 3px;
+	-moz-border-radius-topleft: 4px;
+  -moz-border-radius-topright: 4px;
+	-moz-border-radius-bottomleft: 4px;
+  -moz-border-radius-bottomright: 4px;
+}
+
+groupbox {
+	-moz-border-radius-topleft: 0px;
+  -moz-border-radius-topright: 0px;
+	-moz-border-radius-bottomleft: 0px;
+  -moz-border-radius-bottomright: 0px;
+	border-color: #DDDDDD;
+	background-color: #E8E8E8;
+	border-width: 1px;
+	border-style: solid;
+}
+
+textbox {
+	-moz-appearance: none;
+	-moz-border-bottom-colors: none;
+	-moz-border-top-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-left-colors: none;
+	border-color: #999999;
+	border-style: solid;
+	border-width: 1px;
+	background-color: #FFFFFF;
+	padding-right: 2px;
+	padding-left: 2px;
+	padding-top: 1px;
+	padding-bottom: 1px;
+}
+
+textbox.plain {
+	background-color: transparent;
+}
+
+.auto-overflow {
+  overflow: auto;
+}
+
+.bandeau_conf {
+  background-image: url(background_conf.jpg);
+  overflow: auto;
+}
+
+.bandeau_appli {
+  background-image: url(background_appli.jpg);
+  overflow: auto;
+}
+
+.bandeau_test {
+  background-image: url(background_test.jpg);
+  overflow: auto;
+}
+
+.bouton_menu {
+-moz-appearance:none;
+-moz-border-top-colors: none;
+-moz-border-right-colors: none;
+-moz-border-bottom-colors: none;
+-moz-border-left-colors: none;
+border:none;
+padding:0px;
+margin:0px;
+min-width:1em;
+background-color: transparent;
+background-repeat:no-repeat;
+}
+
+
+.mini_bouton {
+	margin-left: 0px;
+	min-width: 5px!important;
+	min-height: 5px!important;
+}
+
+.bIcoValider,
+.bIcoAnnuler,
+.bIcoSupprimer,
+.bIcoRechercher,
+.bIcoCommentaire,
+.bIcoAvance,
+.bIcoAvanceRapide,
+.bIcoRetour,
+.bIcoRetourRapide,
+.bIcoEnveloppe,
+.bIcoContact,
+.bIcoCopierAdr,
+.bIcoCommentaireHid,
+.bIcoMentions,
+.bIcoEuro,
+.bIcoPourcentage,
+.bIcoCreerClient,
+.bIcoCocher,
+.bIcoDecocher,
+.bIcoActualiser,
+.bIcoReinitialiser,
+.bIcoVisualiser,
+.bIcoTransformer,
+.bIcoEdition,
+.bIcoCopier,
+.bIcoFlecheHaut,
+.bIcoFlecheBas,
+.bIcoCalendrier,
+.bIcoCalculer,
+.bIcoRechDoc {
+	margin-left: 0px;
+	min-width: 5px!important;
+	min-height: 5px!important;
+}
+
+.bIcoCopier { list-style-image: url("icones/copier.png"); }
+.bIcoCopier[disabled="true"] {	list-style-image: url("icones/copier_disabled.png"); }
+
+.bIcoRechDoc { list-style-image: url("icones/rechdoc.png"); }
+.bIcoRechDoc[disabled="true"] {	list-style-image: url("icones/rechdoc_disabled.png"); }
+
+.bIcoCalculer { list-style-image: url("icones/calculer.png"); }
+.bIcoCalculer[disabled="true"] { list-style-image: url("icones/calculer_disabled.png"); }
+
+.bIcoCalendrier { list-style-image: url("icones/calendrier.png"); }
+.bIcoCalendrier[disabled="true"] { list-style-image: url("icones/calendrier_disabled.png"); }
+
+.bIcoFlecheHaut { list-style-image: url("icones/fleche_haut.png"); }
+.bIcoFlecheHaut[disabled="true"] { list-style-image: url("icones/fleche_haut_disabled.png"); }
+
+.bIcoFlecheBas { list-style-image: url("icones/fleche_bas.png"); }
+.bIcoFlecheBas[disabled="true"] { list-style-image: url("icones/fleche_bas_disabled.png"); }
+
+.bIcoValider { list-style-image: url("icones/valider.png"); }
+.bIcoValider[disabled="true"] { list-style-image: url("icones/valider_disabled.png"); }
+
+.bIcoActualiser { list-style-image: url("icones/actualiser.png"); }
+.bIcoActualiser[disabled="true"] { list-style-image: url("icones/actualiser_disabled.png"); }
+
+.bIcoReinitialiser { list-style-image: url("icones/reinitialiser.png"); }
+.bIcoReinitialiser[disabled="true"] { list-style-image: url("icones/reinitialiser_disabled.png"); }
+
+.bIcoVisualiser { list-style-image: url("icones/visualiser.png"); }
+.bIcoVisualiser[disabled="true"] { list-style-image: url("icones/visualiser_disabled.png"); }
+
+.bIcoAnnuler { list-style-image: url("icones/annuler.png"); }
+.bIcoAnnuler[disabled="true"] {	list-style-image: url("icones/annuler_disabled.png"); }
+
+.bIcoSupprimer { list-style-image: url("icones/supprimer.png"); }
+.bIcoSupprimer[disabled="true"] {	list-style-image: url("icones/supprimer_disabled.png"); }
+
+.bIcoRechercher { list-style-image: url("icones/rechercher.png"); }
+.bIcoRechercher[disabled="true"] {	list-style-image: url("icones/rechercher_disabled.png"); }
+
+.bIcoCommentaire { list-style-image: url("icones/commentaire.png"); }
+.bIcoCommentaire[disabled="true"] {	list-style-image: url("icones/commentaire_disabled.png"); }
+
+.bIcoAvance { list-style-image: url("icones/avance.png"); }
+.bIcoAvance[disabled="true"] { list-style-image: url("icones/avance_disabled.png"); }
+
+.bIcoAvanceRapide { list-style-image: url("icones/avance_rapide.png"); }
+.bIcoAvanceRapide[disabled="true"] { list-style-image: url("icones/avance_rapide_disabled.png"); }
+
+.bIcoRetour { list-style-image: url("icones/retour.png"); }
+.bIcoRetour[disabled="true"] { list-style-image: url("icones/retour_disabled.png"); }
+
+.bIcoRetourRapide { list-style-image: url("icones/retour_rapide.png"); }
+.bIcoRetourRapide[disabled="true"] { list-style-image: url("icones/retour_rapide_disabled.png"); }
+
+.bIcoEnveloppe { list-style-image: url("icones/enveloppe.png"); }
+.bIcoEnveloppe[disabled="true"] { list-style-image: url("icones/enveloppe_disabled.png"); }
+
+.bIcoContact { list-style-image: url("icones/contact.png"); }
+.bIcoContact[disabled="true"] { list-style-image: url("icones/contact_disabled.png"); }
+
+.bIcoCopierAdr { list-style-image: url("icones/copier_adr.png"); }
+.bIcoCopierAdr[disabled="true"] { list-style-image: url("icones/copier_adr_disabled.png"); }
+
+.bIcoCommentaireHid { list-style-image: url("icones/commentaire_hid.png"); }
+.bIcoCommentaireHid[disabled="true"] { list-style-image: url("icones/commentaire_hid_disabled.png"); }
+
+.bIcoMentions { list-style-image: url("icones/mentions.png"); }
+.bIcoMentions[disabled="true"] { list-style-image: url("icones/mentions_disabled.png"); }
+
+.bIcoPourcentage { list-style-image: url("icones/pourcentage.png"); }
+.bIcoPourcentage[disabled="true"] { list-style-image: url("icones/pourcentage_disabled.png"); }
+
+.bIcoEuro { list-style-image: url("icones/euro.png"); }
+.bIcoEuro[disabled="true"] { list-style-image: url("icones/euro_disabled.png"); }
+
+.bIcoCreerClient { list-style-image: url("icones/creer_client.png"); }
+.bIcoCreerClient[disabled="true"] { list-style-image: url("icones/creer_client_disabled.png"); }
+
+.bIcoCocher { list-style-image: url("icones/cocher.png"); }
+.bIcoCocher[disabled="true"] { list-style-image: url("icones/cocher_disabled.png"); }
+
+.bIcoDecocher { list-style-image: url("icones/decocher.png"); }
+.bIcoDecocher[disabled="true"] { list-style-image: url("icones/decocher_disabled.png"); }
+
+.bIcoEdition { list-style-image: url("icones/edition.png"); }
+.bIcoEdition[disabled="true"] { list-style-image: url("icones/edition_disabled.png"); }
+
+.bIcoTransformer { list-style-image: url("icones/transformer.png"); }
+.bIcoTransformer[disabled="true"] { list-style-image: url("icones/transformer_disabled.png"); }
+
+
+
+.bRechercher { list-style-image: url("icones/rechercher.png"); }
+.bRechercher[disabled="true"] {	list-style-image: url("icones/rechercher_disabled.png"); }
+
+.bNouveau {	list-style-image: url("icones/nouveau.png"); }
+.bNouveau[disabled="true"] { list-style-image: url("icones/nouveau_disabled.png"); }
+
+.bAnnuler {	list-style-image: url("icones/annuler.png"); }
+.bAnnuler[disabled="true"] { list-style-image: url("icones/annuler_disabled.png"); }
+
+.bValider {	list-style-image: url("icones/valider.png"); }
+.bValider[disabled="true"] { list-style-image: url("icones/valider_disabled.png"); }
+
+.bEdition {	list-style-image: url("icones/edition.png"); }
+.bEdition[disabled="true"] { list-style-image: url("icones/edition_disabled.png"); }
+
+.bEnregistrer { list-style-image: url("icones/enregistrer.png"); }
+.bEnregistrer[disabled="true"] { list-style-image: url("icones/enregistrer_disabled.png"); }
+
+.bPDF { list-style-image: url("icones/pdf.png"); }
+.bPDF[disabled="true"] { list-style-image: url("icones/pdf_disabled.png"); }
+
+.bPDFBleu { list-style-image: url("icones/pdf_bleu.png"); }
+.bPDFBleu[disabled="true"] { list-style-image: url("icones/pdf_disabled.png"); }
+
+.bPDFVert { list-style-image: url("icones/pdf_vert.png"); }
+.bPDFVert[disabled="true"] { list-style-image: url("icones/pdf_disabled.png"); }
+
+.bSupprimer { list-style-image: url("icones/supprimer.png"); }
+.bSupprimer[disabled="true"] { list-style-image: url("icones/supprimer_disabled.png"); }
+
+.bTransformer { list-style-image: url("icones/transformer.png"); }
+.bTransformer[disabled="true"] { list-style-image: url("icones/transformer_disabled.png"); }
+
+.bCopier { list-style-image: url("icones/copier.png"); }
+.bCopier[disabled="true"] {	list-style-image: url("icones/copier_disabled.png"); }
+
+.bColisage { list-style-image: url("icones/colisage.png"); }
+.bColisage[disabled="true"] {	list-style-image: url("icones/colisage_disabled.png"); }
+
+.bGeneric { list-style-image: url("icones/generic.png"); }
+.bGeneric[disabled="true"] { list-style-image: url("icones/generic_disabled.png"); }
+
+.bCSV { list-style-image: url("icones/csv.png"); }
+.bCSV[disabled="true"] { list-style-image: url("icones/csv_disabled.png"); }
+
+.bExit { list-style-image: url("icones/exit.png"); }
+.bExit[disabled="true"] { list-style-image: url("icones/exit_disabled.png"); }
+
+.bImporter { list-style-image: url("icones/importer.png"); }
+.bImporter[disabled="true"] { list-style-image: url("icones/importer_disabled.png"); }
+
+.bExporter { list-style-image: url("icones/exporter.png"); }
+.bExporter[disabled="true"] { list-style-image: url("icones/exporter_disabled.png"); }
+
+.bEnvoyer { list-style-image: url("icones/envoyer.png"); }
+.bEnvoyer[disabled="true"] { list-style-image: url("icones/envoyer_disabled.png"); }
+
+
+button[type="radio"] {
+-moz-appearance:none;
+-moz-border-top-colors: none;
+-moz-border-right-colors: none;
+-moz-border-bottom-colors: none;
+-moz-border-left-colors: none;
+border: 1px solid;
+}
+
+button[checked="true"] {
+	background-color: #C4CFE1;
+}
+
+button:focus > .button-box {
+-moz-border-top-colors: none;
+-moz-border-right-colors: none;
+-moz-border-bottom-colors: none;
+-moz-border-left-colors: none;
+border:none;
+}
+
+
+/* boutons tracker */
+
+#bMenuDossiers { width:91px;height:21px;background-image: url("boutons_tracker/menu_dossiers.png") }
+#bMenuDossiers:hover { background-image: url("boutons_tracker/menu_dossiers_over.png") }
+#bMenuDossiers[disabled="true"] { background-image: url("boutons_tracker/menu_dossiers_disab.png") }
+
+#bMenuPrincipal { width:90px;height:21px;background-image: url("boutons_tracker/menu_principal.png") }
+#bMenuPrincipal:hover { background-image: url("boutons_tracker/menu_principal_over.png") }
+#bMenuPrincipal[disabled="true"] { background-image: url("boutons_tracker/menu_principal_disab.png") }
+
+#bMenuUtilisateurs { width:101px;height:21px;background-image: url("boutons_tracker/menu_utilisateurs.png") }
+#bMenuUtilisateurs:hover { background-image: url("boutons_tracker/menu_utilisateurs_over.png") }
+#bMenuUtilisateurs[disabled="true"] { background-image: url("boutons_tracker/menu_utilisateurs_disab.png") }
+
+#bMenuEntreprises { width:104px;height:21px;background-image: url("boutons_tracker/menu_entreprises.png") }
+#bMenuEntreprises:hover { background-image: url("boutons_tracker/menu_entreprises_over.png") }
+#bMenuEntreprises[disabled="true"] { background-image: url("boutons_tracker/menu_entreprises_disab.png") }
+
+#bMenuSites { width:72px;height:21px;background-image: url("boutons_tracker/menu_sites.png") }
+#bMenuSites:hover { background-image: url("boutons_tracker/menu_sites_over.png") }
+#bMenuSites[disabled="true"] { background-image: url("boutons_tracker/menu_sites_disab.png") }
+
+#bGestionSite { width:78px;height:21px;background-image: url("boutons_tracker/gestion_site.png") }
+#bGestionSite:hover { background-image: url("boutons_tracker/gestion_site_over.png") }
+#bGestionSite[disabled="true"] { background-image: url("boutons_tracker/gestion_site_disab.png") }
+
+#bGestionDossiers { width:102px;height:21px;background-image: url("boutons_tracker/gestion_dossiers.png") }
+#bGestionDossiers:hover { background-image: url("boutons_tracker/gestion_dossiers_over.png") }
+#bGestionDossiers[disabled="true"] { background-image: url("boutons_tracker/gestion_dossiers_disab.png") }
+
+#bMenuExercices { width:97px;height:21px;background-image: url("boutons_tracker/menu_exercices.png") }
+#bMenuExercices:hover { background-image: url("boutons_tracker/menu_exercices_over.png") }
+#bMenuExercices[disabled="true"] { background-image: url("boutons_tracker/menu_exercices_disab.png") }
+
+#bRetourReglements { width:109px;height:21px;background-image: url("boutons_tracker/retour_reglements.png") }
+#bRetourReglements:hover { background-image: url("boutons_tracker/retour_reglements_over.png") }
+#bRetourReglements[disabled="true"] { background-image: url("boutons_tracker/retour_reglements_disab.png") }
+
+#bRetourReglementsClients { width:143px;height:21px;background-image: url("boutons_tracker/retour_reglements_clients.png") }
+#bRetourReglementsClients:hover { background-image: url("boutons_tracker/retour_reglements_clients_over.png") }
+#bRetourReglementsClients[disabled="true"] { background-image: url("boutons_tracker/retour_reglements_clients_disab.png") }
+
+#bRetourReglementsFournisseurs { width:173px;height:21px;background-image: url("boutons_tracker/retour_reglements_fournisseurs.png") }
+#bRetourReglementsFournisseurs:hover { background-image: url("boutons_tracker/retour_reglements_fournisseurs_over.png") }
+#bRetourReglementsFournisseurs[disabled="true"] { background-image: url("boutons_tracker/retour_reglements_fournisseurs_disab.png") }
+
+#bRetourRemises { width:94px;height:21px;background-image: url("boutons_tracker/retour_remises.png") }
+#bRetourRemises:hover { background-image: url("boutons_tracker/retour_remises_over.png") }
+#bRetourRemises[disabled="true"] { background-image: url("boutons_tracker/retour_remises_disab.png") }
+
+#bRetourBordereaux { width:112px;height:21px;background-image: url("boutons_tracker/retour_bordereaux.png") }
+#bRetourBordereaux:hover { background-image: url("boutons_tracker/retour_bordereaux_over.png") }
+#bRetourBordereaux[disabled="true"] { background-image: url("boutons_tracker/retour_bordereaux_disab.png") }
+
+#bRetourRelances { width:97px;height:21px;background-image: url("boutons_tracker/retour_relances.png") }
+#bRetourRelances:hover { background-image: url("boutons_tracker/retour_relances_over.png") }
+#bRetourRelances[disabled="true"] { background-image: url("boutons_tracker/retour_relances_disab.png") }
+
+#bMenuAffaires { width:85px;height:21px;background-image: url("boutons_tracker/menu_affaires.png") }
+#bMenuAffaires:hover { background-image: url("boutons_tracker/menu_affaires_over.png") }
+#bMenuAffaires[disabled="true"] { background-image: url("boutons_tracker/menu_affaires_disab.png") }
+
+#bRetourAffaire { width:86px;height:21px;background-image: url("boutons_tracker/retour_affaire.png") }
+#bRetourAffaire:hover { background-image: url("boutons_tracker/retour_affaire_over.png") }
+#bRetourAffaire[disabled="true"] { background-image: url("boutons_tracker/retour_affaire_disab.png") }
+
+#bRetourBL { width:69px;height:21px;background-image: url("boutons_tracker/retour_BL.png") }
+#bRetourBL:hover { background-image: url("boutons_tracker/retour_BL_over.png") }
+#bRetourBL[disabled="true"] { background-image: url("boutons_tracker/retour_BL_disab.png") }
+
+#bRetourBLF { width:105px;height:21px;background-image: url("boutons_tracker/retour_BL.png") }
+#bRetourBLF:hover { background-image: url("boutons_tracker/retour_BL_over.png") }
+#bRetourBLF[disabled="true"] { background-image: url("boutons_tracker/retour_BL_disab.png") }
+
+#bRetourFacture { width:90px;height:21px;background-image: url("boutons_tracker/retour_facture.png") }
+#bRetourFacture:hover { background-image: url("boutons_tracker/retour_facture_over.png") }
+#bRetourFacture[disabled="true"] { background-image: url("boutons_tracker/retour_facture_disab.png") }
+
+#bRetourColisage { width:96px;height:21px;background-image: url("boutons_tracker/retour_colisage.png") }
+#bRetourColisage:hover { background-image: url("boutons_tracker/retour_colisage_over.png") }
+#bRetourColisage[disabled="true"] { background-image: url("boutons_tracker/retour_colisage_disab.png") }
+
+#bRetourAvoir { width:80px;height:21px;background-image: url("boutons_tracker/retour_avoir.png") }
+#bRetourAvoir:hover { background-image: url("boutons_tracker/retour_avoir_over.png") }
+#bRetourAvoir[disabled="true"] { background-image: url("boutons_tracker/retour_avoir_disab.png") }
+
+#bRetourCommande { width:110px;height:21px;background-image: url("boutons_tracker/retour_commande.png") }
+#bRetourCommande:hover { background-image: url("boutons_tracker/retour_commande_over.png") }
+#bRetourCommande[disabled="true"] { background-image: url("boutons_tracker/retour_commande_disab.png") }
+
+#bRetourFacturation { width:107px;height:21px;background-image: url("boutons_tracker/retour_facturation.png") }
+#bRetourFacturation:hover { background-image: url("boutons_tracker/retour_facturation_over.png") }
+#bRetourFacturation[disabled="true"] { background-image: url("boutons_tracker/retour_facturation_disab.png") }
+
+#bMenuCommandes { width:109px;height:21px;background-image: url("boutons_tracker/menu_commandes.png") }
+#bMenuCommandes:hover { background-image: url("boutons_tracker/menu_commandes_over.png") }
+#bMenuCommandes[disabled="true"] { background-image: url("boutons_tracker/menu_commandes_disab.png") }
+
+#bRetourBR { width:69px;height:21px;background-image: url("boutons_tracker/retour_BR.png") }
+#bRetourBR:hover { background-image: url("boutons_tracker/retour_BR_over.png") }
+#bRetourBR[disabled="true"] { background-image: url("boutons_tracker/retour_BR_disab.png") }
+
+#bMenuAvoirs { width:79px;height:21px;background-image: url("boutons_tracker/menu_avoirs.png") }
+#bMenuAvoirs:hover { background-image: url("boutons_tracker/menu_avoirs_over.png") }
+#bMenuAvoirs[disabled="true"] { background-image: url("boutons_tracker/menu_avoirs_disab.png") }
+
+#bMenuFactures { width:89px;height:21px;background-image: url("boutons_tracker/menu_factures.png") }
+#bMenuFactures:hover { background-image: url("boutons_tracker/menu_factures_over.png") }
+#bMenuFactures[disabled="true"] { background-image: url("boutons_tracker/menu_factures_disab.png") }
+
+#bRetourDevis { width:81px;height:21px;background-image: url("boutons_tracker/retour_devis.png") }
+#bRetourDevis:hover { background-image: url("boutons_tracker/retour_devis_over.png") }
+#bRetourDevis[disabled="true"] { background-image: url("boutons_tracker/retour_devis_disab.png") }
+
+#bMenuDevis { width:75px;height:21px;background-image: url("boutons_tracker/menu_devis.png") }
+#bMenuDevis:hover { background-image: url("boutons_tracker/menu_devis_over.png") }
+#bMenuDevis[disabled="true"] { background-image: url("boutons_tracker/menu_devis_disab.png") }
+
+#bMenuInventaire { width:97px;height:21px;background-image: url("boutons_tracker/menu_inventaire.png") }
+#bMenuInventaire:hover { background-image: url("boutons_tracker/menu_inventaire_over.png") }
+#bMenuInventaire[disabled="true"] { background-image: url("boutons_tracker/menu_inventaire_disab.png") }
+
+#bRetourInventaire { width:103px;height:21px;background-image: url("boutons_tracker/retour_inventaire.png") }
+#bRetourInventaire:hover { background-image: url("boutons_tracker/retour_inventaire_over.png") }
+#bRetourInventaire[disabled="true"] { background-image: url("boutons_tracker/retour_inventaire_disab.png") }
+
+#bMenuProfils { width:78px;height:21px;background-image: url("boutons_tracker/menu_profils.png") }
+#bMenuProfils:hover { background-image: url("boutons_tracker/menu_profils_over.png") }
+#bMenuProfils[disabled="true"] { background-image: url("boutons_tracker/menu_profils_disab.png") }
+
+#bRetourRB { width:70px;height:21px;background-image: url("boutons_tracker/retour_RB.png") }
+#bRetourRB:hover { background-image: url("boutons_tracker/retour_RB_over.png") }
+#bRetourRB[disabled="true"] { background-image: url("boutons_tracker/retour_RB_disab.png") }
+
+#bMenuEditions { width:86px;height:21px;background-image: url("boutons_tracker/menu_editions.png") }
+#bMenuEditions:hover { background-image: url("boutons_tracker/menu_editions_over.png") }
+#bMenuEditions[disabled="true"] { background-image: url("boutons_tracker/menu_editions_disab.png") }
+
+#bRetourArticle { width:111px;height:21px;background-image: url("boutons_tracker/retour_article.png") }
+#bRetourArticle:hover { background-image: url("boutons_tracker/retour_article_over.png") }
+#bRetourArticle[disabled="true"] { background-image: url("boutons_tracker/retour_article_disab.png") }
+
+#bMenuAbonnements { width:115px;height:21px;background-image: url("boutons_tracker/menu_abonnements.png") }
+#bMenuAbonnements:hover { background-image: url("boutons_tracker/menu_abonnements_over.png") }
+#bMenuAbonnements[disabled="true"] { background-image: url("boutons_tracker/menu_abonnements_disab.png") }
+
+#bMenuModeles { width:90px;height:21px;background-image: url("boutons_tracker/menu_modeles.png") }
+#bMenuModeles:hover { background-image: url("boutons_tracker/menu_modeles_over.png") }
+#bMenuModeles[disabled="true"] { background-image: url("boutons_tracker/menu_modeles_disab.png") }
+
+#bFacturesEmettre { width:113px;height:21px;background-image: url("boutons_tracker/factures_emettre.png") }
+#bFacturesEmettre:hover { background-image: url("boutons_tracker/factures_emettre_over.png") }
+#bFacturesEmettre[disabled="true"] { background-image: url("boutons_tracker/factures_emettre_disab.png") }
+
+#bRetourModele { width:91px;height:21px;background-image: url("boutons_tracker/retour_modele.png") }
+#bRetourModele:hover { background-image: url("boutons_tracker/retour_modele_over.png") }
+#bRetourModele[disabled="true"] { background-image: url("boutons_tracker/retour_modele_disab.png") }
+
+#bRetourAbonnement { width:116px;height:21px;background-image: url("boutons_tracker/retour_abonnement.png") }
+#bRetourAbonnement:hover { background-image: url("boutons_tracker/retour_abonnement_over.png") }
+#bRetourAbonnement[disabled="true"] { background-image: url("boutons_tracker/retour_abonnement_disab.png") }
+
+#bMenuCommerciaux { width:115px;height:21px;background-image: url("boutons_tracker/menu_commerciaux.png") }
+#bMenuCommerciaux:hover { background-image: url("boutons_tracker/menu_commerciaux_over.png") }
+#bMenuCommerciaux[disabled="true"] { background-image: url("boutons_tracker/menu_commerciaux_disab.png") }
+
+#bRetourCommercial { width:112px;height:21px;background-image: url("boutons_tracker/retour_commercial.png") }
+#bRetourCommercial:hover { background-image: url("boutons_tracker/retour_commercial_over.png") }
+#bRetourCommercial[disabled="true"] { background-image: url("boutons_tracker/retour_commercial_disab.png") }
+
+#bMenuFabrication { width:100px;height:21px;background-image: url("boutons_tracker/menu_fabrication.png") }
+#bMenuFabrication:hover { background-image: url("boutons_tracker/menu_fabrication_over.png") }
+#bMenuFabrication[disabled="true"] { background-image: url("boutons_tracker/menu_fabrication_disab.png") }
+
+#bRetourSaisie { width:84px;height:21px;background-image: url("boutons_tracker/retour_saisie.png") }
+#bRetourSaisie:hover { background-image: url("boutons_tracker/retour_saisie_over.png") }
+#bRetourSaisie[disabled="true"] { background-image: url("boutons_tracker/retour_saisie_disab.png") }
+
+#bRetourOptions { width:90px;height:21px;background-image: url("boutons_tracker/retour_options.png") }
+#bRetourOptions:hover { background-image: url("boutons_tracker/retour_options_over.png") }
+#bRetourOptions[disabled="true"] { background-image: url("boutons_tracker/retour_options_disab.png") }
+
+#bRetourBalance { width:94px;height:21px;background-image: url("boutons_tracker/retour_balance.png") }
+#bRetourBalance:hover { background-image: url("boutons_tracker/retour_balance_over.png") }
+#bRetourBalance[disabled="true"] { background-image: url("boutons_tracker/retour_balance_disab.png") }
+
+#bRetourBonRetour { width:121px;height:21px;background-image: url("boutons_tracker/retour_bon_retour.png") }
+#bRetourBonRetour:hover { background-image: url("boutons_tracker/retour_bon_retour_over.png") }
+#bRetourBonRetour[disabled="true"] { background-image: url("boutons_tracker/retour_bon_retour_disab.png") }
+
+#bRetourReception { width:101px;height:21px;background-image: url("boutons_tracker/retour_reception.png") }
+#bRetourReception:hover { background-image: url("boutons_tracker/retour_reception_over.png") }
+#bRetourReception[disabled="true"] { background-image: url("boutons_tracker/retour_reception_disab.png") }
+
+#bChangerClient { width:105px;height:21px;background-image: url("boutons_tracker/changer_client.png") }
+#bChangerClient:hover { background-image: url("boutons_tracker/changer_client_over.png") }
+#bChangerClient[disabled="true"] { background-image: url("boutons_tracker/changer_client_disab.png") }
+
+#bChangerFournisseur { width:135px;height:21px;background-image: url("boutons_tracker/changer_fournisseur.png") }
+#bChangerFournisseur:hover { background-image: url("boutons_tracker/changer_fournisseur_over.png") }
+#bChangerFournisseur[disabled="true"] { background-image: url("boutons_tracker/changer_fournisseur_disab.png") }
+
+#bChangerArticle { width:102px;height:21px;background-image: url("boutons_tracker/changer_article.png") }
+#bChangerArticle:hover { background-image: url("boutons_tracker/changer_article_over.png") }
+#bChangerArticle[disabled="true"] { background-image: url("boutons_tracker/changer_article_disab.png") }
+
+#bRetourListes { width:80px;height:21px;background-image: url("boutons_tracker/retour_listes.png") }
+#bRetourListes:hover { background-image: url("boutons_tracker/retour_listes_over.png") }
+#bRetourListes[disabled="true"] { background-image: url("boutons_tracker/retour_listes_disab.png") }
+
+#bRetourSuiviLot { width:107px;height:21px;background-image: url("boutons_tracker/retour_suivi_lot.png") }
+#bRetourSuiviLot:hover { background-image: url("boutons_tracker/retour_suivi_lot_over.png") }
+#bRetourSuiviLot[disabled="true"] { background-image: url("boutons_tracker/retour_suivi_lot_disab.png") }
+
+#bRetourExpeditions { width:110px;height:21px;background-image: url("boutons_tracker/retour_expeditions.png") }
+#bRetourExpeditions:hover { background-image: url("boutons_tracker/retour_expeditions_over.png") }
+#bRetourExpeditions[disabled="true"] { background-image: url("boutons_tracker/retour_expeditions_disab.png") }
+
+#bRetourMajTarifs { width:99px;height:21px;background-image: url("boutons_tracker/retour_maj_tarifs.png") }
+#bRetourMajTarifs:hover { background-image: url("boutons_tracker/retour_maj_tarifs_over.png") }
+#bRetourMajTarifs[disabled="true"] { background-image: url("boutons_tracker/retour_maj_tarifs_disab.png") }
+
+#bEtatAvancement { width:110px;height:21px;background-image: url("boutons_tracker/etat_avancement.png") }
+#bEtatAvancement:hover { background-image: url("boutons_tracker/etat_avancement_over.png") }
+#bEtatAvancement[disabled="true"] { background-image: url("boutons_tracker/etat_avancement_disab.png") }
+
+#bRetourListeAbonnement { width:143px;height:21px;background-image: url("boutons_tracker/retour_liste_abonnement.png") }
+#bRetourListeAbonnement:hover { background-image: url("boutons_tracker/retour_liste_abonnement_over.png") }
+#bRetourListeAbonnement[disabled="true"] { background-image: url("boutons_tracker/retour_liste_abonnement_disab.png") }
+
+#bRetourListeImports { width:113px;height:21px;background-image: url("boutons_tracker/retour_liste_imports.png") }
+#bRetourListeImports:hover { background-image: url("boutons_tracker/retour_liste_imports_over.png") }
+#bRetourListeImports[disabled="true"] { background-image: url("boutons_tracker/retour_liste_imports_disab.png") }
+
+#bRetourRemisesBanque { width:149px;height:21px;background-image: url("boutons_tracker/retour_remise_banque.png") }
+#bRetourRemisesBanque:hover { background-image: url("boutons_tracker/retour_remise_banque_over.png") }
+#bRetourRemisesBanque[disabled="true"] { background-image: url("boutons_tracker/retour_remise_banque_disab.png") }
+
+#bRetourGestionRetour { width:143px;height:21px;background-image: url("boutons_tracker/menu_gestion_retours.png") }
+#bRetourGestionRetour:hover { background-image: url("boutons_tracker/menu_gestion_retours_over.png") }
+#bRetourGestionRetour[disabled="true"] { background-image: url("boutons_tracker/menu_gestion_retours_disab.png") }
+
+#bMenuComptes { width:150px;height:21px;background-image: url("boutons_tracker/menu_comptes.png") }
+#bMenuComptes:hover { background-image: url("boutons_tracker/menu_comptes_over.png") }
+#bMenuComptes[disabled="true"] { background-image: url("boutons_tracker/menu_comptes_disab.png") }
+
+
+
+/* boutons généraux */
+
+#bFermerSession { width:122px;height:35px;background-image: url("quitter.jpg") }
+#bFermerSession:hover { background-image: url("quitter_over.jpg") }
+#bFermerSession[disabled="true"] { background-image: url("quitter_disab.jpg") }
+
+#bAide { width:70px;height:35px;background-image: url("aide.jpg") }
+#bAide:hover { background-image: url("aide_over.jpg") }
+#bAide[disabled="true"] { background-image: url("aide_disab.jpg") }
+
+#bDeconnexionConf { width:122px;height:35px;background-image: url("quitter_conf.jpg") }
+#bDeconnexionConf:hover { background-image: url("quitter_conf_over.jpg") }
+#bDeconnexionConf[disabled="true"] { background-image: url("quitter_conf_disab.jpg") }
+
+#bAideConf { width:70px;height:35px;background-image: url("aide_conf.jpg") }
+#bAideConf:hover { background-image: url("aide_conf_over.jpg") }
+#bAideConf[disabled="true"] { background-image: url("aide_conf_disab.jpg") }
+
+
+
+.nombre {
+	text-align: right;
+}
+
+.label {
+	text-align: right;
+}
+
+.label_16 {
+	font-family: helvetica, arial, sans-serif;
+	font-weight: bold;
+	font-size: 16pt;
+}
+
+.label_14 {
+	font-family: helvetica, arial, sans-serif;
+	font-weight: bold;
+	font-size: 14pt;
+}
+
+.label_12 {
+	font-family: helvetica, arial, sans-serif;
+	font-weight: bold;
+	font-size: 12pt;
+}
+
+
+
+.bar_menu_conf {
+	background-image: url(background_navigation_conf.jpg);
+	height: 35px;
+}
+
+.bar_menu_conf > .bouton_menu {
+	margin-left: 5px;
+}
+
+.bar_menu_conf_left {
+	background: url(navigation_conf_left.jpg) no-repeat;
+	height: 35px;
+	padding-left: 50px;
+	min-width: 160px;
+}
+
+.bar_menu_conf_left > .bouton_menu {
+	margin-left: 5px;
+}
+
+.bar_menu_conf_right {
+	background: url(navigation_conf_right.jpg) no-repeat top right;
+	height: 35px;
+}
+
+
+.bar_menu {
+	background-image: url(background_navigation.jpg);
+	height: 35px;
+}
+
+.bar_menu_left {
+	background: url(navigation_appli_left.jpg) no-repeat;
+	height: 35px;
+	padding-left: 50px;
+	min-width: 160px;
+}
+
+.bar_menu_left > .bouton_menu {
+	margin-left: 5px;
+}
+
+.bar_menu_right {
+	background: url(navigation_appli_right.jpg) no-repeat top right;
+	height: 35px;
+}
+
+
+
+
+/* design pour les tableaux */
+
+.cadre {
+	border-right: solid 1px #000000;
+	border-left: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	border-top: solid 1px #000000;
+}
+
+.case_entete {
+	border: solid 1px #000000;
+	background-color: #5F6679;
+	margin: 0px;
+	padding: 3px;
+	color: #FFFFFF;
+}
+
+.col_entete {
+	border-right: solid 1px #000000;
+	border-left: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	background-color: #5F6679;
+	margin: 0px;
+	padding: 3px;
+	color: #FFFFFF;
+}
+
+.row_entete {
+	border-right: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	border-top: solid 1px #000000;
+	background-color: #5F6679;
+	margin: 0px;
+	padding: 3px;
+	color: #FFFFFF;
+}
+
+.case {
+	border-right: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	margin: 0px;
+	padding: 3px;
+}
+
+.full_case {
+	border: solid 1px #000000;
+	margin: 0px;
+	padding: 3px;
+}
+
+.col_case {
+	border-right: solid 1px #000000;
+	border-left: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	margin: 0px;
+	padding: 3px;
+}
+
+.row_case {
+	border-right: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	border-top: solid 1px #000000;
+	margin: 0px;
+	padding: 3px;
+}
+
+.entete {
+	border-right: solid 1px #000000;
+	border-bottom: solid 1px #000000;
+	background-color: #5F6679;
+	margin: 0px;
+	padding: 3px;
+}
+
+/* fin design tableaux */
+
+/* recherche de villes */
+.rv_pop {	-moz-binding: url('chrome://opensi/content/binding/recherche_ville.xml#rv_pop'); }
+.rv_cp { -moz-binding: url('chrome://opensi/content/binding/recherche_ville.xml#rv_cp'); }
+.rv_ville { -moz-binding: url('chrome://opensi/content/binding/recherche_ville.xml#rv_ville'); }
+
+
+
+/* NE PAS UTILISER */
+
+.contenu_incorrect {
+	background-color: #ff4444;
+}
+
+.contenu_correct {
+	background-color: #ffffff;
+}
+
+.warning {
+	font-size: 12pt;
+	color: #ff4444;
+}
+
+.bar_titre_etape {
+	height: 30px;
+}
+
+.etape {
+	font-weight: bold;
+	font-size: 12pt;
+	color: #1b69ce;
+}
+
+.saisie {
+  background-color: lightgray;
+}
+
+.saisie[focused=true] {
+  background-color: #FFFFFF;
+}
+
+treechildren:-moz-tree-row(enabled) {
+  background: lightblue;
+}
+
+treechildren:-moz-tree-row(disabled) {
+}
+
+/* FIN NE PAS UTILISER */

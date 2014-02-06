@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_envoiFactures_menuEnvoiFactures"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menuEnvoiFactures.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bRetourFacturation" oncommand="retourFacturation();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	
+	<deck id="deck" flex="1">
+		<vbox>	
+			<label class="label_16" value="Envoi des factures" />
+			
+			<groupbox orient="horizontal">
+				<caption label="Filtres" />
+				
+				<radiogroup id="Type_Doc" oncommand="listerFacturesAvoirs();">
+					<radio value="T" label="Factures et Avoirs" selected="true" />
+					<radio value="F" label="Factures seulement" />
+					<radio value="A" label="Avoirs seulement" />
+				</radiogroup>
+				
+				<box width="20px" />
+				
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Mode d'envoi :" />
+							<hbox>
+								<menulist id="Mode_Envoi" oncommand="listerFacturesAvoirs();">
+									<menupopup>
+										<menuitem value="T" label="Tous" selected="true" />
+										<menuitem value="C" label="Courrier" />
+										<menuitem value="F" label="Fax" />
+										<menuitem value="M" label="Mail" />
+									</menupopup>
+								</menulist>
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Date de facture :" />
+							<hbox align="center">
+								<label value="Du" />
+								<textbox id="dateFactureDebut" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="onKeyPress(event);" />
+								<label value="au" />
+								<textbox id="dateFactureFin" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="onKeyPress(event);" />
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<hbox pack="end">
+				<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher();" />
+				<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutDecocher();" />
+			</hbox>
+
+			<listbox flex="1" id="listeFacturesAvoirsNonEnvoyes" ref="http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes" datasources="rdf:null">
+				<listhead>
+					<listheader label="Envoyer" />
+					<listheader label="Mode d'envoi" />
+					<listheader label="Numéro" />
+					<listheader label="N° Client" />	
+		  		<listheader label="Dénomination" />		  
+		  		<listheader label="Adresse 1" />
+		  		<listheader label="Adresse 2" />
+		  		<listheader label="Adresse 3" />
+		  		<listheader label="Code Postal" />
+					<listheader label="Ville" />
+					<listheader label="Pays" />
+		  		<listheader label="Total HT" style="text-align:right;" />
+		  		<listheader collapsed="true" />
+				</listhead>
+				<listcols>
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol collapsed="true" />
+				</listcols>
+				<template>
+					<listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Doc_Id" allowevents="true">
+						<listcell type="checkbox" checked="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Envoyer" disabled="false" onclick="testcheck(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Mode_Envoi" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Numero" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Client_Id" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Denomination" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Adresse_1" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Adresse_2" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Adresse_3" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Code_Postal" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Ville" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Pays" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell style="text-align:right; padding-right:20px" label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Total_HT" ondblclick="pressOnListeNonEnvoyes(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/listeFacturesAvoirsNonEnvoyes/rdf#Type_Doc" />
+					</listitem>
+				</template>
+			</listbox>	
+
+			<box style="height:10px;" />
+			<hbox pack="center">
+				<button class="bPDF" label="Editer les factures" oncommand="envoyerFactures();" />
+				<hbox align="center" flex="1" pack="end">
+					<menulist id="timeEdition" ref="http://www.opensi.org/facturation/historiqueEnvoiFactures" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Choisir]" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/historiqueEnvoiFactures/rdf#labelDate_Envoi" value="rdf:http://www.opensi.org/facturation/historiqueEnvoiFactures/rdf#Date_Envoi" />
+							</menupopup>
+						</template>
+					</menulist>
+					<button class="bPDF" id="bReediter" label="Rééditer" oncommand="reediter();" />
+				</hbox>
+				
+			</hbox>
+			<box style="height:10px;" />			
+		</vbox>
+		
+		<vbox>
+			<vbox id="pmbox" collapsed="true" align="center">
+				<hbox style="height:30px" />
+				<label value="L'édition des factures et avoirs peut durer quelques minutes. Veuillez patienter..." />
+				<hbox style="height:30px" />
+				<hbox>
+					<progressmeter id="pm" />
+				</hbox>
+			</vbox>
+			<iframe type="content" id="pdf" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-menu.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_menuPrincipal"
+  flex="1"
+  onload="init()"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_principal.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuDossiers" oncommand="retourChoixDossier();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:40px" />
+
+	<hbox flex="1">
+
+		<hbox style="width:30px" />
+
+		<!-- menu gauche -->
+		<vbox>
+			<box style="height:30px" />
+			<button class="bouton_menu" id="bouton_tiers" tabindex="10" oncommand="ouvrirSousMenu('smTiers')" />
+			<vbox id="smTiers" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="11" onclick="goToMenu(1)"><label value="Clients" /></hbox></box>
+				<box id="clientsWeb"><hbox class="bouton_sousmenu" tabindex="12" onclick="goToMenu(18)"><label value="Clients web" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="13" onclick="goToMenu(2)"><label value="Fournisseurs" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="14" onclick="goToMenu(21)"><label value="Commerciaux" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_ventes" tabindex="20" oncommand="ouvrirSousMenu('smVentes')" />
+			<vbox id="smVentes" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="21" onclick="goToMenu(5)"><label value="Devis" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="22" onclick="goToMenu(6)"><label value="Affaires" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="23" onclick="goToMenu(7)"><label value="Factures express" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="24" onclick="goToMenu(8)"><label value="Facturation automatique" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="25" onclick="goToMenu(32)"><label value="Envoi des factures" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="26" onclick="goToMenu(22)"><label value="Expédition" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="27" onclick="goToMenu(9)"><label value="Avoirs" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="28" onclick="goToMenu(16)"><label value="Abonnements" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="29" onclick="goToMenu(27)"><label value="Expéditions en lot" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_achats" tabindex="30" oncommand="ouvrirSousMenu('smAchats')" />
+			<vbox id="smAchats" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="31" onclick="goToMenu(4)"><label value="Commandes" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="32" onclick="goToMenu(17)"><label value="Préparation des commandes" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="33" onclick="goToMenu(20)"><label value="Réception des commandes" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="34" onclick="goToMenu(35)"><label value="Gestion des retours" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="35" onclick="goToMenu(14)"><label value="Factures" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_stock" tabindex="40" oncommand="ouvrirSousMenu('smStocks')" />
+			<vbox id="smStocks" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="41" onclick="goToMenu(3)"><label value="Articles" /></hbox></box>
+				<box id="tarification_client"><hbox class="bouton_sousmenu" tabindex="42" onclick="goToMenu(29)"><label value="Mise à jour des tarifs" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="43" onclick="goToMenu(26)"><label value="Fabrication" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="44" onclick="goToMenu(23)"><label value="Inventaire" /></hbox></box>
+				<box id="prod_frais"><hbox class="bouton_sousmenu" tabindex="45" onclick="goToMenu(25)"><label value="Suivi des numéros de lot" /></hbox></box>
+				<!--<box id="prestation_service"><hbox class="bouton_sousmenu" tabindex="46" onclick="goToMenu(30)"><label value="Prestation de service" /></hbox></box>-->
+			</vbox>
+			<button class="bouton_menu" id="bouton_opdiv" tabindex="50" oncommand="ouvrirSousMenu('smOD')" />
+			<vbox id="smOD" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="51" onclick="goToMenu(33)"><label value="Règlements clients" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="52" onclick="goToMenu(12)"><label value="Règlements fournisseurs" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="53" onclick="goToMenu(34)"><label value="Remises en banque" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="54" onclick="goToMenu(11)"><label value="Editions" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="55" onclick="goToMenu(10)"><label value="Tableaux de bord" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="56" onclick="goToMenu(13)"><label value="Transferts en comptabilité" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="57" onclick="goToMenu(24)"><label value="Export IDEP" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="58" onclick="goToMenu(28)"><label value="Changer le mot de passe" /></hbox></box>
+				<box id="outillage"><hbox class="bouton_sousmenu" tabindex="57" onclick="goToMenu(31)"><label value="Outillage" /></hbox></box>
+			</vbox>
+		</vbox>
+
+		<vbox flex="1" align="center" pack="center" class="auto-overflow">
+
+			<tabbox id="tbActivite" flex="1" pack="center">
+				<tabs>
+      		<tab label="Suivi d'activité" />
+      		<tab label="News OpenSi" />
+					<tab id="tabAlertes" label="Alertes" />
+     		</tabs>
+  			<tabpanels flex="1" style="background: #E8E8E8 url(chrome://opensi/content/design/filigrane.jpg) no-repeat bottom left">
+    			<tabpanel pack="center" align="start" orient="horizontal">
+						<vbox align="center">
+							<label value="Les chiffres clés de la société" style="font-weight:bold;color:#000000" />
+							<box style="height:15px" />
+							<grid style="width:250px;border:1px solid #DDDDDD">
+  							<columns>
+    							<column flex="3" />
+    							<column flex="2" />
+  							</columns>
+  							<rows>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Commandes à facturer :" />
+										<label id="ComEnCours" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="CA mois en cours :" />
+										<label id="CANMois" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="CA mois précédent :" />
+										<label id="CAN1Mois" style="text-align:right" />
+    							</row>
+									<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="CA année en cours :" />
+										<label id="CAN" style="text-align:right" />
+    							</row>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="CA année précédente :" />
+										<label id="CAN1" style="text-align:right" />
+    							</row>
+  							</rows>
+							</grid>
+						</vbox>
+						<box style="width:8px" />
+						<vbox align="center">
+							<label value="Evolution du chiffre d'affaires" style="font-weight:bold;color:#000000" />
+							<box style="height:8px" />
+							<image id="GraphCA" width="376" height="300" />
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<hbox flex="1">
+							<iframe id="news" flex="1" style="width:650px;" />
+						</hbox>
+					</tabpanel>
+					<tabpanel orient="vertical">
+						<!-- pas d'alertes -->
+						<hbox id="boxNoAlertes" pack="center" style="border: 1px solid #C4CFE1;background-color:#FFFFFF;padding:5px;margin-bottom:5px">
+							<label value="Aucune alerte" />	
+						</hbox>		
+					
+						<!-- Cloture facturation -->
+						<hbox id="boxCloture" collapsed="true" style="border: 1px solid #C4CFE1;background-color:#FFFFFF;padding:5px;margin-bottom:5px">
+							<vbox><image src="chrome://opensi/content/design/warning.png" /></vbox>
+							<vbox>
+								<label value="Le mois en cours de facturation est terminé," />
+								<hbox>
+									<label value="voulez-vous clôturer la facturation de la période" />
+									<label id="lblPeriode" />
+									<label value="?" />
+									<button label="Ok" class="mini_bouton" oncommand="cloturerFacturation()" />
+								</hbox>
+							</vbox>
+						</hbox>
+						
+						<!-- Rappel des factures non générées -->
+						<hbox id="boxAffaireFact" collapsed="true" style="border: 1px solid #C4CFE1;background-color:#FFFFFF;padding:5px;margin-bottom:5px">
+							<vbox><image src="chrome://opensi/content/design/warning_icone.png" style="padding-right:10px" /></vbox>
+							<vbox>
+								<label id="lblNbFactures" />
+								<hbox ref="http://www.opensi.org/facturation/numAffaires" id="numAffairesFact" datasources="rdf:null">
+									<template>
+										<hbox uri="rdf:*">
+											<label class="text-link" value="rdf:http://www.opensi.org/facturation/numAffaires/rdf#value" onclick="rdf:http://www.opensi.org/facturation/numAffaires/rdf#onclick" />
+										</hbox>
+									</template>
+								</hbox>
+							</vbox>
+						</hbox>
+						
+						<!-- Rappel des bl non générés -->
+						<hbox id="boxAffaireBL" collapsed="true" style="border: 1px solid #C4CFE1;background-color:#FFFFFF;padding:5px;margin-bottom:5px">
+							<vbox><image src="chrome://opensi/content/design/warning_icone.png" style="padding-right:10px" /></vbox>
+							<vbox>
+								<label id="lblNbBL" />
+								<hbox ref="http://www.opensi.org/facturation/numAffaires" id="numAffairesBL" datasources="rdf:null">
+									<template>
+										<hbox uri="rdf:*">
+											<label class="text-link" value="rdf:http://www.opensi.org/facturation/numAffaires/rdf#value" onclick="rdf:http://www.opensi.org/facturation/numAffaires/rdf#onclick" />
+										</hbox>
+									</template>
+								</hbox>
+							</vbox>
+						</hbox>
+
+						<!-- Rappel des factures d'abonnement à emettre -->
+  					<hbox id="boxAbonnement" collapsed="true" style="border: 1px solid #C4CFE1;background-color:#FFFFFF;padding:5px;margin-bottom:5px">
+  						<vbox><image src="chrome://opensi/content/design/warning_icone.png" style="padding-right:10px" /></vbox>
+      				<hbox>
+								<label id="lblNbFactAEmettre" style="padding-right:10px" />
+        				<button label="Ok" class="mini_bouton" oncommand="facturesAEmettre()" />
+      				</hbox>
+  					</hbox>
+
+  					<!-- Rappel des relances -->
+  					<vbox id="boxRelances" collapsed="true" style="margin-bottom:5px">
+      				<hbox align="center" style="border: 1px solid #C4CFE1;background-color:#FFFFFF">
+								<vbox pack="center"><image src="chrome://opensi/content/design/information_icone.png" style="padding:5px;padding-right:10px" /></vbox>
+        				<label id="lblRelances" style="padding-right:10px" />
+        				<button label="Ok" class="mini_bouton" oncommand="relances()" />
+      				</hbox>
+  					</vbox>
+
+  					<!-- Rappel des echeances -->
+  					<vbox id="boxFournisseur" collapsed="true" style="margin-bottom:5px">
+      				<hbox align="center" style="border: 1px solid #C4CFE1;background-color:#FFFFFF">
+								<vbox pack="center"><image src="chrome://opensi/content/design/information_icone.png" style="padding:5px;padding-right:10px" /></vbox>
+        				<label id="lblFournisseur" style="padding-right:10px" />
+        				<button label="Ok" class="mini_bouton" oncommand="echeancesFournisseur()" />
+      				</hbox>
+  					</vbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+			<box flex="1" />
+
+		</vbox>
+
+  </hbox>
+
+</window>

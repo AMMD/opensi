@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageFournisseurs_overlay-numerotationFournisseur"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-numerotationFournisseur.js" />
+  
+  <tabpanel id="tab-numerotation">
+
+		<vbox pack="center" align="center" flex="1" style="overflow:auto">
+			
+			<checkbox id="onf-chkNumerotationAuto" label="Numérotation automatique des numéros fournisseurs" oncommand="onf_checkNumerotationAuto(this.checked);" />
+			
+			<box height="20px" />
+			
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<hbox align="center">
+							<label value="Format du numéro :" />
+							<textbox id="onf-pattern" readonly="true" size="21" />
+						</hbox>
+						<hbox pack="center"><button id="onf-bReinitialisation" class="bIcoReinitialiser" oncommand="onf_reinitPattern();" /></hbox>
+					</row>
+					<row height="20px" />
+					<row align="center">
+						<hbox align="center">
+							<label value="Insérer une zone fixe :" />
+							<textbox id="onf-zoneFixe" size="4" maxlength="5" />
+						</hbox>
+						<hbox pack="center"><button label="Ajouter" id="onf-bAjouterZoneFixe" oncommand="onf_ajouterZoneFixe();" /></hbox>
+					</row>
+					<row align="center">
+						<hbox align="center">
+							<label value="Insérer l'année sur " />
+							<menulist id="onf-nbChiffresAnnee">
+								<menupopup>
+									<menuitem label="4" value="4" />
+									<menuitem label="2" value="2" />
+								</menupopup>
+							</menulist>
+							<label value="chiffres" />
+						</hbox>
+						<hbox pack="center"><button label="Ajouter" id="onf-bAjouterAnnee" oncommand="onf_ajouterAnnee();" /></hbox>
+					</row>
+					<row align="center">
+						<label value="Insérer le mois sur 2 chiffres" />
+						<hbox pack="center"><button label="Ajouter" id="onf-bAjouterMois" oncommand="onf_ajouterMois();" /></hbox>
+					</row>
+					<row align="center">
+						<hbox align="center">
+							<label value="Insérer le n° incrémental sur " />
+							<textbox id="onf-nbChiffresNumero" size="2" maxlength="1" value="4" />
+							<label value="chiffres" />
+						</hbox>
+						<hbox pack="center"><button label="Ajouter" id="onf-bAjouterNumero" oncommand="onf_ajouterNumero();" /></hbox>
+					</row>
+					<row height="20px" />
+					<row align="center">
+						<label value="Commencer la numérotation au numéro :" />
+						<hbox pack="center"><textbox id="onf-numDebut" size="10" maxlength="9" value="1" /></hbox>
+					</row>
+					<row align="center">
+						<label value="Réinitialisation du numéro :" />
+						<hbox pack="center">
+							<menulist id="onf-typeReinitialisation">
+								<menupopup>
+									<menuitem label="Pas de réinitialisation" value="N" />
+									<menuitem label="Annuelle" value="A" />
+									<menuitem label="Mensuelle" value="M" />
+								</menupopup>
+							</menulist>
+						</hbox>
+					</row>
+				</rows>
+			</grid>
+			
+			<box height="20px" />
+			
+			<hbox>
+				<button class="bEnregistrer" label="Enregistrer" oncommand="onf_enregistrerNumerotation();" />
+			</hbox>
+			
+		</vbox>
+		
+	</tabpanel>
+
+</overlay>

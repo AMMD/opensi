@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_affaires_menuAffaires"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-editionColisage.js" />
+
+	<vbox id="editionColisage" flex="1">
+		<deck id="oecol-deckColisageEtiquettes" selectedIndex="0" flex="1">
+			<vbox>		
+				<hbox flex="1">
+			
+					<vbox flex="1">
+						<label value="Liste des colis :" />
+						<tree id="oecol-listeColis"
+			        		flex="1"
+			            style="min-height: 150px;"
+			        		hidecolumnpicker="true"
+									flags="dont-build-content"
+									onselect="oecol_afficherContenu();"
+									onclick="oecol_afficherContenu();oecol_disableAjouter(true);oecol_disableRetirer(true)"
+			        		seltype="single"
+			        		ref="http://www.opensi.org/facturation/liste_colis"
+			        		datasources="rdf:null">
+			
+			    		<treecols>
+			      		<treecol id="oecol-colNumColis" label="N° Colis" flex="1" />
+								<splitter class="tree-splitter" />
+			      		<treecol id="oecol-colPoidsColis" label="Poids du colis" flex="1" class="nombre" />
+			    		</treecols>
+			    		<template>
+			      		<treechildren>
+			        		<treeitem uri="rdf:*">
+			          		<treerow>
+			            		<treecell label="rdf:http://www.opensi.org/facturation/liste_colis/rdf#NumColis" value="rdf:http://www.opensi.org/facturation/liste_colis/rdf#Colis_Id" />
+			            		<treecell label="rdf:http://www.opensi.org/facturation/liste_colis/rdf#Poids" />
+			          		</treerow>
+			        		</treeitem>
+			      		</treechildren>
+			    		</template>
+			  		</tree>
+					</vbox>
+			
+					<vbox flex="4">
+						<hbox flex="1">
+							<vbox flex="3">
+								<label id="oecol-lblContenu" value="Nouveau colis :" />
+								<tree id="oecol-contenuColis"
+			        				flex="1"
+			              	style="min-height: 150px;"
+			        				hidecolumnpicker="true"
+			        				seltype="single"
+											onclick="oecol_reporterQteSortie()"
+											onselect="oecol_reporterQteSortie()"
+											flags="dont-build-content"
+			        				ref="http://www.opensi.org/facturation/contenu_colis"
+			        				datasources="rdf:null">
+			
+			    				<treecols>
+			      				<treecol id="oecol-colReference" label="Référence" flex="1" />
+										<splitter class="tree-splitter" />
+			      				<treecol id="oecol-colDesignation" label="Désignation" flex="3" />
+										<splitter class="tree-splitter" />
+										<treecol id="oecol-colQuantite" label="Quantité" flex="1" class="nombre" />
+										<splitter class="tree-splitter" />
+										<treecol id="oecol-colPoids" label="Poids unitaire" flex="1" class="nombre" />
+			    				</treecols>
+			    				<template>
+			      				<treechildren>
+			        				<treeitem uri="rdf:*">
+			          				<treerow>
+			            				<treecell label="rdf:http://www.opensi.org/facturation/contenu_colis/rdf#Reference" value="rdf:http://www.opensi.org/facturation/contenu_colis/rdf#Ref_Ligne" />
+			            				<treecell label="rdf:http://www.opensi.org/facturation/contenu_colis/rdf#Designation" />
+													<treecell label="rdf:http://www.opensi.org/facturation/contenu_colis/rdf#Quantite" />
+													<treecell label="rdf:http://www.opensi.org/facturation/contenu_colis/rdf#Poids" />
+			          				</treerow>
+			        				</treeitem>
+			      				</treechildren>
+			    				</template>
+			  				</tree>
+								<hbox pack="end" align="center">
+									<button id="oecol-bNouveauColis" class="bNouveau" label="Nouveau colis" oncommand="oecol_nouveauColis();" />
+								</hbox>
+							</vbox>
+			
+							<vbox pack="center">
+								<button id="oecol-bAjouter" class="bIcoRetourRapide" oncommand="oecol_ajouterAuColis();" tooltiptext="Ajouter l'article sélectionné au colis" />
+			
+								<hbox align="center" pack="end">
+									<label class="label" value="Qté :" />
+									<textbox id="oecol-QteEntree" size="5" maxlength="10" />
+								</hbox>
+								<hbox align="center">
+									<label class="label" value="P.U (kg) :" />
+									<textbox id="oecol-PoidsEntree" size="5" maxlength="10" />
+								</hbox>
+			
+								<box style="height:70px" />
+								<button id="oecol-bRetirer" class="bIcoAvanceRapide" oncommand="oecol_retirerAuColis();" tooltiptext="Enlever l'article sélectionné au colis" />
+								<hbox align="center" pack="end">
+									<label class="label" value="Qté :" />
+									<textbox id="oecol-QteSortie" size="5" maxlength="10" />
+								</hbox>
+							</vbox>
+			
+							<vbox flex="2">
+								<label value="Articles non colisés :" />
+								<tree id="oecol-horsColis"
+			        				flex="1"
+			              	style="min-height: 150px;"
+			        				hidecolumnpicker="true"
+			        				seltype="multiple"
+											onclick="oecol_reporterQteEntree()"
+											onselect="oecol_reporterQteEntree()"
+											flags="dont-build-content"
+			        				ref="http://www.opensi.org/facturation/hors_colis"
+			        				datasources="rdf:null">
+			
+			    				<treecols>
+			      				<treecol id="oecol-colReferenceHC" label="Référence" flex="1" />
+										<splitter class="tree-splitter" />
+			      				<treecol id="oecol-colDesignationHC" label="Désignation" flex="3" />
+										<splitter class="tree-splitter" />
+										<treecol id="oecol-colQuantiteHC" label="Quantité" flex="1" class="nombre" />
+										<splitter class="tree-splitter" />
+										<treecol id="oecol-colPoidsHC" label="Poids unitaire" flex="1" class="nombre" />
+			    				</treecols>
+			    				<template>
+			      				<treechildren>
+			        				<treeitem uri="rdf:*">
+			          				<treerow>
+			            				<treecell label="rdf:http://www.opensi.org/facturation/hors_colis/rdf#Reference" value="rdf:http://www.opensi.org/facturation/hors_colis/rdf#Ref_Ligne" />
+			            				<treecell label="rdf:http://www.opensi.org/facturation/hors_colis/rdf#Designation" />
+													<treecell label="rdf:http://www.opensi.org/facturation/hors_colis/rdf#Quantite" />
+													<treecell label="rdf:http://www.opensi.org/facturation/hors_colis/rdf#Poids" />
+			          				</treerow>
+			        				</treeitem>
+			      				</treechildren>
+			    				</template>
+			  				</tree>
+							</vbox>
+						</hbox>
+			
+						<box style="height:30px" />
+			
+						<hbox align="center">
+							<grid>
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="Nombre de colis :" />
+										<textbox id="oecol-nbColis" size="" class="nombre" readonly="true" />
+									</row>
+									<row align="center">
+										<label class="label" value="Poids total (kg) :" />
+										<textbox id="oecol-poidsTotal" size="" class="nombre" readonly="true" />
+									</row>
+								</rows>
+							</grid>
+
+							<hbox>
+								<button id="oecol-bCalculColisage" label="Calculer les colis" oncommand="oecol_calculColisage();" />
+							</hbox>
+							
+							<spacer flex="1" />
+							
+							<groupbox align="center" pack="center" orient="horizontal" style="padding:15px">
+								<caption label="Génération d'étiquettes sans colisage" />
+								<label class="label" value="Quantité :" />
+								<textbox id="oecol-nbEtiquettes" size="4" maxlength="2" value="1" />
+								<button label="Générer les étiquettes" oncommand="oecol_editerEtiquettesSans();" />
+							</groupbox>
+			
+						</hbox>
+			
+						<box style="height:30px" />
+			
+						<hbox>
+							<button id="oecol-bEtiquettes" label="Générer les étiquettes" oncommand="oecol_editerEtiquettes();" />
+						</hbox>
+					</vbox>
+				</hbox>
+			
+				<box style="height:5px" />
+			</vbox>
+			<vbox>
+				<iframe type="content" id="oecol-pdfColisageEtiquettes" flex="1" />		
+			</vbox>
+		</deck>
+  </vbox>
+</overlay>

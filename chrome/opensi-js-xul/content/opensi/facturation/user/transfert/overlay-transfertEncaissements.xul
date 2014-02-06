@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libre de gestion d'entreprise                              -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_transfert_overlay-transfertEncaissements"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-transfertEncaissements.js" />
+  
+  <tabpanel id="tabEncaissements">
+
+		<vbox pack="center" flex="1" style="overflow:auto">
+
+			<box style="height:10px;" />
+			<label class="label_16" value="Transfert des encaissements" />
+			<box style="height:10px;" />
+			<hbox>
+				<groupbox orient="horizontal" align="start">
+					<caption label="Sélection des encaissements à transférer" />
+					<vbox>
+						<radiogroup id="ote-typePeriode">
+			      	<hbox align="center">
+			        	<radio value="P" label="Période" selected="true" oncommand="ote_changerTypePeriode(this.value);" />
+			        	<menulist id="ote-periode" ref="http://www.opensi.org/facturation/liste_periodes" datasources="rdf:null" oncommand="ote_actualiserSelection();">
+			      			<template>
+			        			<menupopup>
+			          			<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#PeriodeAff" value="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#Periode" />
+			        			</menupopup>
+			      			</template>
+			    			</menulist>
+			      	</hbox>
+							<hbox align="center">
+			      		<radio value="D" label="De date à date" oncommand="ote_changerTypePeriode(this.value);" />
+								<label value="Du" />
+								<textbox id="ote-dateDebut" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+								<label value="au" />
+								<textbox id="ote-dateFin" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+							</hbox>
+			    	</radiogroup>
+			    	<hbox align="center">
+							<label value="Mode de règlement :"/>
+		        	<menulist id="ote-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" oncommand="ote_pressOnModeReglement();">
+		      			<menupopup>
+									<menuitem label="[Tous]" value="0" />
+								</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+              		</menupopup>
+								</template>
+		    			</menulist>
+		      	</hbox>
+			    </vbox>
+			    <vbox>
+						<grid>
+							<columns>
+								<column />
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label value="N° Client :" />
+									<textbox id="ote-clientId" maxlength="10" size="10" />
+									<button oncommand="ote_rechercherClient();" tooltiptext="rechercher un client" class="bIcoRechercher" />
+								</row>
+								<row align="center">
+									<label value="N° Fournisseur :" />
+									<textbox id="ote-fournisseurId" maxlength="10" size="10" />
+									<button oncommand="ote_rechercherFournisseur();" tooltiptext="rechercher un fournisseur" class="bIcoRechercher" />
+								</row>
+							</rows>
+						</grid>
+						<box height="30px" />
+						<hbox pack="end"><button class="bIcoActualiser" tooltiptext="actualiser" oncommand="ote_actualiserSelection();" /></hbox>
+					</vbox>
+				</groupbox>
+		
+				<spacer flex="1" />
+		
+				<groupbox align="start">
+					<caption label="Transfert en comptabilité" />
+					<hbox align="center">
+		    	<label value="Journal d'encaissement :" />
+		    	<menulist id="ote-journal" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+		    		<menupopup>
+		    			<menuitem label="[Journaux par défaut]" value="" />
+		    		</menupopup>
+		      	<template>
+		        	<menupopup>
+		          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+		        	</menupopup>
+		      	</template>
+		    	</menulist>
+					</hbox>
+					<button id="ote-bTransfert" class="bTransformer" label="Transférer en comptabilité" oncommand="ote_transferer();" />
+					<box style="height:20px;" />
+					<hbox align="center">
+						<label class="label" value="Exporter au format" />
+						<menulist id="ote-formatExport" ref="http://www.opensi.org/comboliste/formats"	datasources="rdf:null">
+			    		<menupopup>
+			    			<menuitem label="[Choisir]" value="" />
+			    		</menupopup>
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/comboliste/formats/rdf#Export_Id" label="rdf:http://www.opensi.org/comboliste/formats/rdf#Intitule" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+			    	<button id="ote-bExporter" class="bValider" label="Ok" oncommand="ote_exporter();" />
+					</hbox>
+				</groupbox>
+			</hbox>
+			<box style="height:10px;" />
+		
+			<hbox align="end">
+				<label class="label_14" value="Encaissements de la période" />
+				<hbox pack="end" flex="1">
+					<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('ote-encaissements', true)" />
+					<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('ote-encaissements', false)" />
+					<box width="30px" />
+					<checkbox id="ote-chkAffEncTrans" label="Afficher les encaissements déjà transférés" oncommand="ote_actualiserSelection()" />
+				</hbox>
+			</hbox>
+		  <listbox id="ote-encaissements" flex="1" ref="http://www.opensi.org/facturation/encaissements" datasources="rdf:null">
+		    <listhead>
+		     	<listheader label="Date" />
+					<listheader label="Transféré" />
+					<listheader label="Statut" />
+		      <listheader label="N° Pièce" />
+		      <listheader label="N° Tiers" />
+		      <listheader label="Tiers" />
+		      <listheader label="N° Compte" />
+		      <listheader label="Montant" class="nombre" />
+		      <listheader collapsed="true" />
+		      <listheader collapsed="true" />
+		    </listhead>
+		    <listcols>
+					<listcol flex="1" />
+					<listcol style="width:100px" />
+					<listcol style="width:100px" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="3" />
+					<listcol flex="1" />
+					<listcol flex="2" />
+					<listcol collapsed="true" />
+					<listcol collapsed="true" />
+	  		</listcols>
+		    <template>
+	        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/encaissements/rdf#Reglement_Id" allowevents="true">
+            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Date_Reglement" onclick="testcheck(this.parentNode)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Transfere" ondblclick="affecterCompte(this.parentNode,4,9)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Lbl_Statut" ondblclick="affecterCompte(this.parentNode,4,9)" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Num_Piece" ondblclick="affecterCompte(this.parentNode,4,9)" />
+						<listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Tiers_Id" ondblclick="affecterCompte(this.parentNode,4,9)" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Denomination" ondblclick="affecterCompte(this.parentNode,4,9)" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Numero_Compte" ondblclick="affecterCompte(this.parentNode,4,9)" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Montant" style="text-align:right; padding-right:20px" ondblclick="affecterCompte(this.parentNode,4,9)" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Statut" />
+            <listcell label="rdf:http://www.opensi.org/facturation/encaissements/rdf#Type_Tiers" />
+	        </listitem>
+		    </template>
+		  </listbox>
+		  
+		</vbox>
+	</tabpanel>
+</overlay> 
+

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_multisites_overlay-sites"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-sites.js" />
+
+	<tabpanel id="tab-sites">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+			<tree id="tree-sites"
+        flex="1"
+        hidecolumnpicker="true"
+        seltype="single"
+        ref="http://www.opensi.org/config/liste-sites"
+				onclick="reporterSite()"
+				onselect="reporterSite()"
+        datasources="rdf:null">
+
+    		<treecols>
+     			<treecol id="osi-ColIntitule" label="Intitulé" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColDenomination" label="Raison sociale" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColAdresse_1" label="Adresse" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColAdresse_2" label="" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColAdresse_3" label="" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColCode_Postal" label="CP" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColVille" label="Ville" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColPays" label="Pays" flex="1" />
+					<splitter class="tree-splitter" />
+          <treecol id="osi-ColTel" label="Tel" flex="1" />
+          <splitter class="tree-splitter" />
+          <treecol id="osi-ColFax" label="Fax" flex="1" />
+          <splitter class="tree-splitter" />
+          <treecol id="osi-ColEmail" label="Email" flex="1" />
+          <splitter class="tree-splitter" />
+          <treecol id="osi-ColNumero_TVA" label="Numero TVA" flex="1" />
+          <splitter class="tree-splitter" />
+					<treecol id="osi-ColStock_Defaut" label="Stock par défaut" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="osi-ColCode_Pays" collapsed="true" />
+          <treecol id="osi-ColSite_Id" collapsed="true" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Intitule" />
+            		<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Denomination" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Adresse_1" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Adresse_2" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Adresse_3" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Code_Postal" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Ville" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Pays" />
+                <treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Tel" />
+                <treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Fax" />
+                <treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Email" />
+                <treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Numero_TVA" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Stock_Label" value="rdf:http://www.opensi.org/config/liste-sites/rdf#Stock_Defaut" />
+                <treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Code_Pays" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-sites/rdf#Site_Id" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+
+			<groupbox>
+				<caption label="Site" />
+				<hbox>
+				<spacer flex="2" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="* Intitulé :" />
+							<textbox id="osi-Intitule" size="20" maxlength="30" />
+						</row>
+						<row align="center">
+							<label class="label" value="* Stock par défaut :" />
+							<menulist id="osi-Stock_Defaut" ref="http://www.opensi.org/config/combo-stocks" datasources="rdf:null">
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/combo-stocks/rdf#Intitule" value="rdf:http://www.opensi.org/config/combo-stocks/rdf#Stock_Id" />
+              		</menupopup>
+								</template>
+            	</menulist>
+						</row>
+					</rows>
+				</grid>
+				<spacer flex="1" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="* Raison sociale :" />
+							<hbox><textbox id="osi-Denomination" size="30" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="* Adresse :" />
+							<hbox><textbox id="osi-Adresse_1" size="40" maxlength="80" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="" />
+							<hbox><textbox id="osi-Adresse_2" size="40" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="" />
+							<hbox><textbox id="osi-Adresse_3" size="40" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Code postal :" />
+							<hbox><textbox id="osi-Code_Postal" size="10" maxlength="10" class="rv_cp" idville="osi-Ville" idnextfocus="osi-Code_Pays" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="* Ville :" />
+							<hbox><textbox id="osi-Ville" size="30" maxlength="50" class="rv_ville" idcp="osi-Code_Postal" idnextfocus="osi-Code_Pays" /></hbox>
+						</row>
+              <row align="center">
+                <label class="label" value="Pays :" />
+                <hbox>
+                  <menulist id="osi-Code_Pays"  style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+                  <template>
+                    <menupopup>
+                      <menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+                    </menupopup>
+                  </template>
+                  </menulist>
+                </hbox>
+              </row>
+           <row align="center">
+              <label class="label" value="Tel :" />
+              <hbox><textbox id="osi-Tel" size="20" maxlength="20"/></hbox>
+            </row>
+            <row align="center">
+              <label class="label" value="Fax :" />
+              <hbox><textbox id="osi-Fax" size="20" maxlength="20" /></hbox>
+            </row>
+            <row align="center">
+              <label class="label" value="Email :" />
+              <hbox><textbox id="osi-Email" size="30" maxlength="64"/></hbox>
+            </row>
+            <row align="center">
+              <label class="label" value="Numero_TVA :" />
+              <hbox><textbox id="osi-Numero_TVA" size="30" maxlength="64"/></hbox>
+            </row>
+              
+					</rows>
+				</grid>
+				<spacer flex="2" />
+				</hbox>
+				<box style="height:20px" />
+				<hbox pack="center">
+					<button id="osi-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerSite();" tooltiptext="enregistrer le site" />
+					<button id="osi-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerSite();" tooltiptext="supprimer le site" />
+					<button id="osi-bNouveau" class="bNouveau" label="Nouveau" oncommand="nouveauSite();" tooltiptext="nouveau site" />
+				</hbox>
+				<box style="height:10px" />
+			</groupbox>
+
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_abonnement_gestionModeles"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="gestionModeles.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bFacturesEmettre" oncommand="factureAEmettre();" />
+			<button class="bouton_menu" id="bMenuAbonnements" oncommand="gestionAbonnement();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	
+	<hbox>
+		<label class="label_14" value="Gestion des modèles" />
+		<hbox flex="1" pack="end">
+			<button label="Nouveau modèle" class="bNouveau" oncommand="nouveauModele();" />
+		</hbox>
+	</hbox>
+  
+	<tree id="GestionDesModeles"
+	  flex="1"
+    hidecolumnpicker="true"
+    seltype="single"
+    flags="dont-build-content"
+		ondblclick="ModifierModele();"
+    ref="http://www.opensi.org/facturation/modeles"
+    datasources="rdf:null">
+		<treecols>
+      <treecol id="ColReference"
+        label="Référence"
+        flex="1"
+        sort="rdf:http://www.opensi.org/facturation/modeles/rdf#Reference" />
+			<splitter class="tree-splitter" />
+    	<treecol id="ColLibelle"
+        label="Libellé"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/modeles/rdf#Libelle" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColPeriodicite"
+        label="Périodicité"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/modeles/rdf#PeriodiciteTri" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColDuree"
+        label="Durée"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/modeles/rdf#DureeTri" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColTypeContrat"
+        label="Type de contrat"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/modeles/rdf#Type_contrat" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColModele_Id" collapsed="true"/>
+			<treecol id="ColDureeTri" collapsed="true"/>
+			<treecol id="ColPeriodiciteTri" collapsed="true"/>
+			<splitter class="tree-splitter" />
+		</treecols>
+ 		<template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+           	<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Reference" />
+           	<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Libelle" />
+           	<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Periodicite  rdf:http://www.opensi.org/facturation/modeles/rdf#Type_periodicite" />
+          	<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Duree_contrat rdf:http://www.opensi.org/facturation/modeles/rdf#Type_duree_contrat" />
+	  				<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Type_contrat" />
+						<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#Modele_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#DureeTri" />
+						<treecell label="rdf:http://www.opensi.org/facturation/modeles/rdf#PeriodiciteTri" />
+	  			</treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+	
+	<hbox flex="0.1" pack="end"><button label="Imprimer page" oncommand="creerEtatModele();" id="bEtatModele" /></hbox>
+
+</window>
+

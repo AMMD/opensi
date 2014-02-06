@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_commandes_editionBR"
+  onload="init();"
+	onunload="desinit();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="edition_br.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="demandeEnregistrement();retour_menu_principal();" />
+			<button class="bouton_menu" id="bMenuCommandes" oncommand="demandeEnregistrement();retour_receptions();" />
+			<button class="bouton_menu" id="bRetourCommande" oncommand="demandeEnregistrement();retour_commande();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="demandeEnregistrement();quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+  <vbox flex="1" class="auto-overflow">
+
+		<hbox flex="1">
+			<tabbox flex="1" pack="center">
+				<tabs>
+					<tab id="tabBR" label="Bon de réception" />
+					<tab label="Versions" id="tabVersionDocument" collapsed="true" />
+				</tabs>
+				<tabpanels flex="1">
+	    		<tabpanel pack="center" orient="vertical">
+	    			<hbox pack="center">
+				      <grid>
+				       	<columns>
+				        	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				       		<row align="center">
+				          	<label class="label" value="N° Commande :" />
+				           	<label id="labelCommande" />
+				         	</row>
+				         	<row align="center">
+				          	<label class="label" value="Responsable :" />
+				           	<label id="Login_Resp" />
+				         	</row>
+				          <row align="center">
+				            <label class="label" value="Date :" />
+				            <label id="Date_Commande" />
+				          </row>
+				          <row align="center">
+				            <label class="label" value="Etat :" />
+				            <label id="Etat_Commande" />
+				          </row>
+				        </rows>
+				     	</grid>
+						</hbox>
+					</tabpanel>
+					<tabpanel flex="1" pack="center" orient="vertical">
+						<tree id="listeVersion"
+							hidecolumnpicker="true"
+			        seltype="single"
+			        ref="http://www.opensi.org/facturation/historiqueEditions"
+			        datasources="rdf:null"
+			        flex="1">
+					    <treecols>
+					      <treecol flex="1" label="N° Edition" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Date d'édition" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Login" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Envoyé à" />
+					    </treecols>
+					    <template>
+					      <treechildren>
+					        <treeitem uri="rdf:*">
+					          <treerow>
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+					          </treerow>
+					        </treeitem>
+					      </treechildren>
+					    </template>
+					  </tree>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+			<groupbox flex="1" pack="center" align="center">
+	      <caption id="Fournisseur" />
+	      <vbox>
+					<label id="Denomination" />
+					<label id="Adresse_1" />
+					<label id="Adresse_2" />
+					<label id="Adresse_3" />
+					<hbox><label id="Code_Postal" /><label id="Ville" /></hbox>
+				</vbox>
+	    </groupbox>
+		</hbox>
+	
+		<hbox>
+			<groupbox flex="3">
+	      <caption label="Bons de réception" />
+				<tree id="brs"
+	        flex="1"
+	        hidecolumnpicker="true"
+	        seltype="single"
+					ondblclick="ouvrirBR();"
+					onkeypress="pressOnTree(event);"
+	        ref="http://www.opensi.org/facturation/brs_commande"
+	        datasources="rdf:null">
+	
+	        <treecols>
+	          <treecol id="ColDate_Creation" label="Date création" flex="1" />
+	          <treecol id="ColNum_Entier" label="Numéro" flex="1" />
+						<treecol id="ColEtat" label="Etat" flex="2" />
+						<treecol id="ColBR_Id" collapsed="true" />
+	        </treecols>
+	        <template>
+	          <treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	                <treecell label="rdf:http://www.opensi.org/facturation/brs_commande/rdf#Date_Creation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/brs_commande/rdf#Num_Entier" />
+									<treecell label="rdf:http://www.opensi.org/facturation/brs_commande/rdf#Etat" />
+									<treecell label="rdf:http://www.opensi.org/facturation/brs_commande/rdf#BR_Id" />
+	              </treerow>
+	            </treeitem>
+	          </treechildren>
+	        </template>
+	      </tree>
+				<hbox><button id="bNouveauBR" class="bNouveau" label="Nouveau" oncommand="pressOnNouveauBR();" /></hbox>
+			</groupbox>
+	
+			<groupbox flex="1" pack="center" align="center">
+	      <caption label="Bon de réception" />
+	      <grid>
+	       	<columns>
+	        	<column />
+	         	<column />
+	       	</columns>
+	       	<rows>
+	         	<row align="center">
+	          	<label class="label" value="Numéro :" />
+	           	<label id="Num_Entier" />
+	         	</row>
+						<row align="center">
+	          	<label class="label" value="Date :" />
+	           	<label id="Date_Reception" />
+	          </row>
+						<row align="center">
+	          	<label class="label" value="Etat :" />
+	           	<label id="Etat" />
+	          </row>
+						<row align="center">
+	          	<label class="label" value="N° BL :" />
+	           	<textbox id="Num_BL" size="12" maxlength="20" oninput="setModifie(true);" />
+	          </row>
+	      	</rows>
+	     	</grid>
+	    </groupbox>
+	    
+	    <groupbox flex="1" pack="center" align="center">
+				<caption label="Commentaires" />
+	      <vbox pack="center">
+	      	<grid>
+		       	<columns>
+		        	<column />
+		         	<column />
+		       	</columns>
+		       	<rows>
+		       		<row align="center">
+		       			<label value="Commentaires de fin de bon de réception :" />
+		       			<label value="Commentaires non imprimables :" />
+		       		</row>
+		       		<row align="center">
+		       			<textbox id="Commentaires_Fin" multiline="true" cols="35" rows="6" oninput="setModifie(true);" />
+		       			<textbox id="Commentaires_Int" multiline="true" cols="35" rows="6" oninput="setModifie(true);" />
+		       		</row>
+		       	</rows>
+		      </grid>
+		      <box style="height:5px" />
+					<hbox pack="center">
+						<button id="bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="editerCommentairesCaches();" />
+						<button id="bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="choisirMentions();" />
+					</hbox>
+					<box style="height:5px" />
+	      </vbox>
+			</groupbox>
+	
+		</hbox>
+	
+		<groupbox flex="1">
+			<caption label="Corps" />
+			<hbox flex="1">
+	
+				<vbox flex="1" id="corps_commande">
+					<label value="Articles restant à réceptionner :" />
+					<tree id="commande"
+	        	flex="1"
+	          style="min-height: 150px;"
+	        	hidecolumnpicker="false"
+						flags="dont-build-content"
+						onselect="reporterQteEntree();"
+						onclick="reporterQteEntree();disableAjouter(false,true);disableEnlever(true,false);"
+	        	seltype="single"
+	        	ref="http://www.opensi.org/facturation/articles_a_receptionner"
+	        	datasources="rdf:null">
+	
+	    			<treecols>
+	      			<treecol id="ColReferenceDev" label="Référence" flex="1" />
+							<splitter class="tree-splitter" />
+	      			<treecol id="ColDesignationDev" label="Désignation" flex="3" />
+							<splitter class="tree-splitter" />
+	      			<treecol id="colAttribut2" flex="1" persist="hidden" hidden="true" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColNbPiecesDev" label="Nb pièces restantes" flex="1" class="nombre" ignoreincolumnpicker="true" />
+							<splitter class="tree-splitter" />
+	      			<treecol id="ColQuantiteDev" label="Qté restante" flex="1" class="nombre" />
+							<treecol id="ColLigneDev" collapsed="true" ignoreincolumnpicker="true" />
+	    			</treecols>
+	    			<template>
+	      			<treechildren>
+	        			<treeitem uri="rdf:*">
+	          			<treerow>
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Reference" />
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Designation" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Attribut_2" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Nb_Pieces" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Quantite" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_a_receptionner/rdf#Ligne_Id" />
+	          			</treerow>
+	        			</treeitem>
+	      			</treechildren>
+	    			</template>
+	  			</tree>
+					<checkbox id="Solder" label="Solder la commande à la validation" />
+				</vbox>
+	
+				<vbox pack="center" id="corps_transfert">
+					<vbox id="prod_frais_entree" pack="center">
+						<hbox>
+							<label value="N° Lot :" />
+							<textbox id="NumLotEntree" size="6" maxlength="15" />
+						</hbox>
+						<hbox>
+							<label value="DLC :" />
+							<textbox id="DLCEntree" size="6" maxlength="10" />
+						</hbox>
+						<hbox>
+							<label value="Nb Pièces :" />
+							<textbox id="NbPiecesEntree" size="6" maxlength="10" />
+						</hbox>
+					</vbox>
+					<vbox>
+						<label value="Quantité :" />
+						<hbox>
+							<textbox id="QteEntree" size="6" maxlength="10" />
+							<button id="bAjouter" class="bIcoAvance" oncommand="Ajouter();" style="margin-right:0px" flex="1" />
+						</hbox>
+					</vbox>
+					<box style="height:10px" />
+					<button id="bToutAjouter" label="Tout transférer" class="bIcoAvanceRapide" oncommand="ToutTransferer();" style="margin-right:0px" />
+	
+					<box style="height:40px" />
+	
+					<vbox pack="center">
+						<vbox id="prod_frais_sortie" pack="center">
+							<hbox>
+								<label value="Nb Pièces :" />
+								<textbox id="NbPiecesSortie" size="6" maxlength="10" />
+							</hbox>
+						</vbox>
+						<vbox>
+							<label class="label" value="Quantité :" />
+							<hbox>
+								<button id="bEnlever" class="bIcoRetour" oncommand="Enlever();" style="margin-right:0px" flex="1" />
+								<textbox id="QteSortie" size="6" maxlength="10" />
+							</hbox>
+						</vbox>
+					</vbox>
+					<box style="height:10px" />
+					<button id="bToutEnlever" label="Tout enlever" class="bIcoRetourRapide" dir="reverse" oncommand="ToutEnlever();" style="margin-right:0px" />
+				</vbox>
+	
+				<vbox flex="1">
+					<label value="Articles du bon de réception :" id="titre_corps" />
+					<tree id="bon_reception"
+	        	flex="1"
+	          style="min-height: 150px;"
+	        	hidecolumnpicker="true"
+	        	seltype="single"
+						flags="dont-build-content"
+						onselect="reporterQteSortie();"
+						onclick="reporterQteSortie();disableEnlever(false,true);disableAjouter(true,false);"
+	        	ref="http://www.opensi.org/facturation/articles_br"
+	        	datasources="rdf:null">
+	
+	    			<treecols>
+	      			<treecol id="ColReferenceLiv" label="Référence" flex="1" />
+							<splitter class="tree-splitter" />
+	      			<treecol id="ColDesignationLiv" label="Désignation" flex="3" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColNumLotLiv" label="N° Lot" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColDLCLiv" label="DLC" flex="2" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColNbPiecesLiv" label="Nb pièces" flex="1" class="nombre" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColQuantiteLiv" label="Quantité" flex="1" class="nombre" />
+							<treecol id="ColLigneLiv" collapsed="true" />
+	    			</treecols>
+	    			<template>
+	      			<treechildren>
+	        			<treeitem uri="rdf:*">
+	          			<treerow>
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Reference" />
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Designation" />
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Num_Lot" />
+	            			<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Date_Peremption" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Nb_Pieces" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Quantite" />
+										<treecell label="rdf:http://www.opensi.org/facturation/articles_br/rdf#Ligne_Id" />
+	          			</treerow>
+	        			</treeitem>
+	      			</treechildren>
+	    			</template>
+	  			</tree>
+				</vbox>
+
+			</hbox>
+		</groupbox>
+
+  </vbox>
+
+	<hbox pack="center">
+		<button id="bAnnuler" class="bAnnuler" label="Annuler" oncommand="annulerBR();" />
+		<button id="bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerBR();" />
+		<button id="bValider" class="bValider" label="Valider le BR" oncommand="validerBR();" />
+		<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerBR();" />
+		<button id="bVisualiser" class="bPDF" label="Edition PDF" oncommand="visualiserBR();" />
+		<button id="bTransFacture" class="bTransformer" label="Passer en facture" oncommand="transFacture();" />
+	</hbox>
+	<box style="height:5px" />
+
+	<statusbar>
+		<statusbarpanel id="Creation" />
+		<statusbarpanel id="Modification" />
+		<statusbarpanel id="Fiche" flex="1" style="text-align:right;font-weight:bold;" />
+	</statusbar>
+
+</window>

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_superviseur_utilisateurs_nouveauUtilisateur"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="nouveau_utilisateur.js" />
+
+  <hbox pack="left" align="center" class="bar_menu_conf">
+    <hbox class="bar_menu_conf_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menuManager()" />
+			<button class="bouton_menu" id="bMenuUtilisateurs" oncommand="retour_menuUtilisateurs()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:60px" />
+	<hbox pack="center">
+    <label value="CREATION D'UN UTILISATEUR" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="* Login :" />
+					<hbox><textbox id="Login" maxlength="15" size="16" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="* Mot de passe :" />
+					<hbox><textbox id="Password" maxlength="15" size="16" type="password" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="* Mot de passe :" />
+					<hbox><textbox id="Password2" maxlength="15" size="16" type="password" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Civilité :" />
+					<radiogroup id="Civilite" orient="horizontal" value="0">
+						<radio label="M." value="1" />
+						<radio label="Mme" value="2" />
+						<radio label="Mlle" value="3" />
+					</radiogroup>
+				</row>
+				<row align="center">
+					<label class="label" value="* Nom :" />
+					<hbox><textbox id="Nom" maxlength="30" size="31" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="* Prénom :" />
+					<hbox><textbox id="Prenom" maxlength="30" size="31" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Fonction :" />
+					<hbox><textbox id="Fonction" maxlength="30" size="31" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="" />
+					<checkbox id="membreDirection" label="Membre de la direction" />
+				</row>
+				<row align="center">
+					<label class="label" value="Téléphone :" />
+					<hbox><textbox id="Telephone" maxlength="20" size="31" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="E-Mail :" />
+					<hbox><textbox id="Email" maxlength="60" size="31" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="* Entreprise :" />
+         	<menulist id="liste_entreprises" ref="http://www.opensi.org/Superviseur/listeEntreprises" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Choisir]" />
+			      </menupopup>
+						<template>
+			        <menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Denomination" value="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Entreprise_Id" />
+			        </menupopup>
+						</template>
+					</menulist>
+				</row>
+			</rows>
+		</grid>
+	</hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+    <button class="bEnregistrer" label="Enregistrer" oncommand="creerUtilisateur()" />
+  </hbox>
+
+</window>

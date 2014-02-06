@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_fournisseurs_overlay-adrcom"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-adrcom.js" />
+
+	<tabpanel id="tab-adrcom">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+  		<tree id="tree-adrcom"
+    		hidecolumnpicker="true"
+    		seltype="single"
+    		ref="http://www.opensi.org/facturation/adrcom"
+    		datasources="rdf:null"
+				ondblclick="chargerAdrCom();"
+    		onkeypress="pressOnTreeAdrCom(event);"
+    		flex="3">
+
+    		<treecols>
+      		<treecol id="oac-ColDenomination" flex="2" label="Raison sociale" />
+					<splitter class="tree-splitter" />
+      		<treecol id="oac-ColAdresse_1" flex="3" label="Adresse" />
+					<splitter class="tree-splitter" />
+					<treecol id="oac-ColAdresse_2" flex="2" label="" />
+					<splitter class="tree-splitter" />
+					<treecol id="oac-ColAdresse_3" flex="2" label="" />
+					<splitter class="tree-splitter" />
+      		<treecol id="oac-ColCode_Postal" flex="1" label="Code postal" />
+					<splitter class="tree-splitter" />
+      		<treecol id="oac-ColVille" flex="2" label="Ville" />
+					<splitter class="tree-splitter" />
+      		<treecol id="oac-ColPays" flex="1" label="Pays" />
+      		<splitter class="tree-splitter" />
+      		<treecol id="oac-ColLib_Contact" flex="1" label="Contact" />
+      		<treecol id="oac-ColCode_Pays" collapsed="true" />
+      		<treecol id="oac-ColDefaut" collapsed="true" />
+      		<treecol id="oac-ColContact" collapsed="true" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Denomination" value="rdf:http://www.opensi.org/facturation/adrcom/rdf#Num" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Adresse" />
+								<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Comp_Adresse" />
+								<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Adresse_3" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Code_Postal" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Ville" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Pays" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Lib_Contact" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Code_Pays" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Defaut" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Contact" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+
+  		<groupbox flex="1" pack="center" align="center">
+    		<caption label="Adresse de commande" />
+      	<hbox>
+        	<grid>
+          	<columns>
+            	<column />
+            	<column />
+          	</columns>
+          	<rows>
+							<row align="center">
+              	<label value="" />
+              	<checkbox id="oac-Defaut" label="Adresse par défaut" />
+            	</row>
+							<row align="center">
+              	<label class="label" value="* Raison sociale :" />
+              	<hbox><textbox id="oac-Denomination" maxlength="50" size="30" /></hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="* Adresse :" />
+              	<hbox><textbox id="oac-Adresse" maxlength="80" size="50" /></hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="" />
+              	<hbox><textbox id="oac-Comp_Adresse" maxlength="50" size="50" /></hbox>
+            	</row>
+							<row align="center">
+              	<label class="label" value="" />
+              	<hbox><textbox id="oac-Adresse_3" maxlength="50" size="50" /></hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="* Code postal :" />
+              	<hbox><textbox id="oac-Code_Postal" class="rv_cp" idville="oac-Ville" idnextfocus="oac-Code_Pays" maxlength="10" size="6" /></hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="* Ville :" />
+              	<hbox><textbox id="oac-Ville" class="rv_ville" idcp="oac-Code_Postal" idnextfocus="oac-Code_Pays" maxlength="50" size="30" /></hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="Pays :" />
+              	<hbox>
+              		<menulist id="oac-Code_Pays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+									<template>
+		             		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		             		</menupopup>
+									</template>
+									</menulist>
+              	</hbox>
+            	</row>
+            	<row align="center">
+              	<label class="label" value="Contact :" />
+              	<hbox>
+              		<menulist id="oac-Contact" ref="http://www.opensi.org/facturation/liste-contactsFournisseur" datasources="rdf:null" style="width:200px" sizetopopup="none">
+									<menupopup>
+	              		<menuitem label="[Aucun]" value="" />
+	              	</menupopup>
+									<template>
+	              		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Civilite rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Nom rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Prenom" value="rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Num_Inter" />
+	              		</menupopup>
+									</template>
+									</menulist>
+              	</hbox>
+            	</row>
+          	</rows>
+        	</grid>
+      	</hbox>
+				<hbox style="height:15px" />
+				<hbox pack="center">
+					<button id="bNouveauAdrCom" class="bNouveau" label="Nouveau" oncommand="nouveauAdrCom()" />
+					<button id="bCreerAdrCom" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerAdrCom('C')" />
+					<button id="bModifierAdrCom" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerAdrCom('M')" />
+					<button id="bSupprimerAdrCom" class="bSupprimer" label="Supprimer" oncommand="supprimerAdrCom()" />
+  			</hbox>
+  		</groupbox>
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

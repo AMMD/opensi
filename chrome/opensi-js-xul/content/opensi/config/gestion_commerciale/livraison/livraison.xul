@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_gestion_commerciale_livraison"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="livraison.js" />
+
+	<box class="rv_pop" id="rv" />
+
+	<vbox pack="center" flex="1" style="overflow:auto">
+		<hbox height="10px" />
+		<tree id="liste_org"
+      hidecolumnpicker="true"
+      seltype="single"
+      ref="http://www.opensi.org/config/listeOrgLivraison"
+      datasources="rdf:null"
+			onkeypress="keypress(event)"
+			flex="2"
+      style="min-height: 100px;">
+
+      <treecols>
+        <treecol id="ColOrg" flex="3" label="Organisme" />
+				<treecol id="ColAdresse" flex="4" label="Adresse" />
+				<treecol id="ColCP" flex="1" label="CP" />
+				<treecol id="ColVille" flex="3" label="Ville" />
+				<treecol id="ColTel" flex="2" label="Téléphone" />
+				<treecol id="ColFax" flex="2" label="Fax" />
+				<treecol id="ColNum_Client" flex="2" label="Mon N° Client" />
+      </treecols>
+      <template>
+        <treechildren onclick="ouvrirOrg()">
+          <treeitem uri="rdf:*">
+            <treerow>
+              <treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Nom_Org" value="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Organisme_Id" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Adresse" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Code_Postal" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Ville" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Tel" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Fax" />
+							<treecell label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Num_Client" />
+            </treerow>
+          </treeitem>
+        </treechildren>
+      </template>
+    </tree>
+		<hbox height="10px" />
+		<groupbox flex="1" pack="center" align="center">
+      <caption label="Organisme de livraison" />
+      <grid>
+        <columns>
+          <column/>
+					<column/>
+        </columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="Organisme de livraison :" />
+						<hbox><textbox id="Nom_Org" maxlength="25" size="25" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Adresse :" />
+						<hbox><textbox id="Adresse" maxlength="80" size="50" /></hbox>
+          </row>
+					<row align="center">
+						<label class="label" value="Code postal :" />
+						<hbox><textbox id="Code_Postal" class="rv_cp" idville="Ville" idnextfocus="Tel" maxlength="5" size="5" /></hbox>
+          </row>
+					<row align="center">
+						<label class="label" value="Ville :" />
+						<hbox><textbox id="Ville" class="rv_ville" idcp="Code_Postal" idnextfocus="Tel" maxlength="50" size="30" /></hbox>
+          </row>
+					<row align="center">
+						<label class="label" value="Téléphone :" />
+						<hbox><textbox id="Tel" maxlength="20" size="20" /></hbox>
+          </row>
+					<row align="center">
+						<label class="label" value="Fax :" />
+						<hbox><textbox id="Fax" maxlength="20" size="20" /></hbox>
+          </row>
+          <row align="center">
+						<label class="label" value="Mon N° Client :" />
+						<hbox><textbox id="Num_Client" maxlength="15" size="20" /></hbox>
+          </row>
+				</rows>
+      </grid>
+			<hbox height="30px" />
+			<hbox>
+				<button id="bNouveau" class="bNouveau" label="Nouveau" oncommand="nouveauOrg()" disabled="true" />
+				<hbox style="width:20px" />
+				<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerOrg()" disabled="true" />
+				<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierOrg()" collapsed="true" />
+				<button id="bCreer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerOrg()" />
+			</hbox>
+    </groupbox>
+  </vbox>
+
+</window>

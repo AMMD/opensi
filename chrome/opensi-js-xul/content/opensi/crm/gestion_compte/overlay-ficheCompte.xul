@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+<?xul-overlay href="overlay-ficheSignaletique.xul"?>
+<?xul-overlay href="overlay-ficheContact.xul"?>
+<?xul-overlay href="overlay-ficheTache.xul"?>
+
+<overlay
+  id="opensi_crm_user_gestionCompte_overlayFicheCompte"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-ficheCompte.js" />
+	
+	<script src="chrome://opensi/content/libs/util.js" />
+  
+	<vbox id="overlay-ficheCompte">
+	
+  		<label class="label_16" value="Gestion des comptes" />	
+
+	 		<tabbox flex="1" id="ofc-onglets">
+				<tabs>
+			      	<tab label="Fiche signalétique" oncommand="ofs-clickOnglet();" />
+			      	<tab id="ofc-tabContact" label="Contacts" oncommand="ofc-clickOnglet();" />
+			      	<tab id="ofc-tabEvenement" label="Tâches/Evenements" oncommand="oft-clickOnglet();" />
+				</tabs>
+	  			<tabpanels id="tabPannel" flex="1">
+					<tabpanel id="tabSignaletique" />
+					<tabpanel id="tabContact"  disabled="true" />
+					<tabpanel id="tabEvenement"  disabled="true" />
+	  			</tabpanels>
+    	</tabbox>
+	<statusbar>
+		<statusbarpanel id="Creation" />
+		<statusbarpanel id="Modification" />
+		<statusbarpanel id="Fiche" flex="1" style="text-align:right;font-weight:bold;" />
+	</statusbar>
+	</vbox>
+	
+</overlay>

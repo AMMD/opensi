@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay id="overlay_menu_utilisateurs" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script src="overlay-menu_utilisateurs.js" />
+
+	<vbox id="menu_utilisateurs">
+		<hbox>
+			<vbox flex="1">
+		    <label value="Gestion des utilisateurs" class="label_16" />
+		    <hbox flex="1" align="center">
+					<label value="Login :" />
+					<textbox id="omu-login" maxlength="15" size="16" onkeypress="omu_pressOnFiltre(event);" />
+					<label value="Nom :" />
+					<textbox id="omu-nom" maxlength="30" size="31" onkeypress="omu_pressOnFiltre(event);" />
+					<checkbox id="omu-chkAffTous" label="Afficher les utilisateurs désactivés" oncommand="omu_rechercherUtilisateurs();" />
+					<box flex="1" />
+		    	<vbox>
+						<button id="omu-bNouveau" class="bNouveau" label="Nouvel utilisateur" oncommand="nouvelUtilisateur()" />
+					</vbox>
+		    </hbox>
+		  </vbox>
+		</hbox>
+		<hbox flex="1">
+	    <tree id="liste_utilisateurs"
+	          hidecolumnpicker="true"
+	          seltype="single"
+						flex="1"
+						onkeypress="keypress(event)"
+						ondblclick="modifUtilisateur()"
+	          ref="http://www.opensi.org/Utilisateurs/listeUtilisateurs"
+	          datasources="rdf:null">
+	      <treecols>
+	        <treecol flex="1" id="login" label="Login" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#login" />
+					<treecol flex="1" id="ColCivilite" label="Civilité" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Civilite" />
+	        <treecol flex="1" id="nom" label="Nom" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#nom" />
+	        <treecol flex="1" id="prenom" label="Prénom" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#prenom" />
+	        <treecol flex="1" id="fonction" label="Fonction" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#fonction" />
+	        <treecol flex="1" label="Actif" sort="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Actif" />
+					<treecol id="ColUtilisateur_Id" collapsed="true" />
+	      </treecols>
+	
+	      <template>
+	        <treechildren>
+	          <treeitem uri="rdf:*">
+	            <treerow>
+	              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#login" />
+								<treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Civilite" />
+	              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#nom" />
+	              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#prenom" />
+	              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#fonction" />
+	              <treecell src="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Picto_Actif" />
+								<treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Utilisateur_Id" />
+								<treecell label="rdf:http://www.opensi.org/Utilisateurs/listeUtilisateurs/rdf#Actif" />
+	            </treerow>
+	          </treeitem>
+	        </treechildren>
+	      </template>
+	    </tree>
+	  </hbox>
+	</vbox>
+</overlay>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_abonnement_rechModele"
+  onload="init();"
+	title="OpenSi - gestion commerciale"
+	onunload="desinit();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+ 	<script src="rechModele.js" />
+
+	<hbox style="height:10px" />
+	<hbox flex="0.75" pack="center" >
+		<label class="label_14" value="CHOIX D'UN MODELE" />
+	</hbox>
+	<hbox flex="0.75">
+		<vbox flex="1">
+			<grid>
+			<rows>
+				<row align="center">
+					<label class="label" value="Référence :" />
+     			<textbox id="Reference" maxlength="10" size="20" onkeypress="pressOnId(event);"/>
+      	</row>
+				<row align="center">
+					<label class="label" value="Durée :" />
+					<hbox>
+						<menulist id="DureeModele"
+											oncommand="pressOnDuree();"
+											ref="http://www.opensi.org/facturation/dureeModele"
+											datasources="rdf:null">
+							<menupopup>
+								<menuitem label="[Toutes les durées]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/dureeModele/rdf#Duree_contrat rdf:http://www.opensi.org/facturation/dureeModele/rdf#Type_duree_contrat"
+									 					value="rdf:http://www.opensi.org/facturation/dureeModele/rdf#Duree_contrat rdf:http://www.opensi.org/facturation/dureeModele/rdf#Code_Type_duree_contrat" />
+								</menupopup>
+							</template>
+						</menulist>
+					</hbox>
+				</row>
+			</rows>
+
+			</grid>
+		</vbox>
+		<vbox flex="1">
+			<grid>
+			<rows>
+				<row align="center">
+					<label class="label" value="Libellé :" />
+     			<textbox id="Libelle_modele" maxlength="15" size="25" onkeypress="pressOnLibelle(event);"/>
+      	</row>
+				<row align="center">
+					<label class="label" value="Type Contrat :" />
+					<hbox>
+						<menulist id="TypeContrat" oncommand="pressOnTypeContrat();">
+							<menupopup>
+								<menuitem label="[Tous les types de contrat]" value="0"/>
+								<menuitem label="sans reconduction" value="1" />
+								<menuitem label="reconduction tacite" value="2" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</row>
+			</rows>
+			</grid>
+		</vbox>
+	</hbox>
+	<hbox height="10px" />
+	<hbox flex="2">
+		<tree id="ListeModeles"
+	   	flex="1"
+     	hidecolumnpicker="true"
+     	seltype="single"
+			ondblclick="ouvrirModele();"
+			onselect="MontrerOuvrir();"
+			onclick="MontrerOuvrir();"
+     	flags="dont-build-content"
+     	ref="http://www.opensi.org/facturation/liste_Modele"
+     	datasources="rdf:null">
+			<treecols>
+      	<treecol id="ColReference"
+         	label="Référence"
+         	flex="1"
+         	sort="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+				<splitter class="tree-splitter" />
+    		<treecol id="ColLibelle"
+        	label="Libellé"
+         	flex="3"
+					sort="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+				<splitter class="tree-splitter" />
+      	<treecol id="ColPeriodicite"
+          label="Périodicité"
+          flex="1"
+					sort="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColDuree"
+         	label="Durée"
+         	flex="1"
+					sort="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColTypeContrat"
+         	label="Type de contrat"
+        	flex="2"
+					sort="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColModele_Id"
+					label="modele_id"
+					collapsed="true"
+					/>
+			</treecols>
+	 		<template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	           	<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Reference" />
+	           	<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Libelle" />
+	           	<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Periodicite  rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Type_periodicite" />
+	          	<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Duree_contrat rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Type_duree_contrat" />
+		  				<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Type_contrat" />
+							<treecell label="rdf:http://www.opensi.org/facturation/liste_Modele/rdf#Modele_Id" />
+		  			</treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+	  </tree>
+	</hbox>
+	<hbox>
+		<spacer style="width:20px"/>
+		<hbox flex="1">
+			<button label="Nouveau" id="bnouveau" class="bNouveau" oncommand="nouveauModele();"/>
+		</hbox>
+		<hbox flex="2">
+			<button label="Annuler" id="bannuler" class="bAnnuler" oncommand="retour_gestion_abonnement();"/>
+			<button label="Ok" class="bValider" id="bOuvrir" oncommand="ouvrirModele();"/>
+		</hbox>
+	</hbox>
+</window>
+

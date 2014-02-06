@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageClients_overlay-famillesClients"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-famillesClients.js" />
+  
+  <tabpanel id="tab-familles">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box height="30px" />
+			<hbox pack="center">
+		    <label value="GESTION DES FAMILLES DE CLIENT" class="label_16" />
+		  </hbox>
+			<box height="30px" />
+			
+	  	<hbox pack="center" flex="1">
+	  		<vbox flex="1">
+					<tree id="ofc-listeFamilles"
+								hidecolumnpicker="true"
+		          	ref="http://www.opensi.org/Config/parametrageClients/listeFamillesClients"
+		          	seltype="single"
+		          	datasources="rdf:null"
+								onselect="ofc_ouvrirFamille()"
+								flex="1">
+		      	<treecols>
+		        	<treecol id="ofc-colFamille" label="Famille" flex="1" />
+		        	<treecol id="ofc-colPictoActif" label="Actif" flex="1" collapsed="true" />
+					    <treecol id="ofc-colActif" collapsed="true" />
+		        	<treecol id="ofc-colFamilleId" collapsed="true" />
+		      	</treecols>
+		      	<template>
+	          	<treechildren>
+	            	<treeitem uri="rdf:*">
+	              	<treerow>
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageClients/listeFamillesClients/rdf#Libelle" />
+	                	<treecell src="rdf:http://www.opensi.org/Config/parametrageClients/listeFamillesClients/rdf#Picto_Actif" />
+			              <treecell label="rdf:http://www.opensi.org/Config/parametrageClients/listeFamillesClients/rdf#Actif" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageClients/listeFamillesClients/rdf#Famille_Id" />
+	              	</treerow>
+	            	</treeitem>
+	          	</treechildren>
+		      	</template>
+		    	</tree>
+		    	<checkbox id="ofc-afficherTout" label="Afficher aussi les valeurs désactivées" oncommand="ofc_chargerListe();" />
+		    </vbox>
+	    	
+				<box width="50px" />
+				
+				<vbox>
+					<groupbox flex="1" pack="center" align="center">
+	    		<caption label="Familles" />
+						<hbox pack="center">
+							<grid>
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="* Nom :" />
+										<hbox><textbox id="ofc-nom" size="30" maxlength="40" /></hbox>
+									</row>
+								</rows>
+							</grid>
+						</hbox>
+					</groupbox>
+					
+					<box height="20px" />
+					
+					<groupbox flex="1" pack="center">
+	    			<caption label="Mentions par défaut" />
+
+						<listbox flex="1" id="ofc-listeMentions" ref="http://www.opensi.org/Config/parametrageClients/listeMentionsFamille" datasources="rdf:null">
+							<listhead>
+				    		<listheader label="Mention" />
+						 	</listhead>
+							<listcols>
+								<listcol flex="1" />
+				  		</listcols>
+							<template>
+								<listitem uri="rdf:*" value="rdf:http://www.opensi.org/Config/parametrageClients/listeMentionsFamille/rdf#MentionId" allowevents="true">
+									<listcell type="checkbox" checked="rdf:http://www.opensi.org/Config/parametrageClients/listeMentionsFamille/rdf#Cocher" label="rdf:http://www.opensi.org/Config/parametrageClients/listeMentionsFamille/rdf#Libelle" onclick="ofc_testCheck(this.parentNode)" />
+								</listitem>
+							</template>
+						</listbox>
+					</groupbox>
+					
+					<box height="20px" />
+					<hbox pack="center">
+						<button id="ofc-bNouvelleFamille" class="bNouveau" label="Nouvelle famille" oncommand="ofc_nouvelleFamille()" collapsed="true" />
+						<button id="ofc-bEnregistrerFamille" class="bEnregistrer" label="Enregistrer" oncommand="ofc_enregistrerFamille()" />
+						<button id="ofc-bReactiverFamille" label="Réactiver" oncommand="ofc_reactiverFamille()" collapsed="true" />
+						<button id="ofc-bSupprimerFamille" class="bSupprimer" label="Supprimer" oncommand="ofc_supprimerFamille()" collapsed="true" />
+					</hbox>
+					
+				</vbox>
+			</hbox>
+			
+			<box flex="1"/>
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

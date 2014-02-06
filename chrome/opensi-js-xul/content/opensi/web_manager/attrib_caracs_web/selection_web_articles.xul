@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window id="opensi_webmanager_rapport_cnx" flex="1" onload="init()" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="selection_web_articles.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()" />
+		<button class="bouton_menu" id="bMenuSites" oncommand="menuSite()" />
+		<button class="bouton_menu" id="bGestionSite" oncommand="menuGestionSite()" />
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end" />
+					<label value="Etape 2" align="end" class="etape" id="lb_etape" />
+				</box>
+			</hbox>
+			<box flex="15" pack="center">
+				<label value="Sélection des articles" class="label_14" />
+			</box>
+		</vbox>
+
+		<!-- FIN Titre -->
+		<box height="20px" />
+
+		<label id="info" />
+		<hbox>
+			<box height="20px" width="2px" /><!-- pour garder la place de la barre de progression, meme qd elle est invisible -->
+			<progressmeter id="barre_progression" mode="determined" value="0%" hidden="true" />
+		</hbox>
+		<hbox flex="1">
+			<tree id="liste_articles" 
+			      ref="http://www.opensi.org/WebManager/listeTousArticles" 
+			      seltype="single" 
+			      datasources="rdf:null" 
+			      flex="1" 
+			      style="overflow: auto;" 
+			      onclick="on_clic(event)" 
+			      hidecolumnpicker="true">
+				<treecols>
+					<treecol id="id" flex="6" label="Référence" primary="true" collapsed="false" />
+					<splitter class="tree-splitter" />
+					<treecol id="type" label="Type" collapsed="true" />
+					<splitter class="tree-splitter" />
+					<treecol id="nom" flex="6" label="Désignation" />
+					<splitter class="tree-splitter" />
+					<treecol id="coche" flex="1" />
+					<treecol id="familleId" collapsed="true" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/WebManager/listeTousArticles/rdf#id" />
+								<treecell label="rdf:http://www.opensi.org/WebManager/listeTousArticles/rdf#type" />
+								<treecell label="rdf:http://www.opensi.org/WebManager/listeTousArticles/rdf#nom" />
+								<treecell src="rdf:http://www.opensi.org/WebManager/listeTousArticles/rdf#coche" />
+								<treecell label="rdf:http://www.opensi.org/WebManager/listeTousArticles/rdf#familleId" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+
+
+			<vbox>
+				<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="tout_cocher()" id="toutCocher" />
+				<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="tout_decocher()" id="toutDecocher" />
+			</vbox>
+
+
+		</hbox>
+
+
+
+		<box height="20px" />
+
+		<!-- boutons du bas -->
+		<hbox>
+			<vbox flex="1">
+				<hbox>
+					<box width="10px" />
+					<button id="etape_precedente" label="Etape précédente" class="bIcoRetour" oncommand="etape_precedente()" />
+				</hbox>
+			</vbox>
+
+			<vbox align="end">
+				<hbox align="end">
+
+					<label id="conclusion" value="" />
+					<button id="etape_suivante" label="Gérer les prix web" class="bIcoAvance" oncommand="etape_suivante()" />
+					<box width="10px" />
+
+				</hbox>
+			</vbox>
+
+		</hbox>
+
+
+	</vbox>
+
+</window>

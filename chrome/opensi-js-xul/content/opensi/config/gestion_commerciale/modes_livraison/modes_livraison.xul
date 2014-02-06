@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_gestion_commerciale_modesLivraison"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="modes_livraison.js" />
+
+	<box class="rv_pop" id="rv" />
+
+	<vbox pack="center" flex="1" style="overflow:auto">
+		<hbox height="10px" />
+		<tree id="liste_modes_livraison"
+      hidecolumnpicker="true"
+      seltype="single"
+      ref="http://www.opensi.org/config/listeModesLivraison"
+      datasources="rdf:null"
+			onselect="selectModeLivraison();"
+			flex="2"
+      style="min-height: 100px;">
+
+      <treecols>
+        <treecol id="ColNom" flex="1" label="Nom" />
+				<treecol flex="1" label="Type" />
+				<treecol id="ColOrganisme" flex="1" label="Organisme" />
+				<treecol id="ColFormat" flex="1" label="Format d'export" />
+				<treecol id="ColOrganismeId" collapsed="true" />
+				<treecol id="ColModeLivId" collapsed="true" />
+				<treecol id="ColTypeLiv" collapsed="true" />
+      </treecols>
+      <template>
+        <treechildren>
+          <treeitem uri="rdf:*">
+            <treerow>
+              <treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Nom" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Lbl_Type_Liv" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Organisme" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Format_Export" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Organisme_Id" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Mode_Liv_Id" />
+							<treecell label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Type_Liv" />
+            </treerow>
+          </treeitem>
+        </treechildren>
+      </template>
+    </tree>
+		<hbox height="10px" />
+		<groupbox flex="1" pack="center" align="center">
+      <caption label="Mode de livraison" />
+      <grid>
+        <columns>
+          <column/>
+					<column/>
+        </columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="Nom :" />
+						<hbox><textbox id="Nom" maxlength="30" size="20" /></hbox>
+					</row>
+					<row align="center">
+						<label value="" />
+						<radiogroup id="typeLiv" orient="vertical">
+							<radio label="Expédition classique" value="E" />
+							<radio label="Retrait en magasin" value="M" />
+							<radio label="Relais colis" value="R" />
+						</radiogroup>
+          </row>
+          <row align="center">
+						<label class="label" value="Organisme :" />
+						<hbox>
+							<menulist id="Organisme" ref="http://www.opensi.org/config/listeOrgLivraison" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+             		</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Nom_Org" value="rdf:http://www.opensi.org/config/listeOrgLivraison/rdf#Organisme_Id" />
+              		</menupopup>
+								</template>
+            	</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Format d'export :" />
+						<hbox>
+							<menulist id="Format" ref="http://www.opensi.org/config/listeFormatsExportColis" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="" />
+             		</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeFormatsExportColis/rdf#Export_Id" value="rdf:http://www.opensi.org/config/listeFormatsExportColis/rdf#Export_Id" />
+              		</menupopup>
+								</template>
+            	</menulist>
+						</hbox>
+					</row>
+				</rows>
+      </grid>
+			<hbox height="30px" />
+			<hbox>
+				<button id="bNouveau" class="bNouveau" label="Nouveau" oncommand="nouveauMode()" disabled="true" />
+				<hbox style="width:20px" />
+				<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerMode()" disabled="true" />
+				<button id="bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerMode()" />
+			</hbox>
+    </groupbox>
+  </vbox>
+
+</window>

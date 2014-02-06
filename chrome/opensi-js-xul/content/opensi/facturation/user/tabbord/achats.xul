@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_tabbord_achats_achats"
+  onload="init()"
+  xmlns:TABBORD="http://www.opensi.org/facturation/tabbords/rdf#"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="achats.js" />
+
+  <vbox flex="1" class="auto-overflow">
+  <groupbox id="infos_fournisseur" collapsed="true">
+
+    <tabbox flex="1" id="Panneau_Fournisseurs">
+
+	    <tabs>
+        <tab id="tabFournisseur" label="Fournisseur" onclick="selectTabFournisseur('fournisseur')"/>
+        <tab id="tabFamilleFournisseur" label="Famille de fournisseur" onclick="selectTabFournisseur('famille')"/>
+      </tabs>
+
+  		<tabpanels flex="1">
+
+    	  <tabpanel>
+          <vbox pack="center">
+            <hbox>
+              <button id="fournisseur_prec" class="bIcoRetour" collapsed="true" disabled="true" oncommand="fournisseurPrec();" />
+              <button id="chercher_fournisseur" class="bIcoRechercher" tooltiptext="rechercher un fournisseur" oncommand="rechercherFournisseur();" />
+              <button id="fournisseur_suiv" class="bIcoAvance" collapsed="true" disabled="true" oncommand="fournisseurSuiv();" />
+            </hbox>
+          </vbox>
+          <grid pack="center">
+            <columns>
+              <column />
+       	     <column />
+            </columns>
+    	      <rows>
+              <row align="center">                       
+                <label class="label" value="Numéro :" />
+        	      <label id="Fournisseur_Id" />        	
+      	      </row> 
+      			  <row align="center">                  
+			      	  <label class="label" value="Raison sociale :" />
+      					<label id="Denomination" />
+			      	</row> 
+      				<row align="center">                       
+			      	  <label class="label" value="Adresse :" />
+      					<label id="Adresse" />
+			      	</row> 
+				      <row align="center">
+					      <label class="label" value="" />
+					      <label id="Comp_Adresse" />
+				      </row>   
+				      <row align="center">                       
+				        <label class="label" value="Code postal :" />
+					      <label id="Code_Postal" />
+				      </row>   
+				      <row align="center">                       
+				        <label class="label" value="Ville :" />
+					      <label id="Ville" />
+				      </row>
+            </rows>
+          </grid>
+    		</tabpanel>
+
+    		<tabpanel>
+      		<hbox align="center">
+        		<label class="label" value="Famille :" />
+        		<menulist id="FamilleFournisseur" 
+                      oncommand="pressOnFamilleFournisseur();" 
+                      ref="http://www.opensi.org/facturation/familles_fournisseur" 
+                      datasources="rdf:null" 
+                      style="max-width:250px;min-width:200px">
+          		<menupopup>
+							  <menuitem label="[famille]" value="0"/>
+          		</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" 
+                            label="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Libelle" 
+                            value="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Famille_Id" 
+                            style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</tabpanel>
+
+      </tabpanels>
+
+    </tabbox>
+
+  </groupbox>
+
+  <groupbox id="infos_article" collapsed="true">
+
+
+    <tabbox flex="1" id="Panneau_Articles">
+
+	    <tabs>
+        <tab id="tabArticle" label="Article" onclick="selectTabArticle('article')"/>
+        <tab id="tabFamille" label="Famille d'article" onclick="selectTabArticle('famille')"/>
+        <tab id="tabMarque" label="Marque" onclick="selectTabArticle('marque')"/>
+      </tabs>
+
+  		<tabpanels flex="1">
+
+    	  <tabpanel>
+          <vbox pack="center">
+            <button id="chercher_article" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="rechercherArticle();" />
+          </vbox>
+          <grid pack="center">
+            <columns>
+              <column />
+       	      <column />
+            </columns>
+    	      <rows>
+		          <row>
+                <label value="Référence :" />
+					      <label id="Reference"/>
+		          </row>
+		          <row>
+                <label value="Marque :" />
+					      <label id="lblMarque" />
+      	      </row>
+		          <row>
+                <label value="Désignation :" />
+					      <label id="Designation" />
+      	      </row>
+		          <row>
+                <label value="Famille 1 :" />
+					      <label id="lblFamille1" />
+      	      </row>
+		           <row>
+                <label value="Famille 2 :" />
+					      <label id="lblFamille2" />
+      	      </row>
+      	       <row>
+                <label value="Famille 3 :" />
+					      <label id="lblFamille3" />
+      	      </row>
+            </rows>
+          </grid>
+    		</tabpanel>
+
+    		<tabpanel>
+      		<hbox align="center">
+        		<label class="label" value="Famille 1 :" />
+						<menulist id="Famille_1" oncommand="pressOnFamille1();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Famille 1]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+						<label class="label" value="Famille 2 :" />
+						<menulist id="Famille_2" oncommand="pressOnFamille2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Famille 2]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+						<label class="label" value="Famille 3 :" />
+						<menulist id="Famille_3" oncommand="pressOnFamille3();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Famille 3]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</tabpanel>
+
+    		<tabpanel>
+      		<hbox align="center">
+        		<label class="label" value="Marque :" />
+        		<menulist id="Marque" oncommand="pressOnMarque();" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Marque]" value="0" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+      		</hbox>
+    		</tabpanel>
+
+      </tabpanels>
+
+    </tabbox>
+
+  </groupbox>
+
+  <groupbox id="infos_commercial" collapsed="true">
+   	<caption label="Acheteur" />
+    <hbox>
+      <button id="commercial_prec" class="bIcoRetour" oncommand="commercialPrec();" collapsed="true"/>
+      <menulist id="Login_Resp" 
+                ref="http://www.opensi.org/facturation/commerciaux" 
+                datasources="rdf:null">
+        <template>
+          <menupopup>
+            <menuitem uri="rdf:*" 
+                      label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Prenom rdf:http://www.opensi.org/facturation/commerciaux/rdf#Nom" 
+                      value="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Utilisateur_Id" />
+          </menupopup>
+			  </template>
+      </menulist>
+      <button id="commercial_suiv" class="bIcoAvance" oncommand="commercialSuiv();" collapsed="true"/>
+    </hbox>
+  </groupbox>
+
+  <grid id="tableau_bord" collapsed="true">
+    <columns>
+      <column flex="1"/>
+      <column id="caCol" flex="1"/>
+      <column id="totCol" flex="1" />
+      <column id="pourcentageCol" flex="1" />
+      <column id="comCol" flex="1"/>
+    </columns>
+    <rows id="lignes_tabbord"
+          ref="http://www.opensi.org/facturation/tabbords/achats"
+          datasources="rdf:null">
+      <row align="center">
+        <label class="case_entete" value="" />
+        <label class="row_entete" style="text-align: center;" value="Montant des Achats" />
+        <label class="row_entete" style="text-align: center;" value="Montant Total" />
+        <label class="row_entete" style="text-align: center;" value="% des Achats" />
+        <label class="row_entete" style="text-align: center;" value="Commandes en cours" />
+      </row>
+      <template>
+        <row uri="rdf:*"
+             align="center">
+          <label class="col_entete" style="text-align: center;" 
+                 value="rdf:http://www.opensi.org/facturation/tabbords/achats/rdf#label" />
+          <label class="case" style="text-align: right;" 
+                 value="rdf:http://www.opensi.org/facturation/tabbords/achats/rdf#ca"/>
+          <label class="case" style="text-align: right;" 
+                 value="rdf:http://www.opensi.org/facturation/tabbords/achats/rdf#catot"/>
+          <label class="case" style="text-align: right;" 
+                 value="rdf:http://www.opensi.org/facturation/tabbords/achats/rdf#pourcentage"/>
+          <label class="case" style="text-align: right;" 
+                 value="rdf:http://www.opensi.org/facturation/tabbords/achats/rdf#commandes" />
+        </row>
+      </template>
+    </rows>
+  </grid>
+  <hbox id="lblDates" pack="begin" collapsed="true">
+    <label value="du " />
+    <textbox id="date_debut" size="10" maxlength="10"/>
+    <label value=" au " />
+    <textbox id="date_fin" size="10" maxlength="10"/>
+    <button class="bValider" label="Ok" oncommand="majDates()" />
+  </hbox>
+  
+  </vbox>
+
+  <observes element="Login_Resp" attribute="value" onbroadcast="changeResp();" />
+
+</window>

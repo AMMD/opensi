@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_paramserveur" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="maj_manuelle.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<button class="bouton_menu" id="bMenuSites" oncommand="menuSite()"/>
+		<button class="bouton_menu" id="bGestionSite" oncommand="menuGestionSite()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1" class="auto-overflow">
+
+		<vbox flex="1" align="center" pack="center">
+
+			<groupbox>
+				<caption label="Gérer l'automatisation des mises à jour:" class="label_14" />
+					
+					<hbox flex="1" >
+						<box width="20px" height="20px"/>
+						<progressmeter id="barre_progression" mode="determined" value="0%" hidden="true" width="300px"/>
+						<label id="info" class="warning"/>
+					</hbox>
+					
+					
+					<hbox flex="1">
+						<grid border="1px">
+  							<columns>
+    							<column />
+    							<column />
+								<column />
+								<column />
+								<column />
+  							</columns>
+  							<rows>
+								<row align="top">
+									<label class="label_12" value=""/>
+									<button label="Démarrer tout" id="bt_demarrerTout" oncommand="demarrerTout()" collapsed="true"/>
+									<button label="Arreter tout" id="bt_arreterTout" oncommand="arreterTout()" collapsed="true"/>
+									<button label="Voir les rapports" oncommand="clic_toutRapports()" id="bt_toutRapports"/>
+
+								</row>
+								
+						
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_com" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Récupération des commandes"/>
+											<label id="lb_etat_com" />
+										</hbox>
+										<label id="type_periode_com" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_com"  value="4" hidden="true"/>
+										<label id="heure_depart_com" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_com" style="font-weight:bold;"/>
+											
+											<button label="Changer" oncommand="clic_changer('COM')" id="bt_changerCom" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière récupération le"/>
+											<label value="" id="lb_date_com" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerCom" oncommand="demarrerMaj('COM')"/>
+									<button label="Arreter" id="bt_arreterCom" oncommand="arreterMaj('COM')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('COM')" id="bt_nowCom"/>
+								</row>
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_cli" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Récupération des informations clientes"/>
+											<label id="lb_etat_cli" />
+										</hbox>
+										<label id="type_periode_cli" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_cli"  value="4" hidden="true"/>
+										<label id="heure_depart_cli" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_cli" style="font-weight:bold;"/>
+											
+											<button label="Changer" oncommand="clic_changer('CLI')" id="bt_changerCli" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière récupération le"/>
+											<label value="" id="lb_date_cli" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerCli" oncommand="demarrerMaj('CLI')"/>
+									<button label="Arreter" id="bt_arreterCli" oncommand="arreterMaj('CLI')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('CLI')" id="bt_nowCli"/>
+								</row>
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_maj_cli" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Mise à jour des clients"/>
+											<label id="lb_etat_maj_cli" />
+										</hbox>
+										<label id="type_periode_maj_cli" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_maj_cli"  value="4" hidden="true"/>
+										<label id="heure_depart_maj_cli" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_maj_cli" style="font-weight:bold;"/>
+											<button label="Changer"  id="bt_changerMajCli" oncommand="clic_changer('MAJCLI')" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière mise à jour le"/>
+											<label value="" id="lb_date_maj_cli" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerMajCli"  oncommand="demarrerMaj('MAJCLI')"/>
+									<button label="Arreter" id="bt_arreterMajCli" oncommand="arreterMaj('MAJCLI')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('MAJCLI')" id="bt_nowMajCli"/>
+								
+								</row>
+                <row align="top">
+                  <vbox id="boite_stock">
+                    <hbox>
+                      <image width="20px" height="10px" id="img_etat_stock" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+                    
+                      <label class="label_12" value="Mise à jour des stocks"/>
+                      <label id="lb_etat_stock" />
+                    </hbox>
+                    <label id="type_periode_stock" value="HEURE" hidden="true"/>
+                    <label id="valeur_periode_stock"  value="4" hidden="true"/>
+                    <label id="heure_depart_stock" value="0" hidden="true"/>
+                    <hbox align="center">
+                      <label id="lb_info_stock" style="font-weight:bold;"/>
+                      <button label="Changer"  id="bt_changerStock" oncommand="clic_changer('STOCK')" style="height:20px;font-size:8pt;"/>
+                    </hbox>
+                    <hbox>
+                      <label value="        ( Dernière mise à jour le"/>
+                      <label value="" id="lb_date_stock" />
+                      <label value=")"/>
+                    </hbox>
+                    <box height="15px"/>
+                  </vbox>
+                  <button label="Démarrer" id="bt_demarrerStock"  oncommand="demarrerMaj('STOCK')"/>
+                  <button label="Arreter" id="bt_arreterStock" oncommand="arreterMaj('STOCK')"/>
+                  <button label="Lancer maintenant" oncommand="lancer_maj('STOCK')" id="bt_nowStock"/>
+                
+                </row>
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_stat" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Mise à jour des statuts des commandes"/>
+											<label id="lb_etat_stat" />
+										</hbox>
+										<label id="type_periode_stat" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_stat"  value="4" hidden="true"/>
+										<label id="heure_depart_stat" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_stat" style="font-weight:bold;"/>
+											<button label="Changer" id="bt_changerStat" oncommand="clic_changer('STAT')" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière mise à jour le"/>
+											<label value="" id="lb_date_stat" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerStat"  oncommand="demarrerMaj('STAT')" />
+									<button label="Arreter" id="bt_arreterStat" oncommand="arreterMaj('STAT')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('STAT')" id="bt_nowStat"/>
+								</row>
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_prix" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Mise à jour des prix"/>
+											<label id="lb_etat_prix" />
+										</hbox>
+										<label id="type_periode_prix" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_prix"  value="4" hidden="true"/>
+										<label id="heure_depart_prix" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_prix" style="font-weight:bold;"/>
+											<button label="Changer"  id="bt_changerPrix" oncommand="clic_changer('PRIX')" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière mise à jour le"/>
+											<label value="" id="lb_date_prix" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerPrix"  oncommand="demarrerMaj('PRIX')"/>
+									<button label="Arreter" id="bt_arreterPrix" oncommand="arreterMaj('PRIX')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('PRIX')" id="bt_nowPrix"/>
+								</row>
+								<row align="top">
+									<vbox>
+										<hbox>
+											<image width="20px" height="10px" id="img_etat_info" validate="always" src="chrome://opensi/content/design/rouge2.png" onerror="this.src='chrome://opensi/content/design/rouge2.png'"/>
+										
+											<label class="label_12" value="Mise à jour des informations des articles"/>
+											<label id="lb_etat_info" />
+										</hbox>
+										<label id="type_periode_info" value="HEURE" hidden="true"/>
+										<label id="valeur_periode_info"  value="4" hidden="true"/>
+										<label id="heure_depart_info" value="0" hidden="true"/>
+										<hbox align="center">
+											<label id="lb_info_info" style="font-weight:bold;"/>
+											<button label="Changer"  id="bt_changerInfo" oncommand="clic_changer('INFO')" style="height:20px;font-size:8pt;"/>
+										</hbox>
+										<hbox>
+											<label value="        ( Dernière mise à jour le"/>
+											<label value="" id="lb_date_info" />
+											<label value=")"/>
+										</hbox>
+										<box height="15px"/>
+									</vbox>
+									<button label="Démarrer" id="bt_demarrerInfo"  oncommand="demarrerMaj('INFO')"/>
+									<button label="Arreter" id="bt_arreterInfo" oncommand="arreterMaj('INFO')"/>
+									<button label="Lancer maintenant" oncommand="lancer_maj('INFO')" id="bt_nowInfo"/>
+								</row>				
+							</rows>
+						</grid>
+						<box width="20px"/>
+					</hbox>
+			</groupbox>
+				
+			
+			<groupbox flex="1">
+				<caption label="Modifications" class="label_14" id="cap_modif"/>
+				
+				<hbox align="center" flex="1">
+				
+					<label value="Type de période:" />
+					<menulist id="choix_periode" oncommand="periode_select()">
+						<menupopup>
+							<menuitem label="En minutes" value="MINUTE" />
+							<menuitem label="En heures" value="HEURE" />
+							<menuitem label="Tous les jours" value="JOUR" />
+							<menuitem label="Certains jours" value="SEMAINE" />
+						</menupopup>
+					</menulist>
+					
+					<box width="20px"/>
+
+					<vbox>
+					<hbox id="box_minute" align="center" >
+						<label value="Mettre à jour toutes les"/>
+						<menulist id="choix_minute">
+							<menupopup>
+								<menuitem label="1" value="1" />
+								<menuitem label="2" value="2" />
+								<menuitem label="5" value="5" />
+								<menuitem label="10" value="10" />
+								<menuitem label="20" value="20" />
+								<menuitem label="30" value="30" />
+								<menuitem label="40" value="40" />
+								<menuitem label="50" value="50" />
+							</menupopup>
+						</menulist>
+						
+						<label value="minutes"/>
+					</hbox>
+					
+					<hbox id="box_heure" align="center" >
+						<label value="Mettre à jour toutes les"/>
+						<menulist id="choix_heure">
+							<menupopup>
+								<menuitem label="1" value="1" />
+								<menuitem label="2" value="2" />
+								<menuitem label="3" value="3" />
+								<menuitem label="4" value="4" />
+								<menuitem label="5" value="5" />
+								<menuitem label="6" value="6" />
+								<menuitem label="7" value="7" />
+								<menuitem label="8" value="8" />
+								<menuitem label="9" value="9" />
+								<menuitem label="10" value="10" />
+								<menuitem label="11" value="11" />
+								<menuitem label="12" value="12" />
+								<menuitem label="13" value="13" />
+								<menuitem label="14" value="14" />
+								<menuitem label="15" value="15" />
+								<menuitem label="16" value="16" />
+								<menuitem label="17" value="17" />
+								<menuitem label="18" value="18" />
+								<menuitem label="19" value="19" />
+								<menuitem label="20" value="20" />
+								<menuitem label="21" value="21" />
+								<menuitem label="22" value="22" />
+								<menuitem label="23" value="23" />
+							</menupopup>
+						</menulist>
+						
+						<label value="heures"/>
+					</hbox>
+					
+					<hbox id="box_jour" align="center">
+						<label value="Mettre à jour tous les jours à"/>
+						<menulist id="choix_jour">
+							<menupopup>
+								<menuitem label="1" value="0" />
+								<menuitem label="1" value="1" />
+								<menuitem label="2" value="2" />
+								<menuitem label="3" value="3" />
+								<menuitem label="4" value="4" />
+								<menuitem label="5" value="5" />
+								<menuitem label="6" value="6" />
+								<menuitem label="7" value="7" />
+								<menuitem label="8" value="8" />
+								<menuitem label="9" value="9" />
+								<menuitem label="10" value="10" />
+								<menuitem label="11" value="11" />
+								<menuitem label="12" value="12" />
+								<menuitem label="13" value="13" />
+								<menuitem label="14" value="14" />
+								<menuitem label="15" value="15" />
+								<menuitem label="16" value="16" />
+								<menuitem label="17" value="17" />
+								<menuitem label="18" value="18" />
+								<menuitem label="19" value="19" />
+								<menuitem label="20" value="20" />
+								<menuitem label="21" value="21" />
+								<menuitem label="22" value="22" />
+								<menuitem label="23" value="23" />
+							</menupopup>
+						</menulist>
+						<label value="heures"/>
+					</hbox>
+					
+					<hbox align="center">
+						<checkbox label="Lun" id="case_lun"/>
+						<checkbox label="Mar" id="case_mar"/>
+						<checkbox label="Mer" id="case_mer"/>
+						<checkbox label="Jeu" id="case_jeu"/>
+						<checkbox label="Ven" id="case_ven"/>
+						<checkbox label="Sam" id="case_sam"/>
+						<checkbox label="Dim" id="case_dim"/>
+						
+						<label value="à"/>
+						<menulist id="choix_semaine">
+							<menupopup>
+								<menuitem label="1" value="0" />
+								<menuitem label="1" value="1" />
+								<menuitem label="2" value="2" />
+								<menuitem label="3" value="3" />
+								<menuitem label="4" value="4" />
+								<menuitem label="5" value="5" />
+								<menuitem label="6" value="6" />
+								<menuitem label="7" value="7" />
+								<menuitem label="8" value="8" />
+								<menuitem label="9" value="9" />
+								<menuitem label="10" value="10" />
+								<menuitem label="11" value="11" />
+								<menuitem label="12" value="12" />
+								<menuitem label="13" value="13" />
+								<menuitem label="14" value="14" />
+								<menuitem label="15" value="15" />
+								<menuitem label="16" value="16" />
+								<menuitem label="17" value="17" />
+								<menuitem label="18" value="18" />
+								<menuitem label="19" value="19" />
+								<menuitem label="20" value="20" />
+								<menuitem label="21" value="21" />
+								<menuitem label="22" value="22" />
+								<menuitem label="23" value="23" />
+							</menupopup>
+						</menulist>
+						<label value="heures"/>
+						
+					</hbox>
+					
+					</vbox>
+					
+					<vbox>
+						<button label="Enregistrer" id="bt_enregistrer" oncommand="clic_enregistrer()"/>
+						<button label="Annuler" id="bt_annuler" oncommand="clic_annuler()"/>
+					</vbox>
+					
+				</hbox>
+				
+			
+			</groupbox>
+			
+		</vbox>
+		
+		
+		<box height="20px"/>
+		
+		<!-- Zone d'information -->
+		<hbox>
+			<label value="Démarrer:" style="font-weight:bold;"/><label value="Pour démarrer le service automatique |" />
+			<label value="Arreter:" style="font-weight:bold;"/> <label value="Pour arreter le service automatique" />
+		</hbox>
+		
+		<hbox>
+			<label value="Lancer maintenant:" style="font-weight:bold;"/>
+			<label value="Pour lancer immédiatement la mise à jour, sans changer l'automatisation." />
+		</hbox>
+	</vbox>
+
+</window>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_login"
+  onload="init()"
+	title="OpenSi"
+	sizemode="normal"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="login.js" />
+
+	<vbox style="background:url('chrome://opensi/content/design/login.jpg') no-repeat;width:651px;height:438px">
+		
+		<hbox pack="end"><label id="version" style="font-size:8pt;color:#5F6679" /></hbox>
+		
+		<hbox>
+		<vbox style="padding-top:140px;padding-left:30px">
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label value="" />
+						<menulist id="liste">
+    					<menupopup>
+      					<menuitem id="compta" label="Comptabilité" value="Compta" oncommand="affichTout();" />
+     						<menuitem id="fact" label="Gestion Commerciale" value="Facturation" oncommand="affichTout();" />
+								<!--<menuitem id="crm" label="Gestion des contacts" value="CRM" oncommand="affichTout();"/>-->
+     						<menuitem id="manager_web" label="e-commerce" value="Web" oncommand="affichTout();"/>
+     						<menuitem id="manager_conf" label="Configuration des dossiers" value="Configuration" oncommand="affichTout();" />
+     						<menuitem id="gestion_utilisateurs" label="Gestion des utilisateurs" value="Utilisateurs" oncommand="affichTout();" />
+     						<menuitem id="manager_super" label="Superviseur" value="Superviseur" oncommand="affichPassword();" />     	    
+  						</menupopup>
+  					</menulist>
+					</row>
+					<row align="center">
+						<label id="lblEntreprise" value="Entreprise :" style="text-align:right;color:#FFFFFF" />
+						<textbox id="Entreprise" maxlength="15" onkeypress="keypress(event);" />
+					</row>
+					<row align="center">
+						<label id="logintexte" value="Login :" style="text-align:right;color:#FFFFFF" />
+						<textbox id="login" maxlength="15" onkeypress="keypress(event);" />
+					</row>
+					<row align="center">
+						<label value="Mot de passe :" style="text-align:right;color:#FFFFFF" />
+						<textbox id="password" type="password" maxlength="15" onkeypress="keypress(event);" />
+					</row>
+					<row>
+						<label value="" />
+						<checkbox id="login_check" label="Conserver les identifiants" oncommand="check_login()" style="color:#FFFFFF" />
+					</row>
+					<row>
+						<label value="" />
+						<checkbox id="password_check" label="Conserver le mot de passe" style="color:#FFFFFF" />
+					</row>
+				</rows>
+			</grid>
+			
+			<hbox pack="center">
+				<label id="label_connect_msg" value="" style="color:#FFFFFF" />
+			</hbox>
+			
+			<hbox style="padding-top:20px;">
+				<button id="parambutton" label="Paramètres avancés" oncommand="affiche_param()" />
+				<spacer flex="1" />
+				<button id="ok" label="OK" default="true" oncommand="checkLogin();" />
+			</hbox>
+			
+		</vbox>
+		</hbox>
+		
+		<vbox style="padding-left:30px">
+			<label id="nouveautes" style="color:#FFFFFF;padding-top:12px" value="Consulter les nouveautés de la version 2010" onclick="window.open('http://www.opensi.fr/solutions/nouvelles-versions.html')" class="text-link" />
+			<grid id="paramavances" collapsed="true">
+				<columns>
+					<column />
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label value="Adresse serveur :" style="color:#FFFFFF" />
+						<textbox id="ipserveur" />
+						<hbox align="center">
+							<label value="Port :" style="color:#FFFFFF" />
+							<textbox id="porttomcat" size="4" maxlength="4" />
+						</hbox>
+					</row>
+					<row align="center">
+						<label value="Servlet :" style="text-align:right;color:#FFFFFF" />
+						<textbox id="servlet" />
+						<checkbox id="is_ssl" label="serveur sécurisé" style="color:#FFFFFF" />
+					</row>
+				</rows>
+			</grid>		
+		</vbox>
+		
+	</vbox>
+
+</window>

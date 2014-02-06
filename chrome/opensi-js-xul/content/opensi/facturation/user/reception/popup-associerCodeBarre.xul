@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Associer un code barre"
+  id="opensi_facturation_user_reception_popupAssocierCodeBarre"
+  onload="init();"
+	height="180"
+	width="380"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-associerCodeBarre.js" />
+
+  <hbox style="height:30px" />
+  
+	<hbox pack="center">
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row>
+					<label class="label" value="Code barre :" />
+					<hbox><textbox id="Code_Barre" size="20" readonly="true" /></hbox>
+				</row>
+				<row>
+					<label class="label" value="Référence :" />
+					<hbox>
+						<textbox id="Article_Id" size="20" maxlength="40" onkeypress="pressOnArticleId(event);" />
+						<button id="bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="rechercherArticle();" />
+					</hbox>
+				</row>			
+			</rows>
+		</grid>
+	</hbox>
+	
+  <box style="height:20px" />
+  <hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+  	<button label="Ok" class="bValider" oncommand="associerCodeBarre();" />
+  </hbox>
+
+</window>
+
+

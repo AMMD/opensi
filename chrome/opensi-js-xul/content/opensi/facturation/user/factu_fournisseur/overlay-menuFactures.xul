@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_factuFournisseur_overlayMenuFactures"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-menuFactures.js" />
+
+	<vbox id="menuFactures" flex="1">
+		<deck id="omf-deckMenu" selectedIndex="0" flex="1">
+			<vbox class="auto-overflow">
+				<hbox>
+					<label class="label_14" value="Gestion des factures d'achat" />
+					<hbox flex="1" pack="end">
+						<button label="Nouvelle facture" class="bNouveau" oncommand="omf_pressOnNouvelleFacture();" />
+						<button label="Nouvel avoir" class="bNouveau" oncommand="omf_pressOnNouvelAvoir();" />
+					</hbox>
+				</hbox>
+				
+				<hbox>
+					<vbox>
+						<hbox>
+							<vbox>
+								<label value="N° Facture :" />
+					      <hbox><textbox id="omf-numFacture" width="120px" onkeypress="omf_pressOnCritere(event);" /></hbox>
+							</vbox>
+							<vbox>
+								<label value="N° Fournisseur :" />
+					      <hbox><textbox id="omf-fournisseurId" width="120px" onkeypress="omf_pressOnCritere(event);" /></hbox>
+							</vbox>
+							<vbox>
+								<label value="Fournisseur :" />
+					      <hbox><textbox id="omf-denomination" width="120px" onkeypress="omf_pressOnCritere(event);" /></hbox>
+							</vbox>
+							<vbox>
+								<label value="Etat :" />
+					      <hbox>
+					      	<menulist id="omf-etat" oncommand="omf_listerFactures();" width="120px">
+										<menupopup>
+											<menuitem label="[Tous]" value="TS" />
+											<menuitem label="Non validée" value="N" />
+											<menuitem label="Validée" value="V" />
+										</menupopup>
+									</menulist>
+					      </hbox>
+							</vbox>
+						</hbox>
+						<hbox>
+							<vbox>
+								<label value="Date de facture :" />
+								<hbox align="center">
+									<label value="Du" />
+						      <hbox><textbox id="omf-dateDebut" maxlength="10" size="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="omf_pressOnCritere(event);" /></hbox>
+									<label value="au" />
+					      	<hbox><textbox id="omf-dateFin" maxlength="10" size="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="omf_pressOnCritere(event);" /></hbox>
+								</hbox>
+							</vbox>
+							<vbox>
+								<label value="Réf. Article :" />
+					      <hbox><textbox id="omf-articleId" width="120px" onkeypress="omf_pressOnCritere(event);" /></hbox>
+							</vbox>
+						</hbox>
+						<hbox>
+							<vbox>
+								<label value="Etat paiement :" />
+								<menulist id="omf-etatPaiement" oncommand="omf_listerFactures();" style="width:120px">
+									<menupopup>
+										<menuitem label="[Tous]" value="TS" />
+										<menuitem label="Payée" value="T" />
+			              <menuitem label="Part. payée" value="P" />
+			              <menuitem label="Non payée" value="N" />
+									</menupopup>
+								</menulist>
+							</vbox>
+							<vbox>
+								<label value="Mode de règlement :" />
+								<menulist id="omf-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:120px" sizetopopup="none" oncommand="omf_listerFactures();">
+									<menupopup>
+										<menuitem label="[Tous]" value="T" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</vbox>
+							<vbox>
+								<label value="Pôle d'activité :" />
+								<menulist id="omf-secteurActivite" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" oncommand="omf_listerFactures();" style="width:120px" sizetopopup="none">
+									<menupopup>
+										<menuitem label="[Tous]" value="T" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</vbox>
+							<vbox flex="1" pack="end">
+								<hbox pack="end">
+									<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="omf_listerFactures();" />
+									<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="omf_initCriteres();" />
+								</hbox>
+							</vbox>
+						</hbox>
+						<box style="height:20px" />
+					</vbox>
+					
+					<box style="width:20px" />
+			  	
+			  	<vbox flex="1">
+						<hbox>
+							<label value="Aperçu de la facture N°" />
+							<label id="omf-numFactureSelect" />
+						</hbox>
+						<tree id="omf-apercu"
+			      	flex="1"
+			      	hidecolumnpicker="true"
+			      	seltype="single"
+			      	ref="http://www.opensi.org/facturation/apercu_facture_fournisseur"
+			      	datasources="rdf:null"
+							flags="dont-build-content">
+			
+			    		<treecols>
+			      		<treecol label="Référence" flex="1" />
+								<splitter class="tree-splitter" />
+			      		<treecol flex="2" label="Désignation" />
+								<splitter class="tree-splitter" />
+			      		<treecol flex="1" label="Quantité" class="nombre" />
+			      		<splitter class="tree-splitter" />
+				      	<treecol flex="1" label="Montant HT" class="nombre" />
+			    		</treecols>
+			    		<template>
+			      		<treechildren>
+			        		<treeitem uri="rdf:*">
+			          		<treerow>
+			            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_fournisseur/rdf#Reference" />
+			            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_fournisseur/rdf#Designation" />
+			            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_fournisseur/rdf#Quantite" />
+			            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_fournisseur/rdf#Montant_HT" />
+			          		</treerow>
+			        		</treeitem>
+			      		</treechildren>
+			    		</template>
+			  		</tree>
+					</vbox>
+				</hbox>
+				
+				<box style="height:20px" />
+				
+				
+				<hbox>
+					<hbox flex="1" pack="center">
+						<button class="bIcoRetour" style="margin-right:0px" id="omf-bPrec" oncommand="omf_pressOnPagePrec();" tooltiptext="page précédente" disabled="true" />
+						<vbox pack="center">
+							<hbox>
+								<label value="Page" />
+								<label id="omf-pageDeb" />
+								<label value="/" />
+								<label id="omf-pageFin" />
+							</hbox>
+						</vbox>
+						<button class="bIcoAvance" id="omf-bSuiv" oncommand="omf_pressOnPageSuiv();" tooltiptext="page suivante" disabled="true" />
+					</hbox>
+					
+					<hbox align="center" pack="end">
+						<label value="Nb de lignes par page :" />
+						<menulist id="omf-nbLignesParPage" oncommand="omf_listerFactures();" width="120px">
+							<menupopup>
+								<menuitem label="100" value="100" />
+								<menuitem label="500" value="500" />
+								<menuitem label="1000" value="1000" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</hbox>
+				
+				
+				<tree id="omf-listeFactures"
+		        flex="1"
+		        seltype="single"
+		        flags="dont-build-content"
+		        ref="http://www.opensi.org/facturation/factures"
+		        onselect="omf_selectOnListeFactures();"
+						ondblclick="omf_ouvrirFacture();"
+						onkeypress="omf_pressOnListeFactures(event);"
+		        datasources="rdf:null">
+		
+					<treecols>
+						<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#triDate_Facture" />
+						<splitter class="tree-splitter" />
+						<treecol id="omf-colNumFacture" label="N° Facture" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#Num_Entier" />
+						<splitter class="tree-splitter" />
+			    	<treecol label="N° Fournisseur" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#Fournisseur_Id" />
+						<splitter class="tree-splitter" />
+					  <treecol label="Fournisseur" flex="3" sort="rdf:http://www.opensi.org/facturation/factures/rdf#Denomination" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#Etat" />
+						<splitter class="tree-splitter" />
+			      <treecol label="Mode de règlement" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#Mode_Reglement" />
+						<splitter class="tree-splitter" />
+			      <treecol class="nombre" label="Total HT" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_HT" />
+			      <splitter class="tree-splitter" />
+			      <treecol class="nombre" label="Total TTC" flex="1" sort="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_TTC" />
+			      <splitter class="tree-splitter" />
+			      <treecol label="Statut paiement" width="20px" tooltiptext="Statut de paiement" class="treecol-image" sort="rdf:http://www.opensi.org/facturation/factures/rdf#triStatut_Paiement" />
+						<treecol id="omf-colFactureId" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="omf-colTypeDoc" collapsed="true" ignoreincolumnpicker="true" />
+			    </treecols>
+			    <template>
+			      <treechildren>
+			        <treeitem uri="rdf:*">
+			          <treerow>
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Date_Facture" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Num_Entier" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Fournisseur_Id" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Denomination" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Etat" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Mode_Reglement" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Total_HT" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Total_TTC" />
+			            <treecell src="rdf:http://www.opensi.org/facturation/factures/rdf#Statut_Paiement" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Facture_Id" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Type_Doc" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triDate_Facture" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_HT" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_TTC" />
+									<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triStatut_Paiement" />
+			          </treerow>
+			        </treeitem>
+			      </treechildren>
+			    </template>
+			  </tree>
+			  <hbox>
+			  	<hbox align="center" flex="1">
+						<vbox><button id="omf-bEditionCsv" disabled="true" class="bCSV" label="Edition CSV" oncommand="omf_pressOnEditionCsv();" /></vbox>
+						<vbox><button id="omf-bEditerFactures" disabled="true" class="bPDF" label="Editer les factures" oncommand="omf_pressOnEditerFactures();" /></vbox>
+					</hbox>
+					<hbox pack="end" align="center">
+						<label value="Total HT :" />
+						<textbox id="omf-totalHT" class="nombre" readonly="true" />
+					</hbox>
+				</hbox>
+			</vbox>
+			
+			<vbox>
+				<iframe type="content" id="omf-pdfFactures" flex="1" />		
+			</vbox>
+		</deck>
+	</vbox>
+
+</overlay>

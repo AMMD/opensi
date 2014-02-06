@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_import_banque_overlay-prefImport"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-prefImport.js" />
+
+	<tabpanel id="tabPrefImport" flex="1">
+	
+		<hbox flex="1" class="auto-overflow">
+			<vbox flex="2">
+				<groupbox flex="1">
+					<caption label="Affectation des comptes" />
+					
+					<vbox flex="1">
+						<tree id="opi-treeParamCompte" flex="1"
+							hidecolumnpicker="true"
+							flags="dont-build-content"
+							datasources="rdf:null" 
+							ref="http://www.opensi.org/compta/import_banque"
+							seltype="single"
+							onselect="opi_selectOnTreeCompte();">
+							<treecols>
+								<treecol id="opi-colLibRechCompte" label="Libellé recherché" flex="2" />
+								<splitter class="tree-splitter" />
+								<treecol id="opi-colLibRempCompte" label="Libellé de remplacement" flex="2" />
+								<splitter class="tree-splitter" />
+								<treecol id="opi-colRecette" label="Compte de recettes" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="opi-colDepense" label="Compte de dépenses" flex="1" />
+							</treecols>
+							<template>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Lib_Rech" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Lib_Remp" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Compte_Rec" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Compte_Dep" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</template>
+						</tree>
+					</vbox>
+					
+					<vbox align="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Libellé recherché : " />
+									<hbox>
+										<textbox id="opi-libelleRechercheAffectation" maxlength="100" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Libellé de remplacement : " />
+									<hbox>
+										<textbox id="opi-libelleRemplacementAffectation" maxlength="100" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Compte de recettes : " />
+									<hbox align="center">
+										<hbox>
+							          		<textbox id="opi-compteRecetteAffectation" size="10" maxlength="8" />
+							          	</hbox>
+							          	<button id="opi-bRechercheCompteRecetteAffectation" class="bIcoRechercher" oncommand="opi_pressOnRechercheCompteRecetteAffectation();" />
+						        	</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Compte de dépenses : " />
+									<hbox align="center">
+										<hbox>
+							          		<textbox id="opi-compteDepenseAffectation" size="10" maxlength="8" />
+							          	</hbox>
+							          	<button id="opi-bRechercheCompteDepenseAffectation" class="bIcoRechercher" oncommand="opi_pressOnRechercheCompteDepenseAffectation();" />
+						        	</hbox>
+								</row>
+							</rows>
+						</grid>
+										
+						<hbox align="center">
+							<button id="opi-bNouveauAffectation" class="bNouveau" label="Nouveau" oncommand="opi_pressOnNouveauAffectation();" />
+							<button id="opi-bSupprimerAffectation" class="bSupprimer" label="Supprimer" oncommand="opi_pressOnSupprimerAffectation();" />
+							<button id="opi-bEnregistrerAffectation" class="bEnregistrer" label="Enregistrer" oncommand="opi_pressOnEnregistrerAffectation();" />
+						</hbox>
+					</vbox>
+				</groupbox>
+			</vbox>
+			<vbox flex="1">
+				<groupbox flex="1">
+					<caption label="Mode de règlement" />
+					
+					<vbox flex="1">
+						<tree id="opi-treeParamModeReg" flex="1"
+							hidecolumnpicker="true"
+							flags="dont-build-content"
+							datasources="rdf:null" 
+							ref="http://www.opensi.org/compta/import_banque"
+							seltype="single"
+							onselect="opi_selectOnTreeModeReg();">
+							<treecols>
+								<treecol id="opi-colLibRechModeReg" label="Libellé recherché" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="opi-colModeReg" label="Mode de réglement" flex="1" />
+								<treecol id="opi-colParamModeRegId" collapsed="true" ignoreincolumnpicker="true" />
+							</treecols>
+							<template>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Lib_Mode_Reg" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Libelle" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Mode_Reg_Id" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</template>
+						</tree>
+					</vbox>
+					
+					<vbox align="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Libellé recherché : " />
+									<hbox>
+										<textbox id="opi-libelleRechercheModeReg" maxlength="100" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Correspond à  : " />
+									
+							 		<menulist id="opi-listeModeReg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:160px" sizetopopup="none">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+							</rows>
+						</grid>
+										
+						<hbox align="center">
+							<button id="opi-bNouveauModeReg" class="bNouveau" label="Nouveau" oncommand="opi_pressOnNouveauModeReg();" />
+							<button id="opi-bSupprimerModeReg" class="bSupprimer" label="Supprimer" oncommand="opi_pressOnSupprimerModeReg();" />
+							<button id="opi-bEnregistrerModeReg" class="bEnregistrer" label="Enregistrer" oncommand="opi_pressOnEnregistrerModeReg();" />
+						</hbox>
+					</vbox>
+				</groupbox>
+				<groupbox flex="1">
+					<caption label="Numéro de pièce" />
+					<vbox flex="1">
+						<tree id="opi-treeParamNumPiece" flex="1"
+							hidecolumnpicker="true"
+							flags="dont-build-content"
+							datasources="rdf:null" 
+							ref="http://www.opensi.org/compta/import_banque"
+							seltype="single"
+							onselect="opi_selectOnTreeNumPiece();">
+							<treecols>
+								<treecol id="opi-colLibRechNumPiece" label="Libellé recherché" flex="1" />
+								<treecol id="opi-colNbCarNumPiece" label="Nombre de caractères" flex="1" />
+							</treecols>
+							<template>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Lib_Num_Piece" />
+											<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Nb_Car_Piece" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</template>
+						</tree>
+					</vbox>
+					
+					<vbox align="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Libellé recherché : " />
+									<hbox>
+										<textbox id="opi-libelleRechercheNumPiece" maxlength="100" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Nombre de caractères à prendre après le libellé: " />
+									<hbox>
+										<textbox id="opi-nbCarNumPiece" maxlength="10" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+										
+						<hbox align="center">
+							<button id="opi-bNouveauNumPiece" class="bNouveau" label="Nouveau" oncommand="opi_pressOnNouveauNumPiece();" />
+							<button id="opi-bSupprimerNumPiece" class="bSupprimer" label="Supprimer" oncommand="opi_pressOnSupprimerNumPiece();" />
+							<button id="opi-bEnregistrerNumPiece" class="bEnregistrer" label="Enregistrer" oncommand="opi_pressOnEnregistrerNumPiece();" />
+						</hbox>
+					</vbox>
+				</groupbox>
+			</vbox>
+		</hbox>
+		
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageArticles_overlay-marquesArticles"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-marquesArticles.js" />
+  
+  <tabpanel id="tab-marques">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box height="30px" />
+			<hbox pack="center">
+		    <label value="GESTION DES MARQUES" class="label_16" />
+		  </hbox>
+			<box height="30px" />
+			
+	  	<hbox flex="1">
+	  		<vbox flex="1">
+					<tree id="om-listeMarques"
+								hidecolumnpicker="true"
+		          	ref="http://www.opensi.org/Config/parametrageArticles/listeMarquesArticles"
+		          	seltype="single"
+		          	datasources="rdf:null"
+								onselect="om_ouvrirMarque()"
+								flex="1">
+		      	<treecols>
+		        	<treecol id="om-colMarque" label="Marque" flex="1" />
+		        	<treecol id="om-colPictoActif" label="Actif" flex="1" collapsed="true" />
+		        	<treecol id="om-colActif" collapsed="true" />
+		        	<treecol id="om-colMarqueId" collapsed="true" />
+		      	</treecols>
+		      	<template>
+	          	<treechildren>
+	            	<treeitem uri="rdf:*">
+	              	<treerow>
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeMarquesArticles/rdf#Libelle" />
+	                	<treecell src="rdf:http://www.opensi.org/Config/parametrageArticles/listeMarquesArticles/rdf#Picto_Actif" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeMarquesArticles/rdf#Actif" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeMarquesArticles/rdf#Marque_Id" />
+	              	</treerow>
+	            	</treeitem>
+	          	</treechildren>
+		      	</template>
+		    	</tree>
+		    	<checkbox id="om-afficherTout" label="Afficher aussi les valeurs désactivées" oncommand="om_chargerListe();" />
+		    </vbox>
+	    	
+				<box width="50px" />
+				
+				<vbox>
+					<groupbox flex="1" pack="center" align="center">
+	    		<caption label="Marques" />
+						<hbox pack="center">
+							<grid>
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="* Nom :" />
+										<hbox><textbox id="om-nom" size="30" maxlength="40" /></hbox>
+									</row>
+								</rows>
+							</grid>
+						</hbox>
+					</groupbox>
+					
+					<box height="20px" />
+					<hbox pack="center">
+						<button id="om-bNouvelleMarque" class="bNouveau" label="Nouvelle marque" oncommand="om_nouvelleMarque()" collapsed="true" />
+						<button id="om-bEnregistrerMarque" class="bEnregistrer" label="Enregistrer" oncommand="om_enregistrerMarque()" />
+						<button id="om-bReactiverMarque" label="Réactiver" oncommand="om_reactiverMarque()" collapsed="true" />
+						<button id="om-bSupprimerMarque" class="bSupprimer" label="Supprimer" oncommand="om_supprimerMarque()" collapsed="true" />
+					</hbox>
+					
+				</vbox>
+			</hbox>
+			
+			<box flex="1"/>
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

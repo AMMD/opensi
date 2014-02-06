@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_editions_overlayClients"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-clients.js" />
+
+	<vbox id="tab-clients">
+		<vbox flex="1">
+		  <hbox style="height: 60px" />
+		  <hbox pack="center">
+		  	<label value="EDITIONS CLIENTS" class="label_16" />
+		  </hbox>
+		  <hbox style="height:40px" />
+			<hbox pack="center">
+				<button type="radio" group="oc-Etat" label="Palmarès client" oncommand="oc_switchOptions('PC');" checked="true" />
+				<button type="radio" group="oc-Etat" label="Liste des clients" oncommand="oc_switchOptions('LC');" />
+				<button type="radio" group="oc-Etat" label="Fiches clients" oncommand="oc_switchOptions('FC');" collapsed="true" />
+				<button type="radio" group="oc-Etat" label="Palmarès des devis" oncommand="oc_switchOptions('PD');" collapsed="true" />
+				<button type="radio" group="oc-Etat" label="Activité client" oncommand="oc_switchOptions('AC');" collapsed="true" />
+			</hbox>
+			<hbox style="height:20px" />
+		
+			<hbox>
+				<groupbox id="oc-gPeriode" flex="1" pack="center" align="center">
+					<caption label="Période d'édition" />
+					<radiogroup id="oc-Periode">
+						<radio id="oc-PeriodeMC" value="MC" label="Mois en cours" selected="true" oncommand="oc_enableDates(false);" />
+						<radio id="oc-PeriodeMP" value="MP" label="Mois précédent" oncommand="oc_enableDates(false);" />
+						<radio id="oc-PeriodeAC" value="AC" label="Année en cours" oncommand="oc_enableDates(false);" />
+						<radio id="oc-PeriodeAP" value="AP" label="Année précédente" oncommand="oc_enableDates(false);" />
+						<hbox align="center">
+							<radio id="oc-PeriodeDD" value="DD" label="De date à date :" oncommand="oc_enableDates(true);" />
+							<label value="du" />
+							<textbox id="oc-DateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="oc-DateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						</hbox>
+					</radiogroup>
+				</groupbox>
+		
+				<groupbox id="oc-gSelection" flex="1" pack="center" align="center">
+					<caption label="Sélection clients" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+		      			<label class="label" value="Famille :" />
+		      			<hbox>
+		        			<menulist id="oc-Famille" ref="http://www.opensi.org/facturation/familles_client" datasources="rdf:null" style="width:180px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+		            			<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_client/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_client/rdf#Famille_Id" />
+		            			</menupopup>
+										</template>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+		      			<label class="label" value="Commercial :" />
+		      			<hbox>
+		        			<menulist id="oc-Commercial" ref="http://www.opensi.org/facturation/commerciaux" datasources="rdf:null" style="width:180px">
+										<menupopup>
+											<menuitem label="[tous]" />
+										</menupopup>
+										<template>
+		            			<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Prenom rdf:http://www.opensi.org/facturation/commerciaux/rdf#Nom" value="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Utilisateur_Id" />
+		            			</menupopup>
+										</template>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+								<label value="" />
+								<checkbox id="oc-Tarifs_Spe" label="Uniquement clients ayant des tarifs spécifiques" />
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+		
+				<groupbox id="oc-gTri" flex="1" pack="center" align="center">
+					<caption label="Ordre de tri" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+		      			<label class="label" value="Tri 1 :" />
+		      			<hbox>
+		        			<menulist id="oc-Tri1">
+										<menupopup>
+											<menuitem label="Numéro client" value="Client_Id" />
+											<menuitem label="Nom client" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+		      			<label class="label" value="Tri 2 :" />
+		      			<hbox>
+		        			<menulist id="oc-Tri2">
+										<menupopup>
+											<menuitem label="[aucun]" value="" />
+											<menuitem label="Numéro client" value="Client_Id" />
+											<menuitem label="Nom client" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+							<row align="center">
+		      			<label class="label" value="Tri 3 :" />
+		      			<hbox>
+		        			<menulist id="oc-Tri3">
+										<menupopup>
+											<menuitem label="[aucun]" value="" />
+											<menuitem label="Numéro client" value="Client_Id" />
+											<menuitem label="Nom client" value="Denomination" />
+											<menuitem label="Code postal" value="Code_Postal" />
+											<menuitem label="Ville" value="Ville" />
+											<menuitem label="Famille" value="Famille_Id" />
+										</menupopup>
+		        			</menulist>
+								</hbox>
+		    			</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+		
+			<hbox>
+				<groupbox id="oc-gDetailCA" flex="1" pack="center" align="center">
+					<caption label="Détail du CA" />
+					<radiogroup id="oc-DetailCA">
+						<radio id="oc-DetailCAN" value="N" label="Pas de détail" selected="true" />
+						<radio id="oc-DetailCAD" value="D" label="Par date" />
+						<radio id="oc-DetailCAF1" value="F1" label="Par famille 1 d'article" />
+						<radio id="oc-DetailCAF2" value="F2" label="Par famille 2 d'article" />
+						<radio id="oc-DetailCAF3" value="F3" label="Par famille 3 d'article" />
+						<radio id="oc-DetailCAA" value="A" label="Par article" />
+					</radiogroup>
+				</groupbox>
+			
+				<groupbox id="oc-gSortie" flex="1" pack="center" align="center">
+					<caption label="Sortie" />
+					<radiogroup id="oc-Sortie">
+						<radio id="oc-SortiePDF" value="PDF" label="PDF" selected="true" />
+						<radio id="oc-SortieCSV" value="CSV" label="CSV" />
+					</radiogroup>
+				</groupbox>
+			</hbox>
+		
+			<box style="height:10px" />
+			<hbox pack="center"><button label="Edition" oncommand="oc_editerPalmares();" /></hbox>
+			<box style="height:10px" />
+		</vbox>
+	</vbox>
+
+</overlay>

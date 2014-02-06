@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_remisesBanque_overlayHistoriqueRemises"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-historiqueRemises.js" />
+
+	<tabpanel id="tabHistoriqueRemises">
+		<vbox flex="1" class="auto-overflow">
+			<hbox>
+				<vbox>
+					<grid>
+						<columns>
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Banque :"/>
+								<menulist id="ohr-comboBanques" ref="http://www.opensi.org/config/banques" datasources="rdf:null" oncommand="ohr_listerReglements();">
+									<menupopup>
+										<menuitem label="[Toutes]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+								
+								<label value="Date du règlement : " />
+								<hbox align="center">
+									<label value="Du" />
+									<textbox id="ohr-dateDebutReg" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+									<label value="au" />
+									<textbox id="ohr-dateFinReg" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+								</hbox>
+								
+								<label class="label" value="N° Client :" />
+								<hbox align="center">
+									<textbox id="ohr-numClient" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+	 								<button class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="ohr_rechercherClient();" />
+	 							</hbox>
+	 							
+	 							<label class="value" value="N° Remise :" />
+								<hbox align="center">
+									<textbox id="ohr-numRemise" maxlength="9" size="10" onkeypress="ohr_onKeyPress(event);" />
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Type règlement :"/>
+								<menulist id="ohr-comboTypeReg" ref="http://www.opensi.org/facturation/typeR" datasources="rdf:null" oncommand="ohr_listerReglements();">
+									<menupopup>
+										<menuitem label="[Tous]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeR/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeR/rdf#id" />
+										</menupopup>
+									</template>
+								</menulist>
+								
+								<label value="Date de remise : " />
+								<hbox align="center">
+									<label value="Du" />
+									<textbox id="ohr-dateDebutRemise" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+									<label value="au" />
+									<textbox id="ohr-dateFinRemise" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+								</hbox>
+								
+								<label class="label" value="N° Fournisseur :" />
+								<hbox align="center">
+									<textbox id="ohr-numFournisseur" maxlength="10" size="10" onkeypress="ohr_onKeyPress(event);" />
+	 								<button class="bIcoRechercher" tooltiptext="rechercher un fournisseur" oncommand="ohr_rechercherFournisseur();" />
+	 							</hbox>
+	 							
+	 							<label value="" />
+	 							<label value="" />
+							</row>
+						</rows>
+					</grid>
+				</vbox>
+				<vbox>
+					<hbox pack="center"><button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="ohr_reinitialiser();" /></hbox>
+				</vbox>
+			</hbox>
+
+			<hbox pack="center">
+				<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="ohr-bPrec" oncommand="ohr_pressOnPagePrec();" tooltiptext="Page précédente" />
+				<vbox pack="center">
+					<hbox>
+						<label value="Page" />
+						<label id="ohr-pageDeb" />
+						<label value="/" />
+						<label id="ohr-pageFin" />
+					</hbox>
+				</vbox>
+				<button disabled="true" class="bIcoAvance" id="ohr-bSuiv" oncommand="ohr_pressOnPageSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+			
+			<tree id="ohr-listeRemises"
+						flex="1"
+						hidecolumnpicker="true"
+						seltype="single"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/remises"
+						onselect="ohr_selectOnListeRemises();"
+						datasources="rdf:null">
+				<treecols>
+					<treecol label="Date remise" flex="1" sort="rdf:http://www.opensi.org/remises/rdf#triDate_Remise"/>
+					<splitter class="tree-splitter" />
+					<treecol label="N° Remise" flex="1" sort="rdf:http://www.opensi.org/remises/rdf#Num_Remise"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Banque" flex="1" sort="rdf:http://www.opensi.org/remises/rdf#Banque_Remise"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Type règlement" flex="1" sort="rdf:http://www.opensi.org/remises/rdf#Type_Reglement"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Statut" flex="1" sort="rdf:http://www.opensi.org/remises/rdf#Lbl_Etat"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Comptabilisé" sort="rdf:http://www.opensi.org/remises/rdf#triComptabilise"/>
+					<splitter class="tree-splitter" />
+					<treecol label="Montant total" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/remises/rdf#triMontant"/>
+					<treecol id="ohr-colEspeces" collapsed="true" />
+					<treecol id="ohr-colEtat" collapsed="true" />
+					<treecol id="ohr-colRemiseId" collapsed="true" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Date_Remise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Num_Remise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Banque_Remise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Type_Reglement" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Lbl_Etat" />
+								<treecell src="rdf:http://www.opensi.org/remises/rdf#Comptabilise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Montant" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Especes" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Etat" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#Remise_Id" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#triDate_Remise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#triComptabilise" />
+								<treecell label="rdf:http://www.opensi.org/remises/rdf#triMontant" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+			<hbox pack="end">
+				<button id="ohr-bAnnulerRemise" class="bAnnuler" label="Annuler la remise en banque" oncommand="ohr_annulerRemise();" />
+				<button id="ohr-bReediterBordereau" class="bPDF" label="Rééditer bordereau" oncommand="ohr_reediterRemise();" />
+			</hbox>
+			
+			<vbox flex="1" id="ohr-boxDetails" collapsed="true">
+				<tree id="ohr-listeReglements"
+							flex="1"
+							hidecolumnpicker="true"
+							seltype="single"
+							flags="dont-build-content"
+							ref="http://www.opensi.org/reglement"
+							datasources="rdf:null" collapsed="true">
+					<treecols>
+						<treecol label="Date règlement" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#triDate_Reg"/>
+						<splitter class="tree-splitter" />
+						<treecol label="N° Tiers" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Tiers_Id"/>
+						<splitter class="tree-splitter" />
+						<treecol label="Tiers" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Tiers"/>
+						<splitter class="tree-splitter" />
+						<treecol label="N° Pièce" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Num_Piece"/>
+						<splitter class="tree-splitter" />
+						<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triMontant"/>
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Date_Reg" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Tiers_Id" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Tiers" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Num_Piece" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Montant" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#triDate_Reg" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#triMontant" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+				
+				<tree id="ohr-listeReglementsEspeces"
+							flex="1"
+							hidecolumnpicker="true"
+							seltype="single"
+							flags="dont-build-content"
+							ref="http://www.opensi.org/reglement"
+							datasources="rdf:null" collapsed="true">
+					<treecols>
+						<treecol label="Valeur faciale" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triValeur"/>
+						<splitter class="tree-splitter" />
+						<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triMontant"/>
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Valeur" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#Montant" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#triValeur" />
+									<treecell label="rdf:http://www.opensi.org/reglement/rdf#triMontant" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+			</vbox>
+		</vbox>
+	</tabpanel>
+</overlay>

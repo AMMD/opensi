@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_suiviLot_suiviLot"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="suivi_lot.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bRetourSuiviLot" oncommand="retour_suivi_lot();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  
+  <deck id="deck" flex="1">
+		<vbox flex="1">		
+
+		  <hbox style="height: 15px" />
+			
+			<hbox align="center">
+				<hbox flex="1"><label value="Suivi des N° de lots" class="label_14" /></hbox>
+				<hbox flex="1" pack="center">
+					<label value="LOT N° :" class="label_12" />
+					<textbox id="num_lot" size="15" maxlength="15" onkeypress="pressOnNumLot(event);" />
+					<button label="Valider" oncommand="validerNumLot();" />
+				</hbox>
+				<hbox flex="1" pack="end"><label id="RefArticle" value="" class="label_12" /></hbox>
+			</hbox>
+			
+			<hbox flex="1">
+				<tree id="liste_receptions"
+			        flex="1"
+			        hidecolumnpicker="true"
+			        seltype="single"
+			        flags="dont-build-content"
+			        ref="http://www.opensi.org/facturation/liste_receptions_lot"
+			        datasources="rdf:null">
+			
+			    <treecols>
+			      <treecol id="ColFournisseur" label="Fournisseur" flex="8" />			      
+						<treecol id="ColDateReception" label="Date de réception" flex="3" />
+						<treecol id="ColNbPiecesRecep" label="Nb Pièces" flex="1" />
+						<treecol id="ColQteRecue" label="Qté reçue" flex="2" />
+			    </treecols>
+			    <template>
+			      <treechildren>
+			        <treeitem uri="rdf:*">
+			          <treerow>
+			          	<treecell label="rdf:http://www.opensi.org/facturation/liste_receptions_lot/rdf#Fournisseur" />			            
+			            <treecell label="rdf:http://www.opensi.org/facturation/liste_receptions_lot/rdf#Date_Reception" />
+									<treecell label="rdf:http://www.opensi.org/facturation/liste_receptions_lot/rdf#Nb_Pieces" />
+									<treecell label="rdf:http://www.opensi.org/facturation/liste_receptions_lot/rdf#Qte_Recue" />
+			          </treerow>
+			        </treeitem>
+			      </treechildren>
+			    </template>
+			  </tree>
+			  
+			  <tree id="liste_livraisons"
+			        flex="1"
+			        hidecolumnpicker="true"
+			        seltype="single"
+			        flags="dont-build-content"
+			        ref="http://www.opensi.org/facturation/liste_livraisons_lot"
+			        datasources="rdf:null">
+			
+			    <treecols>
+			    	<treecol id="ColClient" label="Client livré" flex="5" />			      
+						<treecol id="ColAdresse" label="Adresse" flex="8" />
+						<treecol id="ColNbPiecesLiv" label="Nb Pièces" flex="1" />
+						<treecol id="ColQteLiv" label="Qté livrée" flex="2" />
+						<treecol id="ColTelephone" label="Téléphone" flex="3" />
+						<treecol id="ColDateLiv" label="Date de livraison" flex="3" />
+			    </treecols>
+			    <template>
+			      <treechildren>
+			        <treeitem uri="rdf:*">
+			          <treerow>
+			          	<treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Nom_Client" />
+				          <treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Adresse" />
+				          <treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Nb_Pieces" />
+									<treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Qte_Livree" />
+									<treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Telephone" />
+									<treecell label="rdf:http://www.opensi.org/facturation/liste_livraisons_lot/rdf#Date_Livraison" />
+			          </treerow>
+			        </treeitem>
+			      </treechildren>
+			    </template>
+			  </tree>
+			</hbox>
+		
+			<box style="height:5px" />
+			<hbox pack="center">
+				<button id="bEditionCourrier" label="Editer les courriers" class="bPDF" oncommand="editionCourrier();" />
+				<box style="width:200px" />
+				<button id="bEdition" label="Editer la liste" class="bPDF" oncommand="editionPdf();" />
+				<box style="width:200px" />
+				<button id="bActionNumLot" label="Bloquer le n° de lot" oncommand="bloquerNumLot();" />
+			</hbox>
+			<box style="height:15px" />
+		</vbox>
+		
+		<vbox>
+			<iframe type="content" id="suivi_lot" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

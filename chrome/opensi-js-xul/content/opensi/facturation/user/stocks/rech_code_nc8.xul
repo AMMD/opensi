@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'un code NC8"
+  id="opensi_facturation_user_stocks_rechCodeNC8"
+	width="900"
+	height="500"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_code_nc8.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="RECHERCHE D'UN CODE NC8" />
+	</hbox>
+	<hbox style="height:20px" />
+	
+	<hbox pack="center" flex="1">
+		<tree id="liste_codes_nc8"
+					hidecolumnpicker="true"
+         	ref="http://www.opensi.org/facturation/liste_codes_nc8"
+         	seltype="single"
+         	datasources="rdf:null"
+					flex="1">
+     	<treecols>
+       	<treecol primary="true" id="ColCode_NC8" flex="1" label="Code NC8" />
+       	<splitter class="tree-splitter" />
+       	<treecol id="ColLibelle" flex="3" label="Libellé" />
+       	<splitter class="tree-splitter" />
+       	<treecol id="ColInfo_Unite" flex="1" label="Info Unité" />
+       	<treecol id="ColType" collapsed="true" />
+     	</treecols>
+     	<template>
+         	<treechildren>
+           	<treeitem value="rdf:http://www.opensi.org/facturation/liste_codes_nc8/rdf#Code_NC8" uri="rdf:*">
+             	<treerow>
+               	<treecell label="rdf:http://www.opensi.org/facturation/liste_codes_nc8/rdf#Code_NC8" />
+               	<treecell label="rdf:http://www.opensi.org/facturation/liste_codes_nc8/rdf#Libelle" />
+               	<treecell label="rdf:http://www.opensi.org/facturation/liste_codes_nc8/rdf#Info_Unite" />
+               	<treecell label="rdf:http://www.opensi.org/facturation/liste_codes_nc8/rdf#Type" />
+             	</treerow>
+           	</treeitem>
+         	</treechildren>
+     	</template>
+   	</tree>
+  </hbox>
+
+	<hbox pack="center">
+		<hbox flex="1" pack="center">
+			<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+			<button class="bValider" label="Ok" oncommand="choixCodeNC8();" />
+		</hbox>
+	</hbox>
+	<box style="height:20px" />
+
+</window>

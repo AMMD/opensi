@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_compta_manager_dossiers_overlay-menuDossiers"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-menuDossiers.js" />
+
+  <vbox id="menuDossiers" flex="1">
+		<hbox>
+			<label class="label_16" value="Gestion des dossiers" />
+		</hbox>
+		
+		<hbox style="height:40px" />
+		<hbox pack="center" align="center">
+			<label value="Dossier :" />
+			<textbox id="omd-filtreDossierId" maxlength="8" size="8" onkeypress="omd_pressOnDossierId(event);" />
+			<button id="omd-bRechercher" label="Ok" maxwidth="32" oncommand="omd_rechercherDossier()" />
+		</hbox>
+		<hbox style="height:20px" />
+		<hbox flex="1">
+	    <tree id="omd-listeDossiers"
+						hidecolumnpicker="true"
+	          ref="http://www.opensi.org/Superviseur/listeDossiers"
+	          seltype="single"
+	          datasources="rdf:null"
+	          onselect="omd_selectOnListeDossiers();"
+	          flex="1">
+	      <treecols>
+	        <treecol id="omd-colDossierId" flex="1" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Dossier_Id" />
+	        <treecol id="omd-colNom" flex="2" label="Nom dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Nom" />
+	        <treecol flex="1" label="Actif" sort="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Actif" />
+	        <treecol id="omd-colActif" collapsed="true" />
+	      </treecols>
+	      <template>
+	        <treechildren>
+	          <treeitem uri="rdf:*">
+	            <treerow>
+	              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Dossier_Id" />
+	              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Nom" />
+	              <treecell src="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Picto_Actif" />
+	              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiers/rdf#Actif" />
+	            </treerow>
+	          </treeitem>
+	        </treechildren>
+	      </template>
+	    </tree>
+		</hbox>
+		
+		<box style="height:20px" />
+		
+		<hbox>
+			<vbox flex="1">
+				<hbox pack="center">
+					<grid>
+						<columns>
+							<column />
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="* Identifiant du dossier :" class="label" />
+								<hbox>
+									<textbox id="omd-dossierId" maxlength="8" size="8" />
+								</hbox>
+								<checkbox id="omd-chkActif" label="Actif" />
+							</row>
+							<row align="center">
+								<label value="* Nom du dossier :" class="label" />
+								<hbox>
+									<textbox id="omd-nomDossier" maxlength="50" size="50" />
+								</hbox>
+								<label value="" />
+							</row>
+						</rows>
+					</grid>
+					
+					<box style="width:20px" />
+					
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center" id="omd-rowDateDebutPremierExercice">
+								<label value="* Début du premier exercice comptable :" class="label" />
+								<hbox>
+									<textbox id="omd-debutExercice" tooltiptext="jj/mm/aaaa" maxlength="10" size="10" />
+								</hbox>
+							</row>
+							<row align="center" id="omd-rowDateFinPremierExercice">
+								<label value="* Fin du premier exercice comptable :" class="label" />
+								<hbox>
+									<textbox id="omd-finExercice" tooltiptext="jj/mm/aaaa" maxlength="10" size="10" onfocus="omd_calculerDateFinExercice();" />
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+				<box style="height:10px" />
+				<hbox pack="center">
+					<button id="omd-bSupprimer" label="Supprimer" class="bSupprimer" oncommand="omd_pressOnSupprimer();" />
+					<button id="omd-bEnregistrer" label="Enregistrer" class="bEnregistrer" oncommand="omd_enregistrerDossier();" />
+					<button id="omd-bNouveau" label="Nouveau" class="bNouveau" oncommand="omd_nouveauDossier();" />
+				</hbox>
+				<box style="height:10px" />
+			</vbox>
+		</hbox>
+	</vbox>
+	
+</overlay>

@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageArticles_overlay-famillesArticles"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-famillesArticles.js" />
+  
+  <tabpanel id="tab-familles">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box style="height:30px" />
+			<hbox pack="center">
+			   <label value="GESTION DES FAMILLES D'ARTICLE" class="label_16" />
+			 </hbox>
+			 
+			<hbox style="height:30px" />
+			<hbox pack="center" flex="10" style="overflow:auto">
+			 	<hbox pack="center" flex="1">
+			 		<vbox flex="1">
+						<tree id="ofa-liste_familles"
+									hidecolumnpicker="true"
+			          	ref="http://www.opensi.org/Config/listeFamilles"
+			          	seltype="single"
+			          	datasources="rdf:null"
+									onselect="ofa_ouvrirFamille()"
+									flex="1">
+			      	<treecols>
+			        	<treecol primary="true" id="ofa-ColLibelle" flex="5" label="Famille" />
+			        	<splitter class="tree-splitter" />
+			        	<treecol id="ofa-ColParentId" collapsed="true"/>
+			        	<treecol id="ofa-ColLibelleParent" collapsed="true"/>
+			        	<treecol id="ofa-ColNiveau" collapsed="true"/>
+			        	<treecol id="ofa-colPictoActif" label="Actif" flex="1" collapsed="true" />
+							  <treecol id="ofa-colActif" collapsed="true" />
+			      	</treecols>
+			      	<template>
+			         	<treechildren>
+			           	<treeitem value="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Famille_Id" uri="rdf:*">
+			             	<treerow>
+			               	<treecell label="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Libelle" />
+			               	<treecell label="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Parent_Id" />
+			               	<treecell label="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Libelle_Parent" />
+			               	<treecell label="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Niveau" />
+			               	<treecell src="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Picto_Actif" />
+			               	<treecell label="rdf:http://www.opensi.org/Config/listeFamilles/rdf#Actif" />
+			             	</treerow>
+			           	</treeitem>
+			         	</treechildren>
+			      	</template>
+			    	</tree>
+			    	<checkbox id="ofa-afficherTout" label="Afficher aussi les valeurs désactivées" oncommand="ofa_chargerListe();" />
+			   	</vbox>
+			   	
+					<hbox width="50px" />
+					<vbox>
+						<groupbox flex="1" pack="center" align="center">
+			   		<caption label="Familles" />
+							<hbox pack="center">
+								<grid>
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row id="ofa-Row_Famille_Parente" align="center" collapsed="true">
+											<label class="label" value="Famille parente :" />
+											<hbox><textbox id="ofa-Famille_Parente" size="30" maxlength="40" disabled="true" /></hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="* Nom :" />
+											<hbox><textbox id="ofa-Nom_Famille" size="30" maxlength="40" /></hbox>
+										</row>
+									</rows>
+								</grid>
+							</hbox>
+							
+							<hbox height="20px" />
+							<hbox pack="center">
+								<button id="ofa-bEnregistrer" label="Enregistrer" class="bEnregistrer" oncommand="ofa_enregistrerFamille()" />
+								<button id="ofa-bSupprimer" label="Supprimer" class="bSupprimer" oncommand="ofa_supprimerFamille()" collapsed="true" />
+								<button id="ofa-bReactiver" label="Réactiver" oncommand="ofa_reactiverFamille()" collapsed="true" />
+								<hbox width="70px" />
+								<button id="ofa-bNouveau" label="Nouveau" class="bNouveau" oncommand="ofa_nouvelleFamille()" />
+								<button id="ofa-bAjouterSousFamille" label="Nouvelle sous-famille" class="bNouveau" oncommand="ofa_nouvelleSousFamille()" collapsed="true" />
+							</hbox>
+						</groupbox>
+						<hbox height="20px" />
+						
+						<groupbox flex="1" pack="center" align="center">
+			   			<caption label="Paramétrage des comptes" />
+							<tabbox flex="1" id="ofa-Comptes_TVA">
+								<tabs>
+					      	<tab label="National" />
+					      	<tab label="UE" />
+					      	<tab label="International" />
+					     	</tabs>
+					  		<tabpanels flex="1">
+					    		<tabpanel>		    			
+					    			<hbox pack="center" flex="1">
+					    				<vbox flex="1">
+							    			<tree id="ofa-liste_comptes_familles_national"
+								          	flex="1"
+								          	hidecolumnpicker="true"
+								          	seltype="single"
+								          	ref="http://www.opensi.org/config/liste_comptes_familles_articles"
+								          	datasources="rdf:null"
+														onselect="ofa_pressOnComptesFamillesNational();"
+														flags="dont-build-content">
+								
+									      	<treecols>
+									        	<treecol id="ofa-ColTaux_TVA_National" label="Taux de TVA" flex="1" />
+														<splitter class="tree-splitter" />
+									        	<treecol id="ofa-ColCompte_Achat_National" flex="1" label="Compte d'achat" />
+														<splitter class="tree-splitter" />
+														<treecol id="ofa-ColCompte_Vente_National" flex="1" label="Compte de vente" />
+														<treecol id="ofa-ColCode_TVA_National" collapsed="true" />
+													</treecols>
+									      	<template>
+									        	<treechildren>
+									          	<treeitem uri="rdf:*">
+									            	<treerow>
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Taux_TVA" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Achat" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Vente" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_TVA" />
+									            	</treerow>
+									          	</treeitem>
+									        	</treechildren>
+									      	</template>
+									    	</tree>
+									    	<hbox pack="center">
+										    	<grid>
+														<columns>
+									          	<column />
+									          	<column />
+									          	<column />
+									          	<column />
+									        	</columns>
+														<rows>
+															<row align="center">
+									        			<hbox pack="center"><label class="label" value="Taux de TVA" /></hbox>
+									        			<hbox pack="center"><label class="label" value="Compte Achat" /></hbox>
+									        			<hbox pack="center"><label class="label" value="Compte Vente" /></hbox>
+									        			<label class="label" value="" />
+									      	    </row>
+															<row align="center">
+									        			<hbox pack="center">
+									        				<textbox id="ofa-Taux_TVA_National" size="9" readonly="true" />
+									        				<textbox id="ofa-Code_TVA_National" collapsed="true" />
+																</hbox>
+									            	<hbox pack="center">
+									              	<textbox id="ofa-Compte_Achat_National" maxlength="8" size="9" readonly="true" />
+																	<button id="ofa-Aplus_National" class="bIcoRechercher" tooltiptext="rechercher un compte d'achat" oncommand="ofa_rechcompte('ofa-Compte_Achat_National');" />
+																	<button id="ofa-Amoins_National" class="bIcoSupprimer" tooltiptext="enlever le compte d'achat" oncommand="document.getElementById('ofa-Compte_Achat_National').value='';" />
+									            	</hbox>
+									            	<hbox pack="center">
+									              	<textbox id="ofa-Compte_Vente_National" maxlength="8" size="9" readonly="true" />
+																	<button id="ofa-Vplus_National" class="bIcoRechercher" tooltiptext="rechercher un compte de vente" oncommand="ofa_rechcompte('ofa-Compte_Vente_National');" />
+																	<button id="ofa-Vmoins_National" class="bIcoSupprimer" tooltiptext="enlever le compte de vente" oncommand="document.getElementById('ofa-Compte_Vente_National').value='';" />
+									            	</hbox>
+									            	<hbox pack="center">
+									              	<button id="ofa-bValiderCompte_National" class="bIcoValider" oncommand="ofa_validerCompteFamilleNational();" />
+									            	</hbox>
+									      	    </row>
+									      		</rows>
+													</grid>
+												</hbox>								
+											</vbox>
+										</hbox>
+					    		</tabpanel>		    		
+					    		
+					    		<tabpanel>		    			
+					    			<hbox pack="center" flex="1">
+					    				<tabbox flex="1">
+												<tabs>
+									      	<tab label="Taux européens" />
+									      	<tab label="Taux nationaux pour l'Europe" />
+									    	</tabs>
+									  		<tabpanels flex="1">
+									    		<tabpanel>
+									    			<vbox flex="1">
+										    			<tree id="ofa-liste_comptes_familles_ue"
+											          	flex="1"
+											          	hidecolumnpicker="true"
+											          	seltype="single"
+											          	ref="http://www.opensi.org/config/liste_comptes_familles_articles"
+											          	datasources="rdf:null"
+																	onselect="ofa_pressOnComptesFamillesUE();"
+																	flags="dont-build-content">
+											
+												      	<treecols>
+												      		<treecol id="ofa-ColPays_UE" label="Pays" flex="1" />
+																	<splitter class="tree-splitter" />
+												        	<treecol id="ofa-ColTaux_TVA_UE" label="Taux de TVA" flex="1" />
+												        	<splitter class="tree-splitter" />
+																	<treecol id="ofa-ColCompte_Achat_UE" flex="1" label="Compte d'achat" />
+																	<splitter class="tree-splitter" />
+																	<treecol id="ofa-ColCompte_Vente_UE" flex="1" label="Compte de vente" />
+																	<treecol id="ofa-ColCode_TVA_UE" collapsed="true" />
+																	<treecol id="ofa-ColCode_Pays_UE" collapsed="true" />
+																</treecols>
+												      	<template>
+												        	<treechildren>
+												          	<treeitem uri="rdf:*">
+												            	<treerow>
+												            		<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Pays" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Taux_TVA" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Achat" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Vente" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_TVA" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_Pays" />
+												            	</treerow>
+												          	</treeitem>
+												        	</treechildren>
+												      	</template>
+												    	</tree>
+												    	<hbox pack="center">
+													    	<grid>
+																	<columns>
+																		<column />
+												          	<column />
+												          	<column />
+												          	<column />
+												          	<column />
+												        	</columns>
+																	<rows>
+																		<row align="center">
+																			<hbox pack="center"><label class="label" value="Pays" /></hbox>
+												        			<hbox pack="center"><label class="label" value="Taux de TVA" /></hbox>
+												        			<hbox pack="center"><label class="label" value="Compte Achat" /></hbox>
+												        			<hbox pack="center"><label class="label" value="Compte Vente" /></hbox>
+												        			<label class="label" value="" />
+												      	    </row>
+																		<row align="center">
+																			<hbox pack="center">
+												        				<textbox id="ofa-Pays_UE" size="9" readonly="true" />
+												        				<textbox id="ofa-Code_Pays_UE" collapsed="true" />
+																			</hbox>
+												        			<hbox pack="center">
+												        				<textbox id="ofa-Taux_TVA_UE" size="9" readonly="true" />
+												        				<textbox id="ofa-Code_TVA_UE" collapsed="true" />
+																			</hbox>
+																			<hbox pack="center">
+												              	<textbox id="ofa-Compte_Achat_UE" maxlength="8" size="9" readonly="true" />
+																				<button id="ofa-Aplus_UE" class="bIcoRechercher" tooltiptext="rechercher un compte d'achat" oncommand="ofa_rechcompte('ofa-Compte_Achat_UE');" />
+																				<button id="ofa-Amoins_UE" class="bIcoSupprimer" tooltiptext="enlever le compte d'achat" oncommand="document.getElementById('ofa-Compte_Achat_UE').value='';" />
+												            	</hbox>
+												            	<hbox pack="center">
+												              	<textbox id="ofa-Compte_Vente_UE" maxlength="8" size="9" readonly="true" />
+																				<button id="ofa-Vplus_UE" class="bIcoRechercher" tooltiptext="rechercher un compte de vente" oncommand="ofa_rechcompte('ofa-Compte_Vente_UE');" />
+																				<button id="ofa-Vmoins_UE" class="bIcoSupprimer" tooltiptext="enlever le compte de vente" oncommand="document.getElementById('ofa-Compte_Vente_UE').value='';" />
+												            	</hbox>
+												            	<hbox pack="center">
+												              	<button id="ofa-bValiderCompte_UE" class="bIcoValider" oncommand="ofa_validerCompteFamilleUE();" />
+												            	</hbox>
+												      	    </row>
+												      		</rows>
+																</grid>
+															</hbox>								
+														</vbox>
+													</tabpanel>
+													
+													<tabpanel>
+									    			<vbox flex="1">
+										    			<tree id="ofa-liste_comptes_familles_nat_ue"
+											          	flex="1"
+											          	hidecolumnpicker="true"
+											          	seltype="single"
+											          	ref="http://www.opensi.org/config/liste_comptes_familles_articles"
+											          	datasources="rdf:null"
+																	onselect="ofa_pressOnComptesFamillesNatUE();"
+																	flags="dont-build-content">
+											
+												      	<treecols>
+												      		<treecol id="ofa-ColPays_Nat_UE" label="Pays" flex="1" />
+																	<splitter class="tree-splitter" />
+												        	<treecol id="ofa-ColTaux_TVA_Nat_UE" label="Taux de TVA" flex="1" />
+																	<splitter class="tree-splitter" />
+																	<treecol id="ofa-ColCompte_Vente_Nat_UE" flex="1" label="Compte de vente" />
+																	<treecol id="ofa-ColCode_TVA_Nat_UE" collapsed="true" />
+																	<treecol id="ofa-ColCode_Pays_Nat_UE" collapsed="true" />
+																</treecols>
+												      	<template>
+												        	<treechildren>
+												          	<treeitem uri="rdf:*">
+												            	<treerow>
+												            		<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Pays" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Taux_TVA" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Vente" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_TVA" />
+												              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_Pays" />
+												            	</treerow>
+												          	</treeitem>
+												        	</treechildren>
+												      	</template>
+												    	</tree>
+												    	<hbox pack="center">
+													    	<grid>
+																	<columns>
+																		<column />
+												          	<column />
+												          	<column />
+												          	<column />
+												        	</columns>
+																	<rows>
+																		<row align="center">
+																			<hbox pack="center"><label class="label" value="Pays" /></hbox>
+												        			<hbox pack="center"><label class="label" value="Taux de TVA" /></hbox>
+												        			<hbox pack="center"><label class="label" value="Compte Vente" /></hbox>
+												        			<label class="label" value="" />
+												      	    </row>
+																		<row align="center">
+																			<hbox pack="center">
+												        				<textbox id="ofa-Pays_Nat_UE" size="9" readonly="true" />
+												        				<textbox id="ofa-Code_Pays_Nat_UE" collapsed="true" />
+																			</hbox>
+												        			<hbox pack="center">
+												        				<textbox id="ofa-Taux_TVA_Nat_UE" size="9" readonly="true" />
+												        				<textbox id="ofa-Code_TVA_Nat_UE" collapsed="true" />
+																			</hbox>
+												            	<hbox pack="center">
+												              	<textbox id="ofa-Compte_Vente_Nat_UE" maxlength="8" size="9" readonly="true" />
+																				<button id="ofa-Vplus_Nat_UE" class="bIcoRechercher" tooltiptext="rechercher un compte de vente" oncommand="ofa_rechcompte('ofa-Compte_Vente_Nat_UE');" />
+																				<button id="ofa-Vmoins_Nat_UE" class="bIcoSupprimer" tooltiptext="enlever le compte de vente" oncommand="document.getElementById('ofa-Compte_Vente_Nat_UE').value='';" />
+												            	</hbox>
+												            	<hbox pack="center">
+												              	<button id="ofa-bValiderCompte_Nat_UE" class="bIcoValider" oncommand="ofa_validerCompteFamilleNatUE();" />
+												            	</hbox>
+												      	    </row>
+												      		</rows>
+																</grid>
+															</hbox>								
+														</vbox>
+													</tabpanel>
+												</tabpanels>
+											</tabbox>
+										</hbox>
+					    		</tabpanel>
+					    		
+					    		<tabpanel>		    			
+					    			<hbox pack="center" flex="1">
+					    				<vbox flex="1">
+							    			<tree id="ofa-liste_comptes_familles_international"
+								          	flex="1"
+								          	hidecolumnpicker="true"
+								          	seltype="single"
+								          	ref="http://www.opensi.org/config/liste_comptes_familles_articles"
+								          	datasources="rdf:null"
+														onselect="ofa_pressOnComptesFamillesInternational();"
+														flags="dont-build-content">
+								
+									      	<treecols>
+									      		<treecol id="ofa-ColPays_International" label="Pays" flex="1" />
+									      		<splitter class="tree-splitter" />
+														<treecol id="ofa-ColCompte_Achat_International" flex="1" label="Compte d'achat" />
+														<splitter class="tree-splitter" />
+														<treecol id="ofa-ColCompte_Vente_International" flex="1" label="Compte de vente" />
+														<treecol id="ofa-ColCode_TVA_International" collapsed="true" />
+														<treecol id="ofa-ColCode_Pays_International" collapsed="true" />
+													</treecols>
+									      	<template>
+									        	<treechildren>
+									          	<treeitem uri="rdf:*">
+									            	<treerow>
+									            		<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Pays" />
+									            		<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Achat" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Compte_Vente" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_TVA" />
+									              	<treecell label="rdf:http://www.opensi.org/config/liste_comptes_familles_articles/rdf#Code_Pays" />
+									            	</treerow>
+									          	</treeitem>
+									        	</treechildren>
+									      	</template>
+									    	</tree>
+									    	<hbox pack="center">
+										    	<grid>
+														<columns>
+															<column />
+									          	<column />
+									          	<column />
+									          	<column />
+									        	</columns>
+														<rows>
+															<row align="center">
+																<hbox pack="center"><label class="label" value="Pays" /></hbox>
+																<hbox pack="center"><label class="label" value="Compte Achat" /></hbox>
+									        			<hbox pack="center"><label class="label" value="Compte Vente" /></hbox>
+									        			<label class="label" value="" />
+									      	    </row>
+															<row align="center">
+																<hbox pack="center">
+									        				<textbox id="ofa-Pays_International" size="9" readonly="true" />
+									        				<textbox id="ofa-Code_Pays_International" collapsed="true" />
+									        				<textbox id="ofa-Code_TVA_International" collapsed="true" />
+																</hbox>
+																<hbox pack="center">
+									              	<textbox id="ofa-Compte_Achat_International" maxlength="8" size="9" readonly="true" />
+																	<button id="ofa-Aplus_International" class="bIcoRechercher" tooltiptext="rechercher un compte d'achat" oncommand="ofa_rechcompte('ofa-Compte_Achat_International');" />
+																	<button id="ofa-Amoins_International" class="bIcoSupprimer" tooltiptext="enlever le compte d'achat" oncommand="document.getElementById('ofa-Compte_Achat_International').value='';" />
+									            	</hbox>
+									            	<hbox pack="center">
+									              	<textbox id="ofa-Compte_Vente_International" maxlength="8" size="9" readonly="true" />
+																	<button id="ofa-Vplus_International" class="bIcoRechercher" tooltiptext="rechercher un compte de vente" oncommand="ofa_rechcompte('ofa-Compte_Vente_International');" />
+																	<button id="ofa-Vmoins_International" class="bIcoSupprimer" tooltiptext="enlever le compte de vente" oncommand="document.getElementById('ofa-Compte_Vente_International').value='';" />
+									            	</hbox>
+									            	<hbox pack="center">
+									              	<button id="ofa-bValiderCompte_International" class="bIcoValider" oncommand="ofa_validerCompteFamilleInternational();" />
+									            	</hbox>
+									      	    </row>
+									      		</rows>
+													</grid>
+												</hbox>								
+											</vbox>
+										</hbox>
+					    		</tabpanel>
+					  		</tabpanels>
+							</tabbox>
+							
+						</groupbox>
+						
+					</vbox>
+				</hbox>
+			</hbox>
+			<hbox flex="1"/>
+		</vbox>
+	</tabpanel>
+</overlay>

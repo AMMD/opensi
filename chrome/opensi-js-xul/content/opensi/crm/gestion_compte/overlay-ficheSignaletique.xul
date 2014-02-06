@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_crm_user_gestionCompte_overlayFicheSignaletique"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-ficheSignaletique.js" />
+	
+	<script src="chrome://opensi/content/libs/util.js" />
+  
+	<tabpanel id="tabSignaletique" flex="1" >
+		<hbox flex="1"  pack="center" >
+			<vbox pack="center"  >
+			<hbox>
+				<groupbox align="center">
+					<caption label="Coordonnées"/>
+					<hbox >
+					<box>
+						<grid flex="1">
+						
+							  	<columns>
+									<column/>
+									<column/> 
+									<column/>
+									<column/>
+								</columns>
+							
+								<rows>
+											
+									<row align="center">
+										<label class="label" value="* Denomination : "/>
+										<box><textbox id="ofs-denomination" maxlength="50" size="30" /></box>
+										<label/>
+										<label/>	
+									</row>
+									
+									<row align="center">
+										<label class="label" value="* Adresse : "/>
+										<hbox><textbox id="ofs-adresse1" maxlength="80" size="30"/></hbox>
+										<label class="label" value="Téléphone : "/>
+										<hbox><textbox id="ofs-telephone" maxlength="20" size="20"/></hbox>		
+									</row>
+									
+									<row align="center">
+										<label />
+										<hbox><textbox id="ofs-adresse2" maxlength="80" size="30"/></hbox>
+										<label class="label" value="Fax : "/>
+										<hbox><textbox id="ofs-fax" maxlength="20" size="20"/></hbox>			
+									</row>
+									
+									<row align="center">
+										<label />
+										<hbox><textbox id="ofs-adresse3" maxlength="80" size="30"/></hbox>
+										<label class="label" value="E-Mail : "/>
+										<hbox><textbox id="ofs-email" maxlength="60" size="20"/></hbox>			
+									</row>
+		
+									<row align="center">
+										<label class="label" value="Code Postal : "/>
+										<hbox><textbox id="ofs-Code_Postal" maxlength="10" size="6"/></hbox>
+										<label class="label" value="Site Web : "/>
+										<hbox><textbox id="ofs-Site_Web" maxlength="40" size="20"/></hbox>			
+									</row>
+		
+									<row align="center">
+										<label class="label" value="* Ville"/>
+										<hbox><textbox id="ofs-ville" maxlength="50" size="30"/></hbox>
+										<label class="label" value=""/>
+										<label class="label" value=""/>	
+									</row>
+		
+									<row align="center">
+										<label class="label" value="Pays"/>
+									<hbox>
+							  			<menulist id="ofs-listePays" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays"  oncommand="rechercher();" datasources="rdf:null">
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+										<label />
+										<label />
+									</row>
+																
+								</rows>
+						</grid>
+					
+					</box>
+				</hbox>			
+					
+				</groupbox>
+		
+				<vbox  flex="1">
+					<vbox >
+						<groupbox >
+							<caption label="Informations complémentaires"/>
+							<grid>
+							<columns>
+								<column/>
+								<column/>
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="* Responsable :"/>
+										<menulist id="ofs-listeResponsable" oncommand="initResponsable();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null" >
+										<menupopup>
+											<menuitem label="[Choisir]" value="TOUS" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Util_R" />
+											</menupopup>
+										</template>
+										</menulist>
+									</row>
+									<row align="center"> 
+										<label class="label" value="* Type :"/>
+										<menulist id="ofs-listeType" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" value="TOUS" />
+											</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Libelle" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Type_Id" />
+											</menupopup>
+										</template>
+										</menulist>
+										
+									</row>
+									
+									<row align="center">
+										<label class="label" value=""/>
+										<checkbox id="ofs-projet" label="Projet"  />
+									</row>
+									
+									<row align="center">
+										<label class="label" value="Chiffre d'affaires : "/>
+										<textbox class="nombre" id="ofs-CA" maxlength="10" size="10" text-align="right"/>						
+									</row>
+									
+									<row align="center">
+										<label class="label" value="Nombre d'employés :"/>
+										<textbox class="nombre" id="ofs-nbr-employes" maxlength="10" size="10"/>						
+									</row>
+									
+								</rows>
+								</grid>
+							</groupbox>
+						</vbox>
+						<vbox >
+						<groupbox >
+							<caption label="Commentaires"/>
+							<hbox flex="1"><textbox id="ofs-comLibre" multiline="true" rows="8" cols="35" /></hbox>
+						</groupbox>
+						</vbox>
+					</vbox>
+				</hbox>
+				
+				<hbox align="center" pack="center">
+					<button id="bofs-Supprimer" class="bSupprimer" tooltiptext="Supprimer fiche" label="Supprimer" oncommand="ofs_pressOnSupprimer();" />
+					<button id="bofs-Enregistrer" class="bEnregistrer" tooltiptext="Enregister fiche" label="Enregister " oncommand="ofsEnregistrer();" />
+				</hbox>
+			
+			</vbox>
+		</hbox>
+	</tabpanel>
+	
+</overlay>

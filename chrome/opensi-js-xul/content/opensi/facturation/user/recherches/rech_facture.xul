@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'une facture client"
+  id="opensi_facturation_user_recherches_rechFacture"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_facture.js" />
+
+  <hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="RECHERCHE D'UNE FACTURE CLIENT" style="text-align:center" />
+	</hbox>
+	<hbox style="height:20px" />
+
+	<hbox style="height:120px">
+  	<grid pack="center">
+    	<columns>
+      	<column />
+      	<column />
+      </columns>
+    	<rows>
+				<row>
+					<label value="" />
+				</row>
+      	<row align="center">
+        	<label class="label" value="Numéro de facture :" />
+        	<hbox><textbox id="Numero" maxlength="10" size="20" onkeypress="pressOnId(event);" /></hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Numéro de client :" />
+        	<hbox><textbox id="Client_Id" maxlength="10" size="20" onkeypress="pressOnClientId(event);" /></hbox>
+      	</row>
+				<row align="center">
+					<label class="label" value="Client :" />
+        	<hbox><textbox id="Denomination" maxlength="20" size="20" onkeypress="pressOnRaisonSociale(event);" /></hbox>
+				</row>
+				<row align="center">
+        	<label class="label" value="Date début (jj/mm/aaaa) :" />
+        	<hbox><textbox id="Date_Debut" maxlength="10" size="20" onkeypress="pressOnDateDebut(event);" /></hbox>
+      	</row>
+				<row align="center">
+        	<label class="label" value="Date fin (jj/mm/aaaa) :" />
+        	<hbox><textbox id="Date_Fin" maxlength="10" size="20" onkeypress="pressOnDateFin(event);" /></hbox>
+      	</row>
+				<row align="center">
+        	<label class="label" value="Référence article :" />
+        	<hbox><textbox id="Article_Id" maxlength="10" size="20" onkeypress="pressOnArticleId(event);" /></hbox>
+      	</row>
+    	</rows>
+  	</grid>
+
+  	<box style="width:30px;"/>
+
+		<vbox flex="1">
+			<hbox>
+				<label value="Aperçu de la facture N°" />
+				<label id="Num_Facture" />
+			</hbox>
+			<tree id="apercu"
+      	flex="1"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/apercu_facture_client"
+      	datasources="rdf:null"
+				flags="dont-build-content">
+
+    		<treecols>
+      		<treecol id="ColReference" label="Référence" flex="1" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColDesignation" flex="2" label="Désignation" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColQuantite" flex="1" label="Quantité" class="nombre" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_client/rdf#Reference" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_client/rdf#Designation" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_facture_client/rdf#Quantite" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+		</vbox>
+
+	</hbox>
+
+	<label value="Factures trouvées :" />
+	<tree id="factures"
+      	flex="1"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/factures"
+      	datasources="rdf:null"
+				flags="dont-build-content"
+      	onkeypress="pressOnTree(event);"
+				ondblclick="choixFacture();"
+				onclick="loadApercu();"
+				onselect="loadApercu();"
+      	height="150px"
+      	width="600px">
+
+  	<treecols>
+  		<treecol id="ColDate_Facture" label="Date" flex="1"
+          	   sort="rdf:http://www.opensi.org/facturation/factures/rdf#Date_Facture"/>
+			<splitter class="tree-splitter" />
+      <treecol id="ColNum_Entier" label="N° Facture" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/factures/rdf#Num_Entier" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColClient_Id" label="N° Client" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/factures/rdf#Client_Id" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDenomination" label="Client" flex="3"
+							 sort="rdf:http://www.opensi.org/facturation/factures/rdf#Denomination" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColTotal_HT" label="Total HT" class="nombre" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_HT" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColTotal_TTC" label="Total TTC" class="nombre" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_TTC" />
+			<treecol id="ColFacture_Id" collapsed="true" />
+  	</treecols>
+  	<template>
+    	<treechildren>
+      	<treeitem uri="rdf:*">
+        	<treerow>
+          	<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Date_Facture" />
+            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Num_Entier" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Client_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Denomination" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Total_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Total_TTC" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#Facture_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triDate_Facture" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/factures/rdf#triTotal_TTC" />
+        	</treerow>
+      	</treeitem>
+    	</treechildren>
+  	</template>
+	</tree>
+
+	<box style="height:20px" />
+  <hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+  	<button label="Ouvrir" oncommand="choixFacture();" />
+  </hbox>
+	<box style="height:20px" />
+
+</window>

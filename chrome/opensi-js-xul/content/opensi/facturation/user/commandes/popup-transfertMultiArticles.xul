@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Transfert multi-articles"
+  id="opensi_compta_user_commandes_popupTransfertMultiArticles"
+  onload="init();"
+	width="800"
+	height="600"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-transfertMultiArticles.js" />
+
+  <hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="Transfert multi-articles" style="text-align:center" />
+	</hbox>
+	<box style="height:20px" />
+
+	<vbox flex="1">
+		<hbox align="center">
+			<label class="label" value="Fournisseur :" />
+			<menulist id="fournisseur" oncommand="pressOnFournisseur();" ref="http://www.opensi.org/facturation/liste_fournisseurs_article" datasources="rdf:null" width="200px" sizetopopup="none">
+				<menupopup>
+					<menuitem label="[Choisir un fournisseur]" />
+				</menupopup>
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Denomination" value="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Fournisseur_Id" />
+					</menupopup>
+				</template>
+			</menulist>
+			
+			<box style="width:40px" />
+			
+			<label class="label" value="Commande :" />
+			<menulist id="commande" ref="http://www.opensi.org/facturation/liste_commandes_fournisseur_non_validees" datasources="rdf:null" width="200px" sizetopopup="none">
+				<menupopup>
+					<menuitem label="[Choisir une commande]" />
+				</menupopup>
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_commandes_fournisseur_non_validees/rdf#Num_Entier" value="rdf:http://www.opensi.org/facturation/liste_commandes_fournisseur_non_validees/rdf#Commande_Id" />
+					</menupopup>
+				</template>
+			</menulist>
+		</hbox>
+		
+		<hbox pack="end">
+			<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher(true)" />
+			<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher(false)" />
+		</hbox>
+		<listbox id="listeArticles" flex="1" ref="http://www.opensi.org/facturation/liste_articles" datasources="rdf:null" onselect="selectOnListeArticles();">
+			<listhead>
+				<listheader label="Référence" />
+				<listheader label="Désignation" />
+				<listheader label="Quantité" class="nombre" />
+				<listheader label="Qté à transférer" class="nombre" />
+			</listhead>
+			<listcols>
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+			</listcols>
+			<template>
+				<listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/liste_articles/rdf#Ligne_Id" allowevents="true">
+		    	<listcell type="checkbox" checked="true" label="rdf:http://www.opensi.org/facturation/liste_articles/rdf#Reference" onclick="testcheck(this.parentNode)" />
+		    	<listcell label="rdf:http://www.opensi.org/facturation/liste_articles/rdf#Designation" />
+		    	<listcell label="rdf:http://www.opensi.org/facturation/liste_articles/rdf#Quantite" class="nombre" />
+		    	<listcell label="rdf:http://www.opensi.org/facturation/liste_articles/rdf#Quantite" class="nombre" />
+		    </listitem>
+			</template>
+		</listbox>
+		<hbox align="center" pack="end">
+			<label value="Qté à transférer :" />
+			<textbox id="quantite" class="nombre" size="5" maxlenth="10" disabled="true" />
+			<button id="bValiderLigne" class="bIcoValider" tooltiptext="valider" oncommand="validerLigne()" disabled="true" />
+		</hbox>
+	</vbox>
+
+	<box style="height:20px" />
+  <hbox pack="center">
+		<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+  	<button id="bValider" class="bValider" label="Ok" oncommand="valider();" disabled="true" />
+  </hbox>
+	<box style="height:20px" />
+
+</window>

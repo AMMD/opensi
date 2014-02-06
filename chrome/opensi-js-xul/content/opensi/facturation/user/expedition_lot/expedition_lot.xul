@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="expedition_lot.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_expeditionLot_expeditionLot"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="expedition_lot.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bRetourExpeditions" oncommand="retour_expedition();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+  <deck id="deck" flex="1">
+		<vbox flex="1">
+
+		  <hbox style="height: 15px" />
+			<label value="Expéditions en lot des commandes" class="label_16" />
+			<hbox style="height: 10px" />
+			
+			<hbox>
+				<hbox flex="1" pack="center">
+					<grid>
+						<columns>
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Mode d'expédition :" />
+								<hbox align="center">
+									<menulist id="modeExpedition" ref="http://www.opensi.org/facturation/liste_modes_expedition" datasources="rdf:null" oncommand="listerCommandes();" style="width:120px" sizetopopup="none">
+										<menupopup>
+											<menuitem label="[Tous]" value="T" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Nom" value="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Mode_Liv_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+								<label class="label" value="Commandes expédiables :" />
+								<hbox align="center">
+									<menulist id="typeExpedition" oncommand="listerCommandes();" style="width:120px">
+										<menupopup>
+											<menuitem label="[Toutes]" value="TS" />
+											<menuitem label="Totalement" value="TT" />
+											<menuitem label="Partiellement" value="PT" />
+										</menupopup>
+									</menulist>
+								</hbox>
+								<label value="" />
+								<label value="" />
+							</row>
+							<row align="center">
+								<label class="label" value="Etat paiement :" />
+								<hbox align="center">
+				    			<menulist id="etatPaiement" oncommand="listerCommandes();" style="width:120px">
+										<menupopup>
+											<menuitem label="[Tous]" value="T" />
+											<menuitem label="Payée" value="1" />
+											<menuitem label="Part. payée" value="2" />
+											<menuitem label="Non payée" value="0" />
+										</menupopup>
+									</menulist>
+								</hbox>
+								<label class="label" value="Date de commande :" />
+								<hbox align="center">
+									<label value="du" />
+									<textbox id="dateDebut" maxlength="10" size="10" onkeypress="onKeyPress(event);" />
+									<label value="au" />
+									<textbox id="dateFin" maxlength="10" size="10" onkeypress="onKeyPress(event);" />
+								</hbox>
+								<label class="label" id="lblProvenance" value="Provenance :" collapsed="true" />
+								<menulist collapsed="true" id="Provenance" ref="http://www.opensi.org/facturation/liste_sites" datasources="rdf:null" oncommand="listerCommandes();" style="width:120px" sizetopopup="none">
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_sites/rdf#nom" value="rdf:http://www.opensi.org/facturation/liste_sites/rdf#id" style="font-size:80%" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+						</rows>
+					</grid>
+					
+					<vbox flex="1" pack="end">
+						<hbox pack="end">
+							<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocherBL(true)" />
+							<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocherBL(false)" />
+						</hbox>
+					</vbox>
+				</hbox>
+			</hbox>
+			
+			<hbox pack="center" flex="1">
+				<listbox flex="1" id="liste_commandes" ref="http://www.opensi.org/Facturation/listeCommandes" datasources="rdf:null">
+					<listhead>
+		    		<listheader label="N° Commande" />
+		    		<listheader label="Date" />
+		    		<listheader width="20px" tooltiptext="Statut de paiement" />
+		    		<listheader id="lhProvenance" label="Provenance" collapsed="true" />
+		    		<listheader label="N° Client" />
+		    		<listheader label="Raison Sociale" />
+		    		<listheader label="Mode Expédition" />
+		    		<listheader label="Montant" style="text-align:right" />
+		    		<listheader label="Commentaire" />
+		    		<listheader collapsed="true" />
+		    		<listheader collapsed="true" />
+		    		<listheader collapsed="true" />
+		    		<listheader collapsed="true" />
+				 	</listhead>
+					<listcols>
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol width="20px" />
+						<listcol id="colProvenance" flex="1" collapsed="true" />
+						<listcol flex="5" />
+						<listcol flex="5" />
+						<listcol flex="5" />
+						<listcol flex="1" />
+						<listcol width="300" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+		  		</listcols>
+					<template>
+						<listitem uri="rdf:*" class="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Couleur" value="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Commande_Id" allowevents="true">
+							<listcell type="checkbox" checked="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#CocherBL" label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Num_Commande" disabled="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#DesactiverBLBP" onclick="testcheck(this.parentNode,1)" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Date" ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell class="listcell-iconic" image="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Statut_Paiement"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Provenance"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Code_Client"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Denomination"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Mode_Expedition"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Montant"  ondblclick="afficherPopupCommentaire(this.parentNode);" style="text-align:right" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Commentaire"  ondblclick="afficherPopupCommentaire(this.parentNode);" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Envoi_Multiple"  ondblclick="afficherPopupCommentaire(this.parentNode);" collapsed="true" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Existe_BL" collapsed="true" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Existe_Fact" collapsed="true" />
+							<listcell label="rdf:http://www.opensi.org/Facturation/listeCommandes/rdf#Hors_Stock" collapsed="true" />
+						</listitem>
+					</template>
+				</listbox>
+			</hbox>
+			
+			<hbox>
+				<groupbox pack="center" align="center" orient="horizontal" flex="1">
+		      <caption label="Validation" />
+		      <hbox align="center">
+		      	<label class="label" value="Nombre de lignes cochées :" />
+		      	<label id="lblNbLignesCochees" />
+		      </hbox>
+		      <box style="width:30px" />
+		      <vbox>
+						<checkbox id="chkBP" label="Générer les bons de préparation" />
+						<checkbox id="chkEditerPicking" label="Editer un bon de picking" />
+					</vbox>
+					<vbox>
+						<checkbox id="chkFacture" label="Générer les factures sans les éditer" />
+						<checkbox id="chkCreerFacture" label="Générer les factures" checked="true" oncommand="checkActFacture();" />
+					</vbox>
+					<box style="width:30px" />
+					<vbox>
+						<button class="bValider" id="bValider" label="Valider" oncommand="valider();" />
+					</vbox>
+				</groupbox>
+				
+				<groupbox pack="center" align="center">
+	      	<caption label="Historique" />
+	      	<hbox pack="center">
+	      		<vbox pack="center">
+	      			<label value="Réédition :" />
+	      		</vbox>
+						<menulist id="Reedition" ref="http://www.opensi.org/facturation/historique_expeditions_lot" datasources="rdf:null">
+							<menupopup>
+								<menuitem label="[Choisir]" style="font-size:80%" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/historique_expeditions_lot/rdf#Date" value="rdf:http://www.opensi.org/facturation/historique_expeditions_lot/rdf#Timestamp" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+						<button class="bIcoValider" id="bReediter" oncommand="reediter();" />
+					</hbox>
+					<checkbox id="chkReediterPicking" label="Editer un bon de picking" />
+				</groupbox>
+			</hbox>
+
+		</vbox>
+		
+		<vbox>
+			<vbox id="pmbox" collapsed="true" align="center">
+				<hbox style="height:30px" />
+				<label value="La génération des expéditions peut durer quelques minutes. Veuillez patienter..." />
+				<hbox style="height:30px" />
+				<hbox>
+					<progressmeter id="pm" />
+				</hbox>
+			</vbox>
+			<iframe type="content" id="expedition" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

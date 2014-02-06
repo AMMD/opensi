@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_import_banque_overlay-importBanque"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:ECRITURE="http://www.opensi.org/compta/import_banque/rdf#">
+	
+	<script src="overlay-importBanque.js" />
+
+	<tabpanel id="tabImportBanque" flex="1">
+	
+		<vbox style="overflow:hidden">
+		<!-- class="auto-overflow" -->
+		
+			<label class="label_16" value="Etape 1 : Import du fichier de banque" />
+			
+			<vbox id="oib-menuImport">
+				<grid>
+					<columns>
+						<column width="120" />
+						<column flex="1" />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Format de fichier : " />
+							<hbox>
+						 		<menulist id="oib-formatImport" ref="http://www.opensi.org/compta/import_banque/formats" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="oib_selectOnFormatImport()">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/import_banque/formats/rdf#libelle" value="rdf:http://www.opensi.org/compta/import_banque/formats/rdf#code" />
+										</menupopup>
+									</template>
+								</menulist>
+							</hbox>
+						</row>
+						<row align="center" id="oib-ligneAnnee" collapsed="true">
+							<label class="label" value="Année concernée : " />
+							<hbox>
+								<textbox id="oib-anneeImport" maxlength="4" size="4" tooltiptext="Année au format : aaaa"/>
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Fichier à importer : " />
+							<hbox>
+								<html:form enctype="multipart/form-data" method="POST" id="uploadform" style="padding-left:4px">
+									<html:center>
+										<html:input type="file" size="30" name="uploadfile" value="" id="oib-fichierImport" />
+									</html:center>
+								</html:form>
+							</hbox>
+						</row>
+						<row>
+							<box/>
+							<hbox>
+								<button id="oib-bImporter" class="bImporter" label="Importer" oncommand="oib_pressOnImporter();" />
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			
+				<box height="20px" />
+			</vbox>
+			
+			<hbox>
+				<grid>
+					<columns>
+						<column width="120" />
+						<column flex="1" />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Solde de début : " />
+							<hbox>
+								<textbox class="nombre" id="oib-soldeDebut" value="0.00" maxlength="17" size="15" />
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Solde de fin : " />
+							<hbox align="center">
+								<textbox class="nombre" id="oib-soldeFin" value="0.00" maxlength="17" size="15" />
+								<label class="label" value="/ Solde calculé : " />
+								<label id="oib-soldeCalcule" class="label" value="à calculer" />
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</hbox>
+			
+			<box height="20px" />
+			
+			<vbox flex="1">
+				<tree id="oib-treeLigneImport" flex="1"
+					onselect="oib_selectOnTreeLigneImport();"
+					hidecolumnpicker="true" 
+					flags="dont-build-content"
+					datasources="rdf:null" 
+					ref="http://www.opensi.org/compta/import_banque"
+					seltype="single">
+					<treecols>
+						<treecol id="oib-colDate" label="Date" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oib-colLibelle" label="Libellé" flex="6" />
+						<splitter class="tree-splitter" />
+						<treecol id="oib-colDebit" class="nombre" label="Débit" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oib-colCredit" class="nombre" label="Crédit" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oib-colReglement" label="Règlement" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oib-colNumPiece" label="N° Pièce" flex="1" />
+						<treecol id="oib-colLigneId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Date" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Libelle" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Montant_D" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Montant_C" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Mode_Reg" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Num_Piece" />
+									<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Ligne_Id" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+			</vbox>
+			<vbox>
+				<grid pack="start">
+					<rows>
+						<row align="center"  />
+						<row align="center"  />
+					</rows>
+					<columns>
+						<column>
+							<label value="*Date :" />
+							<hbox align="center">
+								<textbox id="oib-dateLigne" maxlength="10" size="12" tooltiptext="Date au format : jj/mm/aaaa" />
+							</hbox>
+						</column>
+						<column>
+							<label value="*Libellé :" />
+							<hbox align="center">
+								<textbox id="oib-libelleLigne" maxlength="100" />
+							</hbox>
+						</column>
+						<column>
+							<label value="Débit :" />
+							<hbox align="center">
+								<textbox class="nombre" id="oib-debitLigne" value="0.00" maxlength="17" size="12" />
+							</hbox>
+						</column>
+						<column>
+							<label value="Crédit :" />
+							<hbox align="center">
+								<textbox class="nombre" id="oib-creditLigne" value="0.00" maxlength="17" size="12" />
+							</hbox>
+						</column>
+						<column>
+							<label value="Règlement :" />
+							<hbox align="center">
+								<textbox id="oib-reglementLigne" maxlength="20" size="15" />
+							</hbox>
+						</column>
+						<column>
+							<label value="N° Pièce :" />
+							<hbox align="center">
+								<textbox id="oib-pieceLigne" maxlength="20" size="15" />
+							</hbox>
+						</column>
+						<column pack="center">
+							<box />
+							<button id="oib-annulerLigne" class="bIcoAnnuler" tooltiptext="Annuler" oncommand="oib_pressOnAnnulerLigne();" />
+						</column>
+						<column pack="center">
+							<box />
+							<button id="oib-validerLigne" class="bIcoValider" tooltiptext="Valider" oncommand="oib_pressOnValiderLigne();" />
+						</column>
+						<column pack="center">
+							<box />
+							<button id="oib-supprimerLigne" class="bIcoSupprimer" tooltiptext="Supprimer" oncommand="oib_pressOnSupprimerLigne();" />
+						</column>
+					</columns>
+				</grid>
+			</vbox>
+		</vbox>
+		
+		
+		<splitter collapse="before" resizebefore="closest" resizeafter="closest">
+			<grippy />
+		</splitter>
+		
+		
+		<vbox flex="10" style="overflow:hidden">
+		
+			<label class="label_16" value="Etape 2 : Génération des écritures de banque" />
+			
+			<hbox>
+				<grid>
+					<columns>
+						<column flex="1" />
+						<column flex="1" />
+						<column flex="1" />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Journal de banque : " />
+							<hbox>
+						 		<menulist id="oib-journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="oib_selectOnJournal()">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#Libelle_Long" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+										</menupopup>
+									</template>
+								</menulist>
+							</hbox>
+							<hbox>
+								<checkbox id="oib-chkCentralisee" label="Ecriture centralisée" />
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Compte de banque : " />
+							<hbox align="center">
+								<hbox>
+					          		<textbox id="oib-compteBanque" size="10" maxlength="8" value="51200000" />
+					          	</hbox>
+					          	<button id="oib-bRechBanque" class="bIcoRechercher" oncommand="oib_pressOnRechercherCompteBanque();" />
+				        	</hbox>
+							<hbox>
+								<checkbox id="oib-chkFusion" label="Concaténation des libellés" />
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Compte d'attente : " />
+							<hbox align="center">
+								<hbox>
+					          		<textbox id="oib-compteAttente" size="10" maxlength="8" value="47200000" />
+					          	</hbox>
+					          	<button id="oib-bRechAttente" class="bIcoRechercher" oncommand="oib_pressOnRechercherCompteJournal();" />
+				        	</hbox>
+							<box/>
+						</row>
+					</rows>
+				</grid>
+			</hbox>
+			
+			<box height="20px" />
+			
+			<hbox>
+				<box flex="1" />
+					<button id="oib-supprimer" class="bSupprimer" label="Supprimer l'import actuel" oncommand="oib_pressOnSupprimer();" />
+				<box flex="1" />
+					<button id="oib-rafraichir" class="bIcoActualiser" label="Rafraichir les écritures" oncommand="oib_pressOnRafraichir();" />
+				<box flex="1" />
+					<button id="oib-valider" class="bValider" label="Valider les écritures" oncommand="oib_pressOnValider();" />
+				<box flex="1" />
+			</hbox>
+			
+			<box height="20px" />
+			
+			
+			<vbox flex="1">
+				<tree id="oib-treeLigneEcriture" flex="1"
+					hidecolumnpicker="true"
+					datasources="rdf:null" 
+					ref="http://www.opensi.org/compta/import_banque">
+					<treecols>
+						<treecol label="Date" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Compte" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="Libellé" flex="6" />
+						<splitter class="tree-splitter" />
+						<treecol label="Règlement" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol class="nombre" label="Débit" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol class="nombre" label="Crédit" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Pièce" flex="1" />
+					</treecols>
+					<template>
+						<rule ECRITURE:type_desc="separator">
+							<treechildren>
+								<treeseparator uri="rdf:*" />
+							</treechildren>
+						</rule>
+						<rule>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Date" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Numero_Compte" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Libelle" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Mode_Reg" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Montant_D" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Montant_C" />
+										<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Num_Piece" />
+									</treerow>
+								 </treeitem>
+							</treechildren>
+						</rule>
+					</template>
+				</tree>
+			</vbox>
+			
+		</vbox>
+		
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_superviseur_dossiers_overlay-nouveauDossier4"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-nouveauDossier4.js" />
+
+	<vbox id="nouveauDossier4" flex="1">
+	  <hbox style="height:60px" />
+		<hbox pack="center">
+	    <label value="CREATION D'UN DOSSIER: ETAPE 4/4" class="label_16" />
+	  </hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+	    <label id="ond4-titre" class="label_14" />
+	  </hbox>
+		<hbox style="height:20px" />
+		<hbox flex="1">
+			<listbox flex="1" id="ond4-listeUtilisateurs" ref="http://www.opensi.org/Superviseur/listeUtilisateurs" datasources="rdf:null">
+				<listhead>
+	    		<listheader label="Login" />
+	    		<listheader label="Nom" />
+	    		<listheader label="Prénom" />
+	    		<listheader label="Fonction" />
+	    		<listheader label="Entreprise" />
+			 	</listhead>
+				<listcols>
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+	  		</listcols>
+				<template>
+					<listitem value="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#Utilisateur_Id" uri="rdf:*" allowevents="true">
+						<listcell type="checkbox" label="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#login" onclick="testCheck(this.parentNode);"/>
+						<listcell label="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#nom"/>
+						<listcell label="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#prenom"/>
+						<listcell label="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#fonction"/>
+						<listcell label="rdf:http://www.opensi.org/Superviseur/listeUtilisateurs/rdf#Entreprise"/>
+					</listitem>
+				</template>
+			</listbox>
+		</hbox>
+		<box style="height:20px" />
+		<hbox pack="center">
+	    <button label="Enregistrer" class="bEnregistrer" oncommand="ond4_enregistrer()" />
+	  </hbox>
+	  <box style="height:20px" />
+	</vbox>
+</overlay>

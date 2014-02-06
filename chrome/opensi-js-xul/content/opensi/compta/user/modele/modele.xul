@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_compta_user_modele_modele"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="modele.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	
+	<vbox flex="1">
+	
+		<label class="label_16" value="Gestion des modèles d'écriture" />
+	
+		<hbox flex="1" class="auto-overflow">
+			
+			<hbox flex="1">
+				<tree id="treeModele"
+		 				flex="1"
+		 				hidecolumnpicker="true"
+						flags="dont-build-content"
+						datasources="rdf:null"
+						ref="http://www.opensi.org/compta/modele"
+						onselect="selectOnTreeModele()"
+						seltype="single">
+					<treecols>
+						<treecol id="colTextRaccourci" label="Racc." flex="1" tooltiptext="Raccourci" />
+						<splitter class="tree-splitter" />
+						<treecol id="colRaccourci" collapsed="true" ignoreincolumnpicker="true" />
+						<splitter class="tree-splitter" />
+						<treecol id="colLibelle" label="Libellé" flex="10" />
+						<splitter class="tree-splitter" />
+						<treecol id="colTextEtat" label="Etat" flex="5" />
+						<treecol id="colModeleId" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="colEtat" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#textRaccourci" />
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Raccourci" />
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Libelle" />
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#TextEtat" />
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Mod_Ecr_Id" />
+									<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Etat" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+			</hbox>
+			
+			<groupbox>
+				<caption label="Fiche modèle" />
+				<vbox flex="1">
+					<hbox>
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+						 		<row align="center">
+							 		<label class="label" value="*Libellé : " />
+							 		<textbox id="libelle" onkeypress="keyPressOnLibelle(event);" size="30" maxlength="50" />
+							 	</row>
+							 	<row align="center">
+							 		<label class="label" value="Raccourci : " />
+							 		<menulist id="raccourci" sizetopopup="none" oncommand="changeOnRaccourci();">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+											<menuitem label="1" value="1" />
+											<menuitem label="2" value="2" />
+											<menuitem label="3" value="3" />
+											<menuitem label="4" value="4" />
+											<menuitem label="5" value="5" />
+											<menuitem label="6" value="6" />
+											<menuitem label="7" value="7" />
+											<menuitem label="8" value="8" />
+											<menuitem label="9" value="9" />
+										</menupopup>
+									</menulist>
+							 	</row>
+							</rows>
+						</grid>
+						
+					</hbox>
+					
+					<vbox>
+			 			<hbox flex="1" pack="center">
+			 				<button id="bNouveau" class="bNouveau" label="Nouveau" oncommand="pressOnNouveau();" />
+			 				<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="pressOnSupprimer();" disabled="true" />
+			 				<button id="bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="pressOnEnregistrer();" disabled ="true" />
+			 				<button id="bCopier" class="bCopier" label="Copier" oncommand="pressOnCopier();" disabled="true" />
+			 				<button id="bValider" class="bValider" label="Valider" oncommand="pressOnValider();" disabled="true" />
+			 			</hbox>
+			 		</vbox>
+			 		
+			 		<hbox>
+			 			<label value="Modèle d'écriture :" />
+			 		</hbox>
+			 		
+			 		<hbox flex="1">
+				 		<tree id="treeLigne"
+								flags="dont-build-content"
+								datasources="rdf:null" 
+								ref="http://www.opensi.org/compta/modele"
+								onselect="selectOnTreeLigne();"
+				 				flex="1"
+				 				hidecolumnpicker="true"
+								seltype="single">
+							<treecols>
+								<treecol id="colCompte" label="N° Compte" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="colLibelle" label="Libellé" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="colReglement" label="Règlement" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="colInfos" label="Infos" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol class="nombre" id="colDebit" label="Débit" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol class="nombre" id="colCredit" label="Crédit" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="colPiece" label="N° Pièce" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="colCalcul" label="Type de calcul" flex="1" />
+								<treecol id="colLigneId" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="colReglementId" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="colPeriode" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="colCalculId" collapsed="true" ignoreincolumnpicker="true" />
+							</treecols>
+							<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Compte" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Libelle" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Reglement" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Infos" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Debit" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Credit" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Piece" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Calcul" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Id" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#IdReg" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#Periode" />
+										<treecell label="rdf:http://www.opensi.org/compta/modele/rdf#IdCalc" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+							</template>
+						</tree>
+					</hbox>
+					
+					<vbox>
+						<box height="10px" />
+						<hbox>
+							<grid>
+								<columns>
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column flex="1" />
+									<column pack="center" />
+									<column pack="center" />
+									<column pack="center" />
+								</columns>
+								<rows>
+									<row align="center" flex="1">
+										<label value="N° Compte :" />
+										<label value="Libellé :" />
+										<label value="Règlement :" />
+										<label value="Infos :" />
+										<label value="Débit :" />
+										<label value="Crédit :" />
+										<label value="N° Pièce :" />
+										<label value="Type de calcul :" />
+									</row>
+									<row align="center" flex="1">
+										<hbox flex="1">
+											<textbox id="compteLigne" maxlength="8" size="10" onkeypress="keyPressOnCompte(event);" />
+										</hbox>
+										<hbox flex="1">
+											<textbox id="libelleLigne" maxlength="70" flex="1" />
+										</hbox>
+										<menulist id="filtreModesLigne" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:130px" sizetopopup="none">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+										<hbox flex="1">
+											<textbox id="infosLigne" maxlength="20" size="15" />
+										</hbox>
+										<hbox flex="1">
+											<textbox class="nombre" id="debitLigne" value="0.00" maxlength="17" size="7" />
+										</hbox>
+										<hbox flex="1">
+											<textbox class="nombre" id="creditLigne" value="0.00" maxlength="17" size="7" />
+										</hbox>
+										<hbox flex="1">
+											<textbox id="pieceLigne" maxlength="20" size="15" />
+										</hbox>
+										<menulist id="filtreCalculLigne" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:130px" sizetopopup="none">
+											<menupopup>
+												<menuitem label="[Choisir]" value="0" />
+												<menuitem label="Pourcentage" value="P" />
+												<menuitem label="Montant fixe" value="F" />
+												<menuitem label="Sans montant" value="S" />
+											</menupopup>
+										</menulist>
+										<button id="bAnnulerLigne" class="bIcoAnnuler" tooltiptext="Annuler" oncommand="pressOnAnnulerLigne();" />
+										<button id="bValiderLigne" class="bIcoValider" tooltiptext="Valider" oncommand="pressOnValiderLigne();" />
+										<button id="bSupprimerLigne" class="bIcoSupprimer" tooltiptext="Supprimer" oncommand="pressOnSupprimerLigne();" />
+									</row>
+								</rows>
+							</grid>
+						</hbox>
+						<hbox>
+							<checkbox id='chkPeriode' label="Insérer la période en fin de libellé" />
+						</hbox>
+					</vbox>
+				</vbox>
+			</groupbox>
+			
+		</hbox>
+		
+	</vbox>
+
+</window>

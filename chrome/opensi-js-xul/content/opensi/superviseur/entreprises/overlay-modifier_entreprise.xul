@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="overlay_modifier_entreprise"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-modifier_entreprise.js" />
+  
+  <vbox id="modifier_entreprise">
+
+		<tabbox flex="1" id="tab-modification">
+			<tabs>
+      	<tab label="Entreprise" />
+      	<tab label="Droits sur dossiers" />
+     	</tabs>
+  		<tabpanels flex="1">
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+		    			<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label id="labEntreprise" class="label_16" />
+						  </hbox>
+							<hbox style="height:40px" />
+		    			<hbox pack="center" flex="1">
+								<grid align="center">
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<label class="label" value="* Dénomination :" />
+											<textbox id="me-Denomination" maxlength="50" size="31" />
+										</row>
+										<row align="center">
+											<label class="label" value="Téléphone :" />
+											<hbox><textbox id="me-Tel" maxlength="20" size="21" /></hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="Email :" />
+											<textbox id="me-Email" maxlength="60" size="31" />
+										</row>										
+										<row align="center">
+											<label class="label" value="" />
+											<checkbox id="me-No_Mail" label="Pas d'e-mail" oncommand="checkModifierMail();" />
+										</row>
+										<row align="center">
+											<label class="label" value="Responsable :" />
+											<hbox><textbox id="me-Responsable" maxlength="60" size="31" /></hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="" />
+											<checkbox id="me-Actif" label="Actif" disabled="true" />
+										</row>
+										<row align="center">
+											<label class="label" value="Droits d'accès :" />
+											<vbox>
+												<checkbox id="me-gesco" label="Gestion commerciale" />
+												<checkbox id="me-compta" label="Comptabilité" />
+												<checkbox id="me-contact" label="Gestion des contacts" />
+											</vbox>
+										</row>
+										<hbox style="height:10px" />
+										<row align="center">
+											<label class="label" value="" />
+											<hbox>
+												<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierEntreprise();" />
+												<button id="bActiver" label="Activer" oncommand="changerEtatEntreprise(true);" />
+												<button id="bDesactiver" label="Désactiver" oncommand="changerEtatEntreprise(false);" />
+											</hbox>
+										</row>
+									</rows>
+								</grid>
+							</hbox>
+						</vbox>
+					</hbox>
+    		</tabpanel>
+    		
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+		    			<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label value="Liste des droits d'accès sur dossiers" class="label_16" />
+						  </hbox>
+							<hbox style="height:40px" />
+							<hbox pack="center">
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Dossiers non autorisés" /></hbox>
+								</vbox>
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Dossiers autorisés" /></hbox>
+								</vbox>
+							</hbox>
+							<hbox style="height:10px" />
+							<hbox flex="1">
+								<vbox flex="1" >
+									    <tree id="liste_dossiers_interdits"
+						          hidecolumnpicker="true"
+						          seltype="multiple"
+						          ref="http://www.opensi.org/Superviseur/listeDossiersInterdits"
+						          datasources="rdf:null"
+											flex="1"
+						          style="min-height: 150px;"
+											onselect="pressOnDossiersInterdits();">
+						
+						      <treecols>
+						        <treecol flex="1" id="ldi-ColDossier_Id" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiersInterdits/rdf#Dossier_Id" />
+						        <treecol flex="1" id="ldi-ColDenomination" label="Nom dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiersInterdits/rdf#Denomination" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiersInterdits/rdf#Dossier_Id" />
+						              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiersInterdits/rdf#Denomination" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>
+								</vbox>
+								<vbox align="center">
+										<hbox flex="1">
+											<vbox pack="center"><button id="bAjouterDossiers" class="bIcoAvanceRapide" oncommand="ajouterDossiersAccessibles();" /></vbox>
+										</hbox>
+										<hbox flex="1">
+											<vbox pack="center"><button id="bEnleverDossiers" class="bIcoRetourRapide" oncommand="enleverDossiersAccessibles();" /></vbox>
+										</hbox>
+								</vbox>
+								<vbox flex="1" >
+									<tree id="liste_dossiers_accessibles"
+							      hidecolumnpicker="true"
+						        seltype="multiple"
+						        ref="http://www.opensi.org/Superviseur/listeDossiersAccessibles"
+						        datasources="rdf:null"
+										flex="1"
+						        style="min-height: 150px;"
+										onselect="pressOnDossiersAccessibles();">
+						
+						      <treecols>
+						        <treecol flex="1" id="lda-ColDossier_Id" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiersAccessibles/rdf#Dossier_Id" />
+						        <treecol flex="1" id="lda-ColDenomination" label="Nom dossier" sort="rdf:http://www.opensi.org/Superviseur/listeDossiersAccessibles/rdf#Denomination" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiersAccessibles/rdf#Dossier_Id" />
+						              <treecell label="rdf:http://www.opensi.org/Superviseur/listeDossiersAccessibles/rdf#Denomination" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>						    	
+								</vbox>
+						  </hbox>
+						</vbox>
+					</hbox>
+    		</tabpanel>
+    		
+    	</tabpanels>
+    </tabbox>
+
+	</vbox>
+</overlay>

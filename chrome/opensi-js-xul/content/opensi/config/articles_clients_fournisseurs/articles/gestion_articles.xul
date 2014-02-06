@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_articles"
+  flex="1"
+  onload="init()"
+  pack="center"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestion_articles.js" />
+
+	<hbox style="height:30px" />
+	<hbox pack="center" flex="10" style="overflow:auto">
+	<vbox pack="center" flex="1">
+  	<hbox pack="center" flex="1">
+    	<tree id="liste_article"
+						hidecolumnpicker="true"
+          	ref="http://www.opensi.org/Config/listeArticle"
+          	seltype="multiple"
+          	datasources="rdf:null"
+						onselect="pressOnListeArticle()"
+						flex="1">
+      	<treecols>
+        	<treecol id="code" flex="2" label="Référence" sort="rdf:http://www.opensi.org/Config/listeArticle/rdf#code" />
+        	<treecol id="designation" flex="4" label="Désignation" sort="rdf:http://www.opensi.org/Config/listeArticle/rdf#designation" />
+        	<treecol id="marque" flex="2" label="Marque" sort="rdf:http://www.opensi.org/Config/listeArticle/rdf#marque" />
+        	<treecol id="famille 1" flex="4" label="Famille" sort="rdf:http://www.opensi.org/Config/listeArticle/rdf#famille1" />
+      	</treecols>
+      	<template>
+          	<treechildren>
+            	<treeitem uri="rdf:*">
+              	<treerow>
+                	<treecell label="rdf:http://www.opensi.org/Config/listeArticle/rdf#code" />
+                	<treecell label="rdf:http://www.opensi.org/Config/listeArticle/rdf#designation" />
+                	<treecell label="rdf:http://www.opensi.org/Config/listeArticle/rdf#marque" />
+                	<treecell label="rdf:http://www.opensi.org/Config/listeArticle/rdf#famille1" />
+              	</treerow>
+            	</treeitem>
+          	</treechildren>
+      	</template>
+    	</tree>
+    </hbox>
+			<hbox width="50px" />
+		 <hbox pack="center" ><button id="bRestaurer" label="Restaurer" oncommand="reinitialiser()" /> </hbox>
+			<hbox height="40px" />
+       
+				
+	</vbox>
+		
+	</hbox>
+	<hbox flex="1"/>
+
+</window>

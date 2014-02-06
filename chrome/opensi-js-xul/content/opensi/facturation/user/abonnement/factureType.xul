@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_abonnement_facturetype"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="factureType.js" />
+
+	<tabpanel id="factureType">
+		<vbox flex="1" class="auto-overflow">
+			<hbox flex="1">
+				<groupbox flex="3" pack="top" align="center">
+					<caption label="Paramètres facture" id="FactureType" />
+						<hbox>
+							<vbox pack="center">
+								<label class="label" value="Responsable :"  />
+							</vbox>
+							<vbox>
+								<menulist id="Login_Resp" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null" oncommand="menu_abonnement_setModifie(true);">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+      						</menupopup>
+									<template>
+       							<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+       							</menupopup>
+									</template>
+       					</menulist>
+							</vbox>
+							<hbox id="row_tarif" pack="center" align="center">
+								<label class="label" value="Code tarifaire :" />
+								<menulist id="tarif" ref="http://www.opensi.org/facturation/liste_types_tarifs" datasources="rdf:null" oncommand="menu_abonnement_setModifie(true);">
+				  				<template>
+	            			<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Valeur" />
+	            			</menupopup>
+									</template>
+		  				  </menulist>
+							</hbox>
+						</hbox>
+					</groupbox>
+				</hbox>
+			
+				<hbox flex="5">
+					<vbox flex="1">
+
+						<tree id="articles"
+          				flex="1"
+          				hidecolumnpicker="true"
+									flags="dont-build-content"
+          				seltype="single"
+          				ref="http://www.opensi.org/facturation/articles_modele"
+          				datasources="rdf:null"
+									ondblclick="FactureType_ouvrirCommentaire();"
+									onselect="FactureType_ouvrirLigne();">
+
+      				<treecols>
+        				<treecol id="ColReference" label="Référence" flex="2" />
+								<splitter class="tree-splitter" />
+        				<treecol id="ColDesignation" label="Désignation" flex="5" />
+								<splitter class="tree-splitter" />
+        				<treecol id="ColQuantite" label="Quantité" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+        				<treecol id="ColPU" label="P.U HT" flex="2" style="text-align:right" />
+								<splitter class="tree-splitter" />
+        				<treecol id="ColRistourne" label="Ristourne (%)" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+        				<treecol id="ColTotal" label="Total HT" flex="2" style="text-align:right" />
+								<treecol id="ColCode_TVA" collapsed="true" />
+								<treecol id="ColType_Ligne" collapsed="true" />
+								<treecol id="ColLigne_Id" collapsed="true" />
+								<treecol id="ColLibelle" collapsed="true" />
+      				</treecols>
+      				<template>
+        				<treechildren>
+          				<treeitem uri="rdf:*">
+            				<treerow>
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Reference" />
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Designation" />
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Quantite" />
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Prix" />
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Ristourne" />
+              				<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Total" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Code_TVA" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Type_Ligne" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Ligne_Id" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_modele/rdf#Libelle" />
+            				</treerow>
+          				</treeitem>
+        				</treechildren>
+      				</template>
+    				</tree>
+
+					<grid>
+						<rows>
+							<row />
+							<row />
+						</rows>
+						<columns>
+							<column>
+								<hbox align="end"><label value="Référence :" /></hbox>
+								<hbox><textbox id="Reference" maxlength="40" size="15" onkeypress="FactureType_pressOnReference(event);" /></hbox>
+							</column>
+							<column flex="1">
+								<hbox align="end"><label value="Désignation :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="Designation" flex="1" maxlength="50" style="margin-left:0px" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label value="Qté :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="Quantite" maxlength="15" size="7" class="nombre" style="margin-left:0px" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label id="lblPU" value="P.U HT :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="PU" maxlength="16" size="14" class="nombre" style="margin-left:0px" onkeypress="FactureType_evaluer(this, event);" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label value="Ristourne :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="Ristourne" maxlength="15" size="8" class="nombre" style="margin-left:0px" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label class="label" value="Tva :" style="margin-left:0px" /></hbox>
+        				<hbox>
+									<menulist id="Code_TVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null" style="margin-left:0px">
+										<template>
+           						<menupopup>
+												<menuitem uri="rdf:*"
+													label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA"
+													value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA"/>
+            					</menupopup>
+										</template>
+            			</menulist>
+								</hbox>
+							</column>
+							<column>
+								<hbox align="center">
+									<button id="bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="FactureType_rechercherStock();" style="margin-left:0px" flex="1" />
+									<button id="bCommentaire" class="bIcoCommentaire" tooltiptext="éditer les commentaires sur ligne" oncommand="FactureType_editerCommentaire();" style="margin-left:0px" flex="1" />
+								</hbox>
+								<hbox>
+									<button id="bAnnuler" class="bIcoAnnuler" tooltiptext="annuler la ligne" oncommand="FactureType_annulerLigne();" style="margin-left:0px" />
+									<button id="bValider" class="bIcoValider" tooltiptext="valider la ligne" oncommand="FactureType_validerLigne();" style="margin-left:0px" />
+									<button id="bSupprimer" class="bIcoSupprimer" tooltiptext="supprimer la ligne" oncommand="FactureType_supprimerLigne();" style="margin-left:0px" />
+								</hbox>								
+							</column>
+						</columns>
+					</grid>
+				</vbox>
+			</hbox>
+
+			<hbox flex="1">
+				
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Commentaires" />	
+					<textbox id="Commentaires" multiline="true" cols="45" rows="6" oninput="menu_abonnement_setModifie(true);" />
+					<hbox pack="center"><button id="bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="FactureType_choisirMentions();" /></hbox>
+				</groupbox>
+				
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Paramètres" />
+					<command id="maj" oncommand="FactureType_calculTotaux();" />
+					<grid>
+						<rows>
+							<row align="center">
+								<label value="Mode de règlement :" class="label" />
+								<hbox>
+									<menulist id="Mode_Reg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+              				<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+              				</menupopup>
+										</template>
+            			</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<hbox align="center" pack="end">
+									<label class="label" value="Remise en" />
+									<button id="bRemise" oncommand="FactureType_switchRemise();" class="bIcoPourcentage" />
+									<label value=":" />
+								</hbox>
+								<hbox><textbox id="Remise" onkeypress="FactureType_evaluer(this, event);" maxlength="5" size="10" timeout="200" command="maj" type="timed" oninput="setModifie(true);" class="nombre" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" id="lblFrais_Port" value="Frais de port :" />
+								<hbox><textbox id="Frais_Port" onkeypress="FactureType_evaluer(this, event);" maxlength="12" size="10" timeout="200" command="maj" type="timed" oninput="menu_abonnement_setModifie(true);" class="nombre" /></hbox>
+							</row>
+							<row align="center">
+								<hbox align="center" pack="end">
+									<label class="label" value="Remise sur frais de port en" />
+									<button id="bRemiseFP" oncommand="FactureType_switchRemiseFP();" class="bIcoPourcentage" />
+									<label value=":" />
+								</hbox>
+								<hbox><textbox id="RemiseFP" onkeypress="FactureType_evaluer(this, event);" maxlength="5" size="10" timeout="200" command="maj" type="timed" oninput="menu_abonnement_setModifie(true);" class="nombre" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Escompte (%) :" />
+								<hbox><textbox id="Escompte" onkeypress="FactureType_evaluer(this, event);" maxlength="5" size="10" timeout="200" command="maj" type="timed" oninput="menu_abonnement_setModifie(true);" class="nombre" /></hbox>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Totaux" />
+					<grid id="piedHT">
+        		<columns>
+          		<column />
+          		<column />
+        		</columns>
+        		<rows>
+          		<row align="center">
+            		<label class="label" value="Montant HT :" />
+            		<label id="MontantHT" style="text-align:right" />
+							</row>
+							<row id="rowRemiseHT" align="center">
+  							<label class="label" value="Remise :" />
+  							<label id="MontantRemise" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Frais de port :" />
+  							<label id="MontantFrais_Port" style="text-align:right" />
+							</row>
+							<row align="center" id="rowRemiseFPHT">
+		  					<label class="label" value="Remise sur frais de port :" />
+		  					<label id="MontantRemiseFP" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Total HT :" />
+  							<label id="TotalHT" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="TVA :" />
+  							<label id="TVA" style="text-align:right" />
+							</row>
+							<row id="rowMontantTTC" align="center">
+  							<label class="label" value="Montant TTC :" />
+  							<label id="MontantTTC" style="text-align:right" />
+							</row>
+							<row id="rowEscompteHT" align="center">
+  							<label class="label" value="Escompte :" />
+  							<label id="MontantEscompte" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Total TTC :" />
+  							<label id="TotalTTC" style="text-align:right" />
+							</row>
+        		</rows>
+      		</grid>
+					<grid id="piedTTC" collapsed="true">
+        		<columns>
+          		<column />
+          		<column />
+        		</columns>
+        		<rows>
+							<row align="center">
+  							<label class="label" value="Montant TTC :" />
+  							<label id="pttcMontantTTC" style="text-align:right" />
+							</row>
+							<row id="rowRemiseTTC" align="center">
+  							<label class="label" value="Remise :" />
+  							<label id="pttcMontantRemise" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Frais de port :" />
+  							<label id="pttcMontantFrais_Port" style="text-align:right" />
+							</row>
+							<row align="center" id="rowRemiseFPTTC">
+		  					<label class="label" value="Remise sur frais de port :" />
+		  					<label id="pttcMontantRemiseFP" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Total TTC :" />
+  							<label id="pttcTotalTTC" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Dont TVA :" />
+  							<label id="pttcTVA" style="text-align:right" />
+							</row>
+							<row id="rowEscompteTTC" align="center">
+  							<label class="label" value="Escompte :" />
+  							<label id="pttcMontantEscompte" style="text-align:right" />
+							</row>
+							<row align="center">
+  							<label class="label" value="Net à payer :" />
+  							<label id="pttcNetTTC" style="text-align:right" />
+							</row>					
+        		</rows>
+      		</grid>
+				</groupbox>
+
+			</hbox>
+			
+			<label id="Type_Ligne" collapsed="true" />
+			<label id="Tarif_Id" collapsed="true" />
+			<label id="Ligne_Id" collapsed="true" />
+			<label id="Libelle" collapsed="true" />
+			<label id="Modifie" collapsed="true" value="n" />
+		</vbox>
+	</tabpanel>
+	
+</overlay>

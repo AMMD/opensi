@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_cloture_optionsCloture" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_cloture.js" />
+
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:60px" />
+	<hbox pack="center">
+    <label value="CLOTURE D'UN EXERCICE COMPTABLE (1/2)" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<label id="Ancien_Exercice" />	
+	</hbox>
+	<hbox pack="center">
+		<label id="Nouvel_Exercice" />
+	</hbox>
+	<hbox style="height:30px" />
+	<hbox pack="center">
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="Date de fin du nouvel exercice (jj/mm/aaaa) :" id="labelDate_Fin" collapsed="true" />
+					<hbox><textbox id="Date_Fin" size="11" maxlength="10" collapsed="true" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Ecriture d'A Nouveau à générer au journal :" />
+					<hbox>
+						<menulist id="JournalAN" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null"> 
+      				<template>
+        				<menupopup>
+          				<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+        				</menupopup>
+      				</template>
+    				</menulist>
+					</hbox>
+				</row>
+				<row align="center">
+					<label value="" />
+					<checkbox id="DetailTiers" label="Détail des comptes de tiers" checked="true" />
+				</row>
+				<row align="center">
+					<label value="" />
+					<checkbox id="DetailAux" label="Détail des comptes auxiliaires" checked="true" />
+				</row>
+				<row align="center">			
+					<label value="" />
+					<checkbox id="AExtourner" label="Extourner un journal" checked="false" oncommand="displayEX(!this.checked)" />
+				</row>
+				<row align="center">
+					<label class="label" value="Code Journal :" id="labelJournalEX" collapsed="true" />
+					<hbox>
+						<menulist id="JournalEX" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" collapsed="true" oncommand="initPeriodesEX();"> 
+      				<template>
+        				<menupopup>
+          				<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+        				</menupopup>
+      				</template>
+    				</menulist>
+					</hbox>		
+				</row>
+				<row align="center">
+					<label class="label" value="Période :" id="labelDateEX" collapsed="true" />
+					<hbox>
+						<menulist id="DateEX" ref="http://www.opensi.org/compta/periodes_extourne" datasources="rdf:null" collapsed="true"> 
+      				<template>
+        				<menupopup>
+          				<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/periodes_extourne/rdf#PeriodeLabel" value="rdf:http://www.opensi.org/compta/periodes_extourne/rdf#Periode" />
+        				</menupopup>
+      				</template>
+    				</menulist>
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+	</hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+    <button class="bValider" id="bOK" label="Ok" oncommand="precloture()" />
+  </hbox>
+	<hbox style="height:60px" />
+	<vbox id="progression" align="center" collapsed="true">
+		<label value="Veuillez patienter..." />
+		<hbox style="height:30px" />
+		<progressmeter id="pm" />
+	</vbox>
+	
+</window>

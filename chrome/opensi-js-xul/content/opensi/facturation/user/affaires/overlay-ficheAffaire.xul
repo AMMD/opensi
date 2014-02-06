@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_affaires_overlayFicheAffaire"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-ficheAffaire.js" />
+
+	<vbox id="ficheAffaire" flex="1">
+		<label class="label_16" id="ofa-numAffaire" value="Affaire" />
+		<box height="20px" />
+		
+		<hbox flex="1">
+		
+			<groupbox align="center" flex="1" orient="vertical">
+				<caption id="ofa-lblAffaire" label="Fiche affaire" />
+
+				<hbox flex="1">
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="N° Client :" />
+								<hbox align="center">
+									<hbox flex="1" align="center"><label id="ofa-clientId" /></hbox>
+									<button id="ofa-bRechercher" class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="ofa_rechercherClient();" />
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="* Raison sociale :" />
+								<textbox id="ofa-raisonSociale" oninput="ofa_setModifie(true);" maxlength="50" />
+							</row>
+							<row align="center">
+								<label class="label" value="Téléphone :" />
+								<textbox id="ofa-telephone" oninput="ofa_setModifie(true);" maxlength="20" />
+							</row>
+							<row align="center">
+								<label class="label" value="Fax :" />
+								<textbox id="ofa-fax" oninput="ofa_setModifie(true);" maxlength="20" />
+							</row>
+							<row align="center">
+								<label value="Email :" class="text-link" style="text-align:right" onclick="ouvrirLienMail('ofa-email')" />
+								<textbox id="ofa-email" oninput="ofa_setModifie(true);" maxlength="64" />
+							</row>
+							<row height="30px" />
+							<row>
+								<label class="label" value="Commentaires :" />
+								<textbox id="ofa-commentaires" multiline="true" cols="20" rows="6" oninput="ofa_setModifie(true);" />
+							</row>
+						</rows>
+					</grid>
+					
+					<box style="width:20px" />
+					
+					<grid flex="1">
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Etat d'avancement :" />
+								<label id="ofa-etatAvancement" />
+							</row>
+							<row align="center">
+								<label class="label" value="Intitulé :" />
+								<hbox>
+									<textbox id="ofa-intitule" oninput="ofa_setModifie(true);" maxlength="20" />
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Responsable :" />
+								<hbox>
+									<menulist id="ofa-responsable" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null" oncommand="ofa_setModifie(true);">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+		             		</menupopup>
+										<template>
+		              		<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+		              		</menupopup>
+										</template>
+		            	</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Mode de facturation :" />
+								<hbox>
+									<menulist id="ofa-typeFacturation" oncommand="ofa_pressOnTypeFacturation(); ofa_setModifie(true);">
+										<menupopup>
+											<menuitem label="Commande" value="CC" />
+											<menuitem label="Bon de Livraison" value="BL" />
+											<menuitem label="Groupement de Commandes" value="GC" />
+											<menuitem label="Groupement d'Affaires" value="GA" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label value="" />
+								<checkbox id="ofa-modeFacturation" label="Facturable avant livraison" oncommand="ofa_setModifie(true);" />
+							</row>
+							<row align="center">
+								<label value="" />
+								<checkbox id="ofa-chkSansLivraison" label="Sans livraison" oncommand="ofa_pressOnSansLivraison(); ofa_setModifie(true);" />
+							</row>
+			        <row align="center">
+								<label class="label" value="Période de facturation :" />
+								<hbox>
+									<menulist id="ofa-periodeFacturation" oncommand="ofa_pressOnPeriodeFacturation(); ofa_setModifie(true);">
+				            <menupopup>
+											<menuitem label="Immédiate" value="I" />
+											<menuitem label="Fin de mois" value="M" />
+											<menuitem label="A partir d'une date" value="D" />
+				            </menupopup>
+				        	</menulist>
+				        	<textbox id="ofa-dateDebutPeriode" size="10" maxlength="10" oninput="ofa_setModifie(true);" />
+				        </hbox>
+			        </row>
+			        <row align="center">
+								<label class="label" value="Mode d'envoi de la facture :" />
+								<hbox>
+									<menulist id="ofa-modeEnvoiFacture" oncommand="ofa_setModifie(true);">
+				            <menupopup>
+											<menuitem label="Courrier" value="C" />
+											<menuitem label="Fax" value="F" />
+											<menuitem label="Mail" value="M" />
+				            </menupopup>
+				        	</menulist>
+				        </hbox>
+			        </row>
+			        <row align="center" id="ofa-rowActivationCP" collapsed="true">
+			        	<label value="" />
+			        	<checkbox id="ofa-activationCP" label="Activer les codes produits automatiquement à la livraison" oncommand="ofa_setModifie(true);" />
+			        </row>
+			        <row id="ofa-rowFacturationFP" align="center">
+			        	<label value="" />
+			        	<checkbox id="ofa-factSepFP" label="Facturer les frais de port à part" oncommand="ofa_setModifie(true);" />
+			        </row>
+							<row align="center">
+								<label class="label" value="Fichiers associés :" />
+								<hbox>
+									<button label="Voir les fichiers" oncommand="ofa_pressOnFichiers();" />
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+				
+				<hbox pack="center" id="ofa-boxBoutonsAffaire" collapsed="true">
+					<button id="ofa-bAnnuler" class="bAnnuler" label="Annuler l'affaire" tooltiptext="annuler l'affaire" oncommand="ofa_pressOnAnnuler();" />
+					<button id="ofa-bEnregistrer" class="bEnregistrer" label="Enregistrer" tooltiptext="enregistrer l'affaire" oncommand="ofa_pressOnEnregistrer();" />
+				</hbox>
+				
+				<box style="height:20px" />
+			</groupbox>
+			
+			<box style="width:10px" />
+			
+			<vbox flex="1" id="ofa-boxEncaissements">
+				<groupbox orient="vertical">
+					<caption label="Récapitulatif affaire" />
+					
+					<hbox pack="center">
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Nombre de commandes :" />
+									<label id="ofa-nbCommandesEnCours" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="CA HT Commandes :" />
+									<label id="ofa-caHTCommandesEnCours" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Prix d'achat HT des commandes :" />
+									<label id="ofa-paHTCommandes" class="label" />
+								</row>
+								<row align="center">
+									<hbox pack="end">
+										<vbox align="center"><image id="ofa-pictoMargeNegative" src="chrome://opensi/content/design/icones/alerte.png" /></vbox>
+										<label class="label" id="ofa-lblMargeHT" value="Marge HT de l'affaire :" />
+									</hbox>
+									<label id="ofa-margeHTAffaire" class="label" />
+								</row>
+							</rows>
+						</grid>
+						<box style="width:10px" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Nombre d'articles commandés :" />
+									<label id="ofa-nbArticlesALivrer" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Nombre d'articles déjà livrés :" />
+									<label id="ofa-nbArticlesDejaLivres" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Nombre d'articles restant à livrer :" />
+									<label id="ofa-nbArticlesRestantALivrer" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Avancement de l'affaire :" />
+									<label id="ofa-avancementAffaire" class="label" />
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+				</groupbox>
+
+				<box style="height:20px" />
+				
+				<groupbox flex="1" orient="vertical">
+					<caption label="Suivi des encaissements" />
+					
+					<hbox>
+						<hbox align="top">
+							<label value="CA TTC facturé :" />
+							<label id="ofa-caTTCFacture" />
+						</hbox>
+						<box style="width:20px" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+								<column />
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="CA TTC payé :" />
+									<label class="label" id="ofa-caTTCPaye" />
+									<label class="label" value="soit :" />
+									<label class="label" id="ofa-pourcCATTCPaye" />
+									<label class="label" value="% du facturé" />
+								</row>
+								<row align="center">
+									<label class="label" value="Solde à encaisser :" />
+									<label class="label" id="ofa-soldeAEncaisser" />
+									<label class="label" value="soit :" />
+									<label class="label" id="ofa-pourcSoldeAEncaisser" />
+									<label class="label" value="% du facturé" />
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+					
+					<tree
+						id="ofa-listeReglements"
+		      	flex="1"
+		      	hidecolumnpicker="true"
+		      	seltype="single"
+		      	ref="http://www.opensi.org/facturation/liste_reglements"
+		      	datasources="rdf:null"
+						flags="dont-build-content"
+						enableColumnDrag="true"
+					>
+		    		<treecols>
+		      		<treecol label="Type" flex="1" />
+							<splitter class="tree-splitter" />
+		      		<treecol label="Date" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol label="Mode de règlement" flex="1" />
+							<splitter class="tree-splitter" />
+							<treecol label="Montant" flex="1" class="nombre" />
+		    		</treecols>
+		    		<template>
+		      		<treechildren>
+		        		<treeitem uri="rdf:*">
+		          		<treerow>
+		            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Type" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Date_Reglement" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reglement" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Montant" />
+		          		</treerow>
+		        		</treeitem>
+		      		</treechildren>
+		    		</template>
+		  		</tree>
+		  		<box style="height:20px" />
+				</groupbox>
+			</vbox>
+		</hbox>
+
+		<box height="20px" />
+
+		<hbox flex="2">
+			<groupbox flex="10">
+				<caption label="Commandes" />
+
+				<tree
+					id="ofa-listeCommandes"
+	      	flex="1"
+	      	hidecolumnpicker="true"
+	      	seltype="single"
+	      	ref="http://www.opensi.org/facturation/liste_commandes"
+	      	datasources="rdf:null"
+					flags="dont-build-content"
+					ondblclick="ofa_pressOnListeCommandes();"
+					enableColumnDrag="true"
+					style="margin:0px"
+				>
+	    		<treecols>
+	      		<treecol label="Date" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Numéro" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="Référence" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Etat" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="Nb Lignes" flex="1" class="nombre" />
+						<splitter class="tree-splitter" />
+						<treecol label="Total HT" flex="1" class="nombre" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut paiement" width="20px" tooltiptext="Statut de paiement" class="treecol-image" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut facturation" width="20px" tooltiptext="Statut de facturation" class="treecol-image" />
+						<treecol id="ofa-colCommandeId" collapsed="true" ignoreincolumnpicker="true" />
+	    		</treecols>
+	    		<template>
+	      		<treechildren>
+	        		<treeitem uri="rdf:*">
+	          		<treerow>
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Date" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Numero" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Reference" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Etat" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Nb_Lignes" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Total_HT" />
+	            		<treecell src="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Paiement" />
+	                <treecell src="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Facturation" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Commande_Id" />
+	          		</treerow>
+	        		</treeitem>
+	      		</treechildren>
+	    		</template>
+	  		</tree>
+	  		
+	  		<hbox style="margin:0px" id="ofa-boxBoutonsCommande" collapsed="true">
+	  			<button id="ofa-bNouvelleCommande" class="bNouveau" tooltiptext="nouvelle commande" label="Nouvelle commande" oncommand="ofa_pressOnNouvelleCommande();" />
+	  		</hbox>
+			</groupbox>
+			
+			<groupbox flex="1">
+				<caption label="Bons de livraison" />
+				
+				<tree
+					id="ofa-listeBL"
+	      	flex="1"
+	      	hidecolumnpicker="true"
+	      	seltype="single"
+	      	ref="http://www.opensi.org/facturation/liste_bons_livraison"
+	      	datasources="rdf:null"
+					flags="dont-build-content"
+					onselect="ofa_selectOnListeBL();"
+					ondblclick="ofa_pressOnListeBL();"
+					enableColumnDrag="true"
+					style="margin:0px"
+				>
+	    		<treecols>
+	      		<treecol label="Date" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Numéro" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Etat" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Expédition" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol label="Nb Lignes" flex="1" class="nombre" />
+						<treecol id="ofa-colBonId" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ofa-colFournisseur" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ofa-colTypeBon" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ofa-colEtat" collapsed="true" ignoreincolumnpicker="true" />
+	    		</treecols>
+	    		<template>
+	      		<treechildren>
+	        		<treeitem uri="rdf:*">
+	          		<treerow>
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Date" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Numero" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#LblEtat" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Expedition" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Nb_Lignes" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Bon_Id" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Fournisseur" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Type_Bon" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_bons_livraison/rdf#Etat" />
+	          		</treerow>
+	        		</treeitem>
+	      		</treechildren>
+	    		</template>
+	  		</tree>
+			
+				<hbox style="margin:0px" id="ofa-boxBoutonsBL" collapsed="true">
+					<button id="ofa-bNouveauBL" class="bNouveau" tooltiptext="nouveau bon de livraison" label="Nouveau BL" oncommand="ofa_pressOnNouveauBL();" />
+					<spacer flex="1"/>
+					<button id="ofa-bNouveauBLF" class="bNouveau" tooltiptext="nouveau bon de livraison fournisseur" label="Nouveau BL Fournisseur" oncommand="ofa_pressOnNouveauBLF();" />
+					<spacer flex="1"/>
+					<button id="ofa-bNouveauBR" class="bNouveau" tooltiptext="nouveau bon de retour" label="Nouveau BR" oncommand="ofa_pressOnNouveauBR();" />
+				</hbox>
+			</groupbox>
+			
+			<groupbox flex="5">
+				<caption label="Factures / Avoirs" />
+				
+				<tree
+					id="ofa-listeFacturesAvoirs"
+	      	flex="1"
+	      	hidecolumnpicker="true"
+	      	seltype="single"
+	      	ref="http://www.opensi.org/facturation/liste_factures_avoirs"
+	      	datasources="rdf:null"
+					flags="dont-build-content"
+					ondblclick="ofa_pressOnListeFacturesAvoirs();"
+					onselect="ofa_selectOnListeFacturesAvoirs();"
+					enableColumnDrag="true"
+					style="margin:0px"
+				>
+	    		<treecols>
+	      		<treecol label="Date" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Numéro" flex="1" />
+						<splitter class="tree-splitter" />
+	      		<treecol label="Nb Lignes" flex="1" class="nombre" />
+	      		<splitter class="tree-splitter" />
+	      		<treecol label="Total HT" flex="1" class="nombre" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut paiement" width="20px" tooltiptext="Statut de paiement" class="treecol-image" />
+	      		<treecol id="ofa-colValide" collapsed="true" ignoreincolumnpicker="true" />
+	      		<treecol id="ofa-colDocId" collapsed="true" ignoreincolumnpicker="true" />
+	      		<treecol id="ofa-colTypeDoc" collapsed="true" ignoreincolumnpicker="true" />
+	    		</treecols>
+	    		<template>
+	      		<treechildren>
+	        		<treeitem uri="rdf:*">
+	          		<treerow>
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Date" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Numero" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Nb_Lignes" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Total_HT" />
+	            		<treecell src="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Statut_Paiement" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Valide" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Doc_Id" />
+	            		<treecell label="rdf:http://www.opensi.org/facturation/liste_factures_avoirs/rdf#Type_Doc" />
+	          		</treerow>
+	        		</treeitem>
+	      		</treechildren>
+	    		</template>
+	  		</tree>
+			
+				<hbox style="margin:0px" id="ofa-boxBoutonsFacture" collapsed="true">
+					<hbox>
+						<button id="ofa-bNouvelleFacture" class="bNouveau" tooltiptext="nouvelle facture" label="Nouvelle facture" oncommand="ofa_pressOnNouvelleFacture();" />
+					</hbox>
+					<hbox pack="end" flex="1">
+						<button id="ofa-bNouvelAvoir" class="bNouveau" tooltiptext="nouvel avoir" label="Nouvel avoir" oncommand="ofa_pressOnNouvelAvoir();" />
+					</hbox>
+				</hbox>
+			</groupbox>
+		</hbox>
+		
+		<statusbar>
+			<statusbarpanel id="ofa-creation" />
+			<statusbarpanel id="ofa-modification" />
+			<statusbarpanel id="ofa-fiche" flex="1" style="text-align:right;font-weight:bold;" />
+		</statusbar>
+	</vbox>
+
+</overlay>

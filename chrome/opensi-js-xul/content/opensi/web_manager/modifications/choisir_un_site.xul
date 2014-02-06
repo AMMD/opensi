@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_paramserveur" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="choisir_un_site.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="" align="end" class="etape" />
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Choisir un site" class="label_14"/></box>
+		</vbox>
+
+		<label class="label_12"  value=""/>
+		<hbox flex="4">
+    		<tree id="liste_sites_e_commerce" 
+        		  ref="http://www.opensi.org/WebManager/listeSitesECommerce"
+        		  seltype="single"
+        		  datasources="rdf:null"
+        		  flex="1"
+        		  style="overflow: auto;"
+        		  ondblclick="select_site()"
+							hidecolumnpicker="true">
+    		  <treecols>
+			  		<treecol id="id_site" flex="1" label="id"  collapsed="true"/>
+						<splitter class="tree-splitter" />
+        		<treecol id="nom_site" flex="1" label="Nom du site" />
+						<splitter class="tree-splitter" />
+        		<treecol id="url_site" flex="4" label="URL du site" />
+    		  </treecols>
+    		  <template>
+        		<treechildren>
+        		  <treeitem uri="rdf:*">
+            		<treerow>
+					  			<treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#id_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#nom_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#url_site" />
+            		</treerow>
+        		  </treeitem>
+        		</treechildren>
+    		  </template>
+    		</tree>
+		  </hbox>
+			
+	</vbox>
+
+</window>

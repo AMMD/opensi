@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libre de gestion d'entreprise                              -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_transfert_overlay-transfertReglementsClients"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-transfertReglements.js" />
+
+  <tabpanel id="tabReglements">
+
+		<vbox pack="center" flex="1">
+
+			<box style="height:10px;" />
+			<label class="label_16" value="Transfert des règlements" />
+			<box style="height:10px;" />
+			<hbox>
+				<groupbox orient="horizontal" align="start">
+					<caption label="Sélection des règlements à transférer" />
+					<vbox>
+						<radiogroup id="otr-typePeriode">
+			      	<hbox align="center">
+			        	<radio value="P" label="Période" selected="true" oncommand="otr_changerTypePeriode(this.value);" />
+			        	<menulist id="otr-periode" ref="http://www.opensi.org/facturation/liste_periodes" datasources="rdf:null" oncommand="otr_actualiserSelection();">
+			      			<template>
+			        			<menupopup>
+			          			<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#PeriodeAff" value="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#Periode" />
+			        			</menupopup>
+			      			</template>
+			    			</menulist>
+			      	</hbox>
+							<hbox align="center">
+			      		<radio value="D" label="De date à date" oncommand="otr_changerTypePeriode(this.value);" />
+								<label value="Du" />
+								<textbox id="otr-dateDebut" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+								<label value="au" />
+								<textbox id="otr-dateFin" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+							</hbox>
+			    	</radiogroup>
+			    	<hbox align="center" id="otr-boxReglements">
+							<label value="Mode de règlement :"/>
+		        	<menulist id="otr-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" oncommand="otr_actualiserSelection();">
+		      			<menupopup>
+									<menuitem label="[Tous]" value="0" />
+								</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+              		</menupopup>
+								</template>
+		    			</menulist>
+		    			<box width="10px" />
+		    			<label value="Banque :"/>
+							<menulist id="otr-comboBanques" ref="http://www.opensi.org/config/banques" datasources="rdf:null" oncommand="otr_pressOnBanque();">
+								<menupopup>
+									<menuitem label="[Toutes]" value="0" />
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+									</menupopup>
+								</template>
+							</menulist>
+		      	</hbox>
+			    </vbox>
+					<vbox>
+				    <grid>
+				    	<columns>
+				    		<column />
+				    		<column />
+				    	</columns>
+				    	<rows>
+				    		<row align="center">
+				    			<label value="N° Client :" />
+				    			<hbox align="center">
+				    				<textbox id="otr-clientId" maxlength="10" size="10" />
+										<button oncommand="otr_rechercherClient();" tooltiptext="rechercher un client" class="bIcoRechercher" />
+				    			</hbox>
+				    		</row>
+				    		<row align="center">
+				    			<label value="N° Fournisseur :" />
+				    			<hbox align="center">
+				    				<textbox id="otr-fournisseurId" maxlength="10" size="10" />
+										<button oncommand="otr_rechercherFournisseur();" tooltiptext="rechercher un fournisseur" class="bIcoRechercher" />
+				    			</hbox>
+				    		</row>
+				    	</rows>
+				    </grid>
+
+						<hbox pack="end">
+							<vbox><button class="bIcoActualiser" tooltiptext="actualiser" oncommand="otr_actualiserSelection();" /></vbox>
+							<vbox><button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="otr_initCriteres();" /></vbox>
+						</hbox>
+					</vbox>
+				</groupbox>
+		
+				<spacer flex="1" />
+		
+				<groupbox align="start">
+					<caption label="Transfert en comptabilité" />
+					<hbox align="center" id="otr-boxJournalRemise">
+			    	<label value="Journal de banque :" />
+			    	<menulist id="otr-journal" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+			    		<menupopup>
+			    			<menuitem label="[Journaux par défaut]" value="" />
+			    		</menupopup>
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+					</hbox>
+					<hbox align="center" id="otr-boxJournalRegul">
+			    	<label value="Journal d'OD :" />
+			    	<menulist id="otr-journalRegul" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+					</hbox>
+					<button id="otr-bTransfert" class="bTransformer" label="Transférer en comptabilité" oncommand="otr_transferer();" />
+					<box style="height:20px;" />
+					<hbox align="center">
+						<label class="label" value="Exporter au format" />
+						<menulist id="otr-formatExport" ref="http://www.opensi.org/comboliste/formats"	datasources="rdf:null">
+			    		<menupopup>
+			    			<menuitem label="[Choisir]" value="" />
+			    		</menupopup>
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/comboliste/formats/rdf#Export_Id" label="rdf:http://www.opensi.org/comboliste/formats/rdf#Intitule" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+			    	<button id="otr-bExporter" class="bValider" label="Ok" oncommand="otr_exporter();" />
+					</hbox>
+				</groupbox>
+			</hbox>
+			<box style="height:10px;" />
+			
+			<hbox align="center">
+				<label value="Type de transfert :" />
+				<radiogroup id="otr-typeTransfert" orient="horizontal" oncommand="otr_switchTypeTransfert();">
+					<radio value="RR" label="Remises / Décaissements" />
+					<radio value="RG" label="Pertes et profits" />
+				</radiogroup>
+			</hbox>
+			
+			<box style="height:10px;" />
+		
+			<vbox flex="1" id="otr-boxRemisesRemboursements">
+				<hbox pack="center" flex="1">
+					<vbox flex="1">
+						<hbox align="end">
+							<label class="label_14" value="Remises en banque de la période" />
+							<hbox pack="end" flex="1">
+								<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('otr-remisesBanque', true)" />
+								<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('otr-remisesBanque', false)" />
+								<box width="30px" />
+								<checkbox id="otr-chkAffRemiseTransferees" label="Afficher les remises en banque déjà transférées" oncommand="otr_actualiserListeRemise();" />
+							</hbox>
+						</hbox>
+					  <listbox id="otr-remisesBanque" flex="1" ref="http://www.opensi.org/facturation/transfert" datasources="rdf:null">
+					    <listhead>
+					     	<listheader label="Date" />
+								<listheader label="Transférée" />
+								<listheader label="Statut" />
+					      <listheader label="N° Remise" />
+					      <listheader label="Montant" class="nombre" />
+					      <listheader collapsed="true" />
+					      <listheader collapsed="true" />
+					    </listhead>
+					    <listcols>
+								<listcol flex="1" />
+								<listcol style="width:100px" />
+								<listcol style="width:100px" />
+								<listcol flex="1" />
+								<listcol flex="1" />
+								<listcol collapsed="true" />
+								<listcol collapsed="true" />
+				  		</listcols>
+					    <template>
+				        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/transfert/rdf#Remise_Id" allowevents="true" onclick="otr_selectOnListeRemisesBanque(this)">
+			            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/transfert/rdf#Date_Remise" onclick="testcheck(this.parentNode);" />
+									<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Transfere" />
+									<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Statut" />
+			            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Num_Piece" />
+			            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Montant" style="text-align:right; padding-right:20px" />
+			            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Statut" />
+			            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type_Remise" />
+				        </listitem>
+					    </template>
+					  </listbox>
+					</vbox>
+
+					<groupbox flex="3" id="otr-boxDetails" collapsed="true" orient="vertical">
+						<caption label="Détail de la remise en banque :" />
+						<tree id="otr-listeReglements"
+									flex="1"
+									hidecolumnpicker="true"
+									seltype="single"
+									flags="dont-build-content"
+									ref="http://www.opensi.org/reglement"
+									ondblclick="otr_affecterCompte();"
+									datasources="rdf:null" collapsed="true">
+							<treecols>
+								<treecol label="Date règlement" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#triDate_Reg"/>
+								<splitter class="tree-splitter" />
+								<treecol id="otr-colTiersId" label="N° Tiers" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Tiers_Id"/>
+								<splitter class="tree-splitter" />
+								<treecol label="Tiers" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Tiers"/>
+								<splitter class="tree-splitter" />
+								<treecol label="N° Compte" flex="1" sort="rdf:http://www.opensi.org/reglement/rdf#Numero_Compte"/>
+								<splitter class="tree-splitter" />
+								<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triMontant"/>
+								<treecol id="otr-colTypeTiers" collapsed="true" />
+							</treecols>
+							<template>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Date_Reg" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Tiers_Id" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Tiers" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Numero_Compte" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Montant" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Type_Tiers" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#triDate_Reg" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#triMontant" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</template>
+						</tree>
+						
+						<tree id="otr-listeReglementsEspeces"
+									flex="1"
+									hidecolumnpicker="true"
+									seltype="single"
+									flags="dont-build-content"
+									ref="http://www.opensi.org/reglement"
+									datasources="rdf:null" collapsed="true">
+							<treecols>
+								<treecol label="Valeur faciale" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triValeur"/>
+								<splitter class="tree-splitter" />
+								<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/reglement/rdf#triMontant"/>
+							</treecols>
+							<template>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Valeur" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#Montant" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#triValeur" />
+											<treecell label="rdf:http://www.opensi.org/reglement/rdf#triMontant" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</template>
+						</tree>
+					</groupbox>
+				</hbox>
+			  
+			  <box style="height:10px;" />
+			
+				<hbox align="end">
+					<label class="label_14" value="Décaissements de la période" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('otr-remboursements', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('otr-remboursements', false)" />
+						<box width="30px" />
+						<checkbox id="otr-chkAffRembTransferes" label="Afficher les décaissements déjà transférés" oncommand="otr_actualiserListeRemboursement()" />
+					</hbox>
+				</hbox>
+			  <listbox id="otr-remboursements" flex="1" ref="http://www.opensi.org/facturation/transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+						<listheader label="Transféré" />
+						<listheader label="Statut" />
+						<listheader label="Type" />
+			      <listheader label="N° Pièce" />
+			      <listheader label="N° Tiers" />
+			      <listheader label="Tiers" />
+			      <listheader label="N° Compte" />
+			      <listheader label="Montant" class="nombre" />
+			      <listheader collapsed="true" />
+			      <listheader collapsed="true" />
+			    </listhead>
+			    <listcols>
+						<listcol flex="1" />
+						<listcol style="width:100px" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/transfert/rdf#Remboursement_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/transfert/rdf#Date_Remboursement" onclick="testcheck(this.parentNode)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Transfere" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Statut" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Type" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Num_Piece" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Tiers_Id" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Denomination" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Numero_Compte" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Montant" style="text-align:right; padding-right:20px" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Statut" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type_Tiers" />
+		        </listitem>
+			    </template>
+			  </listbox>
+		  </vbox>
+		  
+		  <vbox flex="1" id="otr-boxRegularisations">
+				<hbox align="end">
+					<label class="label_14" value="Pertes exceptionnelles" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('otr-regulEcheances', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('otr-regulEcheances', false)" />
+						<box width="30px" />
+						<checkbox id="otr-chkAffRegulEchTrans" label="Afficher les pertes déjà transférées" oncommand="otr_actualiserListeRegulEcheance()" />
+					</hbox>
+				</hbox>
+			  <listbox id="otr-regulEcheances" flex="1" ref="http://www.opensi.org/facturation/transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+			     	<listheader label="Transférée" />
+			     	<listheader label="Statut" />
+			     	<listheader label="Type" />
+			      <listheader label="N° Pièce" />
+			      <listheader label="N° Tiers" />
+			      <listheader label="Tiers" />
+			      <listheader label="N° Compte" />
+			      <listheader label="Montant" class="nombre" />
+			      <listheader collapsed="true" />
+			      <listheader collapsed="true" />
+			      <listheader collapsed="true" />
+			    </listhead>
+			    <listcols>
+						<listcol flex="1" />
+						<listcol style="width:100px" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/transfert/rdf#Regularisation_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/transfert/rdf#Date_Regul" onclick="testcheck(this.parentNode)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Comptabilise" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Statut" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Type" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Num_Piece" ondblclick="affecterCompte(this.parentNode,5,10)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Tiers_Id" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Denomination" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Numero_Compte" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Montant" style="text-align:right; padding-right:20px" ondblclick="affecterCompte(this.parentNode,5,10)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Statut" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type_Tiers" />
+		        </listitem>
+			    </template>
+			  </listbox>
+			  
+			  <box style="height:10px;" />
+			
+				<hbox align="end">
+					<label class="label_14" value="Profits exceptionnels" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('otr-regulReglements', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('otr-regulReglements', false)" />
+						<box width="30px" />
+						<checkbox id="otr-chkAffRegulReglTrans" label="Afficher les profits déjà transférés" oncommand="otr_actualiserListeRegulReglement()" />
+					</hbox>
+				</hbox>
+			  <listbox id="otr-regulReglements" flex="1" ref="http://www.opensi.org/facturation/transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+			     	<listheader label="Transféré" />
+			     	<listheader label="Statut" />
+			     	<listheader label="Type" />
+			      <listheader label="N° Pièce" />
+			      <listheader label="N° Tiers" />
+			      <listheader label="Tiers" />
+			      <listheader label="N° Compte" />
+			      <listheader label="Montant" class="nombre" />
+			      <listheader collapsed="true" />
+			      <listheader collapsed="true" />
+			      <listheader collapsed="true" />
+			    </listhead>
+			    <listcols>
+			    	<listcol flex="1" />
+			    	<listcol style="width:100px" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+						<listcol collapsed="true" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/transfert/rdf#Regularisation_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/transfert/rdf#Date_Regul" onclick="testcheck(this.parentNode)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Comptabilise" ondblclick="affecterCompte(this.parentNode,5,11)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Statut" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Lbl_Type" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Num_Piece" ondblclick="affecterCompte(this.parentNode,5,11)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Tiers_Id" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Denomination" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Numero_Compte" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Montant" style="text-align:right; padding-right:20px" ondblclick="affecterCompte(this.parentNode,5,11)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Statut" />
+							<listcell label="rdf:http://www.opensi.org/facturation/transfert/rdf#Type_Tiers" />
+		        </listitem>
+			    </template>
+			  </listbox>
+		  </vbox>
+		</vbox>
+	</tabpanel>
+</overlay> 
+

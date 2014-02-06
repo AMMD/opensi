@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Echéances multiples"
+  id="opensi_facturation_user_commun_popup-echeancesMultiplesFourn"
+  onload="init();"
+	height="400"
+	width="600"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-echeancesMultiplesFourn.js" />
+  
+  <box class="rv_pop" id="rv" />
+  
+ 	<vbox pack="center" flex="1" class="auto-overflow">
+
+	  <hbox style="height:10px" />
+	 	<hbox pack="center">
+	  	<label class="label_14" value="ECHEANCES MULTIPLES" />
+	 	</hbox>
+	  <hbox style="height:20px" />
+	  
+	  <tree id="listeEcheances"
+	  			onselect="selectOnListeEcheances();"
+	        hidecolumnpicker="true"
+	        seltype="single"
+	        ref="http://www.opensi.org/facturation/listeEcheances"
+	        datasources="rdf:null"
+	        flex="1">
+	    <treecols>
+	      <treecol id="colDateEcheance" flex="1" label="Date d'échéance" />
+				<splitter class="tree-splitter" />
+	      <treecol id="colModeReglement" flex="1" label="Mode de règlement" />
+				<splitter class="tree-splitter" />
+				<treecol flex="1" label="Montant" style="text-align:right" />
+				<treecol id="colMontant" collapsed="true" />
+				<treecol id="colModeRegId" collapsed="true" />
+				<treecol id="colEcheanceId" collapsed="true" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#dateEcheance" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#modeReglement" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#AffMontant" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#montant" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#modeRegId" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/listeEcheances/rdf#echeanceId" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+	  </tree>
+	  
+		<vbox pack="center" id="boxModification">
+			<box style="height:20px" />
+			
+			<grid>
+				<rows>
+					<row />
+					<row />
+				</rows>
+				<columns>
+					<column>
+						<hbox align="end"><label value="Montant Net :" /></hbox>
+						<hbox><textbox id="montantNet" size="12" readonly="true" class="nombre" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Total échéances :" /></hbox>
+						<hbox><textbox id="totalEcheances" size="12" readonly="true" class="nombre" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Ecart :" /></hbox>
+						<hbox><textbox id="totalRestant" size="12" readonly="true" class="nombre" /></hbox>
+					</column>
+					<column flex="1">
+						<label value="" />
+						<hbox pack="end">
+							<button id="bReinitialiser" label="Réinitialiser" oncommand="reinitialiser();" />
+						</hbox>
+					</column>
+				</columns>
+			</grid>
+			
+			<box style="height:20px" />
+			
+			<grid>
+				<rows>
+					<row />
+					<row />
+				</rows>
+				<columns>
+					<column>
+						<hbox align="end"><label value="Date d'échéance :" /></hbox>
+						<hbox><textbox id="Date_Echeance" maxlength="10" size="12" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Mode de règlement :" /></hbox>
+						<hbox>
+							<menulist id="Mode_Reg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+								</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+              		</menupopup>
+								</template>
+            	</menulist>
+						</hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Montant :" /></hbox>
+						<hbox><textbox id="Montant" onkeypress="evaluer(this, event);" maxlength="12" size="12" timeout="200" command="maj" type="timed" class="nombre" /></hbox>
+					</column>
+					<column>
+						<hbox></hbox>
+						<hbox>
+							<button id="bAnnuler" class="bIcoAnnuler" tooltiptext="annuler la ligne" oncommand="initLigne();" style="margin-left:0px" />
+							<button id="bValider" class="bIcoValider" tooltiptext="valider la ligne" oncommand="validerLigne();" style="margin-left:0px" />
+							<button id="bSupprimer" class="bIcoSupprimer" tooltiptext="supprimer la ligne" oncommand="supprimerLigne();" style="margin-left:0px" />
+						</hbox>
+					</column>
+				</columns>
+			</grid>
+		</vbox>
+
+	  <box style="height:20px" />
+	  <hbox pack="center">
+	  	<button label="Ok" class="bValider" oncommand="majParent();" />
+	  </hbox>
+	  <box style="height:20px" />
+  
+  </vbox>
+
+</window>
+
+

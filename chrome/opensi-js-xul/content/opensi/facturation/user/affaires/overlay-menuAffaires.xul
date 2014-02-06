@@ -1,0 +1,672 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_affaires_overlayMenuAffaires"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-menuAffaires.js" />
+
+	<vbox id="menuAffaires" flex="1">
+		<hbox>
+			<vbox flex="1">
+				<label class="label_16" value="Gestion des affaires clients" />
+			</vbox>
+			<vbox>
+				<button id="oma-bEtatsWebService" label="Etats du WebService" oncommand="oma_pressOnEtatsWebService();"/>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<groupbox>
+				<caption label="Recherche" />
+				
+				<hbox>
+					<hbox>
+						<label value="Mode d'affichage :" />
+						<radiogroup id="oma-modeTraitement" oncommand="oma_initCriteres();">
+							<radio value="C" label="par commande" />
+							<radio value="A" label="par affaire" />
+						</radiogroup>
+					</hbox>
+					<box width="20px" />
+					<vbox>
+						<label value="N°/Réf. Commande :" />
+						<textbox id="oma-numCommande" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox id="oma-boxNumAffaire" collapsed="true">
+						<label value="N° Affaire :" />
+						<textbox id="oma-numAffaire" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox id="oma-boxIntituleAffaire" collapsed="true">
+						<label value="Intitulé d'affaire :" />
+						<textbox id="oma-intituleAffaire" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox id="oma-boxEtatAffaire" collapsed="true">
+						<label value="Etat affaire :" />
+						<menulist id="oma-etatAffaire" oncommand="oma_listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="TS" />
+								<menuitem label="Non validée" value="N" />
+								<menuitem label="En cours" value="T" />
+								<menuitem label="Annulée" value="A" />
+								<menuitem label="Clôturée" value="C" />
+								<menuitem label="Non aboutie" value="Z" />
+							</menupopup>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxEtatCommande">
+						<label value="Etat commande :" />
+						<menulist id="oma-etatCommande" oncommand="oma_listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="TS" />
+								<menuitem label="Non validée" value="N" />
+								<menuitem label="En cours" value="T" />
+								<menuitem label="Annulée" value="A" />
+								<menuitem label="Clôturée" value="C" />
+								<menuitem label="Non aboutie" value="Z" />
+							</menupopup>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxEtatLogistique">
+						<label value="Etat logistique :" />
+						<menulist id="oma-etatLogistique" oncommand="oma_listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="TS" />
+								<menuitem label="A traiter" value="T" />
+								<menuitem id="oma-miExpedier" label="A expédier" value="C" />
+								<menuitem id="oma-miReassort" label="Réassort" value="R" />
+								<menuitem label="Expédiée" value="E" />
+							</menupopup>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxBloque">
+						<label value="Bloquée :" />
+						<menulist id="oma-bloque" oncommand="oma_listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+								<menuitem label="Bloquée" value="1" />
+	              <menuitem label="Non bloquée" value="0" />
+							</menupopup>
+						</menulist>
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox>
+					<vbox>
+						<label value="N° Client :" />
+						<textbox id="oma-numClient" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="Client :" />
+						<textbox id="oma-nomClient" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox id="oma-boxLoginWeb">
+						<label value="Login Web :" />
+						<textbox id="oma-loginWeb" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<box width="20px" />
+					<vbox>
+						<label value="Réf. Article :" />
+						<textbox id="oma-refArticle" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox id="oma-boxMontantTTC">
+						<label value="Total TTC :" />
+						<textbox id="oma-montantTTC" width="120px" class="nombre" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox>
+					<vbox>
+						<label value="N° BL :" />
+						<textbox id="oma-numBL" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="N° Retour :" />
+						<textbox id="oma-numRetour" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="N° Facture :" />
+						<textbox id="oma-numFacture" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="N° Acompte :" />
+						<textbox id="oma-numAcompte" width="120px" onkeypress="oma_onKeyPress(event);" />
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox>
+					<vbox>
+						<label value="Date de commande :" />
+						<hbox align="center">
+							<label value="Du" />
+							<textbox id="oma-dateCommandeDebut" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="oma_onKeyPress(event);" />
+							<label value="au" />
+							<textbox id="oma-dateCommandeFin" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="oma_onKeyPress(event);" />
+						</hbox>
+					</vbox>
+					<box width="40px" />
+					<vbox>
+						<label value="Date de livraison prévue :" />
+						<hbox align="center">
+							<label value="Du" />
+							<textbox id="oma-dateDelaiDebut" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="oma_onKeyPress(event);" />
+							<label value="au" />
+							<textbox id="oma-dateDelaiFin" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="oma_onKeyPress(event);" />
+						</hbox>
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox flex="1">
+					<vbox id="oma-boxEtatPaiement">
+						<label value="Etat paiement :" />
+						<menulist id="oma-etatPaiement" oncommand="oma_listerCommandes();" style="width:120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+								<menuitem label="Payée" value="1" />
+	              <menuitem label="Part. payée" value="2" />
+	              <menuitem label="Non payée" value="0" />
+							</menupopup>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxModeReglement">
+						<label value="Mode de règlement :" />
+						<menulist id="oma-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:120px" sizetopopup="none" oncommand="oma_listerCommandes();">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+								</menupopup>
+							</template>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxProvenance">
+						<label value="Provenance :" />
+						<menulist id="oma-provenance" ref="http://www.opensi.org/facturation/liste_sites" datasources="rdf:null" style="width:120px" sizetopopup="none" oncommand="oma_listerCommandes();">
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_sites/rdf#nom" value="rdf:http://www.opensi.org/facturation/liste_sites/rdf#id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxModeExpedition">
+						<label value="Mode d'expédition :" />
+						<menulist id="oma-modeExpedition" ref="http://www.opensi.org/facturation/liste_modes_expedition" datasources="rdf:null" oncommand="oma_listerCommandes();" style="width:120px" sizetopopup="none">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Nom" value="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Mode_Liv_Id" />
+								</menupopup>
+							</template>
+						</menulist>
+					</vbox>
+					<vbox id="oma-boxSecteurActivite">
+						<label value="Pôle d'activité :" />
+						<menulist id="oma-secteurActivite" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" oncommand="oma_listerCommandes();" style="width:120px" sizetopopup="none">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+								</menupopup>
+							</template>
+						</menulist>
+					</vbox>
+					<box height="10px" />
+					<vbox flex="1" pack="end">
+							<hbox flex="1" pack="end">
+								<vbox><button class="bIcoActualiser" tooltiptext="actualiser" oncommand="oma_listerCommandes();" /></vbox>
+								<vbox><button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="oma_initCriteres();" /></vbox>
+							</hbox>
+					</vbox>
+				</hbox>
+			</groupbox>
+			<vbox flex="1">
+				<hbox pack="end" id="oma-boxNouvelleAffaire" collapsed="true">
+					<button label="Nouvelle Affaire" class="bNouveau" oncommand="oma_pressOnNouvelleAffaire();"/>
+				</hbox>
+				<hbox id="oma-boxStats" flex="1" align="center">
+					<vbox flex="1" align="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Nb commandes en cours :" />
+									<label id="oma-nbCommandesEnCours" class="label" />
+									<label value="Montant HT :" class="label" />
+									<label class="label" id="oma-montantHTCommandesEnCours" />
+								</row>
+								<row align="center">
+									<label class="label" value="Nb commandes à facturer :" />
+									<label id="oma-nbCommandesAFacturer" class="label" />
+									<label class="label" value="Montant HT :" />
+									<label id="oma-montantHTCommandesAFacturer" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Nb commandes à expédier :" />
+									<label id="oma-nbCommandesAExpedier" class="label" />
+									<label class="label" value="Montant HT :" />
+									<label id="oma-montantHTCommandesAExpedier" class="label" />
+								</row>
+								<row align="center">
+									<label class="label" value="Nb commandes non validées :" />
+									<label id="oma-nbCommandesNonValidees" class="label" />
+									<label class="label" value="Montant HT :" />
+									<label id="oma-montantHTCommandesNonValidees" class="label" />
+								</row>
+							</rows>
+						</grid>
+					</vbox>
+				</hbox>
+				<vbox id="oma-boxApercuCommande" flex="1" collapsed="true">
+					<hbox align="center">
+						<label id="oma-numCommandeSelect" />
+					</hbox>
+					<tree
+						id="oma-apercuCommande"
+		      	flex="1"
+		      	hidecolumnpicker="true"
+		      	seltype="single"
+		      	ref="http://www.opensi.org/facturation/apercu_commande"
+		      	datasources="rdf:null"
+						flags="dont-build-content"
+						enableColumnDrag="true"
+					>
+		    		<treecols>
+		      		<treecol flex="1" label="Référence" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="2" label="Désignation" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Quantité" class="nombre" />
+		      		<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Reliquat" class="nombre" />
+		      		<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Montant HT" class="nombre" />
+		    		</treecols>
+		    		<template>
+		      		<treechildren>
+		        		<treeitem uri="rdf:*">
+		          		<treerow>
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande/rdf#Reference" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande/rdf#Designation" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande/rdf#Quantite" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande/rdf#Reliquat" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande/rdf#Montant_HT" />
+		          		</treerow>
+		        		</treeitem>
+		      		</treechildren>
+		    		</template>
+		  		</tree>
+		  		<hbox pack="center">
+		  			<label value="Total HT :" />
+		  			<label id="oma-totalApercuCommande" />
+		  			<vbox align="center"><image id="oma-pictoMargeNegativeCommande" src="chrome://opensi/content/design/icones/alerte.png" /></vbox>
+		  			<label id="oma-lblMargeApercuCommande" value="Marge (EUR) :" />
+		  			<label id="oma-montantMargeApercuCommande" />
+		  			<label id="oma-lblPourcMargeApercuCommande" value="Marge (%) :" />
+		  			<label id="oma-pourcMargeApercuCommande" />
+		  		</hbox>
+				</vbox>
+				<vbox id="oma-boxApercuAffaire" flex="1" collapsed="true">
+					<hbox align="center">
+						<label id="oma-numAffaireSelect" />
+					</hbox>
+					<tree
+						id="oma-apercuAffaire"
+		      	flex="1"
+		      	hidecolumnpicker="true"
+		      	seltype="single"
+		      	ref="http://www.opensi.org/facturation/apercu_affaire"
+		      	datasources="rdf:null"
+						flags="dont-build-content"
+						enableColumnDrag="true"
+					>
+		    		<treecols>
+		      		<treecol flex="1" label="N° Commande" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Réf. Commande" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Total HT" class="nombre" />
+		    		</treecols>
+		    		<template>
+		      		<treechildren>
+		        		<treeitem uri="rdf:*">
+		          		<treerow>
+		          			<treecell label="rdf:http://www.opensi.org/facturation/apercu_affaire/rdf#Num_Commande" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_affaire/rdf#Reference" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_affaire/rdf#Total_HT" />
+		          		</treerow>
+		        		</treeitem>
+		      		</treechildren>
+		    		</template>
+		  		</tree>
+		  		<hbox pack="center">
+		  			<label value="Total HT :" />
+		  			<label id="oma-totalApercuAffaire" />
+		  			<vbox align="center"><image id="oma-pictoMargeNegativeAffaire" src="chrome://opensi/content/design/icones/alerte.png" /></vbox>
+		  			<label id="oma-lblMargeApercuAffaire" value="Marge (EUR) :" />
+		  			<label id="oma-montantMargeApercuAffaire" />
+		  			<label id="oma-lblPourcMargeApercuAffaire" value="Marge (%) :" />
+		  			<label id="oma-pourcMargeApercuAffaire" />
+		  		</hbox>
+				</vbox>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+
+		<hbox flex="1">
+			<vbox flex="1">
+				<hbox>
+					<hbox flex="1" pack="center">
+						<button class="bIcoRetour" style="margin-right:0px" id="oma-bPrec" oncommand="oma_pressOnPagePrec();" tooltiptext="page précédente" disabled="true" />
+						<vbox pack="center">
+							<hbox>
+								<label value="Page" />
+								<label id="oma-pageDeb" />
+								<label value="/" />
+								<label id="oma-pageFin" />
+							</hbox>
+						</vbox>
+						<button class="bIcoAvance" id="oma-bSuiv" oncommand="oma_pressOnPageSuiv();" tooltiptext="page suivante" disabled="true" />
+					</hbox>
+					
+					<hbox align="center" pack="end">
+						<label value="Nb de lignes par page :" />
+						<menulist id="oma-nbLignesParPage" oncommand="oma_listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="100" value="100" />
+								<menuitem label="500" value="500" />
+								<menuitem label="1000" value="1000" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</hbox>
+
+				<tree
+					id="oma-listeCommandes"
+					flex="1"
+					flags="dont-build-content"
+					seltype="single"
+					ref="http://www.opensi.org/facturation/liste_commandes"
+					datasources="rdf:null"
+					onselect="oma_selectOnListeCommandes()"
+					ondblclick="oma_pressOnListeCommandes()"
+					enableColumnDrag="true"
+				>
+					<treecols>
+						<treecol label="Date" tooltiptext="Date commande" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Commande" />
+						<splitter class="tree-splitter" />
+	        	<treecol id="oma-lcColNumCommande" label="N° Commande" flex="1"
+	        		sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Num_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="Réf. Commande" flex="1"
+	        		sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Ref_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-lcColProvenance" label="Provenance" flex="1" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Provenance" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-lcColLoginWeb" label="Login Web" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Login_Web" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Client" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Num_Client" />
+						<splitter class="tree-splitter" />
+						<treecol label="Client" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Nom_Client" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat" tooltiptext="Etat commande" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Etat_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="Logistique" tooltiptext="Statut logistique" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Logistique" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-lcColStock" label="Stock" flex="1" style="text-align: center" />
+						<splitter class="tree-splitter" />
+						<treecol label="Date liv." tooltiptext="Date de livraison prévue" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Delai" />
+						<splitter class="tree-splitter" />
+						<treecol label="Mode expédition" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Mode_Expedition" />
+						<splitter class="tree-splitter" />
+						<treecol label="Dernier BL" flex="1" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Dernier_BL" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Livré" flex="1" class="nombre" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triCA_Livre" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Restant" flex="1" class="nombre" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triCA_Restant" />
+						<splitter class="tree-splitter" />
+						<treecol label="Mode règlement" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Mode_Reglement" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-lcColMontantHT" label="Total HT" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triMontant_HT" />
+						<splitter class="tree-splitter" />
+						<treecol label="Total TTC" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triMontant_TTC" />
+						<splitter class="tree-splitter" />
+						<treecol label="Commentaires internes" flex="1" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Commentaires_Int" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut paiement" width="20px" tooltiptext="Statut de paiement" class="treecol-image"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triStatut_Paiement" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut facturation" width="20px" tooltiptext="Statut de facturation" class="treecol-image"
+							sort="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triStatut_Facturation" />
+						<treecol id="oma-lcColCodeEtat" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="oma-lcColCommandeId" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="oma-lcColAffaireId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+	        	<treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow properties="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Couleur">
+	              	<treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Date_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Num_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Ref_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Provenance" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Login_Web" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Num_Client" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Nom_Client" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Etat_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Logistique" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Stock_XY" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Date_Delai" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Mode_Expedition" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Date_Dernier_BL" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#CA_Livre" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#CA_Restant" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Mode_Reglement" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Montant_HT" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Montant_TTC" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Commentaires_Int" />
+	                <treecell src="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Paiement" />
+	                <treecell src="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Statut_Facturation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Code_Etat" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Commande_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#Affaire_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Delai" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triDate_Dernier_BL" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triCA_Livre" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triCA_Restant" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triMontant_HT" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triMontant_TTC" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triStatut_Paiement" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_commandes/rdf#triStatut_Facturation" />
+	              </treerow>
+	            </treeitem>
+	        	</treechildren>
+	        </template>
+				</tree>
+				
+				<tree
+					id="oma-listeAffaires"
+					flex="1"
+					flags="dont-build-content"
+					seltype="single"
+					ref="http://www.opensi.org/facturation/liste_affaires"
+					datasources="rdf:null"
+					onselect="oma_selectOnListeAffaires()"
+					ondblclick="oma_pressOnListeAffaires()"
+					enableColumnDrag="true"
+					collapsed="true"
+				>
+					<treecols>
+						<treecol label="Date" tooltiptext="Date affaire" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triDate_Affaire" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-laColNumAffaire" label="N° Affaire" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Num_Affaire" />
+						<splitter class="tree-splitter" />
+						<treecol label="Intitulé" tooltiptext="Intitulé affaire" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Intitule_Affaire" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat" tooltiptext="Etat affaire" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Etat_Affaire" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Client" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Num_Client" />
+						<splitter class="tree-splitter" />
+						<treecol label="Client" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Nom_Client" />
+						<splitter class="tree-splitter" />
+						<treecol label="Dernier BL" tooltiptext="Date dernier BL" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triDate_Dernier_BL" />
+						<splitter class="tree-splitter" />
+						<treecol id="oma-laColMontantHT" label="Total HT" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triMontant_HT" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Livré" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triCA_Livre" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Restant" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triCA_Restant" />
+						<treecol id="oma-laColAffaireId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+	        	<treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	              	<treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Date_Affaire" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Num_Affaire" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Intitule_Affaire" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Etat_Affaire" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Num_Client" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Nom_Client" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Date_Dernier_BL" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Montant_HT" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#CA_Livre" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#CA_Restant" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#Affaire_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triDate_Affaire" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triMontant_HT" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triDate_Dernier_BL" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triCA_Livre" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_affaires/rdf#triCA_Restant" />
+	              </treerow>
+	            </treeitem>
+	        	</treechildren>
+	        </template>
+				</tree>
+				<hbox pack="end" align="center">
+					<label value="Total HT :" />
+					<textbox id="oma-totalHT" class="nombre" readonly="true" />
+				</hbox>
+				<hbox pack="end" align="center">
+					<label value="Total CA livré :" />
+					<textbox id="oma-totalCALivre" class="nombre" readonly="true" />
+				</hbox>
+				<hbox pack="end" align="center">
+					<label value="Total CA restant :" />
+					<textbox id="oma-totalCARestant" class="nombre" readonly="true" />
+				</hbox>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<hbox align="center" flex="1">
+				<vbox><button id="oma-bValiderCommande" disabled="true" class="bValider" label="Valider la commande" oncommand="oma_pressOnValiderCommande();" /></vbox>
+				<vbox><button id="oma-bEditionCsv" disabled="true" class="bCSV" label="Edition CSV" oncommand="oma_pressOnEditionCsv();" /></vbox>
+			</hbox>
+			<hbox pack="end" align="center">
+				<grid>
+					<columns>
+						<column />
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/P_rouge.png" /></vbox>
+								<label value=": pas payée" />
+							</hbox>
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/P_orange.png" /></vbox>
+								<label value=": partiellement payée" />
+							</hbox>
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/P_vert.png" /></vbox>
+								<label value=": payée" />
+							</hbox>
+						</row>
+						<row align="center">
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/F_rouge.png" /></vbox>
+								<label value=": pas facturée" />
+							</hbox>
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/F_orange.png" /></vbox>
+								<label value=": partiellement facturée" />
+							</hbox>
+							<hbox align="center">
+								<vbox><image src="chrome://opensi/content/design/F_vert.png" /></vbox>
+								<label value=": facturée" />
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</hbox>
+		</hbox>
+		
+		<box height="10px" />
+	</vbox>
+
+</overlay>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 3003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_comptabilite_defaut"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestion_defaut.js" />
+
+	<vbox pack="center" align="center" flex="1" style="overflow:auto">
+
+		<vbox align="center">
+		
+			<hbox>
+				<vbox flex="1">
+					<groupbox style="padding:10px" flex="1">
+						<caption label="Vente" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row height="40px" align="center">
+									<label class="label" value="* Journal de vente par défaut : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_Vente" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Choisir]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+						   						<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value='* Compte "Clients divers" : ' />
+									<hbox>
+										<textbox id="Numero_Compte_Clients" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Clients');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte frais de port facturés : " />
+									<hbox>
+										<textbox id="Numero_Compte_Port_VE" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Port_VE');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte d'escomptes accordés : " />
+									<hbox>
+										<textbox id="Numero_Compte_Escompte_VE" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Escompte_VE');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="Journal pour les acomptes : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_Acompte" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Aucun]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+						   						<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte d'acompte sur commande : " />
+									<hbox>
+										<textbox id="Numero_Compte_Acompte_VE" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Acompte_VE');" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+
+					<groupbox style="padding:10px" flex="1">
+						<caption label="Règlements" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row height="40px" align="center">
+									<label class="label" value="Journal de perte et profit par défaut : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_Regul" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Aucun]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+						   						<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte de charges exceptionnelles : " />
+									<hbox>
+										<textbox id="Numero_Compte_Regul_VE" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Regul_VE');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte de produits exceptionnels : " />
+									<hbox>
+										<textbox id="Numero_Compte_Regul_AC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Regul_AC');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte de remises d'espèces : " />
+									<hbox>
+										<textbox id="Numero_Compte_Especes" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Especes');" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					
+				</vbox>
+		
+				<box style="width:20px" />
+				
+				<vbox flex="1">
+					<groupbox style="padding:10px" flex="1">
+						<caption label="Achat" />
+						<grid>
+							<columns>
+								<column/>
+								<column/>
+							</columns>
+							<rows>
+								<row height="40px" align="center">
+									<label class="label" value="* Journal d'achat par défaut : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_Achat" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Choisir]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+				   								<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value='* Compte "Fournisseurs divers" : ' />
+									<hbox>
+										<textbox id="Numero_Compte_Fournisseurs" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Fournisseurs');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte frais de transport supportés : " />
+									<hbox>
+										<textbox id="Numero_Compte_Port_AC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Port_AC');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte d'escomptes obtenus : " />
+									<hbox>
+										<textbox id="Numero_Compte_Escompte_AC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Escompte_AC');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte de TVA dûe intracommunautaire : " />
+									<hbox>
+										<textbox id="Numero_Compte_Tva_Due_IC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Tva_Due_IC');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte de TVA déductible UE : " />
+									<hbox>
+										<textbox id="Numero_Compte_Tva_Ded_IC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Tva_Ded_IC');" />
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="Journal pour les acomptes : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_Acompte_Achats" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Aucun]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+				   								<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+								<row height="40px" align="center">
+									<label class="label" value="* Compte d'acompte sur commande : " />
+									<hbox>
+										<textbox id="Numero_Compte_Acompte_AC" size="27" readonly="true" />
+			   	 					<button class="bIcoRechercher" oncommand="Changer('Numero_Compte_Acompte_AC');" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					
+					<groupbox style="padding:10px" flex="1">
+						<caption label="A Nouveau" />
+						<grid>
+							<columns>
+								<column/>
+								<column/>
+							</columns>
+							<rows>
+								<row height="40px" align="center">
+									<label class="label" value="* Journal d'à nouveau par défaut : " />
+									<hbox>
+										<menulist width="200px" id="Journaux_ANouveau" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+					   						<menuitem label="[Choisir]" value="0"/>
+		        					</menupopup>
+											<template>
+			        					<menupopup>
+				   								<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code"/>
+			        					</menupopup>
+											</template>
+			    					</menulist>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</vbox>
+			</hbox>
+
+		</vbox>
+
+		<box style="height:10px" />
+
+		<hbox pack="center">
+   	 	<button class="bEnregistrer" label="Enregistrer" oncommand="modifierParametres()" />
+  	</hbox>
+
+	</vbox>
+
+</window>

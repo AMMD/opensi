@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="reception.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_reception_reception"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="reception.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bRetourReception" oncommand="retourReception();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  
+  <deck id="deck" flex="1">
+  	<vbox flex="1">
+			<hbox style="height:10px" />
+			
+			<tabbox flex="1" id="Panneau">
+				<tabs>
+		      <tab label="Réception commande" />
+		      <tab label="Articles en attente de réception" oncommand="pressOnArtAtt();" />
+		      <tab label="Articles réceptionnés" />
+		    </tabs>
+		  	<tabpanels flex="1">
+		  	
+		    	<tabpanel id="tab-reception" orient="vertical">
+						<hbox align="center" pack="center">
+							<vbox flex="10" align="center">
+								<grid>
+			  					<columns>
+			    					<column />
+			    					<column />
+			  					</columns>
+			  					<rows>
+			    					<row align="center">
+			      					<label class="label" value="Réception en cours :" />
+			      					<hbox>
+			      						<menulist id="listePrepRecep" ref="http://www.opensi.org/facturation/liste_prep_receptions" datasources="rdf:null" style="width:180px" oncommand="pressOnListePrepRecep();">
+													<menupopup>
+														<menuitem label="[Choisir]" value="0" />
+													</menupopup>
+													<template>
+					          				<menupopup>
+															<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_prep_receptions/rdf#Fournisseur_Id" value="rdf:http://www.opensi.org/facturation/liste_prep_receptions/rdf#Prep_Id" />
+					          				</menupopup>
+													</template>
+					        			</menulist>
+					        			<button id="bFournisseur" class="bNouveau" label="Nouvelle réception" oncommand="rechercherFournisseur();" />
+			      					</hbox>						
+			      					<label class="label" value="N° BL :" />
+			      					<hbox>
+			        					<textbox id="Num_BL" maxlength="15" size="25" disabled="true" />
+			      					</hbox>
+			    					</row>
+										<row align="center">
+			      					<label class="label" value="Code barre / Article :" />
+			      					<hbox align="center">
+			      						<hbox align="center">
+			        						<textbox id="Article_Id" maxlength="40" size="25" onkeypress="keypress(event,id);" disabled="true" />
+			        					</hbox>
+												<button id="bCodeBarre" label="||||" oncommand="associerCodeBarre();" style="margin-left:0px" class="mini_bouton" tooltiptext="Associer un code barre à l'article" disabled="true" />
+												<button id="bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="rechercherArticle();" disabled="true" />
+			      					</hbox>
+			    					</row>
+										<row align="center">
+			      					<label class="label" value="Quantité :" />
+			      					<hbox>
+			        					<textbox id="Quantite" maxlength="10" size="5" value="1" onkeypress="keypress(event,id);" />
+												<checkbox id="recep_unitaire" label="Réception unitaire" oncommand="changerTypeQuantite(this.checked);" />
+			      					</hbox>
+			    					</row>
+			  					</rows>
+								</grid>
+							</vbox>	
+							<vbox flex="1" align="end" pack="end">
+								<button id="bSupprimerPrep" class="bSupprimer" label="Supprimer la réception" oncommand="SupprimerPrepBR();" disabled="true" />		
+							</vbox>	
+						</hbox>
+						<box style="height:10px" />
+		  			<tree id="bon_reception"
+		        	flex="1"
+		        	hidecolumnpicker="false"
+		        	seltype="single"
+							flags="dont-build-content"
+		        	ref="http://www.opensi.org/facturation/bon_reception"
+		        	onselect="pressOnBonReception();"
+		        	datasources="rdf:null">
+		    			<treecols>
+		      			<treecol id="Num_Com" label="N° Commande" flex="1"/>
+								<splitter class="tree-splitter" />
+		      			<treecol id="Date" label="Date" flex="1"/>
+								<splitter class="tree-splitter" />
+								<treecol id="Article_Id" label="Article" flex="1"/>
+								<splitter class="tree-splitter" />
+		 						<treecol id="Designation" label="Désignation" flex="5"/>
+								<splitter class="tree-splitter" />
+		      			<treecol id="Quantite" label="Quantité" flex="1" style="text-align:right"/>
+		    			</treecols>
+		    			<template>
+		      			<treechildren>
+		        			<treeitem uri="rdf:*">
+		          			<treerow properties="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Etat">
+		            			<treecell label="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Commande_Id" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Date" />
+											<treecell label="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Article_Id" />
+											<treecell label="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Designation" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/bon_reception/rdf#Quantite" />
+		          			</treerow>
+		        			</treeitem>
+		      			</treechildren>
+		    			</template>
+		  			</tree>
+						<box style="height:5px" />
+						<hbox pack="center">
+							<hbox style="width:100px;" />
+							<hbox flex="1" pack="right" align="right">
+								<button id="bSupprimerLigne" class="bSupprimer" label="Supprimer une ligne" oncommand="supprimerLigne();" disabled="true" />
+								<box flex="1" />
+								<button id="bValiderPrep" class="bValider" label="Valider les bons de réception" oncommand="validerPrepBR();" disabled="true" />
+								<button label="Rééditer la dernière validation" oncommand="reediterDerniereValidation();" />
+							</hbox>
+							<hbox style="width:100px;" />
+						</hbox>
+						<box style="height:5px" />
+					</tabpanel>
+					
+		    	<tabpanel id="tab-enattente" orient="vertical">
+		    		<hbox align="center">
+		    			<label value="Fournisseur :"/>
+		    			<menulist id="FournisseurAtt" ref="http://www.opensi.org/facturation/liste-fournisseurs" datasources="rdf:null" oncommand="chargerAttenteReception();">
+		    				<menupopup>
+		    					<menuitem label="[Choisir]" selected="true" />
+		    					<menuitem label="[Tous]" value="T" />
+		    				</menupopup>
+		    				<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-fournisseurs/rdf#Ref_Fournisseur" value="rdf:http://www.opensi.org/facturation/liste-fournisseurs/rdf#Ref_Fournisseur" style="font-size:80%" />
+									</menupopup>
+								</template>
+		    			</menulist>
+		    		</hbox>
+						<tree id="tree-attRecep"
+		        	flex="1"
+		        	hidecolumnpicker="false"
+		        	seltype="single"
+							flags="dont-build-content"
+		        	ref="http://www.opensi.org/facturation/liste-articlesAttenteReception"
+		        	datasources="rdf:null">
+		    			<treecols>
+		      			<treecol label="Référence" flex="2"
+		      				sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Reference" />
+								<splitter class="tree-splitter" />
+		      			<treecol label="Désignation" flex="3"
+		      				sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Designation" />
+								<splitter class="tree-splitter" />
+								<treecol label="Date de commande" flex="1"
+									sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triDate_Commande" />
+								<splitter class="tree-splitter" />
+		 						<treecol label="N° Commande" flex="1"
+		 							sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Num_Commande" />
+								<splitter class="tree-splitter" />
+								<treecol label="N° Fournisseur" flex="1"
+									sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Fournisseur_Id" />
+								<splitter class="tree-splitter" />
+		      			<treecol label="Quantité" flex="1" style="text-align:right"
+		      				sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triQuantite" />
+		      			<treecol label="Valeur" flex="1" style="text-align:right"
+		      				sort="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triValeur" />
+		    			</treecols>
+		    			<template>
+		      			<treechildren>
+		        			<treeitem uri="rdf:*">
+		          			<treerow>
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Reference" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Designation" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Date_Commande" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Num_Commande" />            												
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Fournisseur_Id" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Quantite" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#Valeur" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triDate_Commande" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triQuantite" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesAttenteReception/rdf#triValeur" />
+		          			</treerow>
+		        			</treeitem>
+		      			</treechildren>
+		    			</template>
+		  			</tree>
+		  			<box style="height:5px" />
+		  			<hbox align="center" pack="center">
+		  				<button id="bEditerReliquats" label="Bon de reliquats" class="bPDF" oncommand="editerBonReliquats();" disabled="true" />
+							<button id="bEditerArtAtt" label="Editer en CSV" class="bCSV" oncommand="editerArtAtt();" disabled="true" />
+						</hbox>
+						<box style="height:5px" />
+					</tabpanel>
+		
+					<tabpanel id="tab-recu" orient="vertical">
+							<hbox pack="center" align="center">
+								<grid>
+			  					<columns>
+			    					<column />
+			    					<column />
+			  					</columns>
+			  					<rows>
+			    					<row align="center">
+			      					<label class="label" value="* Date début (jj/mm/aaaa) :"  />
+					    				<hbox>
+												<textbox id="Date_Debut" maxlength="10" size="20" onkeypress="pressOnDateDebut(event);" />
+					    				</hbox>
+					  				</row>
+					  				<row align="center">
+		        					<label class="label" value="Date fin (jj/mm/aaaa) :" />
+					    				<hbox>
+												<textbox id="Date_Fin" maxlength="10" size="20" onkeypress="pressOnDateFin(event);" />
+					    				</hbox>
+					  				</row>
+									</rows>
+								</grid>
+								<hbox>
+									<groupbox flex="1" pack="center" align="center">
+		      					<caption label="Choix du fournisseur" />
+		      					<radiogroup id="Fournisseur" oncommand="pressOnFournisseur();">
+		  								<radio selected="true" label="Tous les fournisseurs" />
+		  								<radio label="Choisir un fournisseur" />
+										</radiogroup>
+										<label id="CodeFournisseur" collapsed="true" />
+		    					</groupbox>
+		    				</hbox>
+							</hbox>
+						<tree id="tree-recus"
+		       		flex="1"
+		        	hidecolumnpicker="false"
+		        	seltype="single"
+							flags="dont-build-content"
+		        	ref="http://www.opensi.org/facturation/liste-articlesRecus"
+		        	datasources="rdf:null">
+		    			<treecols>
+		      			<treecol label="Référence" flex="2" />
+								<splitter class="tree-splitter" />
+		      			<treecol label="Désignation" flex="3" />
+								<splitter class="tree-splitter" />
+								<treecol label="Date de réception" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol label="N° Bon de réception" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol label="N° Fournisseur" flex="1" />
+								<splitter class="tree-splitter" />
+		      			<treecol label="Quantité" flex="1" style="text-align:right" />
+		    			</treecols>
+		    			<template>
+		      			<treechildren>
+		        			<treeitem uri="rdf:*">
+		          			<treerow>
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Reference" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Designation" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Date_Reception" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Num_Entier" />
+											<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Num_Fournisseur" />
+		            			<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesRecus/rdf#Quantite" />
+		          			</treerow>
+		        			</treeitem>
+		      			</treechildren>
+		    			</template>
+		  			</tree>
+		  			<box style="height:5px" />
+						<hbox align="center" pack="center">
+							<button id="bEditerArtRecus" label="Editer en CSV" class="bCSV" oncommand="editerArtRecus();" disabled="true" />
+						</hbox>
+						<box style="height:5px" />
+					</tabpanel>		
+		  	</tabpanels>
+			</tabbox>
+		</vbox>
+		
+		<vbox flex="1">
+			<hbox id="bar_edition">
+				<checkbox id="chkBonChiffre" label="Bon Chiffré" oncommand="pressOnBonChiffre();" />
+				<hbox id="optionsReliquat" collapsed="true" align="center">
+					<label value="Tri :" />
+					<radiogroup id="rgpTri" orient="horizontal" oncommand="pressOnBonChiffre();">
+						<radio value="D" label="Date de commande" />
+						<radio value="R" label="Référence article" />
+					</radiogroup>
+				</hbox>
+			</hbox>
+			
+			<iframe type="content" id="br" flex="1" />
+		</vbox>
+	</deck>
+	
+</window>

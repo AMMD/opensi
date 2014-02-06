@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'une commande fournisseur"
+  id="opensi_compta_user_commandes_rechCommande"
+  onload="init();"
+	width="900"
+	height="500"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_commande.js" />
+
+  <hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="RECHERCHE D'UNE COMMANDE FOURNISSEUR" style="text-align:center" />
+	</hbox>
+	<hbox style="height:20px" />
+
+	<hbox style="height:120px">
+		<vbox>
+  		<grid pack="center">
+    		<columns>
+      		<column />
+      		<column />
+      		<column />
+      		<column />
+    		</columns>
+    		<rows>
+					<row>
+						<label value="" />
+					</row>
+      		<row align="center">
+        		<label class="label" value="Numéro de commande :" />
+        		<hbox><textbox id="Numero" maxlength="10" size="15" onkeypress="pressOnId(event);" /></hbox>
+						<label class="label" value="Référence article :" />
+        		<hbox><textbox id="Article_Id" maxlength="20" size="15" onkeypress="pressOnArticle(event);" /></hbox>
+      		</row>
+      		<row align="center">
+        		<label class="label" value="Numéro de fournisseur :" />
+        		<hbox><textbox id="Fournisseur_Id" maxlength="10" size="15" onkeypress="pressOnFournisseurId(event);" /></hbox>
+						<label class="label" value="Fournisseur :" />
+        		<hbox><textbox id="Denomination" maxlength="20" size="15" onkeypress="pressOnRaisonSociale(event);" /></hbox>
+      		</row>
+					<row align="center">
+						<box />
+						<box />
+        		<label class="label" value="Numéro de BR :" />
+        		<hbox><textbox id="Num_BR" maxlength="10" size="15" onkeypress="pressOnNumBR(event);" /></hbox>
+      		</row>
+    		</rows>
+  		</grid>
+			<box style="width:5px;" />
+			<checkbox id="Aff_Reliquats" label="Afficher uniquement les commandes en attente de réception ou ayant un reliquat" oncommand="changerReliquats(true);" />
+		</vbox>
+
+  	<box style="width:10px;" />
+
+		<vbox flex="1">
+			<hbox>
+				<label value="Aperçu de la commande N°" />
+				<label id="Num_Commande" />
+			</hbox>
+			<tree id="apercu"
+      	flex="1"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/apercu_commande_fournisseur"
+      	datasources="rdf:null"
+				flags="dont-build-content">
+
+    		<treecols>
+      		<treecol id="ColReference" label="Référence" flex="1" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColDesignation" flex="2" label="Désignation" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColQuantite" flex="1" label="Quantité" class="nombre" />
+      		<splitter class="tree-splitter" />
+      		<treecol id="ColQuantiteRecep" flex="1" label="Qté reçue" class="nombre" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Reference" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Designation" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Quantite" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Quantite_Recep" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+		</vbox>
+
+	</hbox>
+
+	<box style="height:10px;" />
+
+	<label value="Commandes trouvées :" />
+	<tree id="commandes"
+      	flex="1"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/commandes"
+      	datasources="rdf:null"
+				flags="dont-build-content"
+      	onkeypress="pressOnTree(event);"
+				ondblclick="choixCommande();"
+				onselect="loadApercu();"
+      	height="150px"
+      	width="600px">
+
+  	<treecols>
+  		<treecol id="Coldate" label="Date" flex="1"
+          	   sort="rdf:http://www.opensi.org/facturation/commandes/rdf#date" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColNum" label="N° Commande" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/commandes/rdf#numero" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColIntitule" label="Intitulé" flex="2"
+							 sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Intitule" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColFournisseur_Id" label="N° Fournisseur" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/commandes/rdf#fournisseur" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColFournisseurNom" label="Fournisseur" flex="2"
+							 sort="rdf:http://www.opensi.org/facturation/commandes/rdf#nom_fournisseur" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColResponsable" label="Responsable" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/commandes/rdf#login" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColLibEtat" label="Etat" flex="2"
+               sort="rdf:http://www.opensi.org/facturation/commandes/rdf#libetat" />
+			<splitter class="tree-splitter" />
+			<treecol id="total_ht" label="Total HT" class="nombre" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triTotal_ht" />
+			<treecol id="ColEtat" collapsed="true" />
+			<treecol id="date" collapsed="true" />
+			<treecol id="ColCommande_Id" collapsed="true" />
+  	</treecols>
+  	<template>
+    	<treechildren>
+      	<treeitem uri="rdf:*">
+        	<treerow>
+          	<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#dateaff" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#numero" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Intitule" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#fournisseur" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#nom_fournisseur" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#login" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#libetat" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#total_ht" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#etat" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#date" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triTotal_ht" />
+        	</treerow>
+      	</treeitem>
+    	</treechildren>
+  	</template>
+	</tree>
+
+	<box style="height:20px" />
+  <hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+  	<button label="Ouvrir" oncommand="choixCommande();" />
+  </hbox>
+	<box style="height:20px" />
+
+</window>

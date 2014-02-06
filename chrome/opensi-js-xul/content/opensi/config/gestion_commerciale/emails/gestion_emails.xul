@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  flex="1"
+  id="opensi_manager_gestion_commerciale_gestionEmails"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestion_emails.js" />
+
+	<vbox pack="center" flex="1" class="auto-overflow">
+		<tree id="liste_emails"
+				hidecolumnpicker="true"
+				seltype="single"
+				flags="dont-build-content"
+				ref="http://www.opensi.org/Config/listeEmails"
+				datasources="rdf:null"
+				height="350px"
+				onselect="chargerEmail();">
+			<treecols>
+				<treecol id="ColLibelle" flex="1" label="Libelle" />
+				<treecol id="ColExpediteur" flex="1" label="Expéditeur" />
+				<treecol id="ColDestCC" flex="1" label="Destinataire CC" />
+				<treecol id="ColDestBCC" flex="1" label="Destinataire BCC" />
+				<treecol id="ColSujet" flex="1" label="Sujet" />
+				<treecol id="ColEmailId" collapsed="true" />
+			</treecols>
+			<template>
+				<treechildren>
+					<treeitem uri="rdf:*">
+						<treerow>
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" />
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Expediteur" />
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Dest_CC" />
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Dest_BCC" />
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Sujet" />
+							<treecell label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</template>
+		</tree>
+		
+		<groupbox flex="1" pack="center" align="center">
+			<caption label="Email" />
+			<grid>
+				<columns>
+					<column/>
+					<column/>
+				</columns>
+				<rows>
+         	<row align="center">
+           	<label class="label" value="Libellé :" />
+           	<hbox><textbox id="Libelle" maxlength="30" size="30" /></hbox>
+         	</row>
+					<row align="center">
+           	<label class="label" value="* Expéditeur :" />
+           	<hbox><textbox id="Expediteur" maxlength="64" size="50" /></hbox>
+         	</row>
+					<row align="center">
+           	<label class="label" value="Destinataire CC :" />
+           	<hbox><textbox id="Dest_CC" maxlength="64" size="50" /></hbox>
+         	</row>
+         	<row align="center">
+           	<label class="label" value="Destinataire BCC :" />
+           	<hbox><textbox id="Dest_BCC" maxlength="64" size="50" /></hbox>
+         	</row>
+         	<row align="center">
+           	<label class="label" value="* Sujet :" />
+           	<hbox><textbox id="Sujet" maxlength="50" size="50" /></hbox>
+         	</row>
+				</rows>
+     	</grid>
+
+			<hbox style="height:30px" />
+			<hbox>
+				<button id="bNouvelEmail" class="bNouveau" label="Nouveau" oncommand="nouvelEmail()" />
+				<button id="bEnregistrerEmail" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerEmail()" />
+				<button id="bSupprimerEmail" class="bSupprimer" label="Supprimer" oncommand="supprimerEmail()" />
+			</hbox>
+   	</groupbox>
+	</vbox>
+
+</window>

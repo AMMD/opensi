@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_overlay-fiche"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-fiche.js" />
+
+	<tabpanel id="tab-fiche" onchange="setModifie();">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+			<hbox flex="1">
+    		<vbox flex="1">
+      		<groupbox flex="1" pack="center" align="center">
+      			<caption label="Coordonnées du client" />
+          	<hbox>
+            	<grid>
+              	<columns>
+                	<column />
+                	<column />
+              	</columns>
+              	<rows>
+                	<row align="center">
+                  	<label class="label" value="* Code client :" />
+                  	<hbox>
+                  		<label id="lblAuto" value="Automatique" collapsed = "true" />
+                  		<textbox id="Client_Id" maxlength="10" size="11" />
+                  		<button id="bChgCodeClient" oncommand="changerCodeClient();" class="bIcoEdition" />
+                  	</hbox>
+                	</row>
+									<row>
+										<label class="label" value="Type client :" />
+										<radiogroup id="Type_Client" orient="horizontal">
+											<vbox>
+                    		<radio id="TypeP" value="P" label="Particulier" oncommand="selTypeClient(value);" />
+                    		<radio id="TypeE" value="E" label="Entreprise" selected="true" oncommand="selTypeClient(value);" />
+											</vbox>
+											<vbox>
+                    		<radio id="TypeA" value="A" label="Association" oncommand="selTypeClient(value);" />
+												<radio id="TypeO" value="O" label="Organisme public" oncommand="selTypeClient(value);" />
+											</vbox>
+                  	</radiogroup>
+									</row>
+									<row style="height:10px" />
+									<row align="center" id="rowType_Societe">
+                  	<label class="label" value="Type société :" />
+										<hbox>
+											<menulist id="Type_Societe" ref="http://www.opensi.org/facturation/typeS" datasources="rdf:null">
+												<menupopup>
+													<menuitem label="[Aucun]" value="0" />
+									      </menupopup>
+												<template>
+						     					<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeS/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeS/rdf#id" />
+						     					</menupopup>
+												</template>
+						   				</menulist>
+										</hbox>
+                	</row>
+									<row align="center" observes="bcParticulier">
+                  	<label class="label" value="* Raison sociale :" />
+                  	<hbox><textbox id="Denomination" maxlength="50" size="30" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Civilité :" />
+                  	<radiogroup id="Civilite" orient="horizontal">
+                    	<radio id="CiviliteM" value="1" label="M." selected="true" />
+                    	<radio id="CiviliteMme" value="2" label="Mme" />
+                    	<radio id="CiviliteMlle" value="3" label="Mlle" />
+                  	</radiogroup>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Nom :" />
+                  	<hbox><textbox id="Nom" maxlength="30" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Prénom :" />
+                  	<hbox><textbox id="Prenom" maxlength="20" size="20" /></hbox>
+                	</row >
+                	<row align="center">
+                  	 <label class="label" value="* Adresse :" />
+                  	 <hbox><textbox id="Adresse" maxlength="80" size="30" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="" />
+                  	<hbox><textbox id="Comp_Adresse" maxlength="50" size="30" /></hbox>
+                	</row>
+									<row align="center">
+                  	<label class="label" value="" />
+                  	<hbox><textbox id="Adresse_3" maxlength="50" size="30" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Code postal :" />
+                  	<hbox><textbox id="Code_Postal" class="rv_cp" idnextfocus="Code_Pays" idville="Ville" maxlength="10" size="6" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="* Ville :" />
+                  	<hbox><textbox id="Ville" class="rv_ville" idnextfocus="Code_Pays" idcp="Code_Postal" maxlength="50" size="30" /></hbox>
+                	</row>
+									<row align="center">
+                  	<label class="label" value="Pays :" />
+                  	<hbox>
+                  		<menulist id="Code_Pays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+											<template>
+			              		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+			              		</menupopup>
+											</template>
+											</menulist>
+                  	</hbox>
+                	</row>
+              	</rows>
+            	</grid>
+							<box style="width:10px" />
+            	<grid>
+              	<columns>
+                	<column />
+                	<column />
+              	</columns>
+              	<rows>
+                	<row align="center">
+                  	<label class="label" value="Tél. 1 :" />
+                  	<hbox><textbox id="Tel_1" maxlength="20" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Tél. 2 :" />
+                  	<hbox><textbox id="Tel_2" maxlength="20" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Tél. 3 :" />
+                  	<hbox><textbox id="Tel_3" maxlength="20" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Fax 1 :" />
+                  	<hbox><textbox id="Fax_1" maxlength="20" size="20" /></hbox>
+                	</row>
+                	<row align="center" id="Fax2">
+                  	<label class="label" value="Fax 2 :" />
+                  	<hbox><textbox id="Fax_2" maxlength="20" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="E-Mail 1 :" />
+                  	<hbox><textbox id="Email_1" maxlength="60" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="E-Mail 2 :" />
+                  	<hbox><textbox id="Email_2" maxlength="60" size="20" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="Site Web :" />
+                  	<hbox><textbox id="Site_Web" maxlength="40" size="20" /></hbox>
+                	</row>
+									<row style="height:20px" />
+									<row align="center">
+          					<label class="label" value="Famille :" />
+          					<hbox align="center">
+            					<menulist id="Famille" ref="http://www.opensi.org/facturation/familles_client" datasources="rdf:null" style="width:180px">
+												<menupopup>
+													<menuitem label="[Aucun]" value="0" />
+												</menupopup>
+												<template>
+              						<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_client/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_client/rdf#Famille_Id" />
+              						</menupopup>
+												</template>
+            					</menulist>
+            					<button class="bIcoEdition" oncommand="ouvrirEditionListe();" />
+										</hbox>
+        					</row>
+        					<row align="center">
+          					<label class="label" value="Pôle d'activité :" />
+          					<hbox>
+            					<menulist id="Secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px">
+												<menupopup>
+													<menuitem label="[Aucun]" value="0" />
+												</menupopup>
+												<template>
+              						<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+              						</menupopup>
+												</template>
+            					</menulist>
+										</hbox>
+        					</row>
+									<row align="center" observes="bcParticulier">
+      							<label class="label" value="Revendeur :" />
+      							<radiogroup id="Revendeur" orient="horizontal">
+        							<radio id="RevendeurOui" value="1" label="oui"/>
+        							<radio id="RevendeurNon" value="0" selected="true" label="non" />
+      							</radiogroup>
+    							</row>
+                	<row align="center" observes="bcParticulier">
+                  	<label class="label" value="N° SIRET :" />
+                  	<hbox><textbox id="Num_SIRET" maxlength="14" size="15" /></hbox>
+                	</row>
+									<row align="center" observes="bcParticulier">
+                  	<label class="label" value="Code NAF :" />
+                  	<hbox><textbox id="Code_NAF" maxlength="5" size="5" /></hbox>
+                	</row>
+                	<row align="center">
+                  	<label class="label" value="N° de TVA :" />
+                  	<hbox><textbox id="Num_TVA_Intra" maxlength="14" size="15" /></hbox>
+                	</row>
+			          	<row align="center">
+										<label class="label" value="Fichiers associés :" />
+										<hbox>
+											<button id="bVoirFichier" label="Voir les fichiers" oncommand="afficherFichiers();" />
+			  						</hbox>
+			  					</row>
+              	</rows>
+            	</grid>
+          	</hbox>
+        	</groupbox>
+    		</vbox>
+				<vbox flex="1">
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Informations complémentaires"/>
+						<grid>
+  						<columns>
+    						<column />
+    						<column />
+  						</columns>
+  						<rows>
+								<row align="center" observes="bcParticulier">
+									<label value="Mon N° de fournisseur :" class="label" />
+									<hbox><textbox id="Code_Fournisseur" size="10" maxlength="10" /></hbox>
+								</row>
+								<row align="center">
+									<label value="Responsable :" class="label" />
+									<hbox>
+										<menulist id="Login_Resp" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+             					</menupopup>
+											<template>
+              					<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+              					</menupopup>
+											</template>
+            				</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+      						<label class="label" value="Bloqué :" />
+      						<radiogroup id="Bloque" orient="horizontal">
+        						<radio id="BloqueOui" value="1" label="oui"/>
+        						<radio id="BloqueNon" value="0" selected="true" label="non" />
+      						</radiogroup>
+    						</row>
+    						<row align="center">
+      						<label class="label" value="Code couleur :" />
+      						<hbox>
+        						<menulist id="Code_Couleur">
+          						<menupopup>
+            						<menuitem id="vert" label="Vert" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_vert.jpg" value="2" />
+            						<menuitem id="bleu" label="Bleu" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_bleu.jpg" value="3" />
+												<menuitem id="rouge" label="Rouge" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_rouge.jpg" value="1" />
+            						<menuitem id="noir" label="Noir" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_noir.jpg" value="0" />
+          						</menupopup>
+        						</menulist>
+      						</hbox>
+    						</row>
+  						</rows>
+						</grid>
+    			</groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires" />
+						<textbox id="Com_Libre" multiline="true" rows="3" cols="35" />
+					</groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Indications de commande" />
+						<textbox id="Indications" multiline="true" rows="3" cols="35" />
+					</groupbox>
+				</vbox>
+			
+			</hbox>
+			
+			<groupbox flex="1" pack="center" align="center" orient="horizontal">
+				<grid>
+  				<columns>
+    				<column />
+    				<column />
+  				</columns>
+  				<rows>
+						<row align="center">
+      				<label class="label" value="Récurrent :" />
+      				<radiogroup id="Recurrent" orient="horizontal">
+        				<radio id="RecurrentOui" value="1" label="oui"/>
+        				<radio id="RecurrentNon" value="0" selected="true" label="non" />
+      				</radiogroup>
+    				</row>
+    				<row>
+      				<label class="label" value="Commentaires :" />
+      				<textbox id="Com_Recurrent" multiline="true" rows="2" />
+    				</row>
+					</rows>
+				</grid>
+				<box style="width:10px" />
+				<grid>
+  				<columns>
+    				<column />
+    				<column />
+  				</columns>
+  				<rows>
+    				<row align="center">
+      				<label class="label" value="Exigences particulières :" />
+        			<radiogroup id="Exigences" orient="horizontal">
+          			<radio id="ExigencesOui" value="1" label="oui" />
+            		<radio id="ExigencesNon" value="0" selected="true" label="non" />		
+        			</radiogroup>
+    				</row>
+    				<row>
+      				<label class="label" value="Commentaires :" />
+      				<textbox id="Com_Exigences" multiline="true" rows="2" />
+    				</row>
+					</rows>
+				</grid>
+				<box style="width:10px" />
+				<grid>
+  				<columns>
+    				<column />
+    				<column />
+  				</columns>
+  				<rows>
+    				<row align="center">
+      				<label class="label" value="Compte actif :" />
+      				<radiogroup id="Actif" orient="horizontal">
+          			<radio id="ActifOui" value="1" label="oui" />
+          			<radio id="ActifNon" value="0" selected="true" label="non" />
+      				</radiogroup>
+    				</row>
+    				<row>
+      				<label class="label" value="Commentaires :" />
+      				<textbox id="Com_Sante" multiline="true" rows="2" />
+    				</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+		</vbox>	
+
+		<observes element="Civilite" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Type_Societe" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Code_Couleur" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Recurrent" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Exigences" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Actif" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Login_Resp" attribute="value" onbroadcast="setModifie();" />
+		<observes element="Bloque" attribute="value" onbroadcast="setModifie();" />
+		
+		<broadcasterset>
+  		<broadcaster id="bcParticulier" collapsed="false" />
+		</broadcasterset>
+
+	</tabpanel>
+
+</overlay>

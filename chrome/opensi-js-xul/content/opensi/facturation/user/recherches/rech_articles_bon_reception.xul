@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Sélection d'articles"
+  id="opensi_facturation_user_stocks_rechStocks"
+  onload="init()"
+  width="800"
+	height="800"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_articles_bon_reception.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="SELECTION D'ARTICLES" />
+	</hbox>
+	<hbox style="height:20px" />
+
+	<vbox>
+		<hbox align="center">
+			<label value="Mode de recherche :" />
+			<radiogroup id="grpModeRecherche" orient="horizontal" oncommand="listerDocuments();">
+				<radio value="BR" label="par bon de réception" />
+				<radio value="C" label="par commande" />
+			</radiogroup>
+		</hbox>
+		<hbox>
+			<grid>
+	  		<columns>
+	    		<column />
+	    		<column />
+	  		</columns>
+	  		<rows>
+	    		<row align="center">
+	      		<label class="label" value="N° Bon de réception :" />
+	      		<hbox align="center">
+	        		<textbox id="Num_Entier" maxlength="15" width="120px" onkeypress="pressOnId(event);"/>
+	      		</hbox>
+	    		</row>
+	    		<row align="center">
+	      		<label class="label" value="N° Commande :" />
+	      		<hbox align="center">
+	        		<textbox id="Num_Commande" maxlength="15" width="120px" onkeypress="pressOnCritere(event);"/>
+	      		</hbox>
+	    		</row>
+				</rows>
+			</grid>
+			<grid>
+	  		<columns>
+	    		<column />
+	    		<column />
+	  		</columns>
+	  		<rows>
+	    		<row align="center">
+	      		<label class="label" value="N° Bon de livraison :" />
+	      		<hbox align="center">
+	        		<textbox id="Num_BL" maxlength="20" width="120px" onkeypress="pressOnCritere(event);"/>
+	      		</hbox>
+	    		</row>
+	    		<row align="center">
+	      		<label class="label" value="Référence article :" />
+	      		<hbox align="center">
+	        		<textbox id="refArticle" maxlength="20" width="120px" onkeypress="pressOnCritere(event);"/>
+	      		</hbox>
+	    		</row>
+				</rows>
+			</grid>
+		</hbox>
+		<hbox pack="end" flex="1">
+			<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="listerDocuments();" />
+			<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="initCriteres();" />
+		</hbox>
+	</vbox>
+	
+	<box style="height:20px" />
+
+	<vbox id="boxBR" flex="1" collapsed="true">
+		<label value="Bons de réception trouvés :" />
+	  <tree id="listeBR"
+	        flex="1"
+	        hidecolumnpicker="true"
+	        ref="http://www.opensi.org/facturation/br"
+	        datasources="rdf:null"
+	        onkeypress="choixBR();"
+					onclick="choixBR();"
+					flags="dont-build-content">
+			<treecols>
+				<treecol id="colNumBR" label="N° Bon de réception" flex="2" />
+				<splitter class="tree-splitter" />
+				<treecol label="Date" flex="2" />
+				<splitter class="tree-splitter" />
+				<treecol label="N° Commande" flex="2" />
+				<splitter class="tree-splitter" />
+				<treecol label="N° Bon de livraison" flex="2" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/facturation/br/rdf#Num_Entier" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/br/rdf#Date_BR" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/br/rdf#Num_Commande" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/br/rdf#Num_BL" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+		</tree>
+	</vbox>
+	<vbox id="boxCommandes" flex="1" collapsed="true">
+		<label value="Commandes trouvées :" />
+	  <tree id="listeCommandes"
+	        flex="1"
+	        hidecolumnpicker="true"
+	        ref="http://www.opensi.org/facturation/commandes"
+	        datasources="rdf:null"
+	        onkeypress="choixCommande();"
+					onclick="choixCommande();"
+					flags="dont-build-content">
+			<treecols>
+				<treecol id="colNumCommande" label="N° Commande" flex="1" />
+				<splitter class="tree-splitter" />
+				<treecol label="Date" flex="1" />
+				<splitter class="tree-splitter" />
+				<treecol label="Total HT" class="nombre" flex="1" />
+				<splitter class="tree-splitter" />
+				<treecol label="Total TTC" class="nombre" flex="1" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Numero" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Date_Commande" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Total_HT" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Total_TTC" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+		</tree>
+	</vbox>
+
+	<box style="height:20px" />
+
+	<hbox align="end">
+		<label value="Articles trouvés :" />
+		<hbox pack="end" flex="1">
+			<button id="bToutCocher" class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher(true)" />
+			<button id="bToutDecocher" class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher(false)" />
+		</hbox>
+	</hbox>
+	
+	<listbox flex="1" id="articles"
+           ref="http://www.opensi.org/facturation/rechArticles"
+           datasources="rdf:null"
+           onclick="testCheck();">
+		<listhead>
+			<listheader label="Référence" />
+			<listheader label="Désignation" />
+			<listheader label="Quantité" class="nombre" />
+		</listhead>
+		<listcols>
+			<listcol flex="3" />
+			<listcol flex="3" />
+			<listcol flex="1" />
+		</listcols>
+		<template>
+			<listitem id="it" value="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Ligne_Id" uri="rdf:*">
+				<listcell id="check" type="checkbox" checked="true" label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Ref_Fournisseur"/>
+				<listcell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Designation" />
+				<listcell label="rdf:http://www.opensi.org/facturation/rechArticles/rdf#Quantite" class="nombre" />
+			</listitem>
+		</template>
+	</listbox>
+
+	<box style="height:20px" />
+	<hbox pack="center">
+		<hbox flex="1" pack="center">
+			<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+			<button id="bOk" label="OK" class="bValider" oncommand="choixArticle();" />
+		</hbox>
+		<hbox style="width:100px;" />
+	</hbox>
+	<box style="height:20px" />
+</window>

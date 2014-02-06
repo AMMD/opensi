@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_rapport_cnx" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestionDoublons.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="" align="end" class="etape" />
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Gestion des doublons" class="label_14"/></box>
+		</vbox>
+
+		<!-- FIN Titre -->
+		
+		
+		<description>Tous les articles ci dessous ont une référence qui existe déjà dans OpenSi.
+		Vous pouvez soit changer la référence, soit les supprimer.
+		</description>
+		
+		<description id="desc" class="warning">
+		Si vous ne faites rien, les doublons sur référence seront supprimés.
+		</description>
+		
+		
+		<!--
+		************
+		* DOUBLONS *
+		************
+		-->
+		
+		<hbox flex="20">
+    		<tree id="contenu_rapport" 
+        		  ref="http://www.opensi.org/WebManager/verifDoublons"
+        		  seltype="single"
+        		  datasources="rdf:null"
+        		  flex="1"
+        		  style="overflow: auto;"
+				  onclick="select_ligne()"
+				hidecolumnpicker="true">
+    		  <treecols>
+			  	<treecol id="ref_opensi" flex="1" label="Reference OpenSi"/>
+				<treecol id="des_opensi" flex="1" label="Designation OpenSi"/>
+				<treecol id="fam_opensi" flex="1" label="Famille 1"/>
+				<treecol id="sousf_opensi" flex="1" label="Famille 2"/>
+				<treecol id="blanc2" flex="1" label=""/>
+				<treecol id="ref_temp" flex="1" label="Reference en ligne"/>
+				<treecol id="des_temp" flex="1" label="Designation en ligne"/>
+				<treecol id="fam_temp" flex="1" label="Famille 1"/>
+				<treecol id="sousfam_temp" flex="1" label="Famille 2"/>
+			 </treecols>
+    		  <template>
+        		<treechildren>
+        		  <treeitem uri="rdf:*">
+            		<treerow>
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#ref_opensi" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#des_opensi" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#fam_opensi" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#sousf_opensi" />
+					  
+					  <treecell />
+					  
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#ref_temp" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#des_temp" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#fam_temp" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/verifDoublons/rdf#sousf_temp" />
+            		</treerow>
+        		  </treeitem>
+        		</treechildren>
+    		  </template>
+    		</tree>
+		  </hbox>
+		
+	<box height="20px"/>
+		
+	<hbox>
+		<box width="10px"/>
+		<progressmeter id="barre_progression" mode="determined" value="0%" hidden="true"/>
+	</hbox>
+		
+		
+	<!-- Pour un article -->	
+	<hbox id="boite_un_article" flex="1" hidden="true">
+		<box width="10px"/>
+
+		<hbox class="cadre" flex="1">
+
+			<vbox flex="1">
+				<box height="10px"/>
+				<hbox>
+
+					<vbox flex="1">
+						<label id="lb_ref" value="Référence" />
+						<textbox id="txt_ref" value="" readonly="true"/>
+					</vbox>
+
+					<vbox flex="1">
+						<label id="lb_design" value="Désignation" />
+						<textbox id="txt_design" value="" readonly="true"/>
+					</vbox>
+					
+					<vbox flex="1">
+						<label id="lb_ref" value="Famille 1" />
+						<textbox id="txt_famille" value="" readonly="true"/>
+					</vbox>
+
+					<vbox flex="1">
+						<label id="lb_design" value="Famille 2" />
+						<textbox id="txt_sousFamille" value="" readonly="true"/>
+					</vbox>
+				</hbox>
+
+				<box height="20px"/>
+
+				<hbox flex="1" align="end">
+					<vbox>
+						<label value="Nouvelle reference" />
+						<textbox id="txt_nvlRef" value="" onkeypress="keyPressee_newRef(event);"/>
+					</vbox>
+					
+					<vbox>
+						<label value="Nouvelle désignation" />
+						<textbox id="txt_nvlDes" value="" onkeypress="keyPressee_newRef(event);"/>
+					</vbox>
+				</hbox>
+
+				<box height="20px"/>
+
+
+
+			</vbox>
+
+			<hbox align="end">
+				<vbox flex="1">
+					<button label="Changer" id="bt_changer" oncommand="clic_changer()"/>
+					<button label="Supprimer" class="bSupprimer" id="bt_suppr" oncommand="clic_supprimer()"/>
+					<button label="Annuler" class="bAnnuler" id="bt_suppr" oncommand="clic_annuler()"/>
+				</vbox>
+			</hbox>
+
+		</hbox>
+	
+	</hbox>
+		
+<!-- Pour une liste d'articles -->	
+	<hbox id="boite_liste_article" flex="1">
+		<box width="10px"/>
+
+		<hbox class="cadre" flex="1">
+
+			<vbox flex="1">
+
+				<hbox flex="1" align="end">
+					<vbox>
+						<label value="Suffixe a ajouter a toutes les références:" />
+						<textbox id="txt_suffixe_ref" value="" onkeypress="keyPressee_suffixes(event);"/>
+					</vbox>
+					
+					<vbox>
+						<label value="Suffixe a ajouter a toutes les désignation:" />
+						<textbox id="txt_suffixe_des" value="" onkeypress="keyPressee_suffixes(event);"/>
+					</vbox>
+				</hbox>
+
+				<box height="20px"/>
+
+
+
+			</vbox>
+
+			<hbox align="end">
+				<vbox flex="1">
+					<button label="Valider" id="bt_changer" oncommand="clic_valider()"/>
+				</vbox>
+			</hbox>
+
+		</hbox>
+	
+		<box width="10px"/>
+	
+	</hbox>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		 <box height="20px"/>
+		 <hbox flex="1" align="end">
+			<vbox flex="1">
+				<hbox>
+					<box width="10px" />
+					<button id="etape_precedente" class="bIcoRetour" label="Etape précédente" oncommand="etape_precedente()"/>
+				</hbox>
+			  </vbox> 
+
+
+			  <vbox align="end" flex="1">
+				<hbox align="end">
+
+					<label id="conclusion_test" value=""/>
+					<button id="etape_suivante" class="bIcoAvance" label="Etape suivante" oncommand="etape_suivante()"/>
+					<box width="10px" />
+				</hbox>
+			  </vbox>
+			  
+		  </hbox>
+		<box height="20px" />
+	</vbox>
+		
+</window>

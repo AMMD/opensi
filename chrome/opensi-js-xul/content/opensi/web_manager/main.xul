@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi e-Commerce"
+  id="opensi_webmanager_main"
+  persist="screenX screenY height width sizemode"
+	sizemode="maximized"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="main.js" />
+
+  <hbox id="bandeau" class="bandeau_conf" style="overflow: hidden">
+		<image id="imgLogo" src="chrome://opensi/content/design/logo-conf.jpg" />
+    <spacer flex="1" />
+		<vbox align="end" style="min-width:730px;background-image: url(chrome://opensi/content/design/bandeau-web.jpg);">
+			<box style="height:10px" />
+			<hbox align="center" style="color:#FFFFFF;margin-right:4px">
+     		<label id="nom_dossier" />
+			</hbox>
+			<box style="height:10px" />
+			<hbox align="center" style="color:#FFFFFF;margin-right:4px">
+				<label id="login" />
+				<label value="-" />
+				<label id="date_courante" />
+			</hbox>
+		</vbox>
+  </hbox>
+	
+	<iframe flex="1" id="contenu" />
+
+</window>

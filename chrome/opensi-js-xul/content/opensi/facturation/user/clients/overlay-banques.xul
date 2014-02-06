@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_overlay-banques"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-banques.js" />
+
+	<tabpanel id="tab-banques">
+		<vbox pack="center" flex="1" class="auto-overflow">
+			<tree id="tree-banques"
+          	flex="2"
+          	hidecolumnpicker="true"
+          	seltype="single"
+          	style="min-height: 100px;"
+          	ref="http://www.opensi.org/facturation/banques_client"
+          	datasources="rdf:null"
+          	onkeypress="pressOnTreeBanques(event);"
+          	ondblclick="chargerBanque();">
+
+      	<treecols>
+        	<treecol id="ColNom" flex="5" label="Banque" />
+					<splitter class="tree-splitter" />
+        	<treecol id="ColAdresse" flex="5" label="Domiciliation" />
+					<splitter class="tree-splitter" />
+        	<treecol id="ColAgence" flex="2" label="Code agence" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColGuichet" flex="2" label="Code guichet" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColCompte" flex="2" label="Numéro de compte" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColRib" flex="1" label="Clé de RIB" />
+          <splitter class="tree-splitter" />
+          <treecol id="ColIBAN" flex="3" label="IBAN" />
+      	</treecols>
+      	<template>
+        	<treechildren>
+          	<treeitem uri="rdf:*">
+            	<treerow>
+              	<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Nom" value="rdf:http://www.opensi.org/facturation/banques_client/rdf#Banque_Id" />
+              	<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Adresse" />
+              	<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Code_Agence" />
+								<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Code_Guichet" />
+								<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Num_Compte" />
+								<treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#Cle_RIB" />
+                <treecell label="rdf:http://www.opensi.org/facturation/banques_client/rdf#IBAN" />
+            	</treerow>
+          	</treeitem>
+        	</treechildren>
+      	</template>
+    	</tree>
+
+			<groupbox flex="1" pack="center" align="center">
+      	<caption label="Banque" />
+      	<grid>
+        	<columns>
+          	<column/>
+          	<column/>
+        	</columns>
+        	<rows>
+            <row align="center">
+              <label value="" />
+              <checkbox id="international" label="Compte International" oncommand="changer_type(checked)"/>
+            </row>
+          	<row align="center">
+            	<label class="label" value="* Nom :" />
+            	<hbox><textbox id="Nom_Banque" maxlength="30" size="30" /></hbox>
+          	</row>
+						<row align="center">
+            	<label class="label" value="* Domiciliation :" />
+            	<hbox><textbox id="Domiciliation" maxlength="80" size="50" /></hbox>
+          	</row>
+						<row align="center" id="row_Code_Agence">
+            	<label class="label" value="* Code agence :" />
+            	<hbox><textbox id="Code_Agence" maxlength="5" size="5" oninput="makeIBAN();" /></hbox>
+          	</row>
+						<row align="center" id="row_Code_Guichet">
+            	<label class="label" value="* Code guichet :" />
+            	<hbox><textbox id="Code_Guichet" maxlength="5" size="5" oninput="makeIBAN();" /></hbox>
+          	</row>
+						<row align="center" id="row_Num_Compte">
+            	<label class="label" value="* Numéro de compte :" />
+            	<hbox><textbox id="Num_Compte" maxlength="11" size="11" oninput="makeIBAN();" /></hbox>
+          	</row>
+						<row align="center" id="row_Cle_RIB">
+            	<label class="label" value="* Clé de RIB :" />
+            	<hbox><textbox id="Cle_RIB" maxlength="2" size="2" oninput="makeIBAN();" /></hbox>
+          	</row>
+						<row align="center">
+            	<label class="label" value="IBAN :" />
+            	<hbox><textbox id="IBAN" maxlength="4" size="4" /><textbox id="IBAN_Suite" maxlength="23" size="23" /></hbox>
+          	</row>
+						<row align="center">
+            	<label class="label" value="Code BIC :" />
+            	<hbox><textbox id="BIC" maxlength="11" size="13" /></hbox>
+          	</row>
+					</rows>
+      	</grid>
+
+				<hbox style="height:30px" />
+				<hbox>
+					<button id="bNouveauBanque" class="bNouveau" label="Nouveau" oncommand="nouveauBanque()" />
+					<button id="bCreerBanque" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerBanque('C')" />
+					<button id="bModifierBanque" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerBanque('M')" />
+					<button id="bSupprimerBanque" class="bSupprimer" label="Supprimer" oncommand="supprimerBanque()" />
+				</hbox>
+
+    	</groupbox>
+
+  	</vbox>
+
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_paramserveur" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="param_serveur.js" />
+
+	<hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="Etape 1" align="end" class="etape" id="lb_etape"/>
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Paramétrer les serveurs" class="label_14"/></box>
+		</vbox>
+
+		<!-- Liste de sites -->
+		<label class="label_12"  value="Sites actifs"/>
+		<hbox flex="3">
+    		<tree id="liste_sites_e_commerce" 
+        		  ref="http://www.opensi.org/WebManager/listeSitesECommerce"
+        		  seltype="single"
+        		  datasources="rdf:null"
+        		  flex="1"
+        		  style="overflow: auto;"
+        		  onclick="select_site()"
+				  ondblclick="doubleClic()"
+							hidecolumnpicker="true">
+    		  <treecols>
+			  	<treecol id="id_site" flex="1" label="id"  collapsed="true"/>
+				<splitter class="tree-splitter" />
+        		<treecol id="nom_site" flex="1" label="Nom du site" />
+				<splitter class="tree-splitter" />
+        		<treecol id="url_site" flex="4" label="URL du site" />
+				<splitter class="tree-splitter" />
+				<treecol id="adresse" flex="2" label="www" />
+				<splitter class="tree-splitter" />
+				<treecol id="logo" flex="2" label="logo" />
+    		  </treecols>
+    		  <template>
+        		<treechildren>
+        		  <treeitem uri="rdf:*">
+            		<treerow>
+					  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#id_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#nom_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#url_site" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#adresse" />
+					  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesECommerce/rdf#logo" />
+            		</treerow>
+        		  </treeitem>
+        		</treechildren>
+    		  </template>
+    		</tree>
+		  </hbox>
+		<!-- fin Liste de sites -->
+
+
+		<!-- Liste des sites désactivés-->
+		<box height="10px"/>
+		<label class="label_12" value="Sites désactivés"/>
+		<hbox flex="2">
+    		<tree id="liste_sites_desactives" 
+        		  ref="http://www.opensi.org/WebManager/listeSitesDesactives"
+        		  seltype="single"
+        		  datasources="rdf:null"
+        		  flex="1"
+        		  style="overflow: auto;"
+        		  onclick="select_desactive()"
+							hidecolumnpicker="true">
+    		  <treecols>
+			  	<treecol id="id_site" flex="1" label="id"  collapsed="true"
+					sort="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#id_site" />
+				<splitter class="tree-splitter" />
+        		<treecol id="nom_site" flex="1" label="Nom du site" 
+					sort="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#nom_site" />
+				<splitter class="tree-splitter" />
+        		<treecol id="url_site" flex="2" label="URL du site" 
+					sort="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#url_site" />
+					<splitter class="tree-splitter" />
+				<treecol id="adresse" flex="2" label="www" 
+					sort="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#adresse" />
+					<splitter class="tree-splitter" />
+				<treecol id="logo" flex="2" label="logo" 
+					sort="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#logo" />
+    		  </treecols>
+    		  <template>
+        		<treechildren>
+        		  <treeitem uri="rdf:*">
+            		<treerow>
+									<treecell label="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#id_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#nom_site" />
+            		  <treecell label="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#url_site" />
+					  			<treecell label="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#adresse" />
+					  			<treecell label="rdf:http://www.opensi.org/WebManager/listeSitesDesactives/rdf#logo" />
+            		</treerow>
+        		  </treeitem>
+        		</treechildren>
+    		  </template>
+    		</tree>
+		  </hbox>
+		<!-- Liste des sites désactivés -->
+
+
+		  <hbox align="center" flex="1">
+		  <box width="10px"/>
+		  <!-- Zone de saisie -->
+  			<vbox flex="1"  class="cadre">
+				<hbox>
+					<label  class="label_12" value="Les paramètres de connexion"/>
+					<label id="warning" value="Faut tout remplir" class="warning"/>
+					<label id="txt_id_site" value="id du site" hidden="true"/>
+				</hbox>
+				<hbox height="10px" />
+				
+				<hbox align="end" flex="1">
+				
+					<vbox flex="1">
+						
+						<hbox flex="1" >							
+							<vbox flex="3">
+								<label value="Adresse du site de e-commerce:"/>
+								<textbox id="txt_adresse_site" value=""/>
+							</vbox>
+							
+							<vbox flex="3">
+								<label value="Url du logo:"/>
+								<textbox id="txt_logo" value=""/>
+							</vbox>
+						</hbox>
+
+						<box height="10px" />
+
+						<!-- SITE -->	
+						<hbox flex="1" >
+							<vbox flex="1">
+								<label value="Nom du site:"/>
+								<textbox id="txt_nom_site" value="site web"/>
+							</vbox>
+
+							<vbox flex="6">
+								<label value="Adresse du web service:"/>
+								<textbox id="txt_url_site" value="http://localhost:8080/axis/services/ServeurWebManager"/>
+							</vbox>
+
+						</hbox>
+
+						<box height="10px" />
+						
+					</vbox>
+					<!-- Fin Zone de saisie -->
+					<box width="10px"  />
+					
+		  			<vbox pack="end"  >
+						<box flex="1"/>
+						<button  flex="1"  label="Nouveau" oncommand="clic_nouveau()"/>
+						<box height="60px"/>
+						<button  flex="1"  label="Ajouter" id="bt_ajouter" oncommand="clic_ajouter()"/>
+						<button  flex="1"  label="Désactiver" id="bt_suppr" oncommand="clic_suppr()"/>
+					</vbox>
+					<box width="10px"/>
+				</hbox>
+				<box height="10px"/>
+			</vbox>
+			<box width="10px"/>
+		</hbox>
+		
+		
+		
+		<vbox align="end">
+			<hbox align="end">
+				<label id="site_en_cours" value="Sélectionnez un site actif avant de passer à l'étape suivante"/>
+				<button id="etape_suivante" label="Etape suivante" oncommand="etape_suivante()"/>
+				<box width="10px" />
+			</hbox>
+		</vbox>
+		<box height="20px" />
+	</vbox>
+	
+</window>

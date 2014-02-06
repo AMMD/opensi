@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_consultation_lettrage"
+  onload="init()"
+	title="OpenSi - Ecart de lettrage"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="lettrage.js" />
+
+  <vbox flex="1" pack="center" style="overflow: auto;">
+    <hbox flex="1" />
+    <hbox pack="center">
+      <label class="label_16" value="AJOUT D'UNE ECRITURE D'ECART DE LETTRAGE" />
+    </hbox>
+    <hbox flex="1" />
+   
+		<grid>
+			<columns>
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="Contrepartie :" />
+					<hbox>
+						<textbox id="contrepartie" size="10" maxlength="8" />
+						<button class="bIcoRechercher" oncommand="changerCompte();" />
+        	</hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Journal :" />
+					<hbox align="center">
+						<menulist id="journaux" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+							<menupopup>
+								<menuitem label="[Choisir]" value="0" />
+							</menupopup>
+	          	<template>
+	            	<menupopup>
+	              	<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+	            	</menupopup>
+	          	</template>
+	        	</menulist>
+	        </hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Date de l'écriture :" />
+					<hbox><textbox id="date" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Libellé :" />
+					<textbox id="libelle" size="40" maxlength="100" onkeypress="keypress(event)" />
+				</row>
+				<row align="center">
+					<label class="label" id="nom_montant" />
+					<hbox><textbox id="montant" class="nombre" readonly="true" /></hbox>
+				</row>
+			</rows>
+		</grid>
+      
+    <hbox flex="1" />
+    <hbox pack="center">
+			<button class="bAnnuler" label="Annuler" oncommand="window.close()" />
+      <button class="bValider" label="Valider" oncommand="validerEcriture();" />      
+    </hbox>
+    <hbox flex="1" />
+	</vbox>
+
+</window>

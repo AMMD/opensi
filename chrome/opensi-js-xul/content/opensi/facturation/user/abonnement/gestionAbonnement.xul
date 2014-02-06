@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_abonnement_gestionAbonnement"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestionAbonnement.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+			<button class="bouton_menu" id="bFacturesEmettre" oncommand="factureAEmettre();" />
+			<button class="bouton_menu" id="bMenuModeles" oncommand="gestionModele();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+	<hbox>
+		<label class="label_14" value="Gestion des abonnements" />
+		<hbox flex="1" pack="end">
+			<button label="Nouvel abonnement" class="bNouveau" oncommand="nouvelAbonnement();" />
+		</hbox>
+	</hbox>
+	
+	<hbox>
+		<spacer flex="1"/>
+		<groupbox id="gInfoAbonnement" pack="top" align="left">
+			<label class="label" id="nbClients" value=""/>
+			<label class="label" id="nbAbonnement" value=""/>
+		</groupbox>
+	</hbox>
+	<hbox>
+		<vbox flex="1">
+			<hbox>
+				<vbox>
+					<hbox>
+						<label class="label" value="Réference modèle :" />
+					</hbox>
+					<hbox>
+						<menulist id="Combo_reference" oncommand="pressOnParam();" ref="http://www.opensi.org/facturation/ref_modele" datasources="rdf:null">
+							<menupopup>
+								<menuitem label="[tous les modèles]" value="" />
+							</menupopup>
+							<template>
+         				<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/ref_modele/rdf#ref_modele"
+														value="rdf:http://www.opensi.org/facturation/ref_modele/rdf#ref_modele" />
+         				</menupopup>
+							</template>
+      			</menulist>
+					</hbox>
+				</vbox>
+				<vbox>
+					<hbox>
+						<label class="label" value="Type de contrat :" />
+					</hbox>
+					<hbox>
+						<menulist id="typeContrat" oncommand="pressOnParam();">
+							<menupopup>
+								<menuitem label="[Tous les contrats]" value="0"/>
+								<menuitem label="sans reconduction" value="1"/>
+								<menuitem label="reconduction tacite" value="2" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</vbox>
+				<vbox>
+					<hbox>
+						<label class="label" value="Etat :" />
+					</hbox>
+					<hbox>
+						<menulist id="Etat" oncommand="pressOnParam();">
+							<menupopup>
+								<menuitem label="[tous les non résiliés]" value="0"/>
+								<menuitem label="en cours" value="C"/>
+								<menuitem label="en attente" value="A"/>
+								<menuitem label="terminé" value="T"/>
+								<menuitem label="résilié" value="R"/>
+							</menupopup>
+						</menulist>
+					</hbox>
+				</vbox>
+				<vbox>
+					<hbox>
+						<label class="label" value="Date de début : (jj/mm/aaaa)" />
+					</hbox>
+						<textbox id="dateDebut" maxlength="10" size="11" onkeypress="pressOnDate(event);"/>
+				</vbox>
+				<vbox>
+					<hbox>
+						<label class="label" value="Date de fin : (jj/mm/aaaa)" />
+					</hbox>
+						<textbox id="dateFin" maxlength="10" size="11" onkeypress="pressOnDate(event);"/>
+				</vbox>
+				<vbox pack="center">
+						<button id="breinitialiser" label="réinitialiser"	oncommand="reinitialiser();"/>
+				</vbox>
+			</hbox>
+		</vbox>
+	</hbox>
+	<tree id="GestionDesAbonnements"
+	       	flex="1"
+        	hidecolumnpicker="true"
+					ondblclick="ModifierAbonnement();"
+        	seltype="single"
+        	flags="dont-build-content"
+        	ref="http://www.opensi.org/facturation/abonnement"
+        	datasources="rdf:null">
+			<treecols>
+      	<treecol id="ColAbonnement"
+               	label="N° Abonnement"
+               	flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Num_Entier"/>
+				<splitter class="tree-splitter" />
+				<treecol id="ColModele"
+               	label="Ref modèle"
+               	flex="2"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Reference_modele"/>
+				<splitter class="tree-splitter" />
+    		<treecol id="ColLibelle"
+               	label="Libellé"
+               	flex="3"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Libelle"/>
+				<splitter class="tree-splitter" />
+				<treecol id="ColRaisonSociale"
+               	label="Client"
+								flex="2"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Denomination"/>
+				<splitter class="tree-splitter" />
+      	<treecol id="ColDateDebut"
+               	label="Date de début"
+               	flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_debut_tri" />
+				<splitter class="tree-splitter" />
+    		<treecol id="ColDateFin"
+               	label="Date de fin"
+               	flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_fin_tri" />
+				<splitter class="tree-splitter" />
+      	<treecol id="ColPeriodicite"
+               	label="Périodicité"
+               	flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#periodiciteTri" />
+				<splitter class="tree-splitter" />
+      	<treecol id="ColProchaineEcheance"
+               	label="Prochaine échéance"
+               	flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#prochaineEcheanceTri" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColTypeContrat"
+               	label="Type de contrat"
+               	flex="2"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Type_contrat" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColEtat"
+               	label="Etat"
+								flex="1"
+								sort="rdf:http://www.opensi.org/facturation/abonnement/rdf#Etat" />
+				<splitter class="tree-splitter" />
+
+			<treecol id="ColAbonnement_Id" collapsed="true"/>
+			<treecol id="ColDateDebutTri" collapsed="true"/>
+			<treecol id="ColDateFinTri" collapsed="true"/>
+			<treecol id="periodiciteTri" collapsed="true"/>
+
+			</treecols>
+ 			<template>
+      	<treechildren>
+        	<treeitem uri="rdf:*">
+          	<treerow>
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Num_Entier" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Reference_modele" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Libelle" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Denomination" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_debut" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_fin" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Periodicite  rdf:http://www.opensi.org/facturation/abonnement/rdf#Type_periodicite" />
+          		<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Prochaine_Echeance" />
+          		<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Type_contrat" />
+	  					<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Etat" />
+	  					<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Abonnement_Id" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_debut_tri" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#Date_fin_tri" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#periodiciteTri" />
+							<treecell label="rdf:http://www.opensi.org/facturation/abonnement/rdf#prochaineEcheanceTri" />
+						</treerow>
+        	</treeitem>
+      	</treechildren>
+    	</template>
+  	</tree>
+
+
+		<hbox flex="0.1" pack="end"><button label="Imprimer page" oncommand="creerEtatAbonnement();" id="bReediter" /></hbox>
+</window>

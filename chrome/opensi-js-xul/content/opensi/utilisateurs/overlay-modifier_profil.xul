@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="overlay_modifier_profil"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-modifier_profil.js" />
+  
+  <vbox id="modifier_profil">
+
+		<tabbox flex="1" id="tab-modification">
+			<tabs>
+      	<tab label="Profil"  oncommand="initModifProfil2();"/>
+      	<tab label="Droits sur journaux" oncommand="initTabJournaux();" />
+      	<tab label="Droits sur compte" oncommand="initTabCompte();" />
+     	</tabs>
+  		<tabpanels flex="1">
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+		    			<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label id="labProfil" class="label_16" />
+						  </hbox>
+							<hbox style="height:40px" />
+		    			<hbox pack="center">
+								<grid align="center">
+									<columns>
+										<column />
+										<column />												
+									</columns>
+									<rows>
+										<row align="center">
+											<label class="label" value="* Nom :" />
+											<hbox><textbox id="pnom" maxlength="30" size="16" /></hbox>
+										</row>
+										<row align="top">
+											<label class="label" value=" Commentaire :" />
+											<hbox><textbox id="pcommentaire" maxlength="250" multiline="true" size="25" /></hbox>
+										</row>
+									</rows>
+								</grid>
+							</hbox>
+							<box height="40px" />
+							<hbox pack="center">
+								<button class="bEnregistrer" id="bModifier" label="Enregistrer" oncommand="modifierProfil();" />
+								<button class="bSupprimer" id="bSupprimer" label="Supprimer" oncommand="supprimerProfil();" />
+							</hbox>
+						</vbox>
+					</hbox>
+    		</tabpanel>
+    	  <tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+    					
+    					<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label value="Liste des droits d'accès sur journaux" class="label_16" />
+						  </hbox>
+						  <hbox style="height:40px" />
+						  <hbox pack="center" align="center">
+					  		<label value="Choix du dossier :" />
+               	<menulist id="liste_dossiers_journaux" ref="http://www.opensi.org/Utilisateurs/listeDossiers" datasources="rdf:null" oncommand="pressOnListeDossiersJournaux();">
+									<menupopup>
+										<menuitem label="[Choisir]" />
+              		</menupopup>
+									<template>
+	              		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Utilisateurs/listeDossiers/rdf#Dossier_Id" value="rdf:http://www.opensi.org/Utilisateurs/listeDossiers/rdf#Dossier_Id" />
+	              		</menupopup>
+									</template>
+								</menulist>
+              </hbox>
+							<hbox style="height:40px" />
+							<hbox pack="center">
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Journaux non autorisés" /></hbox>
+								</vbox>
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Journaux autorisés" /></hbox>
+								</vbox>
+							</hbox>
+							<hbox style="height:10px" />
+							<hbox flex="1">
+								<vbox flex="1" >
+									    <tree id="liste_journaux_interdits"
+						          hidecolumnpicker="true"
+						          seltype="multiple"
+						          ref="http://www.opensi.org/Utilisateurs/listeJournauxInterditsProfil"
+						          datasources="rdf:null"
+											flex="1"
+											onselect="pressOnJournauxInterdits();">
+						      <treecols>
+						        <treecol flex="1" id="lji-ColCode" label="Code" />
+						        <treecol flex="1" id="lji-ColJournal" label="Journal" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeJournauxInterditsProfil/rdf#Code" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeJournauxInterditsProfil/rdf#Libelle" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    </tree>
+								</vbox>
+								<vbox align="center">
+										<hbox flex="1">
+											<vbox pack="center"><button id="bAjouterJournaux" class="bIcoAvanceRapide" oncommand="ajouterJournauxAccessibles();" /></vbox>
+										</hbox>
+										<hbox flex="1">
+											<vbox pack="center"><button id="bEnleverJournaux" class="bIcoRetourRapide" oncommand="enleverJournauxAccessibles();" /></vbox>
+										</hbox>
+								</vbox>
+								<vbox flex="1" >
+									<tree id="liste_journaux_accessibles"
+							      hidecolumnpicker="true"
+						        seltype="multiple"
+						        ref="http://www.opensi.org/Utilisateurs/listeJournauxAccessiblesProfil"
+						        datasources="rdf:null"
+										flex="1"
+										onselect="pressOnJournauxAccessibles();">
+						      <treecols>
+						        <treecol flex="1" id="lja-ColCode" label="Code" />
+						        <treecol flex="1" id="lja-Journal" label="Journal" />
+						      </treecols>
+						
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeJournauxAccessiblesProfil/rdf#Code" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeJournauxAccessiblesProfil/rdf#Libelle" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>
+								</vbox>
+						  </hbox>    					
+    					
+    				</vbox>
+    			</hbox>
+    		</tabpanel>
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+    					
+    					<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label value="Liste des droits d'accès sur compte" class="label_16" />
+						  </hbox>
+						  <hbox style="height:40px" />
+						  <hbox pack="center" align="center">
+					  		<label value="Choix du dossier :" />
+               	<menulist id="liste_dossiers_comptes" ref="http://www.opensi.org/Utilisateurs/listeDossiers" datasources="rdf:null" oncommand="pressOnListeDossiersCompte();">
+									<menupopup>
+										<menuitem label="[Choisir]" />
+              		</menupopup>
+									<template>
+	              		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Utilisateurs/listeDossiers/rdf#Dossier_Id" value="rdf:http://www.opensi.org/Utilisateurs/listeDossiers/rdf#Dossier_Id" />
+	              		</menupopup>
+									</template>
+								</menulist>
+              </hbox>
+							<hbox style="height:40px" />
+							<hbox pack="center">
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Comptes non autorisés" /></hbox>
+								</vbox>
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Comptes autorisés" /></hbox>
+								</vbox>
+							</hbox>
+							<hbox style="height:10px" />
+							<hbox flex="1">
+								<vbox flex="1" >
+									    <tree id="liste_comptes_interdits"
+						          hidecolumnpicker="true"
+						          seltype="multiple"
+						          ref="http://www.opensi.org/Utilisateurs/listeComptesInterditsProfil"
+						          datasources="rdf:null"
+											flex="1"
+											onselect="pressOnComptesInterdits();">
+						      <treecols>
+						        <treecol flex="1" id="lci-ColCompte" label="N° Compte" />
+						        <treecol flex="1" id="lci-ColIntitule" label="Intitulé" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeComptesInterditsProfil/rdf#Code" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeComptesInterditsProfil/rdf#Libelle" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    </tree>
+								</vbox>
+								<vbox align="center">
+										<hbox flex="1">
+											<vbox pack="center"><button id="bAjouterComptes" class="bIcoAvanceRapide" oncommand="ajouterComptesAccessibles();" /></vbox>
+										</hbox>
+										<hbox flex="1">
+											<vbox pack="center"><button id="bEnleverComptes" class="bIcoRetourRapide" oncommand="enleverComptesAccessibles();" /></vbox>
+										</hbox>
+								</vbox>
+								<vbox flex="1" >
+									<tree id="liste_comptes_accessibles"
+							      hidecolumnpicker="true"
+						        seltype="multiple"
+						        ref="http://www.opensi.org/Utilisateurs/listeComptesAccessiblesProfil"
+						        datasources="rdf:null"
+										flex="1"
+										onselect="pressOnComptesAccessibles();">
+						      <treecols>
+						        <treecol flex="1" id="lca-ColCompte" label="N° Compte" />
+						        <treecol flex="1" id="lca-ColIntitule" label="Intitulé" />
+						      </treecols>
+						
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeComptesAccessiblesProfil/rdf#Code" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeComptesAccessiblesProfil/rdf#Libelle" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>
+								</vbox>
+						  </hbox>    					
+    					
+    				</vbox>
+    			</hbox>
+    		</tabpanel>
+    	</tabpanels>
+    </tabbox>
+
+	</vbox>
+</overlay>

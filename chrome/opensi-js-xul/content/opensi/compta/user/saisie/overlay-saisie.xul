@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libre de gestion d'entreprise                              -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_saisie_overlay-saisie"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:OPERATIONS="http://www.opensi.org/compta/operations/rdf#">
+
+	<script src="overlay-saisie.js" />
+
+	<vbox id="edk-saisie">
+
+		<hbox align="center">
+			<label class="label" value="Journal :" />
+			<menulist id="osa-journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" oncommand="osa_confirmerAction(osa_chargerJournal)">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+					</menupopup>
+				</template>
+			</menulist>
+			<label class="label" value="Période :" />
+			<button class="bIcoRetour" style="margin-right:0px" id="osa-bPeriodePrec" oncommand="osa_confirmerAction(osa_periodePrec)" tooltiptext="période précédente" />
+			<menulist id="osa-periode" ref="http://www.opensi.org/compta/periode" datasources="rdf:null" oncommand="osa_confirmerAction(osa_chargerJournal)">
+				<template>
+					<menupopup>
+						<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/periode/rdf#lettres" value="rdf:http://www.opensi.org/compta/periode/rdf#chiffres" />
+					</menupopup>
+				</template>
+			</menulist>
+			<button class="bIcoAvance" id="osa-bPeriodeSuiv" oncommand="osa_confirmerAction(osa_periodeSuiv)" tooltiptext="période suivante" />
+			<hbox flex="1" pack="end">
+				<button id="osa-bPlanComptable" label="Plan comptable" oncommand="osa_openPlanComptable()" tooltiptext="voir le plan comptable (F10)" />
+				<button id="osa-bRevision" label="Révision des comptes" oncommand="osa_confirmerAction(osa_menuRevision)" tooltiptext="aller en révision des comptes (F11)" />
+				<button id="osa-bRechercher" class="bRechercher" label="Recherche d'écriture" oncommand="gms_openRechercheEcriture()" tooltiptext="rechercher une écriture (F12)" />
+			</hbox>
+		</hbox>
+
+		<hbox>
+			<hbox flex="1" pack="end" align="center">
+				<button id="osa-bPageDebut" oncommand="osa_confirmerAction(osa_pageDebut)" class="bIcoRetourRapide" tooltiptext="première page" />
+				<button id="osa-bPagePrec" oncommand="osa_confirmerAction(osa_pagePrec)" class="bIcoRetour" style="margin-right:0px" tooltiptext="page précédente" />
+				<label id="osa-pagination" />
+				<button id="osa-bPageSuiv" oncommand="osa_confirmerAction(osa_pageSuiv)" class="bIcoAvance" tooltiptext="page suivante" />
+				<button id="osa-bPageFin" oncommand="osa_confirmerAction(osa_pageFin)" class="bIcoAvanceRapide" tooltiptext="dernière page" />
+			</hbox>
+		</hbox>
+
+		<tree id="osa-treeEcritures"
+					flex="1"
+					seltype="single"
+					ref="http://www.opensi.org/compta/operations"
+					datasources="rdf:null"
+					onkeypress="osa_pressOnTreeEcritures(event)"
+					onselect="osa_reporterLigne()"
+					onclick="document.getElementById('osa-jour').focus()"
+					ondblclick="osa_confirmerAction(osa_menuRevision)">
+
+			<treecols>
+				<treecol id="osa-ColNumero" label="N°" flex="1" tooltiptext="numéro d'écriture" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColDateOp" label="Date" flex="1" collapsed="true" />
+				<treecol id="osa-ColJourOp" label="Date" flex="1" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColNumeroCompte" flex="5" label="Compte" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColLibelle" flex="25" label="Libellé" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColContrepartie" flex="5" label="Contrepartie" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColAnalytique" flex="5" label="Analytique" collapsed="true" hidden="true" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColEcheance" flex="3" label="Echéance" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColLibModeReg" flex="1" label="Mode règl." tooltiptext="mode de règlement" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColLettre" flex="1" label="Let." tooltiptext="lettrage" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColPointage" flex="1" label="P" tooltiptext="pointage" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColCommentaire" flex="1" label="Infos" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColDebit" style="text-align:right" flex="8" label="Débit" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColCredit" style="text-align:right" flex="8" label="Crédit" />
+				<splitter class="tree-splitter" />
+				<treecol id="osa-ColPiece" style="text-align:right" flex="5" label="N° Pièce" />
+				<treecol id="osa-ColEcritureId" collapsed="true" hidden="true" />
+				<treecol id="osa-ColOpId" collapsed="true" hidden="true" />
+				<treecol id="osa-ColModeRegId" collapsed="true" hidden="true" />
+				<treecol id="osa-ColEtat" collapsed="true" hidden="true" />
+				<treecol id="osa-ColModif" collapsed="true" hidden="true" />
+			</treecols>
+
+			<template>
+				<rule OPERATIONS:type_desc="separator">
+					<treechildren>
+						<treeseparator uri="rdf:*" />
+					</treechildren>
+				</rule>
+				<rule>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow properties="rdf:http://www.opensi.org/compta/operations/rdf#Prop">
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Numero" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Date_Op" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Jour_Op" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Numero_Compte" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Libelle" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Contrepartie" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Analytique" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Echeance" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Lib_Mode_Reg" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Lettre" />
+								<treecell value="rdf:http://www.opensi.org/compta/operations/rdf#Pointage" src="rdf:http://www.opensi.org/compta/operations/rdf#Coche" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Commentaire" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Debit" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Credit" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Num_Piece" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Ecriture_Id" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Op_Id" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Mode_Reg_Id" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Etat" />
+								<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Modif" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</rule>
+			</template>
+		</tree>
+
+		<hbox>
+			<label id="osa-controleCoherence" value="Controle cohérence" style="font-size:11pt;background:#FFFFFF;color:#FF0000;" collapsed="true" />
+		</hbox>
+		<hbox>
+			<label id="osa-modeleActif" value="MODE RACCOURCI : Vous êtes en train de saisir depuis un modèle" style="color:#FF0000;" collapsed="true" />
+		</hbox>
+
+		<grid id="osa-ligneSaisie" onkeypress="osa_pressOnLigneSaisie(event)">
+			<rows>
+				<row />
+				<row />
+			</rows>
+			<columns>
+				<column>
+					<label value="Date :" />
+					<vbox pack="center"><textbox id="osa-jour" class="saisie" size="3" maxlength="2" onkeypress="osa_pressOnDate(event)" onfocus="this.select()" /></vbox>
+				</column>
+				<column>
+					<label value="Compte :" />
+					<vbox pack="center"><textbox id="osa-compte" class="saisie" size="12" maxlength="8" onfocus="this.select()" /></vbox>
+				</column>
+				<column flex="1">
+					<label value="Libellé :" />
+					<vbox pack="center"><hbox><textbox id="osa-libelle" class="saisie" flex="1" maxlength="100" onkeypress="osa_pressOnLibelle(event)" onfocus="this.select()" /></hbox></vbox>
+				</column>
+				<column>
+					<label value="Contrepartie :" />
+					<vbox pack="center"><textbox id="osa-contrepartie" class="saisie" size="12" maxlength="8" onfocus="this.select()" /></vbox>
+				</column>
+				<column>
+					<label value="Echéance :" />
+					<vbox pack="center"><textbox id="osa-echeance" class="saisie" size="10" maxlength="10" onfocus="this.select()" tooltiptext="jj/mm/aaaa" /></vbox>
+				</column>
+				<column>
+					<label value="Mode règlement :" />
+					<menulist id="osa-reglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Aucun]" value="" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+							</menupopup>
+						</template>
+					</menulist>
+				</column>
+				<column>
+					<label value="Infos :" />
+					<vbox pack="center"><textbox id="osa-commentaire" class="saisie" size="15" maxlength="20" onfocus="this.select()" /></vbox>
+				</column>
+				<column>
+					<label value="Débit :" />
+					<vbox pack="center"><textbox id="osa-debit" class="saisie nombre" size="12" maxlength="15" onfocus="this.select()" /></vbox>
+				</column>
+				<column>
+					<label value="Crédit :" />
+					<vbox pack="center"><textbox id="osa-credit" class="saisie nombre" size="12" maxlength="15" onfocus="this.select()" /></vbox>
+				</column>
+				<column>
+					<label value="N° Pièce :" />
+					<vbox pack="center"><textbox id="osa-piece" class="saisie" size="15" maxlength="20" onfocus="this.select()" /></vbox>
+				</column>
+			</columns>
+		</grid>
+
+		<hbox>
+			<vbox flex="1">
+				<hbox>
+					<vbox>
+						<hbox align="center">
+							<label style="font-weight:bold" value="Compte :" />
+							<label id="osa-intituleCompte" />
+							<spacer flex="1" />
+							<label style="font-weight:bold" value="Type :" />
+							<label id="osa-typeCompte" />
+						</hbox>
+						<spacer flex="1" />
+						<grid style="padding-left:5px;padding-bottom:5px">
+							<columns pack="center">
+								<column style="width:90px" />
+								<column style="width:100px" pack="end" />
+								<column style="width:100px" pack="end" />
+								<column style="width:100px" pack="end" />
+							</columns>
+							<rows flex="1" pack="center">
+								<row>
+									<label value="" class="case_entete" />
+									<label value="Débit" class="row_entete" />
+									<label value="Crédit" class="row_entete" />
+									<label value="Solde" class="row_entete" />
+								</row>
+								<row>
+									<label value="Exercice N" class="col_entete" />
+									<label id="osa-debitCompteN" class="case" style="text-align:right" />
+									<label id="osa-creditCompteN" class="case" style="text-align:right" />
+									<label id="osa-soldeCompteN" class="case" style="text-align:right" />
+								</row>
+								<row>
+									<label value="Exercice N-1" class="col_entete" />
+									<label id="osa-debitCompteN1" class="case" style="text-align:right" />
+									<label id="osa-creditCompteN1" class="case" style="text-align:right" />
+									<label id="osa-soldeCompteN1" class="case" style="text-align:right" />
+								</row>
+							</rows>
+						</grid>
+						<spacer flex="2" />
+					</vbox>
+					<spacer flex="1" />
+					<groupbox>
+						<caption label="Ecriture en cours" />
+						<grid>
+							<columns>
+								<column />
+								<column style="width:90px" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label class="label" value="Total débit :" />
+									<label id="osa-debitEC" class="nombre" />
+								</row>
+								<row align="center">
+									<label class="label" value="Total crédit :" />
+									<label id="osa-creditEC" class="nombre" />
+								</row>
+								<row align="center">
+									<label class="label" value="Solde :" />
+									<label id="osa-soldeEC" class="nombre" />
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+				</hbox>
+			</vbox>
+		</hbox>
+
+	</vbox>
+
+</overlay>
+

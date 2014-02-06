@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_facturation_user_suiviReglementsFournisseurs_popupImputationRemboursement"
+	onload="init()"
+	onunload="desinit()"
+	title="OpenSi - Suivi des règlements"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="popup-imputationRemboursement.js" />
+
+	<hbox pack="center">
+		<label class="label_16" value="IMPUTATION DES REGLEMENTS FOURNISSEUR"/>
+	</hbox>
+	<box style="height:20px" />
+	
+	<groupbox orient="vertical">
+		<caption label="Remboursement à imputer" />
+		<grid flex="1">
+			<columns>
+				<column />
+				<column />
+				<column />
+				<column />
+				<column />
+				<column />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="Date :" />
+					<hbox><textbox id="datePiece" readonly="true" size="15" /></hbox>
+					<label class="label" value="N° Fournisseur :" />
+					<hbox><textbox id="numFournisseur" readonly="true" size="15" /></hbox>
+				</row>
+				<row align="center">
+					<label class="label" value="Mode de règlement :" />
+					<hbox><textbox id="modeReglement" readonly="true" size="15" /></hbox>
+					<label class="label" value="N° de remboursement :" />
+					<hbox><textbox id="numPiece" readonly="true" size="15" /></hbox>
+					<label class="label" value="Raison Sociale :" />
+					<hbox><textbox id="raisonSociale" readonly="true" size="15" /></hbox>
+				</row>
+				<box style="height:20px" />
+				<row align="center">
+					<label class="label" value="Montant à imputer :"/>
+					<hbox><textbox id="montantTotal" class="nombre" readonly="true" size="15" /></hbox>
+					<label class="label" value="Montant imputé :"/>
+					<hbox><textbox id="montantImpute" class="nombre" readonly="true" size="15" /></hbox>
+					<label id="lblMontantRestant" class="label" value="Montant restant à imputer :"/>
+					<hbox><textbox id="montantRestant" class="nombre" readonly="true" size="15" /></hbox>
+				</row>
+			</rows>
+		</grid>
+	</groupbox>
+	
+	<box style="height:20px" />
+	
+	<groupbox flex="1" orient="vertical">
+		<caption label="Règlements non réglés" />
+		<listbox flex="1" id="listeReglements" ref="http://www.opensi.org/affectation_reglement" datasources="rdf:null" onselect="selectOnListeReglements();">
+			<listhead>
+				<listheader label="Date" />
+				<listheader label="Type" />
+				<listheader label="N° Pièce" />
+				<listheader label="Mode règlement" />
+				<listheader label="Restant dû" style="text-align: right" />
+				<listheader label="Montant imputé" style="text-align: right" />
+				<listheader collapsed="true" />
+	 		</listhead>
+			<listcols>
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol flex="1" />
+				<listcol collapsed="true" />
+			</listcols>
+			<template>
+				<listitem value="rdf:http://www.opensi.org/affectation_reglement/rdf#Reglement_Id" uri="rdf:*" allowevents="true">
+					<listcell type="checkbox" checked="rdf:http://www.opensi.org/affectation_reglement/rdf#Cocher" label="rdf:http://www.opensi.org/affectation_reglement/rdf#Date" onclick="testCheck(this.parentNode);" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Lbl_Type" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Num_Entier" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Mode_Reglement" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Montant_Restant" style="text-align:right" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Montant_Impute" style="text-align:right; padding-right:20px" />
+					<listcell label="rdf:http://www.opensi.org/affectation_reglement/rdf#Type" />
+				</listitem>
+			</template>
+		</listbox>
+	</groupbox>
+	
+	<box style="height:20px" />
+	
+	<hbox pack="end">
+		<label class="label" value="Montant imputé au règlement :"/>
+		<hbox>
+			<textbox id="nouveauMontant" maxlength="14" onkeypress="onKeyPress(event);"/>
+			<button class="bIcoValider" oncommand="changerMontant();" style="margin-left:0px" />
+		</hbox>
+	</hbox>
+
+	<box style="height:20px" />
+	<hbox pack="center">
+		<button id="bQuitter" label="Quitter" class="bExit" tooltiptext="quitter" oncommand="quitter();" />
+		<button id="bIgnorer" class="bAnnuler" label="Ignorer" tooltiptext="ignorer et passer à l'imputation suivante" oncommand="imputationSuivante();" />
+		<button id="bValider" class="bValider" label="Valider" oncommand="valider();" />
+	</hbox>
+	<box style="height:5px" />
+</window>

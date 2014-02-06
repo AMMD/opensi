@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_editions_overlayStocks"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-stocks.js" />  
+
+	<vbox id="tab-stocks">
+		<vbox flex="1">
+		  <hbox style="height: 60px" />
+		  <hbox pack="center">
+		  	<label value="EDITIONS STOCKS" class="label_16" />
+		  </hbox>
+		  <hbox style="height:40px" />
+			<hbox pack="center">
+				<button type="radio" group="os-Etat" label="Palmarès article" oncommand="os_switchOptions('PA');" checked="true" />
+				<button type="radio" group="os-Etat" label="Fiches articles" oncommand="os_switchOptions('FA');" />
+				<button type="radio" group="os-Etat" label="Mouvements de stock" oncommand="os_switchOptions('MS');"  />
+				<button type="radio" group="os-Etat" label="Etat des stocks" oncommand="os_switchOptions('ES');" />
+			</hbox>
+			<hbox style="height:20px" />
+		
+			<hbox>
+				<groupbox id="gp-dateArrete" flex="1" pack="center" align="center" collapsed="true">
+					<caption label="Date d'arrêté" />
+					<hbox align="center">
+						<label value="Edition au" />
+						<textbox id="os-dateArrete" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+					</hbox>
+				</groupbox>
+				<groupbox id="gp-valorisation" flex="1" pack="center" align="center" collapsed="true">
+					<caption label="Valorisation" />
+					<radiogroup id="valo">
+						<radio id="cump" value="cump" label="Cout unitaire moyen pondéré en fin de période" selected="true" />
+						<radio id="dpa" value="dpa" label="Dernier prix d'achat connu"  />
+					</radiogroup>
+				</groupbox>
+				<groupbox id="os-gPeriode" flex="1" pack="center" align="center">
+					<caption label="Période d'édition" />
+					<radiogroup id="os-Periode">
+						<radio id="os-PeriodeMC" value="MC" label="Mois en cours" selected="true" oncommand="os_enableDates(false);" />
+						<radio id="os-PeriodeMP" value="MP" label="Mois précédent" oncommand="os_enableDates(false);" />
+						<radio id="os-PeriodeAC" value="AC" label="Année en cours" oncommand="os_enableDates(false);" />
+						<radio id="os-PeriodeAP" value="AP" label="Année précédente" oncommand="os_enableDates(false);" />
+						<hbox align="center">
+							<radio id="os-PeriodeDD" value="DD" label="De date à date :" oncommand="os_enableDates(true);" />
+							<label value="du" />
+							<textbox id="os-DateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="os-DateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						</hbox>
+					</radiogroup>
+					<checkbox id="os-mvte" label="inclure les articles non mouvementés sur la période" />
+				</groupbox>
+				
+				<groupbox id="os-gSelection" flex="1" pack="center" align="center">
+					<caption label="Sélection articles" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+			      		<label class="label" value="Marque :" />
+			      		<hbox>
+			        		<menulist id="os-Marque" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" style="max-width:250px;min-width:200px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+			      		</hbox>
+			    		</row>
+							<row align="center">
+			      		<label class="label" value="Famille 1 :" />
+			      		<hbox>
+									<menulist id="os-Famille_1" oncommand="os_chargerFamilles2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+			      		</hbox>
+				    	</row>
+							<row align="center">
+			      		<label class="label" value="Famille 2 :" />
+			      		<hbox>
+									<menulist id="os-Famille_2" oncommand="os_chargerFamilles3();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+			      		</hbox>
+			    		</row>
+			    		<row align="center">
+			      		<label class="label" value="Famille 3 :" />
+			      		<hbox>
+									<menulist id="os-Famille_3" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+										<menupopup>
+											<menuitem label="[toutes]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+			      		</hbox>
+			    		</row>
+							<row align="center" id="os-RowStockEntier">
+								<hbox />
+								<checkbox id="os-StockEntier" label="Inclure les articles sans stock" />
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				
+				<groupbox id="os-gSortie" flex="1" pack="center" align="center">
+					<caption label="Sortie" />
+					<radiogroup id="os-Sortie">
+						<radio id="os-SortiePDF" value="PDF" label="PDF" selected="true" />
+						<radio id="os-SortieCSV" value="CSV" label="CSV" />
+					</radiogroup>
+				</groupbox>
+			</hbox>
+		
+			<!--<groupbox flex="1" pack="center" align="center">
+				<caption label="Détail du CA" />
+				<radiogroup id="os-DetailCA">
+					<radio id="os-DetailCAN" value="N" label="Pas de détail" selected="true" />
+					<radio id="os-DetailCAD" value="D" label="Par date" />
+					<radio id="os-DetailCAF" value="F" label="Par famille d'article" />
+					<radio id="os-DetailCAS" value="S" label="Par sous-famille d'article" />
+					<radio id="os-DetailCAA" value="A" label="Par article" />
+				</radiogroup>
+			</groupbox>-->
+		
+			<box style="height:10px" />
+			<hbox pack="center">
+				<button id="editionpdf" label="Edition" oncommand="os_editerPalmares();" />
+			</hbox>
+			<box style="height:10px" />
+		</vbox>
+	</vbox>
+
+</overlay>

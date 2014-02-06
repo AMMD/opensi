@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_stocks_contenuNomenclature"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-nomenclature.js" />
+  
+  <tabpanel id="tab-nomenclature">
+
+	  <hbox pack="center" flex="1" class="auto-overflow">
+	    <groupbox flex="5" pack="center">
+	      <caption label="Composants disponibles" />
+	      <tree id="articles"
+	            flex="1"
+	            hidecolumnpicker="true"
+	            seltype="single"
+	            ref="http://www.opensi.org/facturation/composants_dispo"
+	            datasources="rdf:null"
+	            onclick="disableAjouter(false,true);"
+							flags="dont-build-content">
+	
+	        <treecols>
+	          <treecol id="ColArticle_Id" label="Référence" flex="1" sort="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Article_Id" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColDesignation2" flex="3" label="Désignation" sort="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Designation" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColFamille2" flex="2" label="Famille" sort="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Famille" />
+	        </treecols>
+	        <template>
+	          <treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Article_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Designation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Famille" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_dispo/rdf#Stocks_Dispo" />
+	              </treerow>
+	            </treeitem>
+	          </treechildren>
+	        </template>
+	      </tree>
+				<hbox align="center">
+					<label class="label" value="Filtrer par :" />
+					<menulist id="Famille_Article" oncommand="filtrerComposants();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" flex="1">
+           <menupopup>
+							<menuitem label="[famille]" value="0" />
+	          </menupopup>
+						<template>
+	            <menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+	            </menupopup>
+						</template>
+	        </menulist>
+				</hbox>
+	    </groupbox>
+	    <vbox pack="center" align="center">
+	      <hbox align="center">
+					<label class="label" value="Qté :" />
+	        <textbox id="Quantite" maxlength="10" size="8" disabled="true" />
+				</hbox>
+				<hbox style="height:5px" />
+	      <button id="bAjouter" class="bIcoAvanceRapide" oncommand="ajouterComposant();" disabled="true" tooltiptext="Ajouter un composant" />
+				<hbox style="height:100px" />
+	      <button id="bEnlever" class="bIcoRetourRapide" oncommand="enleverComposant();" disabled="true" tooltiptext="Enlever un composant" />
+	    </vbox>
+	    <groupbox flex="7" pack="center">
+	      <caption label="Composants de l'article" />
+	      <tree id="composants"
+	            flex="1"
+	            hidecolumnpicker="true"
+	            seltype="single"
+	            ref="http://www.opensi.org/facturation/composants_article"
+	            datasources="rdf:null"
+	            onkeypress="pressOnComposants(event);"
+							onclick="disableEnlever(false,true);"
+							ondblclick="ouvrirQuantite();"
+							flags="dont-build-content">
+	
+	        <treecols>
+	          <treecol id="ColArticleComp_Id" label="Référence" flex="1" sort="rdf:http://www.opensi.org/facturation/composants_article/rdf#ArticleComp_Id" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColDesignation" flex="3" label="Désignation" sort="rdf:http://www.opensi.org/facturation/composants_article/rdf#Designation" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColFamille" flex="2" label="Famille" sort="rdf:http://www.opensi.org/facturation/composants_article/rdf#Famille" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColQuantite" flex="1" label="Quantité" class="nombre" sort="rdf:http://www.opensi.org/facturation/composants_article/rdf#Quantite" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColStocks_Dispo" label="Disponibilités" class="nombre" flex="1" sort="rdf:http://www.opensi.org/facturation/composants_article/rdf#Stocks_Dispo" />
+	        </treecols>
+	        <template>
+	          <treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_article/rdf#ArticleComp_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_article/rdf#Designation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_article/rdf#Famille" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_article/rdf#Quantite" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/composants_article/rdf#Stocks_Dispo" />
+	              </treerow>
+	            </treeitem>
+	          </treechildren>
+	        </template>
+	      </tree>
+	    </groupbox>
+	  </hbox>
+	
+	</tabpanel>
+
+</overlay>
+

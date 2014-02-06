@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_fournisseurs_overlay_historique"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-historique.js" />
+  
+  <tabpanel id="tab-historique">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+		  <label class="label_14" value="Historique des commandes" />
+		  <vbox flex="1" class="auto-overflow">
+		  <tree id="hi-histo"
+		        flex="1"
+		        hidecolumnpicker="true"
+						flags="dont-build-content"
+		        style="min-height: 100px;"
+		        seltype="single"
+		        ondblclick="choixCommande();"
+		        ref="http://www.opensi.org/facturation/historique_fournisseur"
+		        datasources="rdf:null">
+		
+		    <treecols>
+		      <treecol id="hi-ColDate_Commande" flex="1" label="Date" />
+					<splitter class="tree-splitter" />
+		      <treecol id="hi-ColNumero" flex="1" label="Numéro" />
+					<splitter class="tree-splitter" />
+		      <treecol id="hi-ColTotal_HT" flex="1" label="Total HT" class="nombre" />
+		      <treecol id="hi-ColCommande_Id" collapsed="true" />
+		    </treecols>
+		    <template>
+		      <treechildren>
+		        <treeitem uri="rdf:*">
+		          <treerow>
+		            <treecell label="rdf:http://www.opensi.org/facturation/historique_fournisseur/rdf#Date_Commande" />
+		            <treecell label="rdf:http://www.opensi.org/facturation/historique_fournisseur/rdf#Numero" />
+		            <treecell label="rdf:http://www.opensi.org/facturation/historique_fournisseur/rdf#Total_HT" />
+		            <treecell label="rdf:http://www.opensi.org/facturation/historique_fournisseur/rdf#Commande_Id" />
+		          </treerow>
+		        </treeitem>
+		      </treechildren>
+		    </template>
+		  </tree>
+		
+			<hbox pack="end">
+				<label value="Chiffre d'affaires de la période :" style="font-weight:bold" />
+				<label id="hi-cap" style="font-weight:bold" />
+			</hbox>
+		
+			<box style="height:20px" />
+			<hbox>
+		    <label class="label" value="Période de l'historique :" style="padding-top:2px;" />
+		    <radiogroup id="hi-Periode" orient="horizontal">
+					<vbox>
+						<radio id="hi-Periode1" value="1" selected="true" label="Mois en cours" oncommand="loadHisto();" />
+						<radio id="hi-Periode3" value="3" label="3 mois précédents" oncommand="loadHisto();" />
+					</vbox>
+					<box style="width:20px" />
+					<vbox>
+						<radio id="hi-Periode6" value="6" label="6 mois précédents" oncommand="loadHisto();" />
+						<radio id="hi-Periode12" value="12" label="12 mois précédents" oncommand="loadHisto();" />
+					</vbox>
+					<vbox>
+						<radio id="hi-PeriodeN1" value="N1" label="Année N-1" oncommand="loadHisto();" />
+						<hbox align="center">
+							<radio id="hi-PeriodeP" value="P" label="Personnalisée :" />
+							<label value="du" />
+							<textbox id="hi-Date_Debut" size="10" maxlength="10" onfocus="selectPerso();" />
+							<label value="au" />
+							<textbox id="hi-Date_Fin" size="10" maxlength="10" onfocus="selectPerso();" />
+							<button id="hi-bOk" label="Ok" oncommand="verifPlageDates();" class="mini_bouton" />
+						</hbox>
+					</vbox>
+		    </radiogroup>
+		  </hbox>
+		  </vbox>
+		</vbox>
+	</tabpanel>
+
+</overlay>

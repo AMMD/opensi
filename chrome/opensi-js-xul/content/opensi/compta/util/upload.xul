@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_util_upload"
+  onload="init()"
+	title="OpenSi"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="upload.js" />
+
+	<hbox collapsed="true" pack="center">
+  	<vbox pack="center" flex="1">
+      <html:form enctype="multipart/form-data" method="POST" id="uploadform">
+        <html:center>
+          <html:input type="hidden" size="20" name="urles" id="urles" />
+          <html:input type="hidden" size="20" name="overwrite" value="on" />
+          <html:input type="file" size="20" name="uploadfile" value="" id="file" />
+          <html:input type="hidden" size="20" name="uploaddirectory" value="" id="dir" />
+        </html:center>
+      </html:form>
+    </vbox>
+  </hbox>
+
+	<box style="height:10px" />
+	<hbox pack="center">
+    <label id="labelwait" value="Chargement du fichier en cours..." />
+  </hbox>
+	<box style="height:20px" />
+	<hbox pack="center">
+		<progressmeter id="pm" />
+	</hbox>
+
+</window>

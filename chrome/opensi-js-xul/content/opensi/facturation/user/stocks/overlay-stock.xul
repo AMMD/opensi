@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+
+<overlay
+  id="opensi_compta_user_clients_contenuStock"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-stock.js" />
+  
+  <tabpanel id="tab-stock">
+
+	  <hbox pack="center" flex="1" class="auto-overflow">
+	  	<vbox flex="1">
+	    	<groupbox flex="1" pack="center" align="center">
+	      	<caption label="Stock initial" />
+	        <grid>
+	          <columns>
+	            <column />
+	            <column />
+	          </columns>
+	          <rows>
+	            <row align="center">
+	              <label class="label" value="Stock initial :" />
+	              <hbox><textbox id="Stock_Init" maxlength="15" size="15" class="nombre" /></hbox>
+	            </row>
+							<row align="center">
+	              <label class="label" value="Prix d'achat moyen initial :" />
+	              <hbox><textbox id="Prix_Init" maxlength="15" size="15" class="nombre" /></hbox>
+	            </row>
+							<row align="center">
+	              <label class="label" value="Frais d'approche moyens initiaux :" />
+	              <hbox><textbox id="Frais_Init" maxlength="15" size="15" class="nombre" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Date dernier inventaire :" />
+	              <hbox><textbox id="Date_Inventaire" maxlength="10" size="15" /></hbox>
+	            </row>
+						</rows>
+	        </grid>
+	    	</groupbox>
+				<groupbox flex="1" pack="center" align="center">
+	      	<caption label="Paramètres" />
+	        <grid>
+	          <columns>
+	            <column />
+	            <column />
+	          </columns>
+	          <rows>
+							<row align="center">
+	              <label class="label" value="Stock de sécurité :" />
+	              <hbox><textbox id="Stock_Securite" maxlength="10" size="15" class="nombre" oninput="calcStockMinimum();" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Stock d'alerte :" />
+	              <hbox><textbox id="Stock_Alerte" maxlength="10" size="15" class="nombre" oninput="calcStockMinimum();" /></hbox>
+	            </row>
+							<row align="center">
+	              <label class="label" value="Stock minimum :" tooltiptext="Stock d'alerte - Stock de sécurité" />
+	              <hbox><textbox id="Stock_Minimum" maxlength="10" size="15" class="nombre" disabled="true" /></hbox>
+	            </row>
+							<row align="center">
+	              <label class="label" value="Stock maximum :" />
+	              <hbox><textbox id="Stock_Maximum" maxlength="10" size="15" class="nombre" /></hbox>
+	            </row>
+						</rows>
+	        </grid>
+	    	</groupbox>
+			</vbox>
+			<vbox flex="1">
+				<groupbox flex="1" pack="center" align="center">
+	      	<caption label="Stock actuel" />
+	        <grid>
+	          <columns>
+	            <column />
+	            <column />
+	          </columns>
+	          <rows>
+	            <row align="center">
+	              <label class="label" value="Entrées :" />
+	              <hbox><textbox id="Entrees" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Sorties :" />
+	              <hbox><textbox id="Sorties" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Stock réel :" />
+	              <hbox><textbox id="Stock_Auj" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+							<row align="center" id="row_ajustement">
+	              <label class="label" value="Ajuster le stock à :" />
+	              <hbox><textbox id="Ajustement" size="6" class="nombre" /></hbox>
+	            </row>
+	            <row align="center" id="row_ajustement_2">
+	              <label class="label" value="Libellé ajustement :" />
+	              <hbox>
+									<menulist id="Libelle_Ajustement" ref="http://www.opensi.org/Config/listeStatutsMvtStock" datasources="rdf:null">
+										<menupopup>
+											<menuitem label="Ajustement manuel" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeStatutsMvtStock/rdf#Statut" />
+											</menupopup>
+										</template>
+									</menulist>
+									<button class="bIcoValider" tooltiptext="ajuster le stock" oncommand="ajusterStock();" />
+								</hbox>
+	            </row>
+						</rows>
+	        </grid>
+	    	</groupbox>
+				<groupbox flex="1" pack="center" align="center">
+	      	<caption label="Stock prévisionnel" />
+	        <grid>
+	          <columns>
+	            <column />
+	            <column />
+	          </columns>
+	          <rows>
+	            <row align="center">
+	              <label class="label" value="Commandes clients :" />
+	              <hbox><textbox id="Com_Clients" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Commandes fournisseurs :" />
+	              <hbox><textbox id="Com_Fournisseurs" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+	            <row align="center">
+	              <label class="label" value="Stock disponible :" />
+	              <hbox><textbox id="Stock_Dispo" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+							<row align="center">
+	              <label class="label" value="Stock virtuel :" />
+	              <hbox><textbox id="Stock_Calcule" size="15" disabled="true" class="nombre" /></hbox>
+	            </row>
+	          </rows>
+	        </grid>
+	    	</groupbox>
+	  	</vbox>
+	  </hbox>
+  
+  </tabpanel>
+
+</overlay>
+
+

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageFournisseurs_overlay-famillesFournisseurs"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-famillesFournisseurs.js" />
+  
+  <tabpanel id="tab-familles">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box height="30px" />
+			<hbox pack="center">
+		    <label value="GESTION DES FAMILLES DE FOURNISSEUR" class="label_16" />
+		  </hbox>
+			<box height="30px" />
+			
+	  	<hbox pack="center" flex="1">
+	  		<vbox flex="1">
+					<tree id="off-listeFamilles"
+								hidecolumnpicker="true"
+		          	ref="http://www.opensi.org/Config/parametrageFournisseurs/listeFamillesFournisseurs"
+		          	seltype="single"
+		          	datasources="rdf:null"
+								onselect="off_ouvrirFamille()"
+								flex="1">
+		      	<treecols>
+		        	<treecol id="off-colFamille" label="Famille" flex="1" />
+		        	<treecol id="off-colPictoActif" label="Actif" flex="1" collapsed="true" />
+				      <treecol id="off-colActif" collapsed="true" />
+		        	<treecol id="off-colFamilleId" collapsed="true" />
+		      	</treecols>
+		      	<template>
+	          	<treechildren>
+	            	<treeitem uri="rdf:*">
+	              	<treerow>
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageFournisseurs/listeFamillesFournisseurs/rdf#Libelle" />
+	                	<treecell src="rdf:http://www.opensi.org/Config/parametrageFournisseurs/listeFamillesFournisseurs/rdf#Picto_Actif" />
+		                <treecell label="rdf:http://www.opensi.org/Config/parametrageFournisseurs/listeFamillesFournisseurs/rdf#Actif" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageFournisseurs/listeFamillesFournisseurs/rdf#Famille_Id" />
+	              	</treerow>
+	            	</treeitem>
+	          	</treechildren>
+		      	</template>
+		    	</tree>
+		    	<checkbox id="off-afficherTout" label="Afficher aussi les valeurs désactivées" oncommand="off_chargerListe();" />
+	    	</vbox>
+	    	
+				<box width="50px" />
+				
+				<vbox>
+					<groupbox flex="1" pack="center" align="center">
+	    		<caption label="Familles" />
+						<hbox pack="center">
+							<grid>
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="* Nom :" />
+										<hbox><textbox id="off-nom" size="30" maxlength="40" /></hbox>
+									</row>
+								</rows>
+							</grid>
+						</hbox>
+					</groupbox>
+					
+					<box height="20px" />
+					<hbox pack="center">
+						<button id="off-bNouvelleFamille" class="bNouveau" label="Nouvelle famille" oncommand="off_nouvelleFamille()" collapsed="true" />
+						<button id="off-bEnregistrerFamille" class="bEnregistrer" label="Enregistrer" oncommand="off_enregistrerFamille()" />
+						<button id="off-bReactiverFamille" label="Réactiver" oncommand="off_reactiverFamille()" collapsed="true" />
+						<button id="off-bSupprimerFamille" class="bSupprimer" label="Supprimer" oncommand="off_supprimerFamille()" collapsed="true" />
+					</hbox>
+					
+				</vbox>
+			</hbox>
+			
+			<box flex="1"/>
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

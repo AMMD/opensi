@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_stocks_overlay-fournisseurs"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-fournisseurs.js" />
+
+	<tabpanel id="tab-fournisseurs">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+    	<tree id="farticle"
+          	flex="3"
+          	hidecolumnpicker="true"
+          	seltype="single"
+          	ref="http://www.opensi.org/facturation/liste_fournisseurs_article"
+          	datasources="rdf:null"
+          	onclick="reporterFournisseur();"
+						onselect="reporterFournisseur();"
+						flags="dont-build-content">
+
+      	<treecols>
+        	<treecol id="ColFournisseur_Id" label="N° Fournisseur" flex="1" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Fournisseur_Id" />
+					<splitter class="tree-splitter" />
+        	<treecol id="ColDenomination" flex="4" label="Raison sociale" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Denomination" />
+					<splitter class="tree-splitter" />        
+					<treecol id="ColRef_Fournisseur" flex="2" label="Réf. fournisseur" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Ref_Fournisseur" />
+					<splitter class="tree-splitter" />					
+					<treecol id="ColQte_Minimum" flex="2" label="Quantité mini." sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Qte_Minimum" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColMultiple" flex="2" label="Multiple" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Multiple" />
+					<splitter class="tree-splitter" />					
+					<treecol id="ColDelai_Reappro" flex="3" label="Délai de réappro." sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Delai_Reappro" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColPrix_Achat" style="text-align:right" flex="2" label="Prix d'achat" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Prix_Achat" />
+					<splitter class="tree-splitter" />
+					<treecol id="colStockFournisseur" style="text-align:right" flex="2" label="Stock fournisseur" sort="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Qte_Stock" />
+					<treecol id="ColPrincipal" collapsed="true" />
+					<treecol id="ColFrais_Logistiques" collapsed="true" />
+					<treecol id="ColPack" collapsed="true" />
+				</treecols>
+      	<template>
+        	<treechildren>
+          	<treeitem uri="rdf:*">
+            	<treerow>
+              	<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Fournisseur_Id" />
+              	<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Denomination" />              
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Ref_Fournisseur" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Qte_Minimum" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Multiple" />						
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Delai_Reappro" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Prix_Achat" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Qte_Stock" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Principal" />								
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Frais_Logistiques" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste_fournisseurs_article/rdf#Pack" />
+            	</treerow>
+          	</treeitem>
+        	</treechildren>
+      	</template>
+    	</tree>
+
+			<groupbox flex="1" pack="center" align="center">
+    		<caption label="Fournisseur de l'article" />
+				<hbox>
+					<grid>
+      			<columns>
+        			<column />
+        			<column />
+      			</columns>
+      			<rows>
+							<row align="center">
+          			<label class="label" value="* Fournisseur :" />
+          			<hbox align="center"><textbox id="Fournisseur_Id" maxlength="10" size="15" readonly="true" /><button id="bRechFourn" class="bIcoRechercher" oncommand="rechercherFournisseur();" /></hbox>
+        			</row>
+							<row align="center">
+          			<label value="" />
+          			<checkbox id="Principal" label="Fournisseur principal de l'article" />
+        			</row>
+							<row align="center">
+          			<label class="label" value="* Référence fournisseur :" />
+          			<hbox align="center">
+          				<textbox id="Ref_Fournisseur" maxlength="40" size="15" />
+          				<button class="bIcoCopier" oncommand="reporterRefFabricant();" tooltiptext="Reporter ici la référence fabricant" />
+          			</hbox>
+        			</row>
+							<row align="center">
+          			<label class="label" value="* Prix d'achat HT :" />
+          			<hbox><textbox id="of-Prix_Achat" maxlength="15" size="15" /></hbox>
+        			</row>
+						</rows>
+    			</grid>
+					<box style="width:10px" />
+					<grid>
+      			<columns>
+        			<column />
+        			<column />
+      			</columns>
+      			<rows>
+							<row align="center">
+          			<label class="label" value="* Délai de réappro. :" />
+          			<hbox align="center"><textbox id="Delai_Reappro" maxlength="2" size="3" /><label value="jours" /></hbox>
+        			</row>
+							<row align="center">
+								<label class="label" value="* Quantité minimale de commande :" />
+          			<hbox><textbox id="Qte_Minimum" maxlength="15" size="10" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="* Multiple de commande :" />
+          			<hbox><textbox id="Multiple" maxlength="15" size="10" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="* Frais logistiques :" />
+          			<hbox align="end"><textbox id="Frais_Logistiques" maxlength="15" size="10" /><label value="(champ inactif)" style="color:#FF0000;font-size:8pt;" /></hbox>
+							</row>
+							<row align="center">
+          			<label class="label" value="* Pack de :" />
+          			<hbox align="center"><textbox id="Pack" maxlength="15" size="3" /><label value="unités" /></hbox>
+        			</row>
+						</rows>
+    			</grid>
+    			<box style="width:10px" />
+    			<grid>
+      			<columns>
+        			<column />
+        			<column />
+      			</columns>
+      			<rows>
+							<row align="center">
+          			<label class="label" value="Stock fournisseur :" />
+          			<hbox><textbox id="stockFournisseur" maxlength="15" size="10" readonly="true" /></hbox>
+        			</row>
+        		</rows>
+        	</grid>
+				</hbox>
+				<box style="height:20px" />
+				<hbox pack="center">
+					<button label="Enregistrer" class="bEnregistrer" oncommand="enregistrerFournisseur();" />
+					<button id="bSupprimerFournisseur" class="bSupprimer" label="Supprimer" oncommand="supprimerFournisseur();" />
+					<button label="Nouveau" class="bNouveau" oncommand="nouveauFournisseur();" />
+				</hbox>
+    	</groupbox>
+  	</vbox>
+
+	</tabpanel>
+
+</overlay>

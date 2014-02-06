@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<?xul-overlay href="overlay-menu_utilisateurs.xul"?>
+<?xul-overlay href="overlay-nouvel_utilisateur.xul"?>
+<?xul-overlay href="overlay-modifier_utilisateur.xul"?>
+
+<window
+  id="opensi_utilisateurs_utilisateurs"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="utilisateurs.js" />	
+		
+	<hbox pack="left" align="center" class="bar_menu_conf">
+		<hbox class="bar_menu_conf_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menuGestionDroit()" />
+			<button class="bouton_menu" id="bMenuUtilisateurs" oncommand="init()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	<hbox style="height:10px" />
+	
+	<deck id="deck" flex="1">
+		
+		<vbox flex="1" id="menu_utilisateurs" class="auto-overflow" />
+		<vbox flex="1" id="nouvel_utilisateur" class="auto-overflow" />
+		<vbox flex="1" id="modifier_utilisateur" class="auto-overflow" />
+		
+	</deck>
+	
+</window>

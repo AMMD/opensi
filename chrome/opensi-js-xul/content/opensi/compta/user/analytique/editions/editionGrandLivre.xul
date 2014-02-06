@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_compta_user_analytique_editions_editionGrandLivre"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="editionGrandLivre.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bRetourOptions" oncommand="retourGrandLivre();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	
+	<deck id="deckGrandLivre" selectedIndex="0" flex="1">
+		<vbox flex="1" class="auto-overflow">
+		
+			<label class="label_16" value="Edition du grand livre analytique" />
+			<vbox flex="1" pack="center">
+				<hbox pack="center">
+					<vbox>
+						<groupbox>
+							<caption label="Sélection" />
+							<radiogroup id="rgSelection" oncommand="pressOnRgSelection();">
+								<hbox>
+									<radio value="1" label="Tous les comptes"/>
+								</hbox>
+								<hbox align="center">
+									<radio value="2" label="Le compte n°" />
+									<textbox id="tbCompteSingle" size="10" />
+									<button id="bRechCompteSingle" class="bIcoRechercher" tooltiptext="rechercher un compte analytique" oncommand="pressOnRechCompteSingle();" />
+								</hbox>
+								<hbox align="center">
+									<radio value="3" label="Plage de comptes n°" />
+									<textbox id="tbCompteDebut" size="10" />
+									<button id="bRechCompteDebut" class="bIcoRechercher" tooltiptext="rechercher un compte analytique" oncommand="pressOnRechCompteDebut();" />
+									<label id="lNumPlage" class="label" value="au n°" />
+									<textbox id="tbCompteFin" size="10" />
+									<button id="bRechCompteFin" class="bIcoRechercher" tooltiptext="rechercher un compte analytique" oncommand="pressOnRechCompteFin();" />
+								</hbox>
+								<hbox>
+									<radio value="4" label="Par critère d'analyse :" />
+								</hbox>
+							</radiogroup>
+							<hbox>
+								<box width="10px" />
+								<grid>
+									<columns>
+										<column />
+										<column />
+										<column />
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row id="rowCritere1" align="center">
+											<checkbox id="chkCritere1" label="Critere n°1" oncommand="pressOnChkCritere1();" />
+											<label id="lDebCentre1" class="label" value=":    De" />
+											<menulist id="filtreCentreDebut1" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreDebut1();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+											<label id="lFinCentre1" class="label" value="à" />
+											<menulist id="filtreCentreFin1" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreFin1();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+										</row>
+										<row id="rowCritere2" align="center">
+											<checkbox id="chkCritere2" label="Critere n°2" oncommand="pressOnChkCritere2();" />
+											<label id="lDebCentre2" class="label" value=":    De" />
+											<menulist id="filtreCentreDebut2" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreDebut2();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+											<label id="lFinCentre2" class="label" value="à" />
+											<menulist id="filtreCentreFin2" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreFin2();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+										</row>
+										<row id="rowCritere3" align="center">
+											<checkbox id="chkCritere3" label="Critere n°3" oncommand="pressOnChkCritere3();" />
+											<label id="lDebCentre3" class="label" value=":    De" />
+											<menulist id="filtreCentreDebut3" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreDebut3();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+											<label id="lFinCentre3" class="label" value="à" />
+											<menulist id="filtreCentreFin3" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreFin3();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+										</row>
+										<row id="rowCritere4" align="center">
+											<checkbox id="chkCritere4" label="Critere n°4" oncommand="pressOnChkCritere4();" />
+											<label id="lDebCentre4" class="label" value=":    De" />
+											<menulist id="filtreCentreDebut4" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreDebut4();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+											<label id="lFinCentre4" class="label" value="à" />
+											<menulist id="filtreCentreFin4" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreFin4();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+										</row>
+										<row id="rowCritere5" align="center">
+											<checkbox id="chkCritere5" label="Critere n°5" oncommand="pressOnChkCritere5();" />
+											<label id="lDebCentre5" class="label" value=":    De" />
+											<menulist id="filtreCentreDebut5" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreDebut5();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+											<label id="lFinCentre5" class="label" value="à" />
+											<menulist id="filtreCentreFin5" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreCentreFin5();">
+												<menupopup>
+													<menuitem label="[Choisir]" value="" />
+												</menupopup>
+												<template>
+													<menupopup>
+														<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+													</menupopup>
+												</template>
+											</menulist>
+										</row>
+									</rows>
+								</grid>
+							</hbox>
+						</groupbox>
+						<groupbox>
+							<caption label="Présentation" />
+							<radiogroup id="rgPresentation" oncommand="pressOnRgPresentation();">
+								<radio value="1" label="Totaux uniquement" />
+								<radio value="2" label="Détail des écritures" />
+							</radiogroup>
+							<box height="10px" />
+							<hbox>
+								<label id="lPresentation" class="label" value="Niveaux de rupture :" />
+							</hbox>
+							<grid flex="1">
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row>
+										<checkbox id="chkPresRubrique" label="Par rubrique" oncommand="pressOnChkPresRubrique();" />
+										<checkbox id="chkSsTotRubrique" label="avec sous-total" />
+									</row>
+									<row>
+										<checkbox id="chkPresCompte" label="Par compte" oncommand="pressOnChkPresCompte();" />
+										<checkbox id="chkSsTotCompte" label="avec sous-total" />
+									</row>
+									<row>
+										<checkbox id="chkPresPeriode" label="Par période" oncommand="pressOnChkPresPeriode();" />
+										<checkbox id="chkSsTotPeriode" label="avec sous-total" />
+									</row>
+								</rows>
+							</grid>
+						</groupbox>
+					</vbox>
+					<vbox pack="center">
+						<groupbox flex="1">
+							<caption label="Période" />
+							<radiogroup id="rgPeriode" oncommand="pressOnRgPeriode();">
+								<hbox>
+									<radio value="1" label="Exercice courant" />
+								</hbox>
+								<hbox align="center">
+									<radio value="2" label="Période de" />
+									<textbox id="tbDateDebut" size="3" maxlength="4" tooltiptext="date au format : mmaa" />
+									<label id="lFinPeriode" class="label" value="à" />
+									<textbox id="tbDateFin" size="3" maxlength="4" tooltiptext="date au format : mmaa"/>
+								</hbox>
+							</radiogroup>
+						</groupbox>
+						<groupbox flex="1">
+							<caption label="Tri" />
+							<radiogroup id="rgTri" oncommand="pressOnRgTri();">
+								<hbox>
+									<radio value="1" label="Ordre alphabétique des comptes" />
+								</hbox>
+								<hbox>
+									<radio value="2" label="Par critère d'analyse :" />
+								</hbox>
+								<hbox>
+									<box width="10px" />
+									<vbox flex="1">
+										<listbox id="lbListeCriteres" flex="1"
+											flags="dont-build-content"
+											datasources="rdf:null" 
+											ref="http://www.opensi.org/compta/analytique/parametrages"
+											onselect="selectOnListeCriteres();">
+										    <listcols>
+												<listcol flex="1" />
+												<listcol id="colCritereId" collapsed="true" />
+									  		</listcols>
+									  		<template>
+										    	<listitem allowevents="true" uri="rdf:*">
+													<listcell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" />
+													<listcell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+									  			</listitem>
+									  		</template>
+										</listbox>
+									</vbox>
+									<vbox>
+										<button id="bFlecheHaut" class="bIcoFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="pressOnFlecheHaut();" />
+			   							<button id="bFlecheBas" class="bIcoFlecheBas" tooltiptext="déplacer vers le bas" oncommand="pressOnFlecheBas();" />
+									</vbox>
+								</hbox>
+							</radiogroup>
+						</groupbox>
+						<groupbox flex="1">
+							<caption label="Sortie" />
+							<radiogroup id="rgSortie" oncommand="pressOnRgSortie();">
+								<hbox>
+									<radio value="1" label="PDF" />
+								</hbox>
+								<hbox>
+									<radio value="2" label="CSV" selected="true" />
+								</hbox>
+							</radiogroup>
+						</groupbox>
+					</vbox>
+				</hbox>
+				
+				<hbox pack="center">
+					<button id="bEdition" class="bEdition" label="Edition" oncommand="pressOnEdition();" />
+				</hbox>
+			
+			</vbox>
+			
+		</vbox>
+		
+		<vbox>
+			<iframe type="content" id="pdfGrandLivre" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

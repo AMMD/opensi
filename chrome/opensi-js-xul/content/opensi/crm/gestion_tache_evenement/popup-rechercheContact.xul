@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_crm_gestion_tache_evenements_rechContact"
+	onload="init();"
+	title="OpenSi - Recherche d'un contact"
+	width="700"
+	height="500"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="popup-rechercheContact.js" />
+
+
+
+	  <hbox flex="1" class="auto-overflow">	
+		  <deck id="deck" flex="1">
+		  	<vbox flex="1"  >
+		  		<label class="label_16" value="Recherche d'un contact" />	
+		  			
+				<vbox flex="1" >
+				<box height="50px" />
+					<tree flex="1" id="ofc-listeContacts" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionComptes"
+						datasources="rdf:null" seltype="single" ondblclick="getContact();" >
+						<treecols>		
+							<treecol id="civilite" label="Civilité" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Civilite" />
+							<splitter class="tree-splitter" />
+							
+							<treecol id="nom" label="Nom" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" />
+							<splitter class="tree-splitter" />
+							
+							<treecol id="prenom" label="Prénom" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prenom" />
+							<splitter class="tree-splitter" />
+							
+							<treecol id="fonction" label="Fonction" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Fonction" />
+							<splitter class="tree-splitter" />
+														
+							<treecol id ="Contact_Id" label="Contact_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact_Id" collapsed="true"/>
+							<splitter class="tree-splitter" />
+						</treecols>
+						<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Civilite" />
+										<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" />
+										<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prenom" />
+										<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Fonction" />
+										<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact_Id" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</template>		
+					</tree>
+				</vbox>
+				
+				<hbox pack="center">
+					<button disabled="false" class="bAnnuler" label="Annuler" id="popupRecCompte_annuler" oncommand="pressOnAnnuler();" tooltiptext="Annuler" />
+					<button disabled="false" class="bValider" label="Ok" id="popupRecCompte_valider" oncommand="pressOnOk();" tooltiptext="Ok" />
+				</hbox>
+				
+			</vbox>
+	
+		 
+		  </deck>
+	  </hbox>
+
+
+
+	
+</window>

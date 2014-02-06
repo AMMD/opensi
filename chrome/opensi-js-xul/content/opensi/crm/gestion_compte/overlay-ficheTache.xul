@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_crm_user_gestionCompte_overlayFicheTache"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-ficheTache.js" />
+	
+	<script src="chrome://opensi/content/libs/util.js" />
+  
+	<tabpanel id="tabEvenement" flex="1">
+	<hbox flex="1">
+	
+		<vbox flex="1">
+			<label class="label" value="Tâches :"/>
+			<tree flex="1" id="oft-listeTaches" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionComptes"
+			datasources="rdf:null" seltype="single" ondblclick="dbClickListeTache();" >
+				<treecols>		
+					<treecol id="Priorite" label="" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Priorite" />
+					<splitter class="tree-splitter" />
+					<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date" />
+					<splitter class="tree-splitter" />
+					<treecol label="Intitule" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Intitule" />
+					<splitter class="tree-splitter" />
+					<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Action" />
+					<splitter class="tree-splitter" />
+					<treecol label="Etat" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Etat" />
+					<splitter class="tree-splitter" />
+					<treecol label="Contact" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact" />
+					<splitter class="tree-splitter" />
+					<treecol id ="Responsable" label="Responsable" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+					<splitter class="tree-splitter" />
+					<treecol id ="Tache_Id" label="Tache_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Tache_Id" collapsed="true" />
+					<splitter class="tree-splitter" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Priorite" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Intitule" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Action" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Etat" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Tache_Id" />								
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>		
+			</tree>
+			<label class="label" value="Evènements :"/>
+			
+			<tree flex="1" id="oft-listeEvenements" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionComptes"
+			datasources="rdf:null" seltype="single" ondblclick="dbClickListeTache();" >
+				<treecols>		
+					<treecol id="Priorite" label="Date début" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date_Debut" />
+					<splitter class="tree-splitter" />
+					<treecol label="Date fin" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date_Fin" />
+					<splitter class="tree-splitter" />
+					<treecol label="Intitule" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Intitule" />
+					<splitter class="tree-splitter" />
+					<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Action" />
+					<splitter class="tree-splitter" />
+					<treecol label="Contact" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact" />
+					<splitter class="tree-splitter" />
+					<treecol id ="Responsable" label="Responsable" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+					<splitter class="tree-splitter" />
+					<treecol id ="Evenement_Id" label="Evenement_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Evenement_Id" collapsed="true" />
+					<splitter class="tree-splitter" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date_Debut" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Date_Fin" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Intitule" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Action" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Evenement_Id" />								
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>		
+			</tree>
+		</vbox>
+		</hbox>
+	</tabpanel>
+	
+</overlay>

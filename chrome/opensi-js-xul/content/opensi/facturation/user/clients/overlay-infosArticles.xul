@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_infosArticles"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-infosArticles.js" />
+
+	<tabpanel id="tab-infosArticles">
+		<vbox pack="center" flex="1">
+			<tree id="oia-treeInfosArticles"
+						flex="1"
+						hidecolumnpicker="true"
+						flags="dont-build-content"
+						seltype="single"
+						onselect="oia_reporterArticle();"
+						onclick="oia_reporterArticle();"
+						ref="http://www.opensi.org/facturation/infosArticlesClient"
+						datasources="rdf:null">
+				<treecols>
+					<treecol id="oia-colRefArticleOrg" flex="1" label="Réf. Article Originale" />
+					<splitter class="tree-splitter" />
+   				<treecol id="oia-colRefArticleSpec" flex="1" label="Réf. Article Spécifique" />
+					<splitter class="tree-splitter" />
+					<treecol id="oia-colCodeBarre" flex="1" label="Code Barre" />
+					<treecol id="oia-colArticleId" collapsed="true" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/facturation/infosArticlesClient/rdf#Ref_Article_Org" />
+								<treecell label="rdf:http://www.opensi.org/facturation/infosArticlesClient/rdf#Ref_Article_Spec" />
+								<treecell label="rdf:http://www.opensi.org/facturation/infosArticlesClient/rdf#Code_Barre" />
+								<treecell label="rdf:http://www.opensi.org/facturation/infosArticlesClient/rdf#Article_Id" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+			
+			<groupbox flex="1" pack="center" align="center">
+				<caption label="Infos article" />
+				<grid>
+					<columns>
+						<column/>
+						<column/>
+						<column/>
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Réf. article d'origine :" />
+							<hbox><textbox id="oia-refArticleOrg" disabled="true" size="40" /></hbox>
+							<hbox><button id="oia-bRechercherArticle" class="bIcoRechercher" oncommand="oia_rechercherArticle()" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Réf. article spécifique :" />
+							<hbox><textbox id="oia-refArticleSpec" size="40" maxlength="40" /></hbox>
+							<label value="" />
+						</row>
+						<row align="center">
+							<label class="label" value="Code barre :" />
+							<hbox><textbox id="oia-codeBarre" size="15" maxlength="15" /></hbox>
+							<label value="" />
+						</row>
+					</rows>
+				</grid>
+
+				<hbox style="height:30px" />
+				<hbox>
+					<button id="oia-bNouveauArticleSpec" class="bNouveau" label="Nouveau" oncommand="oia_nouveauArticleSpec()" />
+					<button id="oia-bCreerArticleSpec" class="bEnregistrer" label="Enregistrer" oncommand="oia_enregistrerArticleSpec('C')" />
+					<button id="oia-bModifierArticleSpec" class="bEnregistrer" label="Enregistrer" oncommand="oia_enregistrerArticleSpec('M')" />
+					<button id="oia-bSupprimerArticleSpec" class="bSupprimer" label="Supprimer" oncommand="oia_supprimerArticleSpec()" />
+				</hbox>
+			</groupbox>
+
+		</vbox>
+	</tabpanel>
+
+</overlay>

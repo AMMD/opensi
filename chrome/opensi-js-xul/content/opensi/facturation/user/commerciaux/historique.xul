@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_commerciaux_historique"
+ 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="historique.js" />
+
+	<tabpanel id="historique">
+ 		<hbox flex="1">			
+			<tree id="historique_commissions"
+       			ref="http://www.opensi.org/facturation/historique_commissions"
+       			seltype="single"
+       			datasources="rdf:null"
+       			flex="1"
+       			hidecolumnpicker="true"
+       			flags="dont-build-content"
+       			ondblclick="reediterPdf();">
+ 				<treecols>
+ 					<treecol id="ColDateCommission" flex="1" label="Date d'édition" />
+					<treecol id="ColPeriode" flex="2" label="Période" />
+					<treecol id="ColFiltre" flex="1" label="Filtre d'édition" />
+					<treecol id="ColTotalHT" flex="1" label="Total HT" style="text-align:right" />
+					<treecol id="ColTotalTTC" flex="1" label="Total TTC" style="text-align:right" />
+     			<treecol id="ColMontantCommission" flex="1" label="Montant Commission" style="text-align:right" />
+     			<treecol id="ColMontantAjustement" flex="1" label="Montant Ajustement" style="text-align:right" />
+     			<treecol id="ColTotalCommission" flex="1" label="Total Commission" style="text-align:right" />
+     			<treecol id="ColCommissionId" flex="1" collapsed="true" />
+   			</treecols>
+   			<template>
+   				<treechildren>
+     				<treeitem uri="rdf:*">
+       				<treerow>
+       					<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Date_Commission" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Periode" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Filtre" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Total_HT" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Total_TTC" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Montant_Commission" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Montant_Ajustement" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Total_Commission" />
+								<treecell label="rdf:http://www.opensi.org/facturation/historique_commissions/rdf#Commission_Id" />
+         			</treerow>
+       			</treeitem>
+     			</treechildren>
+   			</template>
+ 			</tree>
+ 		</hbox>
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="overlay_modifier_utilisateur"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-modifier_utilisateur.js" />
+  
+  <vbox id="modifier_utilisateur">
+
+		<tabbox flex="1" id="tab-modification">
+			<tabs>
+      	<tab label="Utilisateur" />
+      	<tab label="Droits sur dossiers" />
+     	</tabs>
+  		<tabpanels flex="1">
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+		    			<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label id="labUtilisateur" class="label_16" />
+						  </hbox>
+							<hbox style="height:40px" />
+		    			<hbox pack="center" flex="1">
+								<grid align="center">
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<label class="label" value="Mot de passe :" />
+											<hbox>
+												<label class="label" value="********************" />
+												<button label="Changer..." oncommand="changerPassword()" />
+											</hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="Civilité :" />
+											<radiogroup id="mu-Civilite" orient="horizontal" value="0">
+												<radio label="M." value="1" />
+												<radio label="Mme" value="2" />
+												<radio label="Mlle" value="3" />
+											</radiogroup>
+										</row>
+										<row align="center">
+											<label class="label" value="* Nom :" />
+											<textbox id="mu-Nom" maxlength="30" size="31" />
+										</row>
+										<row align="center">
+											<label class="label" value="Prénom :" />
+											<textbox id="mu-Prenom" maxlength="30" size="31" />
+										</row>
+										<row align="center">
+											<label class="label" value="Fonction :" />
+											<textbox id="mu-Fonction" maxlength="30" size="31" />
+										</row>
+										<row align="center">
+											<label class="label" value="" />
+											<checkbox id="mu-membreDirection" label="Membre de la direction" />
+										</row>
+										<row align="center">
+											<label class="label" value="Téléphone :" />
+											<hbox><textbox id="mu-Telephone" maxlength="20" size="31" /></hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="E-Mail :" />
+											<hbox><textbox id="mu-Email" maxlength="60" size="31" /></hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="" />
+											<checkbox id="mu-Admin" label="Administrateur" />
+										</row>
+										<row align="center">
+											<label class="label" value="" />
+											<checkbox id="mu-Actif" label="Actif" disabled="true" />
+										</row>
+										<hbox style="height:10px" />
+										<row align="center">
+											<label class="label" value="" />
+											<hbox>
+												<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierUtilisateur();" />
+												<button id="bActiver" label="Activer" oncommand="changerEtatUtilisateur(true);" />
+												<button id="bDesactiver" label="Désactiver" oncommand="changerEtatUtilisateur(false);" />
+											</hbox>
+										</row>
+									</rows>
+								</grid>
+							</hbox>
+						
+							<hbox pack="center">
+						    <label  value="Profil" class="label_16" />
+						  </hbox>
+		    			<hbox pack="center" flex="1">
+		    				<vbox pack="center">
+								  <tree id="liste_dossiers_utilisateur_profil"
+					          hidecolumnpicker="true"
+					          seltype="multiple"
+					          ref="http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil"
+					          datasources="rdf:null"
+										flex="1"
+					          style="min-height: 150px;">
+								
+							      <treecols>
+							        <treecol flex="1" id="ColDossier" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Dossier" />
+							        <treecol flex="1" id="ColProfil" label="Profil" sort="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Nom" />
+							        <treecol flex="1" id="ColDossier_Id" label="Profil"  collapsed="true"/>
+							        <treecol flex="1" id="ColProfil_Id" label="Profil" collapsed="true"/>
+							      </treecols>
+							      <template>
+							        <treechildren>
+							          <treeitem uri="rdf:*">
+							            <treerow>
+							              <treecell label="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Dossier" />
+							              <treecell label="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Nom" />
+							              <treecell label="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Dossier_Id" />
+							              <treecell label="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur_profil/rdf#Profil_Id" />
+							            </treerow>
+							          </treeitem>
+							        </treechildren>
+							      </template>
+							    </tree>
+								
+									<hbox pack="center">
+										<vbox pack="center">
+								  		<label value="Choix du dossier :" />
+								  	</vbox>
+		               	<menulist id="liste_dossiers_utilisateur" ref="http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" />
+		              		</menupopup>
+											<template>
+			              		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur/rdf#Dossier_Id" value="rdf:http://www.opensi.org/Utilisateurs/liste_dossiers_utilisateur/rdf#Dossier_Id" />
+			              		</menupopup>
+											</template>
+										</menulist>
+	         					<vbox pack="center">
+						  				<label value="Choix du profil :" />
+						  			</vbox>
+		               	<menulist id="liste_profil" ref="http://www.opensi.org/Utilisateurs/listeProfil" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" />
+		              		</menupopup>
+											<template>
+			              		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Utilisateurs/listeProfil/rdf#Nom" value="rdf:http://www.opensi.org/Utilisateurs/listeProfil/rdf#profil_id" />
+			              		</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+									<hbox style="height:10px" />
+									<hbox pack="center">
+										<button id="bModifierProfil" class="bEnregistrer" label="Enregistrer" oncommand="ajouterProfil();" />
+										<button id="bSupprimerProfil" class="bSupprimer" label="Supprimer" oncommand="supprimerProfil();" />												
+									</hbox>
+								</vbox>
+							</hbox>
+						</vbox>
+					</hbox>
+				</tabpanel>
+    		
+    		<tabpanel>
+    			<hbox pack="center" flex="1">
+    				<vbox flex="1">
+		    			<hbox style="height:50px" />
+							<hbox pack="center">
+						    <label value="Liste des droits d'accès sur dossiers" class="label_16" />
+						  </hbox>
+							<hbox style="height:40px" />
+							<hbox pack="center">
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Dossiers non autorisés" /></hbox>
+								</vbox>
+								<vbox flex="1">
+									<hbox pack="center"><label pack="center" class="label_12" value="Dossiers autorisés" /></hbox>
+								</vbox>
+							</hbox>
+							<hbox style="height:10px" />
+							<hbox flex="1">
+								<vbox flex="1" >
+									    <tree id="liste_dossiers_interdits"
+						          hidecolumnpicker="true"
+						          seltype="multiple"
+						          ref="http://www.opensi.org/Utilisateurs/listeDossiersInterdits"
+						          datasources="rdf:null"
+											flex="1"
+						          style="min-height: 150px;"
+											onselect="pressOnDossiersInterdits();">
+						
+						      <treecols>
+						        <treecol flex="1" id="ldi-ColDossier_Id" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Utilisateurs/listeDossiersInterdits/rdf#Dossier_Id" />
+						        <treecol flex="1" id="ldi-ColDenomination" label="Nom dossier" sort="rdf:http://www.opensi.org/Utilisateurs/listeDossiersInterdits/rdf#Denomination" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeDossiersInterdits/rdf#Dossier_Id" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeDossiersInterdits/rdf#Denomination" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>
+								</vbox>
+								<vbox align="center">
+										<hbox flex="1">
+											<vbox pack="center"><button id="bAjouterDossiers" class="bIcoAvanceRapide" oncommand="ajouterDossiersAccessibles();" /></vbox>
+										</hbox>
+										<hbox flex="1">
+											<vbox pack="center"><button id="bEnleverDossiers" class="bIcoRetourRapide" oncommand="enleverDossiersAccessibles();" /></vbox>
+										</hbox>
+										<hbox flex="1" />
+								</vbox>
+								<vbox flex="1" >
+									<tree id="liste_dossiers_accessibles"
+							      hidecolumnpicker="true"
+						        seltype="multiple"
+						        ref="http://www.opensi.org/Utilisateurs/listeDossiersAccessibles"
+						        datasources="rdf:null"
+										flex="1"
+						        style="min-height: 150px;"
+										onselect="pressOnDossiersAccessibles();">
+						
+						      <treecols>
+						        <treecol flex="1" id="lda-ColDossier_Id" label="Identifiant dossier" sort="rdf:http://www.opensi.org/Utilisateurs/listeDossiersAccessibles/rdf#Dossier_Id" />
+						        <treecol flex="1" id="lda-ColDenomination" label="Nom dossier" sort="rdf:http://www.opensi.org/Utilisateurs/listeDossiersAccessibles/rdf#Denomination" />
+						      </treecols>
+						      <template>
+						        <treechildren>
+						          <treeitem uri="rdf:*">
+						            <treerow>
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeDossiersAccessibles/rdf#Dossier_Id" />
+						              <treecell label="rdf:http://www.opensi.org/Utilisateurs/listeDossiersAccessibles/rdf#Denomination" />
+						            </treerow>
+						          </treeitem>
+						        </treechildren>
+						      </template>
+						    	</tree>
+						    	
+						    	<hbox style="height:30px" />
+						    	
+						    	<groupbox pack="center" align="center">
+      							<caption id="labDroits" />
+      							<grid>
+      								<columns>
+      									<column />
+      									<column />
+      								</columns>
+      								<rows>
+      									<row>
+      										<checkbox id="cGestionCo" label="Gestion Commerciale" />
+      										<checkbox id="cValidationCdeFourn" label="Validation de commande fournisseur" />
+      									</row>
+      									<row>
+      										<checkbox id="cCompta" label="Comptabilité" />
+      										<label value="" />
+      									</row>
+      									<row collapsed="true">
+      										<checkbox id="cContact" label="Gestion des contacts" />
+      										<label value="" />
+      									</row>
+      									<row>
+      										<checkbox id="cConfig" label="Configuration des dossiers" />
+      										<label value="" />
+      									</row>
+      								</rows>
+      							</grid>
+	      						<vbox pack="center" align="center">
+											<button id="bEnregistrerDroits" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerDroitsDossier();" />
+										</vbox>
+      						</groupbox>
+						    	
+								</vbox>
+						  </hbox>
+						</vbox>
+					</hbox>
+    		</tabpanel>   		
+     	</tabpanels>
+    </tabbox>
+
+	</vbox>
+</overlay>

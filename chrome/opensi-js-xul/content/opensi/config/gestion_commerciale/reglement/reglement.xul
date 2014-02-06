@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  flex="1"
+  id="opensi_manager_gestion_commerciale_reglement"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="reglement.js" />
+
+	<vbox flex="1" style="overflow:auto">
+		<box height="30px" />
+		<hbox pack="center">
+	    <label value="GESTION DES MODES DE REGLEMENT" class="label_16" />
+	  </hbox>
+	  
+	  <box height="30px" />
+		<hbox pack="center" flex="1">
+	  	<vbox flex="1">
+				<tree id="liste_modes"
+          hidecolumnpicker="true"
+          seltype="single"
+					flags="dont-build-content"
+          ref="http://www.opensi.org/config/listeReglement"
+          datasources="rdf:null"
+					onselect="ouvrirModeReglement();"
+					flex="1">
+
+      		<treecols>
+						<treecol id="ColLabelTypeReg" flex="1" label="Type de règlement" sort="rdf:http://www.opensi.org/config/listeReglement/rdf#Type_R" />
+						<splitter class="tree-splitter" />
+        		<treecol id="ColLabelModeReg" flex="1" label="Mode de règlement" sort="rdf:http://www.opensi.org/config/listeReglement/rdf#Mode_R" />
+        		<splitter class="tree-splitter" />
+        		<treecol id="ColCodeJournal" flex="1" label="Journal d'encaissement" sort="rdf:http://www.opensi.org/config/listeReglement/rdf#Code_Journal" />
+        		<treecol id="colPictoActif" label="Actif" flex="1" collapsed="true" />
+		        <treecol id="colActif" collapsed="true" />
+        		<treecol id="ColTypeRegId" collapsed="true" />
+        		<treecol id="ColModeRegId" collapsed="true" />
+      		</treecols>
+      		<template>
+        		<treechildren>
+          		<treeitem uri="rdf:*">
+            		<treerow>
+									<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Label_Type_R" />
+              		<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Label_Mode_R" />
+              		<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Code_Journal" />
+              		<treecell src="rdf:http://www.opensi.org/config/listeReglement/rdf#Picto_Actif" />
+              		<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Actif" />
+              		<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Type_Reg_Id" />
+              		<treecell label="rdf:http://www.opensi.org/config/listeReglement/rdf#Mode_Reg_Id" />
+            		</treerow>
+          		</treeitem>
+        		</treechildren>
+      		</template>
+    		</tree>
+    		<checkbox id="afficherTout" label="Afficher aussi les valeurs désactivées" oncommand="chargerListe();" />
+    	</vbox>
+    	
+    	<box width="50px" />
+    	
+    	<vbox flex="1">
+				<groupbox flex="1" pack="center" align="center">
+	    		<caption label="Mode de règlement" />
+					<hbox pack="center">
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+			            <label class="label" value="Type de règlement :" />
+									<menulist id="Type_R" ref="http://www.opensi.org/facturation/typeR" datasources="rdf:null">
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeR/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeR/rdf#id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+								<row align="center">
+			            <label class="label" value="Mode de règlement :" />
+			            <hbox><textbox id="Mode_R" maxlength="25" size="25" /></hbox>
+								</row>
+								<row align="center">
+			            <label class="label" value="Journal d'encaissement :" />
+			           	<hbox>
+										<menulist id="Code_Journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+				</groupbox>
+					
+				<box height="20px" />
+				<hbox pack="center">
+					<button id="bNouveauMode" class="bNouveau" label="Nouveau" oncommand="nouveauMode()" collapsed="true"/>
+					<button id="bEnregistrerMode" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerMode()" />
+					<button id="bReactiverMode" label="Réactiver" oncommand="reactiverMode()" collapsed="true" />
+					<button id="bSupprimerMode" class="bSupprimer" label="Supprimer" oncommand="supprimerMode()" collapsed="true" />
+				</hbox>
+					
+			</vbox>
+		</hbox>
+		
+		<box flex="1"/>
+	</vbox>
+
+</window>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_facturation_clientsWeb_liste_clients"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="liste_clients.js" />
+
+	<hbox id="menu_haut" class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="menu_principal()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1" style="overflow: auto;">
+		<box flex="1" />
+		<hbox flex="2">
+			<box flex="1" />
+			<vbox flex="1">
+
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Rechercher un client web" />
+					<vbox align="left">
+						<hbox pack="center" align="center">
+							<label value="Numéro :" />
+							<textbox id="txt_num" oninput="rechercher()" />
+							<box width="20px" />
+							<label value="Nom :" />
+							<textbox id="txt_nom" oninput="rechercher()" />
+							<label value="Entreprise :" />
+							<textbox id="txt_entreprise" oninput="rechercher()" />
+						</hbox>
+						<box height="20px" />
+						<hbox pack="center" align="center">
+							<label value="Par son site d'origine :" />
+							<menulist oncommand="rechercher()" id="menulist_sites" ref="http://www.opensi.org/Facturation/listeSite" datasources="rdf:null" style="max-width:160px;min-width:160px">
+								<menupopup>
+									<menuitem label="[Tous]" value="T" />
+								</menupopup>
+								<template>									
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Facturation/listeSite/rdf#nom" value="rdf:http://www.opensi.org/Facturation/listeSite/rdf#id" />
+									</menupopup>
+								</template>
+							</menulist>
+							<button label="Réinitialiser" oncommand="clic_reinitialiser()" />
+						</hbox>
+					</vbox>
+				</groupbox>
+
+				<box flex="1" />
+				<tree id="liste_clients" ref="http://www.opensi.org/Facturation/listeClients" seltype="single" datasources="rdf:null" flex="5" ondblclick="doubleClic()" hidecolumnpicker="true">
+					<treecols>
+						<treecol id="num" flex="1" label="Numéro" />
+						<splitter class="tree-splitter" />
+						<treecol id="site" flex="2" label="Site" />
+						<splitter class="tree-splitter" />
+						<treecol id="site" flex="3" label="Login" />
+						<splitter class="tree-splitter" />
+						<treecol id="entreprise" flex="4" label="Entreprise" />
+						<splitter class="tree-splitter" />
+						<treecol id="nom" flex="5" label="Nom client" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeClients/rdf#num" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeClients/rdf#site" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeClients/rdf#codeclient" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeClients/rdf#entreprise" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeClients/rdf#nom" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+				<box height="20px" />
+			</vbox>
+
+			<box flex="1" />
+
+		</hbox>
+		<box flex="1" />
+
+	</vbox>
+
+</window>

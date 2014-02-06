@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Fichiers associés"
+	id="opensi_fichier_assoc"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="rech_fichiers.js" />
+
+	<hbox style="height:5px" />
+	<vbox flex="1" class="auto-overflow">
+		<hbox pack="center">
+			<checkbox id="acces_check" label="Accès distant" oncommand="charger()"/>
+		</hbox>
+		<groupbox style="background-color: #FFFFFF;" flex="1">
+			<caption label="Liste des fichiers associés" />		
+	 		<vbox ref="http://www.opensi.org/facturation/assoc" 
+				     id="assoc"
+				     datasources="rdf:null">		
+				<template>
+					<hbox uri="rdf:*">
+					 	<label class="text-link" 
+					 				 tooltiptext="rdf:http://www.opensi.org/facturation/assoc/rdf#Lien_tooltiptext" 
+					 				 value="rdf:http://www.opensi.org/facturation/assoc/rdf#Valeur" 
+					 				 onclick="rdf:http://www.opensi.org/facturation/assoc/rdf#Lien"/>
+						<spacer flex="1"/>
+						<label class="text-link" 
+									 tooltiptext="rdf:http://www.opensi.org/facturation/assoc/rdf#Enlever_tooltiptext" 
+									 value="rdf:http://www.opensi.org/facturation/assoc/rdf#Enlever_Value" 
+									 onclick="rdf:http://www.opensi.org/facturation/assoc/rdf#Enlever"/>
+					</hbox>
+				</template>
+			</vbox>
+		</groupbox>
+ 		<hbox align="end" pack="end">			
+ 	  	<button id="bValider" label="Ajouter" class="bAjouter" oncommand="valider_assoc();" />
+ 	  </hbox>	
+		<box style="height:10px" />
+		<vbox align="center">
+			<button class="bExit" id="bClose" label="Quitter" oncommand="window.close();" />
+		</vbox>
+		<box style="height:10px" />
+	</vbox>
+</window>

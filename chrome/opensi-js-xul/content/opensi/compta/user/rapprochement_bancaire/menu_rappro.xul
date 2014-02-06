@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="menu_rappro.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_rapprochement_bancaire_menu_rappro"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js"  />
+  <script src="menu_rappro.js" />  
+ 
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_consultation();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+  <vbox flex="1" class="auto-overflow">
+  
+  	<hbox id="casecompte" collapsed="true" align="center">
+    	<label align="right" value="RAPPROCHEMENT BANCAIRE DU COMPTE :" />
+     	<menulist id="liste" size="10" style="width:100px" sizetopopup="none"
+                ref="http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux"
+          		  datasources="rdf:null"               
+                onkeypress=""
+                oncommand="loadhisto();">
+        <template>
+          <menupopup>
+            <menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux/rdf#libelle" label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux/rdf#compte" />      
+          </menupopup>
+        </template>
+      </menulist>
+ 			<label id="lblcompte" align="right" value="" />
+	  	<label id="lblnvcompte" value="Inscrire un nouveau compte en rapprochement :" />
+	  	<button class="bNouveau" id="btnvcompte" label="Nouveau" oncommand="newcompte_window();" />
+	  	<label id="lblrazcompte" value="RAZ du rapprochement :" />
+	  	<button id="btnrazcompte" label="RAZ" oncommand="raz();" />	  
+  	</hbox>
+  	<hbox id="casejournal" collapsed="true" align="center">
+     	<label align="right" value="RAPPROCHEMENT BANCAIRE DU JOURNAL :" />
+     	<menulist id="liste_journaux" size="10" style="width:100px" sizetopopup="none"
+                  ref="http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux"
+          		    datasources="rdf:null"               
+                  onkeypress=""
+                  oncommand="loadhisto();">
+        <template>
+          <menupopup>
+          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux/rdf#libelle" label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeCompteJournaux/rdf#journal" />      
+        	</menupopup>
+      	</template>
+      </menulist>
+  		<label id="lbljournal" align="right" value="" />
+  		<label id="lblnvjournal" align="right" value="Inscrire un nouveau journal en rapprochement :" />
+  		<button id="btnvjournal" label="Nouveau" oncommand="newcompte_window();" />
+  		<label id="lblrazjournal" pack="end" value="RAZ du rapprochement :" />
+  		<button id="btnrazjournal" label="RAZ" oncommand="raz();" />  	
+		</hbox>
+	
+  	<groupbox flex="1">
+			<hbox style="height:10px" />
+  		<grid flex="1">
+        <columns pack="center">
+          <column />
+          <column />
+          <column flex="1" />
+          <column />
+          <column />
+        </columns>
+  			<rows>
+			    <row>
+			      <label value="Date de début de rapprochement :" />
+			      <textbox id="dateRappro" size="10" maxlength="10" value="" style="max-width: 80px;" disabled="true" />	 			      
+			   	  <hbox flex="1" />
+		        <hbox flex="1" />
+	        	<hbox flex="2" />	        		    
+			    </row>
+			    <row>
+				    <label align="right" value="Ecriture jusqu'au :" />
+				    <textbox id="dateEcrituremax" size="10" maxlength="10" style="max-width: 80px;" onchange="updateRappro();" disabled="true"/>	 			      
+				   	<hbox flex="1" />
+	        	<hbox flex="1" align="center">
+	        		<label value="Ecritures :" />
+	        	</hbox>	        		 
+	        	<radiogroup id="level" oncommand="loadinfo();">
+	        		<hbox flex="1" align="center" id="checkbox">
+	        			<radio id="nonpointees" selected="true" label="Non pointées" />
+	        			<radio id="pointees" label="Pointées" />
+	        			<radio id="toutes" label="Toutes" />
+	        		</hbox>
+	        	</radiogroup>	        		  
+       	  </row>
+       	  <row align="center">
+       	    <label value="Solde comptable :" />
+				    <textbox class="nombre" id="soldecomptable" size="10" style="max-width: 80px;" maxlength="20" disabled="true" />			      			      
+			   	  <hbox flex="1" />
+        		<label value="Historique :" />
+        		<hbox flex="1">
+        		  <menulist id="histo_rappro" style="width:200px" sizetopopup="none"
+	                  ref="http://www.opensi.org/compta/RapprochementBancaire/rapproListeHisto"
+	                  datasources="rdf:null"	                
+	                  onkeypress="keypress(event);"
+	                  oncommand="loadinfo();">
+					      <template>
+					        <menupopup>
+					        	<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeHisto/rdf#dates" value="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeHisto/rdf#rapproid" />					                       				                        
+				          </menupopup>
+				        </template>
+       				</menulist>  
+       				<button id="supRap" label="Supprimer l'historique" oncommand="supRappro();" />
+        		</hbox>
+			    </row>
+			    <row>
+			     	<label value="Solde initial banque :" />
+			      <textbox class="nombre" id="soldeinibanque" size="10" style="max-width: 80px;" maxlength="20" disabled="true" /> 		      
+				   	<hbox flex="1" />
+	        	<hbox flex="1" />
+				   	<hbox flex="1" />
+			    </row>
+					<row>
+			      <label value="Numéro de relevé :" />
+				    <textbox id="numreleve" size="10" maxlength="20" style="max-width: 80px;" onchange="updateRappro();" disabled="true" />
+				   	<hbox flex="1" />
+	        	<hbox flex="1" />
+						<hbox pack="end" align="center">
+	        		<label value="Nb operations / page :" />
+	        		<textbox id="nbOp" size="10" maxlength="4" value="50" style="max-width: 30px;" onkeypress="keypress(event,id);" disabled="true" />
+						</hbox>
+			    </row>
+			    <row>
+				  	<hbox flex="1" />
+				   	<hbox flex="1" />
+				   	<hbox flex="1" />
+	        	<hbox flex="1" />
+				   	<hbox id="pagesbox" pack="end" align="center" flex="1">
+			  		  <button id="boutonDebut" class="bIcoRetourRapide" oncommand="pageDebut()" tooltiptext="première page" disabled="true" />
+			  		  <button id="boutonPrec" class="bIcoRetour" style="margin-right:0px" oncommand="pagePrec()" tooltiptext="page précédente" disabled="true" />
+			  		  <label id="page" />
+			  		  <textbox id="numpage" size="2" style="max-height: 28px; text-align: center;"  maxlength="4" value="1" onkeypress="reinit(value);" disabled="true"/>
+			  		  <label id="finpage" />
+			  		  <button id="boutonSuiv" class="bIcoAvance" oncommand="pageSuiv()" tooltiptext="page suivante" disabled="true" />
+			  		  <button id="boutonFin" class="bIcoAvanceRapide" oncommand="pageFin()" tooltiptext="dernière page" disabled="true" />			  			
+	        	</hbox>
+			    </row>
+  			</rows>
+  		</grid>  
+  	</groupbox>  	
+  	
+    <tree id="lignes"
+          flex="100"
+          style="min-width: 1000px;"
+          hidecolumnpicker="true"          	
+          seltype="single"
+          ref="http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire"
+          datasources="rdf:null"
+          onkeydown="keypress(event,id)">
+      <treecols>
+        <treecol id="date" label="Date" flex="5" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#dateformat" />
+        <treecol id="journal" label="CJ" flex="2" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#journal" />
+        <treecol id="compte" label="Compte" flex="2" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#compte" />
+        <treecol id="piece" flex="4" label="N° Pièce" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#piece" />
+        <treecol id="libelle" flex="25" label="Libellé" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#libelle" />
+        <treecol id="echeance" flex="3" label="Echéance" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#echeance" />
+ 				<treecol id="pointage" flex="1" label="Pointage" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#pointage" />  
+        <treecol id="debit" flex="8" label="Débit" style="text-align: right" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#debit" />       	
+        <treecol id="credit" flex="8" label="Crédit" style="text-align: right" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#credit" />
+ 		 		<treecol id="opid" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#opid" />		   
+		 		<treecol id="rapproid" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#rapproId" />	        	
+		 		<treecol id="type_journal" label="type_journal" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#type_journal" /> 
+		 		<treecol id="type_rb" label="type_rb" collapsed="true" sort="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#typerb" />  	
+      </treecols>
+      <template>
+        <treechildren onclick="updatePointage();" >
+          <treeitem uri="rdf:*">
+            <treerow>
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#dateformat" />
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#journal" />
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#compte" />
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#piece" />
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#libelle" />
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#echeance" />
+              <treecell style="text-align: right" value="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#pointage" src="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#coche"/>
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#debit" />             
+              <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#credit" />              
+	            <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#opid" />
+	            <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#rapproId" />
+	            <treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#type_journal" />
+            	<treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapprochementBancaire/rdf#typerb" />
+            </treerow>
+          </treeitem>         	
+        </treechildren>
+      </template>
+    </tree>   
+    	
+		<hbox>
+			<hbox flex="5" />
+			<hbox pack="center" flex="1">
+				<button class="bRechercher" label="Recherche d'écriture" tooltiptext="rechercher une écriture (F12)" oncommand="rechecr()" />
+				<button id="saisierb" label="Saisie RB" tooltiptext="saisir des écritures de rapprochement bancaire" oncommand="saisierb_window();" />
+			</hbox>
+			<hbox pack="center" flex="1">
+				<button id="toutpointer" label="Tout pointer" oncommand="PointageTot(1)" />
+				<button id="toutdepointer" label="Tout dépointer" oncommand="PointageTot(0)" />						
+			</hbox>
+			<hbox align="center"> 	
+				<label value="Total débit :" />
+				<label id="total_debit" class="indic" style="width:80px;text-align:right" />
+				<label value="Total crédit :" />
+				<label id="total_credit" class="indic" style="width:80px;text-align:right" />    	  	
+			</hbox>
+		</hbox>		  	
+	  <hbox>
+			<hbox flex="1" pack="start">
+			 	<groupbox>
+			  	<caption label="recherche" />
+			  	<label value="Débit :" />
+			   	<textbox id="rech_debit" class="nombre" style="width:100px" onchange="loadTree(1)" disabled="true" />
+			   	<label value="Crédit :" />
+			   	<textbox id="rech_credit" class="nombre" style="width:100px" onchange="loadTree(2)" disabled="true" />					    
+			   	<button id="rech_tous" label="Réinitialiser" tooltiptext="réinitialiser la recherche" oncommand="loadTree(3)" /> 
+			 	</groupbox>
+			</hbox>			  	
+			<hbox flex="1" pack="end">
+				<groupbox>
+					<caption label="Ecart de rapprochement" />
+					<grid>
+					  <columns pack="center">
+							<column flex="3" />
+			      	<column flex="1" />
+			      	<column flex="1" />
+					 	</columns>	
+						<rows>
+			    		<row align="center">
+								<hbox>
+									<button class="bPDF" id="impression" label="Impression" oncommand="genPdf();" />
+									<button id="cloture" label="Clôture" oncommand="clotureRappro();" />
+				  			</hbox>
+								<label value="Solde final :"  />							
+								<hbox><textbox id="soldefinal" size="4" style="width:100px;text-align:right" class="indic" disabled="true" /></hbox>							
+							</row>
+							<row>
+								<box />
+								<label value="Solde du relevé :" />
+			       		<textbox id="soldeRelevé" size="4"  style="width:100px;text-align:right" value="" onchange="updateRappro();" disabled="true" />							
+							</row>
+							<row>
+								<label class="label" value="Ecart :" />
+								<label value="Débit" id="Cpte_Fin" size="8" />								
+								<label value="Crédit" id="Cpte_Fin" size="8" />						
+							</row>
+							<row>
+								<box />				  	                             
+								<textbox id="ecartdebit" size="8" disabled="true" style="width:100px; text-align:right" class="indic" />								
+								<textbox id="ecartcredit" size="8" disabled="true" style="width:100px; text-align:right" class="indic" />						
+							</row>											
+							<row>
+								<box />
+								<box />
+								<textbox value="Ecart" id="ecart" style="width:100px;text-align:right" class="indic" align="right" />															  	                        
+							</row>											
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+		</hbox>	
+  </vbox>
+
+</window>

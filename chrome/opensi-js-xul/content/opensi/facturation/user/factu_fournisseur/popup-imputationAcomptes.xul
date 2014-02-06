@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Imputation des acomptes fournisseurs"
+  id="opensi_facturation_user_factuFournisseur_imputationAcomptes"
+  onload="init()"
+  width="1024"
+  height="768"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-imputationAcomptes.js" />
+
+	<hbox style="height:10px" />
+	<hbox pack="center">
+		<label class="label_14" value="Imputation des acomptes fournisseurs" />
+	</hbox>
+	<hbox style="height:20px" />
+	
+
+	<hbox flex="1" pack="center">
+		
+		<vbox flex="1">
+			<label value="Acomptes non imputés :" />
+			<tree id="listeAcomptesNonImputes"
+       			flex="1"
+       			hidecolumnpicker="true"
+						flags="dont-build-content"
+						onselect="pressOnAcomptesNonImputes();"
+       			seltype="single"
+       			ref="http://www.opensi.org/facturation/liste_acomptes"
+       			datasources="rdf:null">
+   			<treecols>
+     			<treecol label="Date" flex="1" />
+					<splitter class="tree-splitter" />
+     			<treecol label="N° Acompte" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol label="N° Commande" flex="1" />
+					<splitter class="tree-splitter" />
+     			<treecol label="Montant" flex="1" class="nombre" />
+					<treecol id="colAcompteIdEntree" collapsed="true" ignoreincolumnpicker="true"/>
+					<treecol id="colMontantEntree" collapsed="true" ignoreincolumnpicker="true"/>
+   			</treecols>
+   			<template>
+     			<treechildren>
+       			<treeitem uri="rdf:*">
+         			<treerow>
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Date_Acompte" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Num_Acompte" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Num_Commande" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Aff_Montant" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Acompte_Id" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Montant" />
+         			</treerow>
+       			</treeitem>
+     			</treechildren>
+   			</template>
+ 			</tree>
+		</vbox>
+
+		<vbox pack="center">
+			<vbox>
+				<label value="Montant :" />
+				<hbox>						
+					<hbox align="center"><textbox id="montantEntree" size="6" maxlength="15" class="nombre" /></hbox>
+					<button id="bAjouter" class="bIcoAvance" oncommand="pressOnAjouter();" style="margin-right:0px" flex="1" />
+				</hbox>
+			</vbox>
+
+			<box style="height:30px" />
+
+			<vbox pack="center">
+				<vbox>						
+					<label class="label" value="Montant :" />
+					<hbox>
+						<button id="bEnlever" class="bIcoRetour" oncommand="pressOnEnlever();" style="margin-right:0px" flex="1" />
+						<hbox align="center"><textbox id="montantSortie" size="6" maxlength="10" /></hbox>
+					</hbox>
+				</vbox>
+			</vbox>
+		</vbox>
+
+		<vbox flex="1">
+			<label value="Imputation de la facture :" />
+			<tree id="listeAcomptesImputes"
+       			flex="1"
+       			hidecolumnpicker="true"
+       			seltype="single"
+						flags="dont-build-content"
+						onselect="pressOnAcomptesImputes();"
+       			ref="http://www.opensi.org/facturation/liste_acomptes"
+       			datasources="rdf:null">
+   			<treecols>
+     			<treecol label="Date" flex="1" />
+					<splitter class="tree-splitter" />
+     			<treecol label="N° Acompte" flex="1" />
+					<splitter class="tree-splitter" />
+     			<treecol label="Montant imputé" flex="1" class="nombre" />
+					<treecol id="colAcompteIdSortie" collapsed="true" ignoreincolumnpicker="true"/>
+					<treecol id="colMontantSortie" collapsed="true" ignoreincolumnpicker="true"/>
+   			</treecols>
+   			<template>
+     			<treechildren>
+       			<treeitem uri="rdf:*">
+         			<treerow>
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Date_Acompte" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Num_Acompte" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Aff_Montant" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Acompte_Id" />
+           			<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Montant" />
+         			</treerow>
+       			</treeitem>
+     			</treechildren>
+   			</template>
+ 			</tree>
+		</vbox>
+
+	</hbox>
+
+	<hbox style="height:20px" />
+	
+	<hbox pack="end" align="center">
+		<label class="label" value="Acompte total :" />
+		<textbox id="acompteTotal" readonly="true" class="nombre" />
+	</hbox>
+	
+	<hbox style="height:20px" />
+
+	<hbox pack="center" align="center">
+		<button id="bQuitter" label="Quitter" class="bExit" oncommand="quitter();" />
+	</hbox>
+
+	<box style="height:20px" />
+
+</window>

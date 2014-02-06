@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_compta_user_analytique_comptes_gestionComptes"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="gestionComptes.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	
+	<vbox flex="1">
+	
+		<label class="label_16" value="Gestion des comptes analytiques" />
+	
+		<vbox flex="1" class="auto-overflow">
+			<hbox align="center">
+				<label class="label" value="Numéro :" />
+				<textbox id="filtreNumero" size="15" maxlength="10" onchange="changeOnFiltreNumero();" onkeypress="keyPressOnFiltreNumero(event);" />
+				<label class="label" value="Intitulé :" />
+				<textbox id="filtreIntitule" size="30" maxlength="50" onchange="changeOnFiltreIntitule();" onkeypress="keyPressOnFiltreIntitule(event);" />
+				<label class="label" value="Type :" />
+				<menulist id="filtreType" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreType();">
+					<menupopup>
+						<menuitem label="[Tous]" value="2" />
+						<menuitem label="Direct" value="1" />
+						<menuitem label="Indirect" value="0" />
+					</menupopup>
+				</menulist>
+				<label class="label" value="Actif :" />
+				<menulist id="filtreActif" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreActif();">
+					<menupopup>
+						<menuitem label="[Tous]" value="2" />
+						<menuitem label="Actif" value="1" />
+						<menuitem label="Inactif" value="0" />
+					</menupopup>
+				</menulist>
+				<button id="bActualiser" class="bIcoActualiser" tooltiptext="Actualiser" oncommand="pressOnActualiser();" />
+				<button id="bReinitialiser" class="bIcoReinitialiser" tooltiptext="Réinitialiser" oncommand="pressOnReinitialiser();" />
+			</hbox>
+			
+			<box height="10px" />
+			
+			<tree id="treeComptes"
+	 				flex="1"
+	 				hidecolumnpicker="true"
+					flags="dont-build-content"
+					datasources="rdf:null"
+					ref="http://www.opensi.org/compta/analytique/comptes"
+					onselect="selectOnTreeComptes();"
+					seltype="single">
+			    <treecols>
+					<treecol id="col1" flex="1" label="Numéro" />
+					<splitter class="tree-splitter" />
+					<treecol id="col2" flex="1" label="Intitulé" />
+					<splitter class="tree-splitter" />
+					<treecol id="col3" flex="1" label="Type" />
+					<splitter class="tree-splitter" />
+					<treecol id="col4" label="Actif" />
+					<treecol id="colCompteId" collapsed="true" ignoreincolumnpicker="true" />
+		  		</treecols>
+		  		<template>
+		  			<treechildren>
+				    	<treeitem uri="rdf:*">
+				    		<treerow>
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Numero"/>
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Intitule" />
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Libelle_Direct" />
+								<treecell src="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Picto_Actif" />
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Compte_Id" />
+							</treerow>
+			  			</treeitem>
+		  			</treechildren>
+		  		</template>
+			</tree>
+			
+			<box height="10px" />
+			<hbox>
+				<button id="bCSV" class="bCSV" label="Export CSV" oncommand="pressOnCsv();" />
+			</hbox>
+			<box height="10px" />
+			
+			<hbox>
+				<groupbox flex="1" align="center">
+					<caption label="Fiche du compte" />
+					<hbox align="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row align="center">
+									<label id="labelNumero" class="label" value="*Numéro :" />
+									<hbox>
+										<textbox id="numero" size="15" maxlength="10" />
+									</hbox>
+									<label class="label" value="Type :" />
+									<menulist id="type" style="width:130px" sizetopopup="none" oncommand="selectOnType();">
+										<menupopup>
+											<menuitem label="Direct" value="1" />
+											<menuitem label="Indirect" value="0" />
+										</menupopup>
+									</menulist>
+								</row>
+								<row align="center">
+									<label class="label" value="*Intitulé :" />
+									<hbox>
+										<textbox id="intitule" size="30" maxlength="50" />
+									</hbox>
+									<label class="label" value="" />
+									<checkbox id="chkActif" label="Actif" oncommand="checkOnChkActif()" />
+								</row>
+							</rows>
+						</grid>
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+								<row id="ligneListe1" align="center">
+									<label id="labelCentre1" class="label" value="Centre de profit n°1 :" />
+									<menulist id="listeCentre1" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnListeCentre1();">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+								<row id="ligneListe2" align="center">
+									<label id="labelCentre2" class="label" value="Centre de profit n°2 :" />
+									<menulist id="listeCentre2" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnListeCentre2();">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+								<row id="ligneListe3" align="center">
+									<label id="labelCentre3" class="label" value="Centre de profit n°3 :" />
+									<menulist id="listeCentre3" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnListeCentre3();">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+								<row id="ligneListe4" align="center">
+									<label id="labelCentre4" class="label" value="Centre de profit n°4 :" />
+									<menulist id="listeCentre4" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnListeCentre4();">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+								<row id="ligneListe5" align="center">
+									<label id="labelCentre5" class="label" value="Centre de profit n°5 :" />
+									<menulist id="listeCentre5" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="selectOnListeCentre5();">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+											</menupopup>
+										</template>
+									</menulist>
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+				</groupbox>
+			</hbox>
+							
+			<hbox pack="center">
+				<button id="bNouveau" class="bNouveau" label="Nouveau" oncommand="pressOnNouveau();" />
+				<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="pressOnSupprimer();" />
+				<button id="bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="pressOnEnregistrer();" />
+			</hbox>
+		</vbox>
+		
+	</vbox>
+
+</window>

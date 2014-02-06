@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_compta_user_analytique_comptes_popup-rechCompteAna"
+	onload="init();"
+	title="OpenSi - Recherche d'un compte analytique"
+	width="700"
+	height="500"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="popup-rechCompteAna.js" />
+	
+	<box height="10px" />
+	
+	<hbox pack="center">
+		<label class="label_16" value="Recherche d'un compte analytique" />
+	</hbox>
+	
+	<box height="20px" />
+	
+	<vbox flex="1" class="auto-overflow">
+	
+		<grid>
+			<columns>
+				<column flex="1" />
+				<column flex="1" />
+				<column flex="1" />
+				<column flex="1" />
+				<column flex="1" />
+				<column flex="1" />
+			</columns>
+			<rows>
+				<row align="center">
+					<label class="label" value="Numéro :" />
+					<hbox>
+						<textbox id="filtreNumero" size="15" maxlength="10" onchange="changeOnFiltreNumero();" onkeypress="keyPressOnFiltreNumero(event);" />
+					</hbox>
+					<label class="label" value="Type :" />
+					<menulist id="filtreType" style="width:130px" sizetopopup="none" oncommand="selectOnFiltreType();">
+						<menupopup>
+							<menuitem label="[Tous]" value="2" />
+							<menuitem label="Direct" value="1" />
+							<menuitem label="Indirect" value="0" />
+						</menupopup>
+					</menulist>
+					<box />
+					<box />
+				</row>
+				<row align="center">
+					<label class="label" value="Intitulé :" />
+					<hbox>
+						<textbox id="filtreIntitule" size="15" maxlength="50" onchange="changeOnFiltreIntitule();" onkeypress="keyPressOnFiltreIntitule(event);" />
+					</hbox>
+					<label />
+					<box />
+					<box />
+					<hbox>
+						<button id="bActualiser" class="bIcoActualiser" tooltiptext="Actualiser" oncommand="pressOnActualiser();" />
+						<button id="bReinitialiser" class="bIcoReinitialiser" tooltiptext="Réinitialiser" oncommand="pressOnReinitialiser();" />
+					</hbox>
+				</row>
+			</rows>
+		</grid>
+		
+		<box height="10px" />
+		
+		<tree id="treeComptes"
+ 				flex="1"
+ 				hidecolumnpicker="true"
+				flags="dont-build-content"
+				datasources="rdf:null"
+				ref="http://www.opensi.org/compta/analytique/comptes"
+				onselect="selectOnTreeComptes();"
+				ondblclick="dblClickOnTreeComptes();"
+				seltype="single">
+		    <treecols>
+				<treecol id="colNumero" flex="1" label="Numéro" />
+				<splitter class="tree-splitter" />
+				<treecol id="colIntitule" flex="1" label="Intitulé" />
+				<splitter class="tree-splitter" />
+				<treecol id="colLibelleType" flex="1" label="Type" />
+				<treecol id="colType" collapsed="true" ignoreincolumnpicker="true" />
+	  		</treecols>
+	  		<template>
+	  			<treechildren>
+			    	<treeitem uri="rdf:*">
+			    		<treerow>
+							<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Numero"/>
+							<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Intitule" />
+							<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Libelle_Direct" />
+							<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Direct" />
+						</treerow>
+		  			</treeitem>
+	  			</treechildren>
+	  		</template>
+		</tree>
+		
+		<box height="20px" />
+		
+		<hbox pack="center">
+			<button id="bAnnuler" class="bAnnuler" label="Annuler" oncommand="pressOnAnnuler();" />
+			<button id="bValider" class="bValider" label="Ok" oncommand="pressOnOk()" />
+		</hbox>
+	
+	</vbox>
+	
+</window>

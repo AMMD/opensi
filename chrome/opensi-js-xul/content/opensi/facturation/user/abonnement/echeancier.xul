@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_abonnement_echeancier"
+ 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="echeancier.js" />
+
+<tabpanel id="tabecheancier" >
+<vbox flex="1" class="auto-overflow">
+	<tree id="Echeancier"
+	  flex="1"
+    hidecolumnpicker="true"
+    ondblclick="choixFacture();"
+    seltype="single"
+    ref="http://www.opensi.org/facturation/echeance"
+    datasources="rdf:null"
+		onselect="Echeancier_activerBoutons();"	>
+		<treecols>
+      <treecol id="ColNum"
+        label="N° d'échéance"
+        flex="0.5"
+        sort="rdf:http://www.opensi.org/facturation/echeance/rdf#NumEcheance" />
+			<splitter class="tree-splitter" />
+    	<treecol id="ColDateApplication"
+        label="Période facturée"
+        flex="3"
+				sort="rdf:http://www.opensi.org/facturation/echeance/rdf#Date_Debut" />
+			<splitter class="tree-splitter" />
+     	<treecol id="ColNumFacture"
+        label="N° de facture"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/echeance/rdf#Num_Entier_Facture" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColTotalHT"
+        label="Total HT"
+        flex="1" class="nombre"
+				sort="rdf:http://www.opensi.org/facturation/echeance/rdf#Total_HT" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColMontantTTC"
+        label="Montant TTC"
+        flex="1" class="nombre"
+				sort="rdf:http://www.opensi.org/facturation/echeance/rdf#Total_TTC" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColEtat"
+        label="Etat"
+        flex="1"
+				sort="rdf:http://www.opensi.org/facturation/echeance/rdf#Etat" />
+			<splitter class="tree-splitter" />
+			<treecol id="Facture_Id" collapsed="true"/>
+		</treecols>
+ 	<template>
+    <treechildren>
+      <treeitem uri="rdf:*">
+        <treerow>
+          <treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#NumEcheance"/>
+          <treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#Date_Debut rdf:http://www.opensi.org/facturation/echeance/rdf#Date_Fin "/>
+          <treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#Num_Entier_Facture"/>
+	  			<treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#Total_HT" class="nombre"/>
+	  			<treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#MontantTTC" class="nombre" />
+					<treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#Etat"/>
+					<treecell label="rdf:http://www.opensi.org/facturation/echeance/rdf#Facture_Id"/>
+				</treerow>
+      </treeitem>
+    </treechildren>
+  </template>
+</tree>
+	<hbox pack="end">
+		<button label="Annuler échéance" class="bAnnuler" id="annulerEcheance" oncommand="Echeancier_ModifierEtatEcheance('annuler');"/>
+		<button label="Activer échéance" id="activerEcheance" oncommand="Echeancier_ModifierEtatEcheance('active');"/>
+	</hbox>
+</vbox>
+</tabpanel>
+</overlay>

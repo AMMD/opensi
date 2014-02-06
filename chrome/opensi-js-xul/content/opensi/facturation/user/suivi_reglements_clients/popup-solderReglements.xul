@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Solder les règlements en perte et profit"
+	id="opensi_facturation_user_suiviReglementsClients_popupSolderReglements"
+	onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="popup-solderReglements.js" />
+
+	<vbox>
+		<spacer style="height: 10px;"/>
+		<label class="label_14" value="Solder les règlements en perte et profit" style="text-align:center" />
+		<spacer style="height: 20px;"/>
+	</vbox>
+	<hbox align="center">
+		<label value="Restant à imputer &#60;=" />
+		<textbox id="nbCentimes" value="1" size="5" maxlength="5" onkeypress="onKeyPress(event);" class="nombre" />
+		<label value="centimes" />
+		<box width="20px" />
+		<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="rafraichirListeReglements();" />
+		<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="reinitialiser();" />
+	</hbox>
+	<listbox id="listeReglements" flex="1" ref="http://www.opensi.org/facturation/suiviReglementsClients" datasources="rdf:null">
+		<listhead>
+			<listheader label="Type" />
+			<listheader label="N° Client" />
+			<listheader label="Client" />
+			<listheader label="Banque client" />
+			<listheader label="N° Pièce" />
+			<listheader label="Date règlement" />
+			<listheader label="Mode règlement" />
+			<listheader label="Montant" style="text-align: right" />
+			<listheader label="Restant à imputer" style="text-align: right" />
+			<listheader collapsed="true" />
+ 		</listhead>
+ 		<listcols>
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol flex="1" />
+			<listcol collapsed="true" />
+		</listcols>
+		<template>
+			<listitem value="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Reglement_Id" uri="rdf:*" allowevents="true">
+				<listcell type="checkbox" checked="true" label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lbl_Type" onclick="testCheck(this.parentNode);" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Client" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Denomination" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Banque_Client" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Date_Reglement" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reglement" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Aff_Montant" style="text-align:right" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Montant_Restant" style="text-align:right; margin-right:20px" />
+				<listcell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Type" />
+			</listitem>
+		</template>
+	</listbox>
+	<hbox pack="center">
+		<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+		<button id="bValider" class="bValider" label="Valider" oncommand="valider();" />
+	</hbox>
+	<box style="height:20px" />
+</window>

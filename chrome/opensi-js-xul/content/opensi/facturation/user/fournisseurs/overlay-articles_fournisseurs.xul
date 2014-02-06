@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_compta_user_fournisseurs_overlay_articlesFournisseurs"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-articles_fournisseurs.js" />
+  
+  <tabpanel id="tab-articles">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+  
+		  <hbox pack="center" id="af-pagination_articles">
+				<button class="bIcoRetour" style="margin-right:0px" id="af-PrecArticles" oncommand="pageArticlePrec();" tooltiptext="Page précédente" />
+				<vbox pack="center">
+					<hbox>
+						<label value="Page" />
+						<label id="af-PageDebArticles" />
+						<label value="/" />
+						<label id="af-PageFinArticles" />
+					</hbox>
+				</vbox>
+				<button class="bIcoAvance" id="af-SuivArticles" oncommand="pageArticleSuiv();" tooltiptext="Page suivante" />
+		  </hbox>
+		
+		  <vbox pack="center" flex="1" class="auto-overflow">
+				<tree	id="af-articles"
+		    		flex="1"
+		    		hidecolumnpicker="true"
+		    		seltype="single"
+		        style="min-height: 100px;"
+		    		ref="http://www.opensi.org/facturation/articles_fournisseur"
+		    		datasources="rdf:null"
+		    		onselect="disableSup(false);"
+						onclick="disableSup(false);"
+						flags="dont-build-content">
+		
+		    	<treecols>
+		      	<treecol id="af-ColArticle_Id" label="Référence" flex="3" />
+						<splitter class="tree-splitter" />
+		      	<treecol id="af-ColDesignation" label="Désignation" flex="6" />
+						<splitter class="tree-splitter" />
+		      	<treecol id="af-ColPrix_Achat" label="Prix d'achat HT" flex="2" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="af-ColTVA" label="TVA" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="af-ColDelai" label="Délai réappro" flex="1" style="text-align:right" />
+		    	</treecols>
+		    	<template>
+		    		<treechildren>
+		      		<treeitem uri="rdf:*">
+		        		<treerow>
+		          		<treecell label="rdf:http://www.opensi.org/facturation/articles_fournisseur/rdf#Article_Id" />
+		          		<treecell label="rdf:http://www.opensi.org/facturation/articles_fournisseur/rdf#Designation" />
+		          		<treecell label="rdf:http://www.opensi.org/facturation/articles_fournisseur/rdf#Prix_Achat" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_fournisseur/rdf#Taux_TVA" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_fournisseur/rdf#Delai_Reappro" />
+		        		</treerow>
+		      		</treeitem>
+		    		</treechildren>
+		  		</template>
+				</tree>
+		
+				<hbox style="height:30px" />
+				<hbox pack="center">
+		    	<button label="Ajouter" oncommand="ajouterArticle();" collapsed="true" />
+		      <button id="af-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerArticle();" collapsed="true" />
+		    </hbox>
+				<hbox style="height:10px" />
+		  </vbox>
+		</vbox>
+	</tabpanel>
+
+</overlay>

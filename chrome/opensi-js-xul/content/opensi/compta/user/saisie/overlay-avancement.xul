@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libre de gestion d'entreprise                              -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_saisie_overlay-avancement"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-avancement.js" />
+  
+	<vbox id="edk-avancement">
+	
+		<deck id="oav-deck" flex="1">
+			<vbox>
+				<hbox align="center">
+					<label class="label" value="Journal :" />
+					<menulist id="oav-journal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null">
+		    		<template>
+		      		<menupopup>
+		        		<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+		      		</menupopup>
+		    		</template>
+		  		</menulist>
+					<label class="label" value="Période :" />
+		      <menulist id="oav-periode" ref="http://www.opensi.org/compta/periode" datasources="rdf:null">
+		        <template>
+		          <menupopup>
+		            <menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/periode/rdf#lettres" value="rdf:http://www.opensi.org/compta/periode/rdf#chiffres" />
+		          </menupopup>
+		        </template>
+		      </menulist>
+		      <button class="bValider" label="Ok" tooltiptext="accéder au journal de saisie" oncommand="oav_clickOnOK()" />
+				</hbox>
+
+				<vbox flex="1" align="center">
+					<hbox flex="1" align="center">
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row>
+									<hbox>
+										<hbox flex="1">
+											<label id="oav-labelAvancement" class="label_12" />
+										</hbox>
+										<hbox align="center" id="oav-boxExercice" collapsed="true">
+											<label value="Exercice :" />
+											<radiogroup id="oav-rgpExercice" oncommand="oav_chargerAvancement();" orient="horizontal">
+												<radio value="N1" label="N-1" />
+												<radio value="N" label="N" />
+											</radiogroup>
+										</hbox>
+									</hbox>
+									<label value="" />
+								</row>
+								<row>
+									<grid id="oav-gridAvancement">
+									</grid>
+									<vbox align="start">
+										<button class="bRechercher" label="Recherche d'écriture" oncommand="gms_openRechercheEcriture()" tooltiptext="rechercher une écriture (F12)" />
+										<button label="Opérations sur écritures" oncommand="oav_menuOpEcritures()" />
+									</vbox>
+								</row>
+								<row>
+									<hbox pack="end">
+										<button class="bPDF" label="Editer PDF" oncommand="oav_pdfAvancement()" />
+										<button class="bCSV" label="Editer CSV" oncommand="oav_csvAvancement()" />
+									</hbox>
+									<label value="" />
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+				</vbox>
+			</vbox>
+			
+			<vbox>
+				<iframe type="content" id="oav-pdfAvancement" flex="1" />
+			</vbox>
+		
+		</deck>
+	
+	</vbox>
+	
+</overlay> 
+

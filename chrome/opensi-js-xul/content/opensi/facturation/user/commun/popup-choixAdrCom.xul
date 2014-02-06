@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Adresses"
+  id="opensi_facturation_user_commun_popup-choixAdrCom"
+  onload="init();"
+	height="400"
+	width="1000"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-choixAdrCom.js" />
+  
+  <box class="rv_pop" id="rv" />
+  
+ 	<vbox pack="center" flex="1" class="auto-overflow">
+
+	  <hbox style="height:10px" />
+	 	<hbox pack="center">
+	  	<label class="label_14" value="ADRESSES DISPONIBLES" />
+	 	</hbox>
+	  <hbox style="height:20px" />
+	  <tree id="tree-adresses"
+	        hidecolumnpicker="true"
+	        seltype="single"
+	        ref="http://www.opensi.org/facturation/adrcom"
+	        datasources="rdf:null"
+	        onkeypress="pressOnTree(event);"
+	        ondblclick="ouvrirAdresse();"
+	        onclick="chargerAdr();"
+	        height="150px"
+	        width="760px">
+	
+	    <treecols>
+	      <treecol id="ColDenomination" flex="2" label="Raison sociale" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColAdresse_1" flex="3" label="Adresse" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColAdresse_2" flex="2" label="" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColAdresse_3" flex="2" label="" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColCode_Postal" flex="1" label="Code postal" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColVille" flex="2" label="Ville" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColPays" flex="1" label="Pays" />
+	      <splitter class="tree-splitter" />
+      	<treecol id="ColLib_Contact" flex="1" label="Contact" />
+	      <treecol id="ColCode_Pays" collapsed="true" />
+	      <treecol id="ColDefaut" collapsed="true" />
+	      <treecol id="ColContact" collapsed="true" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Denomination" value="rdf:http://www.opensi.org/facturation/adrcom/rdf#Num" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Adresse" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Comp_Adresse" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Adresse_3" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Code_Postal" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Ville" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Pays" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Lib_Contact" />
+           		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Code_Pays" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Defaut" />
+           		<treecell label="rdf:http://www.opensi.org/facturation/adrcom/rdf#Contact" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+	  </tree>
+	  <hbox>
+	    <checkbox id="Adresse" label="Détails de l'adresse" oncommand="changergroupbox(this.checked);" />
+	    <spacer flex="1"/>
+	  </hbox>
+	  
+	  <groupbox pack="center" flex="1" align="center" id ="Group_Adresse" collapsed="true">
+			<caption label="Adresse" />
+			<hbox>
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+		        <row align="center">
+		          <label value="" />
+		          <checkbox id="Defaut" label="Adresse par défaut" />
+		        </row>
+						<row align="center">
+		          <label class="label" value="* Raison sociale :" />
+		          <hbox><textbox id="Denomination" maxlength="50" size="30" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="* Adresse :" />
+		          <hbox><textbox id="Adresse_1" maxlength="80" size="50" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="" />
+		          <hbox><textbox id="Adresse_2" maxlength="50" size="50" /></hbox>
+		        </row>
+						<row align="center">
+		          <label class="label" value="" />
+		          <hbox><textbox id="Adresse_3" maxlength="50" size="50" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="Code postal :" />
+		          <hbox><textbox id="Code_Postal" class="rv_cp" idville="Ville" idnextfocus="Code_Pays" maxlength="10" size="5" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="* Ville :" />
+		          <hbox><textbox id="Ville" class="rv_ville" idcp="Code_Postal" idnextfocus="Code_Pays" maxlength="50" size="30" /></hbox>
+		        </row>
+		        <row align="center">
+		          <label class="label" value="Pays :" />
+		          <hbox>
+		          	<menulist id="Code_Pays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+								<template>
+		            	<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		            	</menupopup>
+								</template>
+								</menulist>
+		          </hbox>
+		        </row>
+           	<row align="center">
+             	<label class="label" value="Contact :" />
+             	<hbox>
+             		<menulist id="Contact" ref="http://www.opensi.org/facturation/liste-contactsFournisseur" datasources="rdf:null" style="width:200px" sizetopopup="none">
+								<menupopup>
+              		<menuitem label="[Aucun]" value="" />
+              	</menupopup>
+              	<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Civilite rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Nom rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Prenom" value="rdf:http://www.opensi.org/facturation/liste-contactsFournisseur/rdf#Num_Inter" />
+              		</menupopup>
+								</template>
+								</menulist>
+             	</hbox>
+           	</row>
+		      </rows>
+				</grid>
+			</hbox>
+			<hbox style="height:20px" />
+			<hbox>
+				<button id="bNouveauAdr" class="bNouveau" label="Nouveau" oncommand="nouveauAdr()" />
+				<button id="bCreerAdr" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerAdr('C')" />
+				<button id="bModifierAdr" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerAdr('M')" />
+				<button id="bSupprimerAdr" class="bSupprimer" label="Supprimer" oncommand="supprimerAdr()" />
+			</hbox>
+		</groupbox>
+
+	  <box style="height:20px" />
+	  <hbox pack="center">
+			<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+	  	<button label="Ok" class="bValider" oncommand="ouvrirAdresse();" />
+	  </hbox>
+	  <box style="height:20px" />
+  
+  </vbox>
+
+</window>
+
+

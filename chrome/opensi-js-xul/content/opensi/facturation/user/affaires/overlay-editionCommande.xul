@@ -1,0 +1,1192 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+
+<overlay
+  id="opensi_facturation_user_affaires_overlayEditionCommande"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-editionCommande.js" />
+
+	<vbox id="editionCommande" flex="1">
+	
+		<deck id="oec-deckCommande" flex="1">
+
+		  <vbox flex="1" class="auto-overflow">
+			  <hbox>
+			  	<tabbox flex="1" pack="center" id="oec-tabBoxCommande">
+						<tabs>
+			      	<tab label="Commande" id="oec-tabCommande" />
+			      	<tab label="Acomptes" id="oec-tabAcomptes" />
+			      	<tab label="Encaissements" id="oec-tabEncaissements" />
+			      	<tab label="Récapitulatif commande" id="oec-tabRecapitulatif" />
+			      	<tab label="Web" id="oec-tabWeb" />
+			      	<tab label="Colis" id="oec-tabColis" />
+			      	<tab label="Historique" id="oec-tabHistorique" />
+			      	<tab label="Versions" id="oec-tabVersionDocument" />
+			     	</tabs>
+			  		<tabpanels flex="1">
+			    		<tabpanel pack="center" align="start" orient="vertical">
+			    			<hbox>
+						      <grid>
+						       	<columns>
+						        	<column />
+						         	<column />
+						       	</columns>
+						       	<rows>
+						       		<row align="center">
+												<label class="label" value="N° Affaire :" />
+												<label id="oec-numAffaire" />
+						         	</row>
+						         	<row align="center">
+						          	<label class="label" value="N° Commande :" />
+						           	<label id="oec-numCommande" />
+						         	</row>
+						         	<row align="center">
+						          	<label class="label" value="Réf. Commande :" />
+						           	<textbox id="oec-refCommande" size="15" maxlength="20" oninput="oec_setModifie(true);" />
+						         	</row>
+						         	<row align="center">
+												<label class="label" value="Date commande :" />
+							          <label id="oec-dateCommande" />
+							        </row>
+											<row align="center">
+												<label class="label" value="Etat commande :" />
+												<label id="oec-etatCommande" />
+						         	</row>
+						         	<row align="center">
+												<label class="label" value="Statut paiement :" />
+												<label id="oec-statutPaiement" />
+						         	</row>
+						         	<row align="center">
+												<label class="label" value="Mode d'expédition :" />
+												<hbox>
+													<menulist id="oec-modeExpedition" ref="http://www.opensi.org/facturation/liste_modes_expedition" datasources="rdf:null" oncommand="oec_setModifie(true);" style="width:110px" sizetopopup="none">
+														<menupopup>
+															<menuitem label="[Aucun]" value="0" />
+														</menupopup>
+														<template>
+															<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Nom" value="rdf:http://www.opensi.org/facturation/liste_modes_expedition/rdf#Mode_Liv_Id" />
+															</menupopup>
+														</template>
+													</menulist>
+												</hbox>
+						         	</row>
+						          <row align="center">
+								  			<label value="Poids total :" class="label" />
+								  			<hbox>
+								  				<label id="oec-poidsTotal" class="label" />
+								  				<label value="kg" />
+								  			</hbox>
+						          </row>
+						         	<row align="center">
+												<label class="label" value="Date livraison prévue :" />
+												<hbox><textbox id="oec-dateDelai" maxlength="10" size="10" tooltiptext="jj/mm/aaaa" oninput="oec_setModifie(true);" /></hbox>
+											</row>
+											<row align="center">
+						          	<label class="label" value="Devis d'origine :" />
+						           	<label id="oec-numDevisOrigine" />
+						         	</row>
+										</rows>
+									</grid>
+									
+									<grid>
+										<columns>
+						        	<column />
+						         	<column />
+						       	</columns>
+										<rows>
+											<row align="center">
+												<label class="label" value="N° Client :" />
+												<hbox>
+							            <label id="oec-clientId" value="" collapsed="true" />
+							            <label id="oec-labelClient" />
+							          </hbox>
+						          </row>
+						          <row align="center" id="oec-rowLoginWeb">
+												<label class="label" value="Login :" />
+												<label id="oec-labelLogin" />
+						          </row>
+											<row align="center">
+						           	<label class="label" value="Responsable :" />
+											 	<hbox>
+													<menulist id="oec-responsable" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null" oncommand="oec_setModifie(true);" style="width:180px" sizetopopup="none">
+														<menupopup>
+															<menuitem label="[Aucun]" value="0" />
+						             		</menupopup>
+														<template>
+						              		<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+						              		</menupopup>
+														</template>
+						            	</menulist>
+												</hbox>
+						         	</row>
+											<row align="center" id="oec-rowTarif">
+							  			  <label value="Code tarifaire :" class="label" />
+								  			<hbox>
+							  			  	<menulist id="oec-codeTarif" ref="http://www.opensi.org/facturation/liste_types_tarifs" datasources="rdf:null" oncommand="oec_setModifie(true);">
+						 			  				<template>
+						             			<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Valeur" />
+						             			</menupopup>
+														</template>
+							  				  </menulist>
+							  				</hbox>
+						  				</row>
+						         	<row align="center">
+						            <label value="" />
+						            <checkbox id="oec-assujettiTVA" label="Assujetti à la TVA" oncommand="oec_changerAssujettiTVA(this.checked); oec_calculerTvaPort();" />
+						          </row>
+						          <row align="center">
+						            <label class="label" value="N° TVA :" />
+						            <textbox id="oec-numTVA" maxlength="14" size="14" oninput="oec_setModifie(true);" />
+						          </row>
+						          <row align="center">
+						  			  	<label value="Application de la TVA :" class="label" />
+								  			<hbox>
+							  			  	<menulist id="oec-regimeTVA" oncommand="oec_calculerTvaPort(); oec_listeTVA(); oec_setModifie(true);" style="width:180px" sizetopopup="none">
+						  			  			<menupopup>
+									  					<menuitem label="Régime général de TVA" value="G" />
+								  					  <menuitem label="Forcer l'application de la TVA" value="T" />
+							  					  	<menuitem label="Forcer l'exonération de TVA" value="E" />
+									  				</menupopup>
+								  				</menulist>
+							  				</hbox>
+						  				</row>
+						          <row align="center">
+						            <label value="" />
+						            <checkbox id="oec-editionTTC" label="Edition en TTC" oncommand="oec_changerTypeEdition(this.checked);" />
+						          </row>
+						          <row align="center">
+						          	<label value="Pôle d'activité :" class="label" />
+						          	<hbox>
+						        			<menulist id="oec-secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px" oncommand="oec_setModifie(true);">
+														<menupopup>
+															<menuitem label="[Aucun]" value="0" />
+														</menupopup>
+														<template>
+						          				<menupopup>
+																<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+						          				</menupopup>
+														</template>
+						        			</menulist>
+						          	</hbox>
+						          </row>
+						      	</rows>
+						     	</grid>
+						     	
+						     	<box style="width:10px" />
+						     	
+						     	<vbox>
+						     		<label value="Indications de commande :" />
+										<textbox id="oec-indications" multiline="true" rows="3" readonly="true" style="color:#FF0000;" />
+										<box style="height:10px" />
+										<label value="Fichiers associés :" />
+						     		<hbox><button id="oec-bVoirFichier" label="Voir les fichiers" oncommand="oec_afficherFichiers();" /></hbox>
+						     	</vbox>
+								</hbox>
+							</tabpanel>
+							
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<vbox flex="1">
+									<tree id="oec-listeAcomptes"
+						          flex="1"
+						          hidecolumnpicker="true"
+											flags="dont-build-content"
+						          seltype="single"
+						          ref="http://www.opensi.org/facturation/liste_acomptes"
+						          datasources="rdf:null"
+						          onselect="oec_pressOnListeAcomptes();">
+							      <treecols>
+											<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#triDate_Acompte" />
+											<splitter class="tree-splitter" />
+											<treecol label="N° Acompte" flex="1" sort="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Num_Acompte" />
+											<splitter class="tree-splitter" />
+											<treecol label="Statut" flex="1" sort="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Lbl_Statut" />
+											<splitter class="tree-splitter" />
+											<treecol label="Montant" flex="1" style="text-align: right" sort="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#triMontant" />
+											<treecol id="oec-colStatut" collapsed="true" />
+											<treecol id="oec-colImpute" collapsed="true" />
+											<treecol id="oec-colAcompteId" collapsed="true" />
+							      </treecols>
+							      <template>
+							        <treechildren>
+							          <treeitem uri="rdf:*">
+					          			<treerow>
+							            	<treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Date_Acompte" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Num_Acompte" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Lbl_Statut" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Montant" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Statut" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Impute" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#Acompte_Id" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#triDate_Acompte" />
+							              <treecell label="rdf:http://www.opensi.org/facturation/liste_acomptes/rdf#triMontant" />
+							            </treerow>
+							          </treeitem>
+							        </treechildren>
+							      </template>
+							    </tree>
+							    <hbox pack="end">
+							    	<vbox id="oec-boxNouvelAcompte"><button label="Nouvel acompte" class="bNouveau" oncommand="oec_nouvelAcompte();" /></vbox>
+							    	<vbox><button id="oec-bAnnulerAcompte" label="Annuler acompte" class="bAnnuler" oncommand="oec_annulerAcompte();" /></vbox>
+						    		<vbox><button id="oec-bReediterAcompte" label="Edition PDF" class="bPDF" oncommand="oec_reediterAcompte();" /></vbox>
+						    	</hbox>
+							  </vbox>
+							</tabpanel>
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<hbox>
+									<hbox align="top">
+										<label value="CA TTC facturé :" />
+										<label id="oec-caTTCFacture" />
+									</hbox>
+									<box style="width:20px" />
+									<grid>
+										<columns>
+											<column />
+											<column />
+											<column />
+											<column />
+											<column />
+										</columns>
+										<rows>
+											<row align="center">
+												<label class="label" value="CA TTC payé :" />
+												<label class="label" id="oec-caTTCPaye" />
+												<label class="label" value="soit :" />
+												<label class="label" id="oec-pourcCATTCPaye" />
+												<label class="label" value="% du facturé" />
+											</row>
+											<row align="center">
+												<label class="label" value="Solde à encaisser :" />
+												<label class="label" id="oec-soldeAEncaisser" />
+												<label class="label" value="soit :" />
+												<label class="label" id="oec-pourcSoldeAEncaisser" />
+												<label class="label" value="% du facturé" />
+											</row>
+										</rows>
+									</grid>
+									<spacer flex="1" />
+									<grid id="oec-gridEncoursClient">
+										<columns>
+											<column />
+											<column />
+										</columns>
+										<rows>
+											<row align="center">
+												<label class="label" value="En cours client autorisé :" />
+												<label id="oec-encoursAutorise" class="label" />
+											</row>
+											<row align="center">
+												<label class="label" value="En cours client actuel :" />
+												<label id="oec-encoursActuel" class="label" />
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+								
+								<tree
+									id="oec-listeReglements"
+					      	flex="1"
+					      	hidecolumnpicker="true"
+					      	seltype="single"
+					      	ref="http://www.opensi.org/facturation/liste_reglements"
+					      	datasources="rdf:null"
+									flags="dont-build-content"
+									enableColumnDrag="true"
+								>
+					    		<treecols>
+					      		<treecol label="Type" flex="1" />
+										<splitter class="tree-splitter" />
+					      		<treecol label="Date" flex="1" />
+										<splitter class="tree-splitter" />
+										<treecol label="Mode de règlement" flex="1" />
+										<splitter class="tree-splitter" />
+										<treecol label="Montant" flex="1" class="nombre" />
+					    		</treecols>
+					    		<template>
+					      		<treechildren>
+					        		<treeitem uri="rdf:*">
+					          		<treerow>
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Type" />
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Date_Reglement" />
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reglement" />
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Montant" />
+					          		</treerow>
+					        		</treeitem>
+					      		</treechildren>
+					    		</template>
+					  		</tree>
+					  		<hbox id="oec-boxReglement" pack="end">
+					  			<button class="bNouveau" label="Nouveau règlement" oncommand="oec_nouveauReglement();" />
+					  		</hbox>
+							</tabpanel>
+							
+							<tabpanel flex="1" orient="vertical" align="center">
+								<hbox flex="1" align="center">
+									<grid>
+										<columns>
+											<column />
+											<column />
+											<column />
+											<column />
+										</columns>
+										<rows>
+											<row align="center">
+												<label class="label" value="CA HT de la commande :" />
+												<label id="oec-caHT" class="label" />
+												<label class="label" value="Nombre d'articles commandés :" />
+												<label id="oec-nbArticlesALivrer" class="label" />
+											</row>
+											<row align="center">
+												<label class="label" value="Prix d'achat HT de la commande :" />
+												<label id="oec-paHT" class="label" />
+												<label class="label" value="Nombre d'articles déjà livrés :" />
+												<label id="oec-nbArticlesDejaLivres" class="label" />
+											</row>
+											<row align="center">
+												<hbox pack="end">
+													<vbox align="center"><image id="oec-pictoMargeNegative" src="chrome://opensi/content/design/icones/alerte.png" /></vbox>
+													<label class="label" id="oec-lblMargeHT" value="Marge HT de la commande :" />
+												</hbox>
+												<label id="oec-margeHT" class="label" />
+												<label class="label" value="Nombre d'articles restant à livrer :" />
+												<label id="oec-nbArticlesRestantALivrer" class="label" />
+											</row>
+											<row align="center">
+												<label value="" />
+												<label value="" />
+												<label class="label" value="Avancement de la commande :" />
+												<label id="oec-avancementCommande" class="label" />
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+							</tabpanel>
+							
+							<tabpanel pack="center" align="center">
+								<grid>
+					       	<columns>
+					        	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					       		<row align="center">
+											<label class="label" value="N° Transaction bancaire :" />
+											<label id="oec-numTransaction" />
+					         	</row>
+					         	<row align="center">
+											<label class="label" value="Site d'origine :" />
+											<label id="oec-siteOrigine" />
+					         	</row>
+										<row align="top">
+											<label class="label" value="Informations :" />
+											<textbox id="oec-informations" multiline="true" rows="3" readonly="true" style="color:#FF0000;" />
+					         	</row>
+									</rows>
+								</grid>
+							</tabpanel>
+							
+							<tabpanel pack="center" align="center">
+								<vbox align="center" ref="http://www.opensi.org/facturation/colis" id="oec-liensColis" datasources="rdf:null">
+									<template>
+										<hbox uri="rdf:*">
+											<label class="rdf:http://www.opensi.org/facturation/colis/rdf#Class" tooltiptext="rdf:http://www.opensi.org/facturation/colis/rdf#Lien_tooltiptext" value="rdf:http://www.opensi.org/facturation/colis/rdf#Valeur" onclick="rdf:http://www.opensi.org/facturation/colis/rdf#Lien" />
+										</hbox>
+									</template>
+								</vbox>
+							</tabpanel>
+							
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<tree
+									id="oec-listeHistorique"
+					      	flex="1"
+					      	hidecolumnpicker="true"
+					      	seltype="single"
+					      	ref="http://www.opensi.org/facturation/liste_historique"
+					      	datasources="rdf:null"
+									flags="dont-build-content"
+									enableColumnDrag="true"
+								>
+					    		<treecols>
+					      		<treecol label="Date" flex="1" />
+										<splitter class="tree-splitter" />
+					      		<treecol label="Login" flex="1" />
+										<splitter class="tree-splitter" />
+										<treecol label="Libellé" flex="3" />
+					    		</treecols>
+					    		<template>
+					      		<treechildren>
+					        		<treeitem uri="rdf:*">
+					          		<treerow>
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_historique/rdf#Date" />
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_historique/rdf#Login" />
+					            		<treecell label="rdf:http://www.opensi.org/facturation/liste_historique/rdf#Libelle" />
+					          		</treerow>
+					        		</treeitem>
+					      		</treechildren>
+					    		</template>
+					  		</tree>
+					  		<hbox pack="end">
+					  			<button id="oec-bEditionInitiale" class="bPDF" label="Edition initiale PDF" oncommand="oec_editerCommandeInitiale();" />
+					  		</hbox>
+							</tabpanel>
+							<tabpanel flex="1" pack="center" orient="vertical">
+								<tree id="oec-listeVersion"
+									hidecolumnpicker="true"
+					        seltype="single"
+					        ref="http://www.opensi.org/facturation/historiqueEditions"
+					        datasources="rdf:null"
+					        flex="1">
+							    <treecols>
+							      <treecol flex="1" label="N° Edition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Date d'édition" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Login" />
+										<splitter class="tree-splitter" />
+										<treecol flex="1" label="Envoyé à" />
+							    </treecols>
+							    <template>
+							      <treechildren>
+							        <treeitem uri="rdf:*">
+							          <treerow>
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+							            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+							          </treerow>
+							        </treeitem>
+							      </treechildren>
+							    </template>
+							  </tree>
+							</tabpanel>
+						</tabpanels>
+					</tabbox>
+			    
+			    <tabbox flex="1" pack="center" id="oec-tabBoxAdresses">
+						<tabs>
+			      	<tab label="Facturation" />
+			      	<tab label="Livraison" />
+			      	<tab label="Envoi" />
+			     	</tabs>
+			  		<tabpanels flex="1">
+			    		<tabpanel pack="center" align="start" orient="horizontal">
+					      <grid>
+					        <columns>
+					        	<column />
+					         	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					         	<row align="center">
+					          	<label class="label" value="Raison sociale :" />						
+					    				<hbox>
+												<textbox id="oec-denominationFact" maxlength="50" size="40" oninput="oec_setModifie(true);" />
+												<button collapsed="true" id="oec-bChercherClient" class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="oec_rechercherClient();" flex="1" />
+											</hbox>
+											<label value="" />
+					         	</row>
+					         	<row align="center">
+					          	<label class="label" value="Adresse :" />
+					   				  <textbox id="oec-adresse1Fact" maxlength="80" size="30" oninput="oec_setModifie(true);" />
+					   				  <hbox align="center">
+												<button id="oec-bChercherAdrFact" class="bIcoEnveloppe" tooltiptext="changer l'adresse de facturation" oncommand="oec_rechercherAdrFact();" />
+											</hbox>
+					          </row>
+										<row align="center">
+					            <label class="label" value="" />
+					      			<hbox>
+												<textbox id="oec-adresse2Fact" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+												<textbox id="oec-adresse3Fact" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+											</hbox>
+											<label value="" />
+					          </row>
+					          <row align="center">
+					            <label class="label" value="Code postal :" />
+											<hbox align="center">
+					      				<textbox id="oec-codePostalFact" class="rv_cp" idville="oec-villeFact" idnextfocus="oec-codePaysFact" maxlength="10" size="6" oninput="oec_setModifie(true);" />
+					            	<label class="label" value="Ville :" />
+					            	<textbox id="oec-villeFact" class="rv_ville" idcp="oec-codePostalFact" idnextfocus="oec-codePaysFact" maxlength="50" size="30" oninput="oec_setModifie(true);" />
+					          	</hbox>
+					          	<label value="" />
+					          </row>
+										<row align="center">
+					            <label class="label" value="Pays :" />
+					            <hbox>
+					            	<menulist id="oec-codePaysFact" oncommand="oec_setModifie(true);" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+													<template>
+						             		<menupopup>
+															<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+						             		</menupopup>
+													</template>
+													</menulist>
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oec-rowInterFact">
+					            <label class="label" value="Contact :" />
+											<hbox>
+												<menulist id="oec-civInterFact" oncommand="oec_setModifie(true);">
+													<menupopup>
+					                  <menuitem label="" value="0" />
+														<menuitem label="M." value="1" />
+														<menuitem label="Mme" value="2" />
+														<menuitem label="Mlle" value="3" />
+													</menupopup>
+												</menulist>
+												<hbox align="center">
+					              	<textbox id="oec-nomInterFact" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oec_setModifie(true);" />
+													<textbox id="oec-prenomInterFact" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oec_setModifie(true);" />
+												</hbox>
+					            </hbox>
+					            <hbox align="center">
+												<button id="oec-bChercherInter" class="bIcoContact" tooltiptext="changer de contact" oncommand="oec_rechercherInterlocuteurFact();" />
+											</hbox>
+					          </row>
+									  <row align="center" id="oec-rowTelFaxFact">
+					            <label class="label" value="Tél :" />
+											<hbox align="center">
+					              <textbox id="oec-telInterFact" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oec_setModifie(true);" />
+					             	<label class="label" value="Fax :" />
+					              <textbox id="oec-faxInterFact" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oec_setModifie(true);" />
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oec-rowEmailFact">
+					            <label value="Email :" style="text-align:right" class="text-link" onclick="ouvrirLienMail('oec-emailInterFact')" />
+					           	<textbox id="oec-emailInterFact" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="oec_setModifie(true);" />
+					           	<hbox align="center">
+												<button id="oec-bCopierFactVersLivEnvoi" class="bIcoCopierAdr" tooltiptext="Reporter les coordonnées en envoi et livraison" oncommand="oec_copierFactVersLivEnvoi();" />
+											</hbox>
+					          </row>
+					        </rows>
+					      </grid>
+			    		</tabpanel>
+			
+							<tabpanel pack="center" align="start" orient="horizontal">
+					      <grid>
+					        <columns>
+					        	<column />
+					         	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					         	<row align="center">
+					          	<label class="label" value="Raison sociale :" />						
+					    				<hbox><textbox id="oec-denominationLiv" maxlength="50" size="40" oninput="oec_setModifie(true);" /></hbox>
+					    				<label value="" />
+					         	</row>
+					         	<row align="center">
+					          	<label class="label" value="Adresse :" />
+					   				  <textbox id="oec-adresse1Liv" maxlength="80" size="30" oninput="oec_setModifie(true);" />
+					   				  <hbox align="center">
+												<button id="oec-bChercherAdrLiv" class="bIcoEnveloppe" tooltiptext="changer l'adresse de livraison" oncommand="oec_rechercherAdrLiv();" />
+											</hbox>
+					          </row>
+										<row align="center">
+					            <label class="label" value="" />
+					      			<hbox>
+												<textbox id="oec-adresse2Liv" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+												<textbox id="oec-adresse3Liv" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+											</hbox>
+											<label value="" />
+					          </row>
+					          <row align="center">
+					            <label class="label" value="Code postal :" />
+											<hbox align="center">
+					      				<textbox id="oec-codePostalLiv" class="rv_cp" idville="oec-villeLiv" idnextfocus="oec-codePaysLiv" maxlength="10" size="6" oninput="oec_setModifie(true);" />
+					            	<label class="label" value="Ville :" />
+					            	<textbox id="oec-villeLiv" class="rv_ville" idcp="oec-codePostalLiv" idnextfocus="oec-codePaysLiv" maxlength="50" size="30" oninput="oec_setModifie(true);" />
+					          	</hbox>
+					          	<label value="" />
+					          </row>
+										<row align="center">
+					            <label class="label" value="Pays :" />
+					            <hbox>
+					            	<menulist id="oec-codePaysLiv" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="oec_calculerTvaPort(); oec_selectPaysLiv(); oec_setModifie(true);">
+													<template>
+						             		<menupopup>
+															<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+						             		</menupopup>
+													</template>
+												</menulist>
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oec-rowInterLiv">
+					            <label class="label" value="Contact :" />
+											<hbox>
+												<menulist id="oec-civInterLiv" oncommand="oec_setModifie(true);">
+													<menupopup>
+					                  <menuitem label="" value="0" />
+														<menuitem label="M." value="1" />
+														<menuitem label="Mme" value="2" />
+														<menuitem label="Mlle" value="3" />
+													</menupopup>
+												</menulist>
+												<hbox align="center">
+					              	<textbox id="oec-nomInterLiv" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oec_setModifie(true);" />
+													<textbox id="oec-prenomInterLiv" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oec_setModifie(true);" />
+												</hbox>
+					            </hbox>
+					            <hbox align="center">
+												<button id="oec-bChercherInterLiv" class="bIcoContact" tooltiptext="changer de contact" oncommand="oec_rechercherInterlocuteurLiv();" />
+											</hbox>
+					          </row>
+									  <row align="center" id="oec-rowTelFaxLiv">
+					            <label class="label" value="Tél :" />
+											<hbox align="center">
+					              <textbox id="oec-telInterLiv" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oec_setModifie(true);" />
+					             	<label class="label" value="Fax :" />
+					              <textbox id="oec-faxInterLiv" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oec_setModifie(true);" />
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oec-rowEmailLiv">
+					            <label value="Email :" class="text-link" style="text-align:right" onclick="ouvrirLienMail('oec-emailInterLiv')" />
+					           	<textbox id="oec-emailInterLiv" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="oec_setModifie(true);" />
+					           	<label value="" />
+					          </row>
+					        </rows>
+					      </grid>
+			    		</tabpanel>
+			    		
+			    		<tabpanel pack="center" align="start" orient="horizontal">
+					      <grid>
+					        <columns>
+					        	<column />
+					         	<column />
+					         	<column />
+					       	</columns>
+					       	<rows>
+					         	<row align="center">
+					          	<label class="label" value="Raison sociale :" />						
+					    				<hbox><textbox id="oec-denominationEnvoi" maxlength="50" size="40" oninput="oec_setModifie(true);" /></hbox>
+					    				<label value="" />
+					         	</row>
+					         	<row align="center">
+					          	<label class="label" value="Adresse :" />
+					   				  <textbox id="oec-adresse1Envoi" maxlength="80" size="30" oninput="oec_setModifie(true);" />
+					   				  <hbox align="center">
+												<button id="oec-bChercherAdrEnvoi" class="bIcoEnveloppe" tooltiptext="changer l'adresse d'envoi" oncommand="oec_rechercherAdrEnvoi();" />
+											</hbox>
+					          </row>
+										<row align="center">
+					            <label class="label" value="" />
+					      			<hbox>
+												<textbox id="oec-adresse2Envoi" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+												<textbox id="oec-adresse3Envoi" maxlength="50" flex="1" oninput="oec_setModifie(true);" />
+											</hbox>
+											<label value="" />
+					          </row>
+					          <row align="center">
+					            <label class="label" value="Code postal :" />
+											<hbox align="center">
+					      				<textbox id="oec-codePostalEnvoi" class="rv_cp" idville="oec-villeEnvoi" idnextfocus="oec-codePaysEnvoi" maxlength="10" size="6" oninput="oec_setModifie(true);" />
+					            	<label class="label" value="Ville :" />
+					            	<textbox id="oec-villeEnvoi" class="rv_ville" idcp="oec-codePostalEnvoi" idnextfocus="oec-codePaysEnvoi" maxlength="50" size="30" oninput="oec_setModifie(true);" />
+					          	</hbox>
+					          	<label value="" />
+					          </row>
+										<row align="center">
+					            <label class="label" value="Pays :" />
+					            <hbox>
+					            	<menulist id="oec-codePaysEnvoi" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="oec_setModifie(true);">
+													<template>
+						             		<menupopup>
+															<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+						             		</menupopup>
+													</template>
+												</menulist>
+					            </hbox>
+					            <label value="" />
+					          </row>
+					          <row align="center" id="oec-rowInterEnvoi">
+					            <label class="label" value="Contact :" />
+											<hbox>
+												<menulist id="oec-civInterEnvoi" oncommand="oec_setModifie(true);">
+													<menupopup>
+					                  <menuitem label="" value="0" />
+														<menuitem label="M." value="1" />
+														<menuitem label="Mme" value="2" />
+														<menuitem label="Mlle" value="3" />
+													</menupopup>
+												</menulist>
+												<hbox align="center">
+					              	<textbox id="oec-nomInterEnvoi" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="oec_setModifie(true);" />
+													<textbox id="oec-prenomInterEnvoi" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="oec_setModifie(true);" />
+												</hbox>
+					            </hbox>
+					            <hbox align="center">
+												<button id="oec-bChercherInterEnvoi" class="bIcoContact" tooltiptext="changer de contact" oncommand="oec_rechercherInterlocuteurEnvoi();" />
+											</hbox>
+					          </row>
+									  <row align="center" id="oec-rowTelFaxEnvoi">
+					            <label class="label" value="Tél :" />
+											<hbox align="center">
+					              <textbox id="oec-telInterEnvoi" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="oec_setModifie(true);" />
+					             	<label class="label" value="Fax :" />
+					              <textbox id="oec-faxInterEnvoi" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="oec_setModifie(true);" />
+					            </hbox>
+					            <label value="" />
+					          </row>
+									  <row align="center" id="oec-rowEmailEnvoi">
+					            <label value="Email :" class="text-link" style="text-align:right" onclick="ouvrirLienMail('oec-emailInterEnvoi')" />
+					           	<textbox id="oec-emailInterEnvoi" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="oec_setModifie(true);" />
+					           	<label value="" />
+					          </row>
+					        </rows>
+					      </grid>
+			    		</tabpanel>
+			  		</tabpanels>
+					</tabbox>
+				</hbox>
+			
+			  <vbox flex="1">
+			  	<hbox flex="1">
+				    <tree id="oec-articles"
+				          flex="1"
+									flags="dont-build-content"
+				          seltype="single"
+				          ref="http://www.opensi.org/facturation/articles_commande"
+				          datasources="rdf:null"
+									ondblclick="oec_ouvrirCommentaire();"
+									onselect="oec_ouvrirLigne();"
+				          style="min-height: 100px;"
+				          enableColumnDrag="true"
+				          width="800px">
+				
+				      <treecols>
+								<treecol id="oec-colCodeStats" label="CS" tooltiptext="Code Statistiques" flex="1" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colReference" label="Référence" flex="2" />
+								<splitter class="tree-splitter" />
+				        <treecol id="oec-colDesignation" label="Désignation" flex="5" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colMarque" label="Marque" flex="1" hidden="true" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colAttribut2" flex="1" hidden="true" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colNumLot" label="N° Lot" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colNbPieces" label="Nb Pièces" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colQuantite" label="Quantité" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colUnite" label="Unité" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colDatePeremption" label="DLC" tooltiptext="Date Limite de Consommation" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+				        <treecol id="oec-colPU" label="P.U HT" flex="2" style="text-align:right" />
+								<splitter class="tree-splitter" />
+				        <treecol id="oec-colRistourne" label="Ristourne (%)" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colPUNet" label="P.U Net" flex="2" style="text-align:right" hidden="true" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colTauxCommission" label="Com. (%)" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colMontantCommission" label="Montant Com." flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colMarge" label="Marge" hidden="true" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+								<treecol id="oec-colPrixAchat" label="Prix d'achat" hidden="true" flex="1" style="text-align:right" />
+								<splitter class="tree-splitter" />
+				        <treecol id="oec-colTotal" label="Total HT" flex="2" style="text-align:right" />
+				        <splitter class="tree-splitter" />
+								<treecol label="Taux TVA" flex="1" style="text-align:right" hidden="true" />
+								<splitter class="tree-splitter" />
+				        <treecol id="oec-colStock" label="Stock" flex="1" style="text-align:center" />
+				        <splitter class="tree-splitter" />
+				        <treecol id="oec-colFournisseur" label="Com. Fournisseur" flex="1" />
+				        <splitter class="tree-splitter" />
+				        <treecol id="oec-colLivree" label="Livrée" flex="1" style="text-align:right" hidden="true" />
+				        <splitter class="tree-splitter" />
+				        <treecol id="oec-colStockDispo" label="Stock dispo" flex="1" style="text-align:right" hidden="true" />
+				        <splitter class="tree-splitter" />
+				        <treecol id="oec-colSousTotal" label="Sous Total" flex="2" style="text-align:right" hidden="true" />
+								<treecol id="oec-colCodeTVA" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="oec-colTypeLigne" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="oec-colLigneId" collapsed="true" ignoreincolumnpicker="true" />
+								<treecol id="oec-colLibelle" collapsed="true" ignoreincolumnpicker="true" />
+				      </treecols>
+				      <template>
+				        <treechildren>
+				          <treeitem uri="rdf:*">
+		          			<treerow properties="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Couleur">
+				            	<treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Code_Stats" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Reference" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Designation" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Marque" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Attribut_2" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Num_Lot" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Nb_Pieces" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Quantite" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Unite" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Date_Peremption" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Prix" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Ristourne" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#PU_Net" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Taux_Commission" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Montant_Commission" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Marge_HT" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Prix_Achat" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Total" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Taux_TVA" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Stock" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Num_Commande_Fournisseur" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Livree" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Stock_Dispo" />
+				              <treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Sous_Total" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Code_TVA" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Type_Ligne" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Ligne_Id" />
+											<treecell label="rdf:http://www.opensi.org/facturation/articles_commande/rdf#Libelle" />
+				            </treerow>
+				          </treeitem>
+				        </treechildren>
+				      </template>
+				    </tree>
+				    <vbox>
+				    	<button class="bIcoFlecheHaut" id="oec-bFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="oec_deplacerLigneHaut();" />
+				    	<button class="bIcoFlecheBas" id="oec-bFlecheBas" tooltiptext="déplacer vers le bas" oncommand="oec_deplacerLigneBas();" />
+				    </vbox>
+					</hbox>
+			
+					<grid>
+						<rows>
+							<row />
+							<row />
+						</rows>
+						<columns>
+							<column id="oec-actCodeStats">
+								<hbox align="end"><label value="CS :" tooltiptext="Code Statistiques" /></hbox>
+								<hbox><textbox id="oec-codeStats" maxlength="10" size="7" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label id="oec-labelRef" value="Référence :" /></hbox>
+								<hbox><textbox id="oec-reference" maxlength="40" size="15" onkeypress="oec_pressOnReference(event);" /></hbox>
+							</column>
+							<column flex="1">
+								<hbox align="end"><label value="Désignation :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-designation" flex="1" maxlength="100" style="margin-left:0px" /></hbox>
+							</column>
+							<column id="oec-produitFrais1">
+								<hbox align="end"><label value="N° Lot :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-numLot" maxlength="15" size="10" style="margin-left:0px" /></hbox>
+							</column>
+							<column id="oec-produitFrais2">
+								<hbox align="end"><label value="Nb Pc :" tooltiptext="Nombre de Pièces" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-nbPieces" maxlength="15" size="6" style="margin-left:0px" class="nombre" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label value="Qté :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-quantite" maxlength="15" size="7" style="margin-left:0px" class="nombre" onkeypress="oec_pressOnQuantite(event);" /></hbox>
+							</column>
+							<column id="oec-produitFrais3">
+								<hbox align="end"><label class="label" value="Unité :" style="margin-left:0px" /></hbox>
+			        	<hbox>
+									<menulist id="oec-unite" ref="http://www.opensi.org/facturation/unites_vente" datasources="rdf:null" style="margin-left:0px">
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" value="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" />
+											</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+							</column>
+							<column id="oec-produitFrais4">
+								<hbox align="end"><label value="DLC :" tooltiptext="Date Limite de Consommation" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-datePeremption" maxlength="10" size="8" style="margin-left:0px" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label id="oec-lblPU" value="P.U HT :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-PU" maxlength="16" size="14" style="margin-left:0px" class="nombre" onkeypress="oec_evaluer(this, event);" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label value="Ristourne :" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-ristourne" maxlength="15" size="8" style="margin-left:0px" class="nombre" /></hbox>
+							</column>
+							<column id="oec-actCommission">
+								<hbox align="end"><label value="Com. % :" tooltiptext="Taux de commission sur l'article" style="margin-left:0px" /></hbox>
+								<hbox><textbox id="oec-commission" maxlength="15" size="7" style="margin-left:0px" class="nombre" /></hbox>
+							</column>
+							<column>
+								<hbox align="end"><label class="label" value="Tva :" style="margin-left:0px" /></hbox>
+			        	<hbox>
+									<menulist id="oec-codeTVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null" style="margin-left:0px">
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" style="font-size:80%;padding-left:0px" label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA" value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA" />
+											</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+							</column>
+							<column>
+								<hbox align="center">
+									<button id="oec-bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="oec_rechercherStock();" style="margin-left:0px" flex="1" />
+									<button id="oec-bCommentaire" class="bIcoCommentaire" tooltiptext="éditer les commentaires sur ligne" oncommand="oec_editerCommentaire();" style="margin-left:0px" flex="1" />
+								</hbox>
+								<hbox>
+									<button id="oec-bAnnuler" class="bIcoAnnuler" tooltiptext="annuler la ligne" oncommand="oec_annulerLigne();" style="margin-left:0px" />
+									<button id="oec-bValider" class="bIcoValider" tooltiptext="valider la ligne" oncommand="oec_validerLigne();" style="margin-left:0px" />
+									<button id="oec-bSupprimer" class="bIcoSupprimer" tooltiptext="supprimer la ligne" oncommand="oec_supprimerLigne();" style="margin-left:0px" />
+								</hbox>
+							</column>
+						</columns>
+					</grid>
+				</vbox>
+			
+				<hbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires" />
+			      <vbox pack="center">
+			      	<grid>
+				       	<columns>
+				        	<column />
+				         	<column />
+				       	</columns>
+				       	<rows>
+				       		<row align="center">
+				       			<label value="Commentaires de fin de commande :" />
+				       			<label value="Commentaires non imprimables :" />
+				       		</row>
+				       		<row align="center">
+				       			<textbox id="oec-commentairesFin" multiline="true" cols="35" rows="6" oninput="oec_setModifie(true);" />
+				       			<textbox id="oec-commentairesInt" multiline="true" cols="35" rows="6" oninput="oec_setModifie(true);" />
+				       		</row>
+				       	</rows>
+				      </grid>
+				      <box style="height:5px" />
+							<hbox pack="center">
+								<button id="oec-bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="oec_editerCommentairesCaches();" />
+								<button id="oec-bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="oec_choisirMentions();" />
+							</hbox>
+							<box style="height:5px" />
+			      </vbox>
+					</groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Paramètres" />
+						<command id="oec-maj" oncommand="oec_calculTotaux();" />
+						<grid>
+			       	<columns>
+			        	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			       		<row align="center">
+			       			<label class="label" value="Mode de règlement :" />
+			       			<hbox>
+										<menulist id="oec-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" oncommand="oec_setModifie(true);" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+			       		</row>
+								<row align="center">
+									<hbox align="center" pack="end">
+										<label class="label" value="Remise en" />
+										<button id="oec-bRemise" oncommand="oec_switchRemise();" class="bIcoPourcentage" />
+										<label value=":" />
+									</hbox>
+									<hbox><textbox id="oec-remise" onkeypress="oec_evaluer(this, event);" maxlength="7" size="10" timeout="200" command="oec-maj" type="timed" oninput="oec_setModifie(true);" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label class="label" id="oec-lblFraisPort" value="Frais de port :" />
+									<hbox><textbox id="oec-fraisPort" onkeypress="oec_evaluer(this, event);" maxlength="12" size="10" timeout="200" command="oec-maj" type="timed" oninput="oec_setModifie(true);" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<hbox align="center" pack="end">
+										<label class="label" value="Remise sur frais de port en" />
+										<button id="oec-bRemiseFP" oncommand="oec_switchRemiseFP();" class="bIcoPourcentage" />
+										<label value=":" />
+									</hbox>
+									<hbox><textbox id="oec-remiseFP" onkeypress="oec_evaluer(this, event);" maxlength="7" size="10" timeout="200" command="oec-maj" type="timed" oninput="oec_setModifie(true);" class="nombre" /></hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Escompte (%) :" />
+									<hbox><textbox id="oec-escompte" onkeypress="oec_evaluer(this, event);" maxlength="5" size="10" timeout="200" command="oec-maj" type="timed" oninput="oec_setModifie(true);" class="nombre" /></hbox>
+								</row>
+							</rows>
+						</grid>
+			    </groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Totaux" />
+			      <grid id="oec-piedHT">
+			        <columns>
+			          <column />
+			          <column />
+			        </columns>
+			        <rows>
+			          <row align="center">
+			            <label class="label" value="Montant HT :" />
+			            <label id="oec-montantHT" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowRemiseHT">
+			  					<label class="label" value="Remise :" />
+			  					<label id="oec-montantRemise" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Frais de port :" />
+			  					<label id="oec-montantFraisPort" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowRemiseFPHT">
+			  					<label class="label" value="Remise sur frais de port :" />
+			  					<label id="oec-montantRemiseFP" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Total HT :" />
+			  					<label id="oec-totalHT" style="text-align:right" />
+								</row>
+								<row id="oec-rowCommissionHT" align="center">
+			  					<label class="label" value="Commission :" />
+			  					<label id="oec-commissionHT" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="TVA :" />
+			  					<label id="oec-TVA" style="text-align:right" />
+								</row>
+								<row id="oec-rowMontantTTC" align="center">
+			  					<label class="label" value="Montant TTC :" />
+			  					<label id="oec-montantTTC" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowEscompteHT">
+			  					<label class="label" value="Escompte :" />
+			  					<label id="oec-montantEscompte" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Total TTC :" />
+			  					<label id="oec-totalTTC" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Acompte :" />
+			  					<label id="oec-montantAcompte" style="text-align:right" />
+								</row>
+			        </rows>
+			      </grid>
+						<grid id="oec-piedTTC" collapsed="true">
+			        <columns>
+			          <column />
+			          <column />
+			        </columns>
+			        <rows>
+								<row align="center">
+			  					<label class="label" value="Montant TTC :" />
+			  					<label id="oec-pttcMontantTTC" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowRemiseTTC">
+			  					<label class="label" value="Remise :" />
+			  					<label id="oec-pttcMontantRemise" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Frais de port :" />
+			  					<label id="oec-pttcMontantFraisPort" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowRemiseFPTTC">
+			  					<label class="label" value="Remise sur frais de port :" />
+			  					<label id="oec-pttcMontantRemiseFP" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Total TTC :" />
+			  					<label id="oec-pttcTotalTTC" style="text-align:right" />
+								</row>
+								<row id="oec-rowCommissionTTC" align="center">
+			  					<label class="label" value="Commission :" />
+			  					<label id="oec-pttcCommissionTTC" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Dont TVA :" />
+			  					<label id="oec-pttcTVA" style="text-align:right" />
+								</row>
+								<row align="center" id="oec-rowEscompteTTC">
+			  					<label class="label" value="Escompte :" />
+			  					<label id="oec-pttcMontantEscompte" style="text-align:right" />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Acompte :" />
+			  					<label id="oec-pttcMontantAcompte" style="text-align:right"  />
+								</row>
+								<row align="center">
+			  					<label class="label" value="Net à payer :" />
+			  					<label id="oec-pttcNetTTC" style="text-align:right" />
+								</row>					
+			        </rows>
+			      </grid>
+					</groupbox>
+			  </hbox>
+				
+				<hbox pack="center">
+					<button id="oec-bAnnulerCommande" class="bAnnuler" label="Annuler la commande" oncommand="oec_annulerCommande();" />
+					<button id="oec-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oec_enregistrerCommande(true);" />
+					<button id="oec-bValiderCommande" class="bValider" label="Valider la commande" oncommand="oec_validerCommande();" />
+					<button id="oec-bBloquer" class="bBloquer" label="Bloquer la commande" oncommand="oec_bloquerCommande();"/>
+					<button id="oec-bDebloquer" class="bDebloquer" label="Débloquer la commande" oncommand="oec_debloquerCommande();"/>
+					<button id="oec-bCloturer" class="bCloturer" label="Clôturer la commande" oncommand="oec_cloturerCommande();"/>
+					<button id="oec-bDecloturer" class="bDecloturer" label="Déclôturer la commande" oncommand="oec_decloturerCommande();"/>
+					<button id="oec-bModifier" class="bModifier" label="Modifier la commande" oncommand="oec_modifierCommande();" />
+					<button id="oec-bSolder" label="Solder la commande" oncommand="oec_solderCommande();" />
+			    	<button id="oec-bVisualiser" class="bPDF" label="Edition PDF" oncommand="oec_editerCommande();" />
+			    	<button id="oec-bProforma" class="bPDFBleu" label="Proforma" oncommand="oec_editerProforma();" />
+			    	<button id="oec-bCopierCommande" class="bCopier" label="Copier la commande" oncommand="oec_copierCommande();" />
+				</hbox>
+				<box style="height:5px" />
+
+				<statusbar>
+					<statusbarpanel id="oec-creation" />
+					<statusbarpanel id="oec-modification" />
+					<statusbarpanel id="oec-fiche" flex="1" style="text-align:right;font-weight:bold;" />
+				</statusbar>
+			</vbox>
+		
+			<vbox>
+				<hbox id="bar_edition">
+					<hbox align="center">
+						<label value="Langue d'édition :" />
+						<menulist id="oec-langueDefaut" ref="http://www.opensi.org/config/listeLangues" oncommand="oec_reediterPdf();" datasources="rdf:null" style="width:200px">
+							<template>
+			          <menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeLangues/rdf#Libelle" value="rdf:http://www.opensi.org/config/listeLangues/rdf#Langue_Id" />
+			          </menupopup>
+							</template>
+			      </menulist>
+			      <button id="oec-bSwitchPdf" label="Ordre de fabrication" oncommand="oec_switchPdf();" />
+					</hbox>
+					<hbox pack="end" flex="1">
+						<button class="bEnvoyer" label="Envoyer par e-mail" oncommand="oec_envoyerMail();" />
+					</hbox>
+				</hbox>
+				<iframe type="content" id="oec-pdfCommande" flex="1" />
+			</vbox>
+			
+		</deck>
+	
+	</vbox>
+
+</overlay>

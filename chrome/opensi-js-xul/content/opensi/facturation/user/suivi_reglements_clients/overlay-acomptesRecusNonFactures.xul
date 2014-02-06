@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_suiviReglementsClients_overlayAcomptesRecusNonFactures"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-acomptesRecusNonFactures.js" />
+
+	<tabpanel id="tabAcomptesRecusNonFactures" flex="1">
+		<vbox flex="1" class="auto-overflow">
+		
+			<hbox>
+				<hbox flex="1" align="center">
+					<label class="label" value="N° Client :" />
+					<textbox id="oarnf-numClient" maxlength="10" size="10" onkeypress="oarnf_onKeyPress(event);" />
+					<button class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="oarnf_rechercherClient();" />
+					<box width="20px" />
+					<label value="Date règlement du :" />
+					<textbox id="oarnf-dateDebut" maxlength="10" size="10" onkeypress="oarnf_onKeyPress(event);" />
+					<label value="au" />
+					<textbox id="oarnf-dateFin" maxlength="10" size="10" onkeypress="oarnf_onKeyPress(event);" />
+					<box width="20px" />
+					<label class="label" value="Mode de règlement :"/>
+					<menulist id="oarnf-filtreModeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="oarnf_initListeReglements()">
+						<menupopup>
+							<menuitem label="[Tous]" value="0" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+							</menupopup>
+						</template>
+					</menulist>
+					<checkbox id="oarnf-chkAffecter" label="A affecter uniquement" oncommand="oarnf_initListeReglements()" />
+					<box width="20px" />
+					<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="oarnf_reinitialiser();" />
+				</hbox>
+			</hbox>
+			
+			<hbox pack="center">
+				<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="oarnf-bPrec" oncommand="oarnf_pressOnPagePrec();" tooltiptext="Page précédente" />
+				<vbox pack="center">
+					<hbox>
+						<label value="Page" />
+						<label id="oarnf-pageDeb" />
+						<label value="/" />
+						<label id="oarnf-pageFin" />
+					</hbox>
+				</vbox>
+				<button disabled="true" class="bIcoAvance" id="oarnf-bSuiv" oncommand="oarnf_pressOnPageSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+
+			<vbox flex="1">
+				<tree id="oarnf-listeReglements"
+						flex="1"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/facturation/suiviReglementsClients"
+						datasources="rdf:null"
+						seltype="multiple"
+						onselect="oarnf_selectOnListeReglements();">
+					<treecols>
+						<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Reglement" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Pièce" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+						<splitter class="tree-splitter" />
+						<treecol label="Mode règlement" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reglement" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Client" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Client_Id" />
+						<splitter class="tree-splitter" />
+						<treecol label="Client" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Denomination" />
+						<splitter class="tree-splitter" />
+						<treecol label="Montant" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol label="Restant à imputer" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Restant" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Commande" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat commande" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lbl_Etat_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="A affecter" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Surplus" />
+						<treecol id="oarnf-colEtatCommande" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="oarnf-colSurplus" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="oarnf-colReglementId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<rule>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Date_Reglement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reglement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Client_Id" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Denomination" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#AffMontant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#AffMontant_Restant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Commande" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lbl_Etat_Commande" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lbl_Affecter" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Etat_Commande" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Surplus" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Reglement_Id" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Reglement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Restant" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</rule>
+					</template>
+				</tree>
+				
+				
+				<hbox>
+					<hbox flex="1" align="center">
+						<button id="oarnf-bChangerReglement" label="Délier de la commande" oncommand="oarnf_pressOnChangerReglement();" disabled="true" />
+						<button id="oarnf-bChangerCommande" label="Affecter à une autre commande" oncommand="oarnf_pressOnChangerCommande();" disabled="true" />
+					</hbox>
+					<box flex="1" />
+					<hbox pack="end" align="center">
+						<label value="Total :" />
+						<textbox id="oarnf-totalReglement" class="nombre" readonly="true" />
+						<box width="20px" />
+						<label value="Total à imputer :" />
+						<textbox id="oarnf-totalRestant" class="nombre" readonly="true" />
+					</hbox>
+				</hbox>
+			</vbox>
+		</vbox>
+	</tabpanel>
+
+</overlay>

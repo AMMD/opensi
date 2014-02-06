@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_analytique_parametrages_overlay-criteresAnalyse"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-rubriquesGenerales.js" />
+
+	<tabpanel id="tabRubriques" flex="1">
+	
+		<hbox flex="1" class="auto-overflow" pack="center">
+		
+			<tree id="org-treeRubriques"
+ 				flex="1"
+ 				hidecolumnpicker="true"
+				flags="dont-build-content"
+				datasources="rdf:null"
+				ref="http://www.opensi.org/compta/analytique/parametrages"
+				onselect="org_selectOnTreeRubriques();"
+				seltype="single">
+				<treecols>
+					<treecol id="org-colLibelle" label="Rubrique" flex="1" />
+					<treecol id="org-colRubriqueId" collapsed="true" ignoreincolumnpicker="true" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" />
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Rubrique_Id" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+			
+			<groupbox flex="1">
+				<caption label="Rubrique" />
+				<hbox align="center" >
+					<label class="label" value="*Intitule :" />
+					<hbox>
+			 			<textbox id="org-intitule" onkeypress="org_keyPressOnIntitule(event);" size="50" maxlength="30" />
+			 		</hbox>
+				</hbox>
+				
+				<box height="10px" />
+				
+				<vbox>
+		 			<hbox>
+		 				<button id="org-bNouveau" class="bNouveau" label="Nouveau" oncommand="org_pressOnNouveau();" />
+		 				<button id="org-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="org_pressOnSupprimer();" />
+		 				<button id="org-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="org_pressOnEnregistrer();" />
+		 			</hbox>
+		 		</vbox>
+	 			
+		 		<box height="20px" />
+		 		
+		 		<hbox>
+		 			<label class="label" value="Plages de comptes de la rubrique :" />
+		 		</hbox>
+		 		
+		 		<tree id="org-treePlages"
+		 				flex="1"
+						flags="dont-build-content"
+						datasources="rdf:null" 
+						ref="http://www.opensi.org/compta/analytique/parametrages"
+						onselect="org_selectOnTreePlages();"
+		 				hidecolumnpicker="true"
+						seltype="single">
+					<treecols>
+						<treecol id="org-colDebut" label="Compte de début" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="org-colFin" label="Compte de fin" flex="1" />
+						<treecol id="org-colPlageId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Compte_Debut" />
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Compte_Fin" />
+								<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Plage_Id" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+					</template>
+				</tree>
+				
+				<box height="10px" />
+				
+				<hbox pack="end" align="center">
+					<label class="label" value="Plage de :" />
+					<hbox>
+						<textbox id="org-debut" maxlength="8" size="12" />
+					</hbox>
+					<label class="label" value="à :" />
+					<hbox>
+						<textbox id="org-fin" maxlength="8" size="12" />
+					</hbox>
+					<button id="org-bAnnulerPlage" class="bIcoAnnuler" tooltiptext="Annuler" oncommand="org_pressOnAnnulerPlage();" />
+					<button id="org-bValiderPlage" class="bIcoValider" tooltiptext="Valider" oncommand="org_pressOnValiderPlage();" />
+					<button id="org-bSupprimerPlage" class="bIcoSupprimer" tooltiptext="Supprimer" oncommand="org_pressOnSupprimerPlage();" />
+				</hbox>
+			</groupbox>
+			
+		</hbox>
+		
+	</tabpanel>
+
+</overlay>

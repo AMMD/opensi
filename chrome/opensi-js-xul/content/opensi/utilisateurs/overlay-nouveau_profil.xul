@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="overlay-nouveau_profil"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-nouveau_profil.js" />
+  
+  <vbox id="nouveau_profil">
+	  <hbox style="height:50px" />
+		<hbox pack="center">
+	    <label value="CREATION D'UN PROFIL" class="label_16" />
+	  </hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="* Nom :" />
+						<hbox><textbox id="nom" maxlength="30" size="16" /></hbox>
+					</row>
+					<row align="top">
+						<label class="label" value=" Commentaire :" />
+						<hbox><textbox id="commentaire" maxlength="50" size="16" /></hbox>
+					</row>
+				</rows>
+			</grid>
+		</hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+	    <button class="bEnregistrer" label="Enregistrer" oncommand="creerProfil()" />
+	  </hbox>
+	</vbox>
+
+</overlay>

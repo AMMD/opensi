@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_consultation_menuConsultation"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_consultation.js" />
+
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_consultation();" />
+    	<button class="bouton_menu" id="bRetourSaisie" oncommand="retour_prec();" collapsed="true" />
+			<button class="bouton_menu" id="bRetourBalance" oncommand="retour_prec();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+  <vbox flex="1" class="auto-overflow">
+		<hbox>
+			<hbox flex="1" pack="center" align="center">
+    		<label value="Numéro de compte :" />
+    		<button id="bCpteDebut" oncommand="compteDebut()" class="bIcoRetourRapide" disabled="true" tooltiptext="premier compte" />
+    		<button id="bCptePrec" style="margin-right:0px" oncommand="comptePrec()" class="bIcoRetour" disabled="true" tooltiptext="compte précédent" />
+    		<textbox id="compte" size="8" maxlength="8" onkeypress="keypress(event, id);" />
+    		<button id="bCpteSuiv" oncommand="compteSuiv()" class="bIcoAvance" disabled="true" tooltiptext="compte suivant" />
+    		<button id="bCpteFin" oncommand="compteFin()" class="bIcoAvanceRapide" disabled="true" tooltiptext="dernier compte" />
+    		<button class="bValider" id="ok" label="Ok" oncommand="ok()" />
+			</hbox>
+    	<hbox pack="end">
+				<button class="bRechercher" label="Recherche d'écriture" tooltiptext="rechercher une écriture (F12)" oncommand="rechecr()" />
+    		<button id="plan" label="Plan comptable" oncommand="plan_comptable()" tooltiptext="voir le plan comptable" />
+			</hbox>
+		</hbox>
+		
+		<hbox pack="center">		
+			<button id="exonmoins1" label="Visualiser exercice N-1" oncommand="exoNmoins1()" />       
+	    <button id="exon" label="Retour exercice en-cours" oncommand="exoN()" collapsed="true" />     
+			<label class="label_14" id="lblnmoins1" value="Exercice N-1" collapsed="true" />		
+		</hbox>
+  	<box collapsed="true">
+    	<label id="compteprec" />
+    	<label id="comptesuiv" />
+  	</box>
+
+  	<hbox>
+    	<vbox>
+      	<hbox align="center">
+        	<label style="font-weight:bold" value="Compte :" />
+        	<label id="libelle_compte" />
+        	<spacer flex="1" />
+        	<label style="font-weight: bold" value="Type :" />
+        	<label id="type_compte" />        	
+      	</hbox>
+
+      	<spacer flex="1"/>
+      	<grid flex="1" style="padding-left:5px">
+        	<columns pack="center">
+            <column style="width:90px" />
+            <column style="width:100px" pack="end" />
+            <column style="width:100px" pack="end" />
+            <column style="width:100px" pack="end" />
+          </columns>
+        	<rows flex="1" pack="center" id="grille">
+          	<row>
+            	<label value="" class="case_entete" />
+            	<label value="Débit" class="row_entete" minlength="9" />
+            	<label value="Crédit" class="row_entete" minlength="9"/>
+            	<label value="Solde" class="row_entete" minlength="9"/>
+          	</row>
+          	<row>
+            	<label value="Année N" class="col_entete" />
+            	<label id="debit_compte" class="case" style="text-align:right" />
+            	<label id="credit_compte" class="case" style="text-align:right" />
+            	<label id="solde_compte" class="case" style="text-align:right" />
+          	</row>
+          	<row>
+            	<label value="Année N-1" class="col_entete" />
+            	<label id="old_debit_compte" class="case" style="text-align:right" />
+            	<label id="old_credit_compte" class="case" style="text-align:right" />
+            	<label id="old_solde_compte" class="case" style="text-align:right" />
+          	</row>
+        	</rows>
+      	</grid>
+      	
+    	</vbox>
+			<spacer flex="1" />
+  		<vbox pack="end">
+     		<hbox>
+			  	<grid flex="1">
+          	<columns pack="center">
+            	<column flex="1" />
+            	<column flex="1" />
+          	</columns>
+          	<rows>
+            	<row>
+    						<label value="Nombre d'opérations / page : " />
+    						<textbox id="nbOp" size="4" maxlength="4" value="50" onkeypress="keypress(event,id);" disabled="true" />
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+				<hbox id="pagesbox" align="center">
+  		  	<button id="boutonDebut" class="bIcoRetourRapide" oncommand="pageDebut()" tooltiptext="première page" disabled="true" />
+  		  	<button id="boutonPrec" style="margin-right:0px" class="bIcoRetour" oncommand="pagePrec()" tooltiptext="page précédente" disabled="true" />
+  		  	<label id="page" />
+  		  	<hbox><textbox id="numpage" size="2" maxlength="4" value="1" onkeypress="keypress(event,id,value);" disabled="true"/></hbox>
+  		  	<label id="finpage" />
+  		  	<button id="boutonSuiv" class="bIcoAvance" oncommand="pageSuiv()" tooltiptext="page suivante" disabled="true" />
+  		  	<button id="boutonFin" class="bIcoAvanceRapide" oncommand="pageFin()" tooltiptext="dernière page" disabled="true" />
+  			</hbox>
+			</vbox>
+		</hbox>
+  	<hbox>
+    	<spacer flex="1"/>
+    	<checkbox id="nonlet" checked="true" label="Ecritures non lettrées" oncommand="reinit(1);" disabled="true" />
+    	<checkbox id="let" label="Ecritures lettrées" oncommand="reinit(1);" disabled="true" />
+  	</hbox>
+  	<hbox flex="1" style="overflow: auto;" pack="center">
+    	<tree id="lignes"
+          	flex="1"
+          	style="min-width: 1000px;"
+          	hidecolumnpicker="true"
+          	seltype="multiple"
+          	ref="http://www.opensi.org/compta/lignes_ecriture"
+          	datasources="rdf:null"
+          	onkeydown="keypress(event,id)"
+          	ondblclick="ecritures()">
+      	<treecols>
+        	<treecol id="dateaff" label="Date" flex="5"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#date" />
+        	<treecol id="journal" label="CJ" flex="2"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#journal" />
+        	<treecol id="libelle" flex="25" label="Libellé"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#libelle" />
+        	<treecol id="echeance" flex="3" label="Echéance" />
+        	<treecol id="debit" flex="8" label="Débit" style="text-align: right"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#tridebit" />
+        	<treecol id="lettre" flex="3" label="Let." style="text-align: center" />
+        	<treecol id="credit" flex="8" label="Crédit" style="text-align: right"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#tricredit" />
+        	<treecol id="solde" flex="8" label="Solde" style="text-align: right" />
+        	<treecol id="contrepartie" flex="4" label="Contrepartie" />
+        	<treecol id="piece" flex="4" label="N° Pièce"
+                	 sort="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#piece" />
+        	<treecol id="num_ecriture" collapsed="true" />
+					<treecol id="date" collapsed="true" />
+        	<treecol id="opid" collapsed="true" />
+        	<treecol id="tridebit" collapsed="true" />
+        	<treecol id="tricredit" collapsed="true" />
+        	<treecol id="type_journal" label="type_journal" collapsed="true" />
+      	</treecols>
+      	<template>
+        	<treechildren>
+          	<treeitem uri="rdf:*">
+            	<treerow properties="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#prop">
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#dateaff" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#journal" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#libelle" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#echeance" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#debit" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#lettre" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#credit" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#solde" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#contrepartie" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#piece" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#num_ecriture" />
+								<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#date" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#opid" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#tridebit" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#tricredit" />
+              	<treecell label="rdf:http://www.opensi.org/compta/lignes_ecriture/rdf#type_journal" />
+            	</treerow>
+          	</treeitem>
+        	</treechildren>
+      	</template>
+    	</tree>
+  	</hbox>
+
+  	<hbox id="lettrage" pack="center" align="center" collapsed="true">
+    	<label value="Lettrage en cours..." />
+    	<label value="Débit :" />
+    	<hbox><textbox id="total_debit_lett" readonly="true" class="nombre" /></hbox>
+    	<label value="Crédit :" />
+    	<hbox><textbox id="total_credit_lett" readonly="true" class="nombre" /></hbox>
+    	<label value="Solde :" />
+    	<hbox><textbox id="total_solde_lett" readonly="true" class="nombre" /></hbox>
+    	<button label="Lettrer (F7)" oncommand="validLettrage()" />
+  	</hbox>
+
+  </vbox>
+
+</window>

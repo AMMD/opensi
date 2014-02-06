@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_edition_optionsSig"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_sig.js" />
+
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+    	<button class="bouton_menu" id="bRetourOptions" oncommand="retour_options();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:50px" />
+<deck id="deck" flex="1">
+<vbox pack="center" flex="1">
+	<hbox pack="center">
+		<label value="OPTIONS POUR L'EDITION DES SOLDES INTERMEDIAIRES DE GESTION" class="label_16" />
+	</hbox>
+	<hbox style="height:30px" />
+	
+	<hbox pack="center" flex="1" class="auto-overflow">
+		<vbox pack="center">
+		<hbox pack="center">
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="1 - Sélection" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Type">
+								<radio id="TypeC" value="C" label="Exercice complet" selected="true" oncommand="disableDates(true)" />
+								<hbox>
+									<radio id="TypeD" value="D" label="Début de l'exercice jusqu'au" oncommand="disableDates(false)" />
+									<textbox id="Date_Fin" maxlength="10" size="10" disabled="true" />
+									<label value="(jj/mm/aaaa)" />
+								</hbox>
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Détail SIG :" />
+							<radiogroup id="Detail">
+								<radio id="DetailOui" value="y" label="oui" />
+								<radio id="DetailNon" value="n" label="non" selected="true" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="2 - Edition" />
+				<grid>
+					<rows>
+						<row>
+							<label value="Edition sans le numéro de dossier" />
+							<radiogroup id="Num_Dossier" orient="horizontal">
+								<radio id="Num_DossierOui" value="y" label="oui" />
+								<radio id="Num_DossierNon" value="n" label="non" selected="true" />
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Edition de la date et de l'heure :" />
+							<radiogroup id="Date_Heure" orient="horizontal">
+								<radio id="Date_HeureOui" value="y" label="oui" selected="true" />
+								<radio id="Date_HeureNon" value="n" label="non" />
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Proratisation de l'écart en fonction du nombre de mois :" />
+							<radiogroup id="Proratisation" orient="horizontal">
+								<radio id="ProratisationOui" value="y" label="oui" />
+								<radio id="ProratisationNon" value="n" label="non" selected="true" />
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Edition sans comparatif (Année N uniquement) :" />
+							<radiogroup id="Comparatif" orient="horizontal">
+								<radio id="ComparatifOui" value="y" label="oui" />
+								<radio id="ComparatifNon" value="n" label="non" selected="true" />
+							</radiogroup>
+						</row>
+						<row>
+							<label value="Commentaire Projet :" />
+							<radiogroup id="Projet" orient="horizontal">
+								<radio id="ProjetOui" value="y" label="oui" />
+								<radio id="ProjetNon" value="n" label="non" selected="true" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			</hbox>
+			<hbox pack="center">
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="3 - Sortie" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Sortie">
+								<radio id="SortieP" value="P" label="PDF imprimable" oncommand="cacheChampsMail(true);" selected="true" />
+								<radio id="SortieM" value="M" label="E-Mail" oncommand="cacheChampsMail(false);" />
+							</radiogroup>
+						</row>
+						<row id="ChampsMail" collapsed="true">
+							<grid>
+								<rows>
+									<row><label class="label" value="Adresse e-mail :" /><textbox id="Email" size="40" maxlength="60" /></row>
+									<row><label class="label" value="Sujet :" /><textbox id="Sujet" size="40" maxlength="60" /></row>
+									<row><label class="label" value="Message :" /><textbox id="Message" multiline="true" rows="7" cols="40" /></row>
+								</rows>
+							</grid>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			</hbox>
+			<hbox style="height:20px" />
+			<hbox pack="center">
+				<button id="BoutonEdition" label="EDITER LES SIG" oncommand="editerSIG();" />
+			</hbox>
+			<hbox style="height:10px" />
+			<hbox flex="1" />
+		</vbox>
+	</hbox>
+</vbox>
+<vbox>
+<iframe type="content" id="sig" flex="1" />
+
+</vbox>
+</deck>
+</window>
+

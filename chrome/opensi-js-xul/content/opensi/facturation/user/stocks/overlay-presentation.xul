@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_contenuPres"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-presentation.js" />
+  
+  <tabpanel id="tab-presentation">
+
+		<vbox pack="center" flex="1" class="auto-overflow">
+	
+			<hbox flex="1">
+	
+				<vbox>
+					<groupbox flex="1" pack="center" align="center">
+	    			<caption label="Visuel" />
+						<vbox>
+							<box style="border:solid 1px">
+								<image validate="always" id="pVignette" onerror="this.src='chrome://opensi/content/design/default_vignette.jpg'" />
+							</box>
+							<hbox pack="end">
+								<button id="bVoirPhoto" class="bIcoVisualiser" tooltiptext="voir la photo" oncommand="voirPhoto();" />
+								<button id="bChangerPhoto" class="bIcoEdition" tooltiptext="changer la photo" oncommand="changerPhoto();" style="margin-right:0px" />
+							</hbox>
+						</vbox>
+					</groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Composition de l'article" />
+						<radiogroup id="pComposition">
+							<radio label="Pas de composition" value="U" oncommand="afficherComposition(false);" />
+							<radio label="Forfait" value="F" oncommand="afficherComposition(true);" />
+							<radio label="Nomenclature" value="N" oncommand="afficherComposition(true);" />
+						</radiogroup>
+					</groupbox>
+	  		</vbox>
+	
+	    	<groupbox flex="1" pack="center" align="center" orient="horizontal">
+	      	<caption label="Présentation" />
+	      	<grid>
+	        	<columns>
+	          	<column />
+	          	<column />
+	        	</columns>
+	        	<rows>
+	          	<row align="center">
+	            	<label class="label" value="* Référence :" />
+	            	<hbox>
+	            		<label id="pLblAuto" value="Automatique" collapsed="true" />
+	            		<textbox id="pArticle_Id" maxlength="40" size="35" />
+	            	</hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Réf. Modèle :" />
+	            	<hbox><textbox id="pRefModele" maxlength="15" size="15" /></hbox>
+	          	</row>
+							<row align="center">
+	            	<label class="label" value="Marque :" />
+	            	<hbox align="center">
+									<menulist id="pMarque" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" flex="1">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<button class="bIcoEdition" oncommand="op_ouvrirEditionListeMarque();" />
+								</hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="* Désignation :" />
+	            	<textbox id="pDesignation" maxlength="100" size="35" />
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="* Famille 1 :" />
+	            	<hbox align="center">
+									<menulist id="pFamille1" oncommand="op_chargerFamilles2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" flex="1">
+										<menupopup>
+											<menuitem label="[Choisir]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<button class="bIcoEdition" oncommand="op_ouvrirEditionListeFamille1();" />
+								</hbox>
+	          	</row>
+							<row align="center">
+	            	<label class="label" value="Famille 2 :" />
+	            	<hbox align="center">
+									<menulist id="pFamille2" oncommand="op_chargerFamilles3();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" flex="1">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<button id="op-bCreerFamille2" class="bIcoEdition" oncommand="op_ouvrirEditionListeFamille2();" />
+								</hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Famille 3 :" />
+	            	<hbox align="center">
+									<menulist id="pFamille3" oncommand="op_rechargerAttributs();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" flex="1">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+										</menupopup>
+										<template>
+											<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+											</menupopup>
+										</template>
+									</menulist>
+									<button id="op-bCreerFamille3" class="bIcoEdition" oncommand="op_ouvrirEditionListeFamille3();" />
+								</hbox>
+	          	</row>
+							<row align="center">
+	            	<label class="label" value="Référence fabricant :" />
+	            	<textbox id="pRef_Fabricant" maxlength="40" size="35" />
+	          	</row>
+							<row align="center">
+								<label class="label" value="Nature :" />
+								<radiogroup id="pNature" orient="horizontal">
+	  							<radio value="1" label="Produit fini" />
+	  							<radio value="0" label="Matière première" />
+								</radiogroup>
+	          	</row>
+	          	<row id="pRowTracabilite_CP" align="center" collapsed="true">
+								<label value="" />
+								<hbox>
+									<checkbox id="pTracabilite_CP" label="Traçabilité des codes produits" />
+								</hbox>
+							</row>
+	        	</rows>
+	      	</grid>
+	
+					<spacer flex="1" />
+	
+					<grid>
+	        	<columns>
+	          	<column />
+	          	<column />
+	        	</columns>
+	        	<rows>
+	          	<row align="center">
+	            	<label class="label" value="Zone de stockage :" />
+	            	<hbox><textbox id="pLocalisation" maxlength="30" size="18" /></hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Code barre :" />
+	            	<hbox><textbox id="pCode_Barre" maxlength="15" size="18" /></hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Code NC8 :" />
+	            	<hbox align="center">
+	            		<hbox><textbox id="pCode_NC8" maxlength="8" size="8" /></hbox>
+	            		<button class="bIcoRechercher" tooltiptext="rechercher un code NC8" oncommand="choixCodeNC8();" />
+	            	</hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Conditionnement :" />
+	            	<hbox><textbox id="pConditionnement" maxlength="30" size="18" /></hbox>
+	          	</row>
+	          	<row align="center">
+	            	<label class="label" value="Article de substitution :" />
+	            	<hbox align="center">
+									<hbox><textbox id="pArticle_Substitution" size="18" disabled="true" /></hbox>
+									<button class="bIcoRechercher" tooltiptext="rechercher un article de substitution" oncommand="choixArticleSubstitution();" />
+									<button class="bIcoSupprimer" tooltiptext="enlever l'article de substitution" oncommand="document.getElementById('pArticle_Substitution').value='';" />
+								</hbox>
+	          	</row>
+	          	<row align="center">
+								<label value="" />
+								<checkbox id="pArt_Achat" label="Article à l'achat" />
+							</row>
+							<row align="center">
+								<label value="" />
+								<checkbox id="pArt_Vente" label="Article à la vente" />
+							</row>
+							<row align="center">
+								<label value="" />
+								<checkbox id="pPrestation" label="Prestation de service" />
+							</row>
+							<row align="center" id="Act_Code_Stats">
+          			<label class="label" value="Code statistiques :" />
+          			<hbox><textbox id="Code_Stats" maxlength="10" size="10" /></hbox>
+        			</row>
+							<row align="center" id="pRowFichiers">
+								<label class="label" value="Fichiers associés :" />
+								<hbox><button id="bVoirFichier" label="Voir les fichiers" oncommand="afficherFichiers();" /></hbox>
+							</row>
+						</rows>
+	      	</grid>
+	
+					<spacer flex="1" />
+
+	    	</groupbox>
+	    	
+	    	<groupbox flex="1" pack="center" align="center">
+	      	<caption label="Attributs" />
+	      	<hbox flex="1" align="center">
+		      	<grid>
+		        	<columns>
+		          	<column />
+		          	<column />
+		        	</columns>
+		        	<rows>
+		        		<row align="center">
+		            	<label class="label" id="pLblAttribut1" />
+		            	<hbox align="center">
+										<menulist id="pAttribut1" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut1();" />
+									</hbox>
+		          	</row>
+		        		<row align="center">
+		            	<label class="label" id="pLblAttribut2" />
+		            	<hbox align="center">
+										<menulist id="pAttribut2" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut2();" />
+									</hbox>
+		          	</row>
+								<row align="center">
+		            	<label class="label" id="pLblAttribut3" />
+		            	<hbox align="center">
+										<menulist id="pAttribut3" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut3();" />
+									</hbox>
+		          	</row>
+		          	<row align="center">
+		            	<label class="label" id="pLblAttribut4" />
+		            	<hbox align="center">
+										<menulist id="pAttribut4" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut4();" />
+									</hbox>
+		          	</row>
+		          	<row align="center">
+		            	<label class="label" id="pLblAttribut5" />
+		            	<hbox align="center">
+										<menulist id="pAttribut5" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut5();" />
+									</hbox>
+		          	</row>
+		          	<row align="center">
+		            	<label class="label" id="pLblAttribut6" />
+		            	<hbox align="center">
+										<menulist id="pAttribut6" ref="http://www.opensi.org/facturation/attributs_article" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[Aucun]" value="" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/attributs_article/rdf#Attribut_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoEdition" oncommand="op_ouvrirEditionListeAttribut6();" />
+									</hbox>
+		          	</row>
+							</rows>
+		      	</grid>
+		      </hbox>
+	    	</groupbox>
+	
+			</hbox>
+
+			<hbox flex="1">
+	
+	    	<groupbox flex="4" pack="center" orient="horizontal">
+	    		<caption label="Détails" />
+					<hbox flex="1">
+						<vbox flex="1">
+							<label value="Description 1 :" />
+	        		<vbox flex="1"><textbox id="pDescrip_1" multiline="true" flex="1" /></vbox>
+						</vbox>
+						<box style="width:10px" />
+						<vbox flex="1">
+							<label value="Description 2 :" />
+							<textbox id="pDescrip_2" multiline="true" flex="1" />
+						</vbox>
+					</hbox>
+				</groupbox>
+	
+				<groupbox flex="1" pack="center" align="center">
+	    		<caption label="Impression des documents" />
+	        <grid>
+						<columns>
+							<column />
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<label class="case_entete" value="" />
+								<label class="row_entete" value="Description 1" />
+								<label class="row_entete" value="Description 2" />
+								<label class="row_entete" value="Nomenclature" />
+							</row>
+							<row>
+								<label class="col_entete" value="Fiche article" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_Fiche" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_Fiche" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_Fiche" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Devis / Commande" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_Devis" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_Devis" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_Devis" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Ordre de fabrication" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_OF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_OF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_OF" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Bon de préparation" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_BP" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_BP" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_BP" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Bon de livraison" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_Bon" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_Bon" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_Bon" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Facture" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_Facture" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_Facture" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_Facture" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Commande fournisseur" />
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc1_BCF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Desc2_BCF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="pImp_Nom_BCF" /></hbox>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+	
+			</hbox>
+		</vbox>
+	
+		<observes element="pMarque" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pFamille1" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pFamille2" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pFamille3" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pCollection" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pCode_Barre" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pConditionnement" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pLocalisation" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pRef_Fabricant" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pDesignation" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pComposition" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pCouleur" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pTaille" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pNature" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pTracabilite_CP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pDescrip_1" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pDescrip_2" attribute="value" onbroadcast="setModifie();" />
+		<observes element="pArt_Achat" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pArt_Vente" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_Fiche" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_Facture" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_Devis" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_OF" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_Bon" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_BP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Nom_BCF" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_Fiche" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_Facture" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_Devis" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_OF" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_Bon" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_BP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc1_BCF" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_Fiche" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_Facture" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_Devis" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_OF" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_Bon" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_BP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="pImp_Desc2_BCF" attribute="checked" onbroadcast="setModifie();" />
+		
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_crm_user_gestionTacheEvenement_overlayFicheTache"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<vbox id="ficheTache" flex="1">
+	
+		<script src="chrome://opensi/content/libs/util.js" />
+		<script src="overlay-ficheTache.js" />
+		
+		<hbox>
+			
+			<groupbox flex="1" align ="center">
+				<caption label="Tâche"/>
+				
+				<vbox>
+				
+					<grid>
+						<columns>
+							<column />
+							<column />
+							<box width="30px" />
+							<column />
+							<column />						
+						</columns>
+						<rows>
+							
+							<row align="center">
+								<label class="label" value="Etat :" />
+								<menulist id="oft-listeEtats" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">			
+									<menupopup>
+										<menuitem label="A traiter" value="N" />
+										<menuitem label="En cours" value="T" />
+										<menuitem label="Effectuée" value="C" />									
+									</menupopup>
+								</menulist>
+								<label class="label" value="* Responsable :" />
+								
+								<menulist id="oft-listeResponsable" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Util_R" />
+										</menupopup>
+									</template>
+								</menulist>					
+							</row>
+							
+							<row align="center">
+								<label class="label" value="* Date :" />
+								<textbox id="oft-DateT" maxlength="10" size="10" tooltiptext="format de saisie : jj/mm/aaaa" oninput="setModifie(true);" />
+								<label class="label" value="Priorité :" />
+								
+								<menulist id="oft-listePriorite" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+									
+									<menupopup>
+										<menuitem label="Faible" value="F" />
+										<menuitem label="Normal" value="N" />
+										<menuitem label="Elevée" value="E" />
+									</menupopup>
+									 
+								</menulist>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="* Intitulé :" />
+								<textbox id="oft-Intitule" maxlength="10" size="10" oninput="setModifie(true);" />
+								<label class="label" value="Action :" />
+								
+								<menulist id="oft-listeAction" ref="http://www.opensi.org/crm/gestionTachesEvenements" datasources="rdf:null">
+	
+									<menupopup>
+										<menuitem label="Aucune" value="" />
+									</menupopup>
+										<template>
+		              						<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionTachesEvenements/rdf#Libelle" value="rdf:http://www.opensi.org/crm/gestionTachesEvenements/rdf#Action_Id" />
+		              						</menupopup>
+										</template>
+																	 
+								</menulist>
+							
+							</row>						
+							
+						</rows>
+					</grid>
+				
+					<hbox>
+						<label class="label" value="Libellé :" />
+						<textbox id="oft-libelle" multiline="true" rows="8" cols="35" oninput="setModifie(true);" />
+					</hbox>
+					
+				</vbox>
+				
+				
+			</groupbox>
+			
+			
+			<vbox flex="1">
+				<groupbox>
+					<caption label="Compte"/>
+					<box height="20 px" />
+					<hbox pack="center">
+						<grid>
+								<columns>
+									<column />
+									<column />
+									<column />
+								</columns>
+								
+								<rows>
+								
+									<row align="center">
+										<label class="label" value="* Dénomination :" />
+										<textbox id="oft-DenomCompte" maxlength="10" size="10" readonly="true" oninput="setModifie(true);" />
+										<hbox align="center">
+											<button class="bIcoRechercher" tooltiptext="rechercher un compte" oncommand="oft_rechercherCompte();" />
+										</hbox>
+									</row>
+								
+								
+									<row align="center">
+										<label class="label" value="Adresse :" />
+										<textbox id="adresse1-compte" value="" readonly="true" oninput="setModifie(true);" />
+										<label value="" />
+									</row>
+									
+									<row align="center">
+										<label value="" />
+										<hbox>
+											<textbox id="adresse2-compte"  maxlength="50" flex="1" value="" readonly="true" oninput="setModifie(true);" />
+											<textbox flex="1" id="adresse3-compte" maxlength="50" value="" readonly="true" oninput="setModifie(true);" />
+										</hbox>	
+										<label value="" />
+									</row>
+									
+									
+									
+									<row align="center" >
+										
+										<label class="label" value="Code Postal :" />
+										<hbox align="center">	
+											<textbox id="CP-compte" maxlength="10" size="6" value="" readonly="true" oninput="setModifie(true);" />
+											<label class="label" value="Ville :" />
+											<textbox id="Ville-compte" maxlength="50" size="30" value="" flex="1" readonly="true" oninput="setModifie(true);" />
+										</hbox>
+										<label value="" />
+										
+									</row>
+						
+									<row align="center">
+										<label class="label" value="Pays :" />
+										<textbox id="Pays-compte" value="" readonly="true" oninput="setModifie(true);" />
+										<label  class="label" value="" />			
+									</row>
+						
+									<row align="center">	
+										
+										<label class="label" value="Téléphone :" />
+										<hbox align="center">
+											<textbox id="Tel-compte" value="" size="15" maxlength="20" flex="1" readonly="true" oninput="setModifie(true);" />
+											<label class="label" value="Fax :" />
+											<textbox id="Fax-compte" value="" size="15" maxlength="20" flex="1" readonly="true" oninput="setModifie(true);" />
+										</hbox>	
+										<label value="" />	
+									</row>
+							
+									<row align="center">
+										<label class="label" value="Email :" />
+										<textbox id="Mail-compte" maxlength="60" value="" readonly="true" oninput="setModifie(true);" />
+										<label value="" />								
+									</row>
+									
+								</rows>
+						</grid>
+					</hbox>
+				</groupbox>
+			
+				<groupbox>
+					<caption label="Contact"/>
+
+					<hbox pack="center">
+						
+						
+						<grid>
+								<columns>
+									<column />
+									<column />
+									<column />
+								</columns>
+								
+								<rows>
+								
+									<row align="center">							
+											<label class="label" value="Contact :" />
+											<textbox id="oft-DenomContact" maxlength="10" size="10" readonly="true" oninput="setModifie(true);" />
+										
+										<hbox flex="1">
+											<button class="bIcoRechercher" id="bRechercherContact" disabled="true" tooltiptext="rechercher un contact" oncommand="oft_rechercherContact();" />
+											<button id="bSupprimer" class="bIcoSupprimer" tooltiptext="effacer le contact de la fiche" oncommand="oft_supprimerContact();" style="margin-left:0px" />						
+										</hbox>
+									</row>
+								
+								
+								
+									<row align="center">
+										<label class="label" value="Adresse :" readonly="true" />
+										<textbox id="adresse1-contact" maxlength="100" value="" flex="1" readonly="true" oninput="setModifie(true);" />
+										<label value="" />
+									</row>
+								
+									<row align="center">
+										<label value="Code Postal :" />
+										<hbox align="center" >
+											<textbox id="CP-contact" maxlength="10" size="6" value="" readonly="true" oninput="setModifie(true);"  />
+											<label value="Ville :" />
+											<textbox id="Ville-contact" maxlength="50" size="30" value="" flex="1" readonly="true" oninput="setModifie(true);" />
+										</hbox>
+										<label value="" />
+									</row>
+						
+									<row align="center">
+										<label value="Pays :" />
+										<textbox id="Pays-contact" value="" readonly="true" oninput="setModifie(true);" />											
+									</row>
+						
+									<row align="center">
+										<label value="Téléphone :" />
+										<hbox align="center">
+											<textbox id="Tel-contact" size="15" maxlength="20" value="" flex="1" readonly="true" oninput="setModifie(true);" />
+											<label value="Portable :" />
+											<textbox id="Port-contact" size="15" maxlength="20" value="" flex="1" readonly="true" oninput="setModifie(true);" />
+										</hbox>
+										<label value="" />
+									</row>
+							
+									<row align="center">
+										<label value="Fax :" />
+										<textbox id="Fax-contact" size="15" maxlength="20" value="" readonly="true" oninput="setModifie(true);" />
+									</row>
+							
+									<row align="center">
+										<label value="Email :" />
+										<textbox id="Mail-contact" maxlength="60" value="" readonly="true" oninput="setModifie(true);" />
+									</row>
+									
+								</rows>
+						</grid>
+					</hbox>					
+				</groupbox>
+			
+			</vbox>
+			
+		</hbox>
+		<hbox pack="center">
+			<button id="boft-Nouveau" class="bNouveau" tooltiptext="Supprimer contact" label="Nouveau" oncommand="oftNouvelleTache();" />
+ 			<button id="boft-Enregistrer" class="bEnregistrer" tooltiptext="Enregistrer contact" label="Enregistrer " oncommand="oftEnregistrer();" />
+			<button id="boft-Supprimer" class="bSupprimer" tooltiptext="Supprimer contact" label="Supprimer " oncommand="oftpressOnSupprimer();" />
+	 	</hbox>
+		
+		<vbox flex="1" pack="end">
+			<statusbar>
+				<statusbarpanel id="StatBaroft-Creation" />
+				<statusbarpanel id="StatBaroft-Modification" flex="1" />
+			</statusbar>
+		</vbox>
+		
+		
+		
+	</vbox>
+	
+	
+	
+	
+</overlay>

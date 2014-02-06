@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-menu.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_menuExercice"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_exercice.js" />
+
+  <hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuDossiers" oncommand="retourChoixDossier();" />
+   		<button class="bouton_menu" id="bMenuExercices" oncommand="retour_exercice();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:40px" />
+
+  <hbox align="end">
+		<box style="width:196px">
+			<vbox id="message" align="center" pack="center" collapsed="true">
+				<label value="EXERCICE VERROUILLÉ" style="font-weight:bold;color:#FF0000" />
+				<hbox style="height:5px" />
+				<label value="Aucune modification possible" style="color:#FF0000" />
+				<box style="height:15px" />
+			</vbox>
+		</box>
+		<hbox flex="1" align="center" pack="center">
+
+		</hbox>
+	</hbox>
+
+	<hbox flex="1">
+
+		<hbox style="width:30px" />
+
+		<!-- menu gauche -->
+
+		<vbox>
+			<box style="height:30px" />
+			<button class="bouton_menu" id="bouton_comptabilite" tabindex="10" oncommand="ouvrirSousMenu('smComptabilite')" />
+			<vbox id="smComptabilite" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="11" onclick="goToMenu(1)"><label value="Saisie" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="12" onclick="goToMenu(2)"><label value="Révision des comptes" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="13" onclick="goToMenu(3)"><label value="Transferts/Copies" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="14" onclick="goToMenu(4)"><label value="Rapprochement bancaire" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="16" onclick="goToMenu(25)"><label value="Clôture" /></hbox></box>
+				<box id="bouton_cloture"><hbox class="bouton_sousmenu" tabindex="15" onclick="goToMenu(5)"><label value="Clôture d'exercice" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_editions" tabindex="20" oncommand="ouvrirSousMenu('smEditions')" />
+			<vbox id="smEditions" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="21" onclick="goToMenu(6)"><label value="Balance" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="22" onclick="goToMenu(7)"><label value="Centralisateur" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="23" onclick="goToMenu(8)"><label value="Grand livre" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="24" onclick="goToMenu(9)"><label value="Journaux" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="25" onclick="goToMenu(10)"><label value="Balance agée" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="26" onclick="goToMenu(11)"><label value="Bilan" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="27" onclick="goToMenu(12)"><label value="Compte de résultat" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="28" onclick="goToMenu(13)"><label value="SIG" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="29" onclick="goToMenu(24)"><label value="Plan comptable" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_suiviactivite" tabindex="30" oncommand="ouvrirSousMenu('smSA')" />
+			<vbox id="smSA" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="31" onclick="goToMenu(14)"><label value="Tableau de bord de gestion" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="32" onclick="goToMenu(15)"><label value="Tableau de bord de trésorerie" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_analytique" tabindex="40" oncommand="ouvrirSousMenu('smAna')" />
+			<vbox id="smAna" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="41" onclick="goToMenu(30)"><label value="Gestion des comptes" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="42" onclick="goToMenu(31)"><label value="Balance analytique" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="43" onclick="goToMenu(32)"><label value="Grand livre analytique" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="44" onclick="goToMenu(32)"><label value="Analyse full costing" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="45" onclick="goToMenu(32)"><label value="Analyse budgetaire" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="46" onclick="goToMenu(29)"><label value="Paramétrages" /></hbox></box>
+			</vbox>
+			<button class="bouton_menu" id="bouton_opdiv" tabindex="50" oncommand="ouvrirSousMenu('smOD')" />
+			<vbox id="smOD" collapsed="true">
+				<box><hbox class="bouton_sousmenu" tabindex="51" onclick="goToMenu(20)"><label value="Comptes/Journaux" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="52" onclick="goToMenu(26)"><label value="Abonnements d'écriture" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="53" onclick="goToMenu(27)"><label value="Modèles d'écriture" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="54" onclick="goToMenu(28)"><label value="Import d'écritures de banque" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="55" onclick="goToMenu(21)"><label value="Import de données" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="56" onclick="goToMenu(22)"><label value="Export de données" /></hbox></box>
+				<box><hbox class="bouton_sousmenu" tabindex="57" onclick="goToMenu(23)"><label value="Changer de mot de passe" /></hbox></box>
+			</vbox>
+		</vbox>
+
+		<!-- partie droite -->
+		<vbox flex="1" align="center" pack="center" class="auto-overflow">
+
+			<tabbox flex="1" pack="center">
+				<tabs>
+      		<tab label="Suivi d'activité" />
+      		<tab label="News OpenSi" />
+					<tab label="Infos comptables" />
+     		</tabs>
+  			<tabpanels flex="1" style="background: #E8E8E8 url(chrome://opensi/content/design/filigrane.jpg) no-repeat bottom left">
+    			<tabpanel pack="center" align="start" orient="horizontal">
+						<vbox align="center">
+							<label value="Les chiffres clés de la société" style="font-weight:bold;color:#000000" />
+							<box style="height:15px" />
+							<grid style="width:250px;border:1px solid #DDDDDD">
+  							<columns>
+    							<column flex="3" />
+    							<column flex="2" />
+  							</columns>
+  							<rows>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Votre trésorerie :" />
+										<label id="SoldeTresorerie" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Votre CA HT réalisé :"/>
+										<label id="TotalCAN" style="text-align:right" />
+    							</row>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Critère personnalisable 1 :" />
+										<label value="0" style="text-align:right" />
+    							</row>
+									<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Critère personnalisable 2 :" />
+										<label value="0" style="text-align:right" />
+    							</row>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Critère personnalisable 3 :" />
+										<label value="0" style="text-align:right" />
+    							</row>
+									<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Critère personnalisable 4 :" />
+										<label value="0" style="text-align:right" />
+    							</row>
+									<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Critère personnalisable 5 :" />
+										<label value="0" style="text-align:right" />
+    							</row>
+  							</rows>
+							</grid>
+						</vbox>
+						<box style="width:8px" />
+						<vbox align="center">
+							<label value="Evolution du chiffre d'affaires" style="font-weight:bold;color:#000000" />
+							<box style="height:8px" />
+							<image id="GraphCA" width="420" height="300" />
+						</vbox>
+					</tabpanel>
+					<tabpanel>
+						<hbox flex="1">
+							<iframe id="news" flex="1" style="width:650px;" />
+						</hbox>
+					</tabpanel>
+					<tabpanel>
+						<hbox flex="1">
+							<iframe id="infos" flex="1" style="width:650px;" />
+						</hbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+			<box flex="1" />
+
+		</vbox>
+
+	</hbox>
+
+</window>

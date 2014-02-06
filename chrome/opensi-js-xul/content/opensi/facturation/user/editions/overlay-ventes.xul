@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_editions_overlayVentes"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-ventes.js" />
+
+	<vbox id="tab-ventes">
+		<vbox flex="1">
+	 		<hbox style="height:60px" />
+	 		<hbox pack="center">
+	 			<label value="EDITIONS VENTES" class="label_16" />
+	 		</hbox>
+	 		<hbox style="height:40px" />
+			<hbox pack="center">
+				<button type="radio" group="Etat" label="Journal des ventes" oncommand="ov_switchOptions('JV');" checked="true" />
+				<button type="radio" group="Etat" label="Journal des acomptes" oncommand="ov_switchOptions('JA');" />
+				<button type="radio" group="Etat" label="Ventes par articles" oncommand="ov_switchOptions('VA');" />
+				<button type="radio" group="Etat" label="Marges des articles" oncommand="ov_switchOptions('MA');" />
+				<button id="ov-bStats" type="radio" group="Etat" label="Tableau de statistiques" oncommand="ov_switchOptions('ST');" />
+			</hbox>
+			<hbox style="height:20px" />
+	
+			<hbox>
+				<groupbox id="ov-gPeriodePrecedente" flex="1" pack="center" align="center">
+					<caption label="Période précédente" />
+					<radiogroup id="ov-margePeriode" oncommand="ov_switchMargePeriode();">
+						<radio id="ov-periodeMP" value="MP" label="Mois précédent" selected="true"/>
+						<radio id="ov-periodeAP" value="AP" label="Année précédente" />					
+					</radiogroup>
+				</groupbox>
+				
+				<groupbox id="ov-gPeriode" flex="1" pack="center" align="center">
+					<caption label="Période d'édition" />
+					<radiogroup id="ov-Periode">
+						<radio id="ov-PeriodeMC" value="MC" label="Mois en cours" selected="true" oncommand="ov_enableDates(false);" />
+						<radio id="ov-PeriodeMP" value="MP" label="Mois précédent" oncommand="ov_enableDates(false);" />
+						<radio id="ov-PeriodeAC" value="AC" label="Année en cours" oncommand="ov_enableDates(false);" />
+						<radio id="ov-PeriodeAP" value="AP" label="Année précédente" oncommand="ov_enableDates(false);" />
+						<hbox align="center">
+							<radio id="ov-PeriodeDD" value="DD" label="De date à date :" oncommand="ov_enableDates(true);" />
+							<label value="du" />
+							<textbox id="ov-DateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="ov-DateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						</hbox>
+					</radiogroup>
+					
+					<hbox align="center" id="ov-boxMargeMois" collapsed="true">						
+						<label value="Choix d'un mois" />
+						<textbox id="ov-margeMois" size="4" maxlength="4" tooltiptext="format : mmaa" />
+					</hbox>
+					<hbox align="center" id="ov-boxMargeAnnee" collapsed="true">
+						<label value="Choix d'une période du " />
+						<textbox id="ov-margeDateDebut" size="4" maxlength="4" tooltiptext="format : mmaa" />
+						<label value="au" />
+						<textbox id="ov-margeDateFin" size="4" maxlength="4" tooltiptext="format : mmaa" />
+					</hbox>
+				</groupbox>
+				
+				<groupbox id="ov-gSecteur" flex="1" pack="center" align="center">
+					<label class="label" value="Pôle d'activité :" />
+					<menulist id="ov-secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px">
+						<menupopup>
+							<menuitem label="[Tous]" value="0" />
+						</menupopup>
+						<template>
+        			<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+        			</menupopup>
+						</template>
+      		</menulist>
+				</groupbox>
+				
+				<groupbox id="ov-gDetailCompte" flex="1" pack="center" align="center">
+					<caption label="Détail par compte" />
+					<checkbox id="ov-DetailCompte" label="Détail par compte en fin d'édition" />
+				</groupbox>
+				
+				<groupbox id="ov-gStatistiques" flex="1" pack="center" align="center">
+					<caption label="Edition des chiffres d'affaires par code statistiques" />
+					<checkbox id="ov-DetailArticle" label="Détail par article" />
+				</groupbox>
+			</hbox>	
+	
+			<box style="height:10px" />
+			<hbox pack="center">
+				<button id="ov-bEditionPDF" class="bPDF" label="Edition PDF" oncommand="ov_editer();" />
+				<button id="ov-bEditionCSV" class="bCSV" label="Edition CSV" oncommand="ov_editerCSV();" />
+			</hbox>
+			<box style="height:10px" />
+		</vbox>
+	</vbox>
+
+</overlay>

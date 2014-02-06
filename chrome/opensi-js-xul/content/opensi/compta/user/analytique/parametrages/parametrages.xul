@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<?xul-overlay href="overlay-criteresAnalyse.xul"?>
+<?xul-overlay href="overlay-formatComptes.xul"?>
+<?xul-overlay href="overlay-rubriquesGenerales.xul"?>
+
+<window
+	id="opensi_compta_user_analytique_parametrages_parametrages"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="parametrages.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bRetourListeImports" oncommand="retourListeImport();" collapsed="true" />
+			<!-- bouton : Menu import banque -->
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	
+	<hbox flex="1">
+		<!-- class="auto-overflow" -->
+		<vbox flex="1">
+	  	
+			<label class="label_16" value="Parametrages" />
+			
+			<tabbox flex="1">
+			
+				<tabs>
+	    			<tab label="Critères d'analyse" />
+	    			<tab label="Format des comptes" oncommand="ofc_init();"/>
+	    			<tab label="Rubriques générales" />
+				</tabs>
+				
+				<tabpanels flex="1">
+					<tabpanel id="tabCriteres" flex="1" />
+					<tabpanel id="tabFormat" flex="1"/>
+					<tabpanel id="tabRubriques" flex="1" />
+				</tabpanels>
+				
+			</tabbox>
+		</vbox>
+	</hbox>
+
+</window>

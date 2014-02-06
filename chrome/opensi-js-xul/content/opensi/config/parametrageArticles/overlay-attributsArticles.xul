@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageArticles_overlay-attributsArticles"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-attributsArticles.js" />
+  
+  <tabpanel id="tab-attributs">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box height="30px" />
+			<label value="Gestion des attributs" class="label_16" />
+			<box height="30px" />
+			
+	  	<hbox pack="center" flex="1">
+	  		<vbox flex="1">
+		  		<tree id="oa-listeAttributs"
+								hidecolumnpicker="true"
+		          	ref="http://www.opensi.org/Config/parametrageArticles/listeAttributs"
+		          	seltype="single"
+		          	datasources="rdf:null"
+								onselect="oa_ouvrirListeAttributs()"
+								flex="1">
+		      	<treecols>
+		        	<treecol id="oa-colNumListe" label="N° Attribut" flex="1" />
+		        	<treecol id="oa-colNomListe" label="Nom" flex="1" />
+				      <treecol label="Circonstancié" flex="1" />
+		        	<treecol id="oa-colCirconstancie" collapsed="true" />
+		      	</treecols>
+		      	<template>
+	          	<treechildren>
+	            	<treeitem uri="rdf:*">
+	              	<treerow>
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributs/rdf#Liste_Id" />
+		                <treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributs/rdf#Nom" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributs/rdf#Lbl_Circonst" />
+	                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributs/rdf#Circonst" />
+	              	</treerow>
+	            	</treeitem>
+	          	</treechildren>
+		      	</template>
+		    	</tree>
+		    	<box flex="1" />
+		    </vbox>
+	  	
+	  	
+	  		<groupbox flex="1" orient="vertical">
+	  			<caption label="Attribut" />
+	  			
+	  			<grid>
+	  				<columns>
+	  					<column flex="1" />
+	  					<column flex="1" />
+	  				</columns>
+	  				<rows>
+	  					<row align="center">
+	  						<label class="label" value="* Nom de l'attribut :" />
+	  						<hbox><textbox id="oa-nom" size="15" maxlength="15" /></hbox>
+	  					</row>
+	  					<row align="center">
+	  						<label value="" />
+	  						<checkbox id="oa-chkCirconstancie" label="Circonstancié par famille" />
+	  					</row>
+	  				</rows>
+	  			</grid>
+	  			
+	  			<hbox pack="center"><button id="oa-bEnregistrerListe" class="bEnregistrer" label="Enregistrer" oncommand="oa_enregistrerListeAttributs();" /></hbox>
+	  			
+	  			<label value="Valeurs de l'attribut :" />
+	  			<hbox flex="1">
+		  			<vbox flex="1">
+							<tree id="oa-listeAttributsArticles"
+										hidecolumnpicker="true"
+				          	ref="http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles"
+				          	seltype="single"
+				          	datasources="rdf:null"
+										onselect="oa_ouvrirAttribut()"
+										minheight="300px">
+				      	<treecols>
+				        	<treecol id="oa-colLibelle" label="Libellé" flex="1" />
+				        	<treecol label="Actif" flex="1" />
+						      <treecol id="oa-colActif" collapsed="true" />
+				        	<treecol id="oa-colAttributId" collapsed="true" />
+				      	</treecols>
+				      	<template>
+			          	<treechildren>
+			            	<treeitem uri="rdf:*">
+			              	<treerow>
+			                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Libelle" />
+			                	<treecell src="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Picto_Actif" />
+				                <treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Actif" />
+			                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Attribut_Id" />
+			              	</treerow>
+			            	</treeitem>
+			          	</treechildren>
+				      	</template>
+				    	</tree>
+				    	<hbox align="center" pack="end">
+								<label value="* Libellé :" />
+								<textbox id="oa-libelle" size="20" maxlength="40" />
+								<checkbox id="oa-chkActif" label="Actif" />
+								<box style="width:20px" />
+								<button id="oa-bAnnulerAttribut" class="bIcoAnnuler" tooltiptext="annuler l'attribut" oncommand="oa_nouvelAttribut();" style="margin-left:0px" />
+								<button id="oa-bValiderAttribut" class="bIcoValider" tooltiptext="valider l'attribut" oncommand="oa_enregistrerAttribut();" style="margin-left:0px" />
+								<button id="oa-bSupprimerAttribut" class="bIcoSupprimer" tooltiptext="supprimer l'attribut" oncommand="oa_supprimerAttribut();" style="margin-left:0px" />
+				    	</hbox>
+						</vbox>
+						<vbox>
+							<button class="bIcoFlecheHaut" id="oa-bFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="oa_deplacerAttributHaut();" />
+		    			<button class="bIcoFlecheBas" id="oa-bFlecheBas" tooltiptext="déplacer vers le bas" oncommand="oa_deplacerAttributBas();" />
+						</vbox>
+					</hbox>
+					<box style="height:10px" />
+					<vbox flex="1" id="oa-circonstanciation">
+						<label value="Valeur circonstanciée aux familles :" />
+						<tree id="oa-listeCirconstanciation"
+									hidecolumnpicker="true"
+			          	ref="http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles"
+			          	seltype="single"
+			          	datasources="rdf:null"
+									minheight="150px"
+									onclick="oa_pressOnListeCirconstanciation(event)">
+			      	<treecols>
+			        	<treecol primary="true" label="Famille" flex="1" />
+					      <treecol id="oa-colPictoChecked" width="50px" />
+					      <treecol id="oa-colChecked" collapsed="true" />
+					      <treecol id="oa-colNiveau" collapsed="true" />
+					      <treecol id="oa-colFamilleId" collapsed="true" />
+			      	</treecols>
+			      	<template>
+		          	<treechildren>
+		            	<treeitem uri="rdf:*">
+		              	<treerow>
+		                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Libelle" />
+		                	<treecell src="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Picto_Coche" />
+		                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Circonst" />
+		                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Niveau" />
+		                	<treecell label="rdf:http://www.opensi.org/Config/parametrageArticles/listeAttributsArticles/rdf#Famille_Id" />
+		              	</treerow>
+		            	</treeitem>
+		          	</treechildren>
+			      	</template>
+			    	</tree>
+			    </vbox>
+	    	</groupbox>
+			</hbox>
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

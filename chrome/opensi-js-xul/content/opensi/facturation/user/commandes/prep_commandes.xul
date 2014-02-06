@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_commandes_prepCommandes"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="prep_commandes.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+	<label class="label_14" value="Préparation des commandes fournisseurs" />
+
+	<vbox id="msgImpossible" collapsed="true">
+		<box style="height:15px" />
+		<label value="Impossible de préparer les commandes" style="color:#FF0000" />
+		<label value="Vous devez d'abord valider ou annuler les commandes à l'état de préparation" style="color:#FF0000" />
+		<hbox><button label="Voir les commandes en préparation" oncommand="goToCommandes()" /></hbox>
+		<box style="height:15px" />
+	</vbox>
+
+	<tree id="tree-prepcom"
+        flex="10"
+        hidecolumnpicker="true"
+        seltype="single"
+        ref="http://www.opensi.org/facturation/prepcom"
+				ondblclick="reporterQte()"
+				onkeypress="keypress(event, id)"
+        datasources="rdf:null">
+
+    <treecols>
+     	<treecol id="ColArticle_Id" label="Référence" flex="3" primary="true" />
+			<splitter class="tree-splitter" />
+     	<treecol id="ColDesignation" label="Désignation" flex="3" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColRef_Fournisseur" label="Réf. Fournisseur" flex="1" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColQte_Theorique" label="Qté à commander" flex="1" style="text-align:center" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColFournisseur_Id" label="N° Fournisseur" flex="1" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColDenomination" label="Fournisseur" flex="1" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColQuantite" label="Qté affectée" flex="1" style="text-align:right" />
+			<splitter class="tree-splitter" />
+       <treecol id="ColPack" label="Pack" flex="1" style="text-align:right" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDelai" label="Délai réappro" flex="1" style="text-align:right" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColPrix_Achat" label="PA HT" flex="1" style="text-align:right" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColSVAvant" label="SV Avant" flex="1" style="text-align:right" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColSVApres" label="SV Aprés" flex="1" style="text-align:right" />
+			<treecol id="ColLigne_Prep_Id" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Article_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Designation" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Ref_Fournisseur" />
+						<treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Qte_Theorique" />
+						<treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Fournisseur_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Denomination" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Quantite" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Pack" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Delai" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Prix_Achat" />
+						<treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#SVAvant" />
+            <treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#SVApres" />
+						<treecell label="rdf:http://www.opensi.org/facturation/prepcom/rdf#Ligne_Prep_Id" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+	<box style="height:10px" />
+	<hbox pack="start" align="center">
+		<tree id="tree-totaux"
+	        flex="5"
+	        hidecolumnpicker="true"
+	        seltype="single"
+	        ref="http://www.opensi.org/facturation/totaux"
+					ondblclick="reporterQte()"
+					onkeypress="keypress(event, id)"
+					height="100"
+	        datasources="rdf:null">
+	
+	    <treecols>
+	      <treecol id="ColRef_Fournisseur" label="N° Fournisseur" flex="1" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColTotaux" label="Total Commande" flex="1" style="text-align:right"  />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColFranco" label="Franco de port" flex="1" style="text-align:right"  />
+				<splitter class="tree-splitter" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/facturation/totaux/rdf#Ref_Fournisseur" />
+							<treecell label="rdf:http://www.opensi.org/facturation/totaux/rdf#Total" />
+	            <treecell label="rdf:http://www.opensi.org/facturation/totaux/rdf#Franco" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+	  </tree>
+		<spacer flex="1" />
+		<label class="label" value="Quantité :" />
+		<textbox id="Quantite" size="10" maxlength="10" disabled="true" onkeypress="keypress(event, id)" />
+		<button id="bChgQte" label="Ok" oncommand="changerQuantite();" disabled="true" />
+		<spacer flex="1" />
+		<hbox pack="end"><button label="Réinitialiser la préparation" oncommand="reinitialiserBPC();" id="breinitprep" disabled="true"/></hbox>
+		<spacer flex="1" />
+		<hbox pack="end"><button label="Générer les bons de commande" oncommand="genererBC();" id="bGenCom" disabled="true" /></hbox>
+	</hbox>
+</window>

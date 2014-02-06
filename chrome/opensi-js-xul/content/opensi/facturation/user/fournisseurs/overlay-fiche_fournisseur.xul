@@ -1,0 +1,320 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay id="opensi_compta_user_fournisseurs_overlay-ficheFournisseur"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-fiche_fournisseur.js" />
+  
+  <tabpanel id="tab-fiche_fournisseur">
+
+		<vbox pack="center" flex="1" class="auto-overflow">
+
+			<hbox pack="center" flex="1" class="auto-overflow">
+		
+				<vbox flex="1">
+			
+			    <groupbox flex="1" pack="center" align="center">
+			      <caption label="Coordonnées de l'entreprise" />
+						<hbox>
+			      <grid>
+			        <columns>
+			          <column/>
+			          <column/>
+			        </columns>
+			        <rows>
+								<row align="center">
+			            <label class="label" value="* Code fournisseur :" />
+			            <hbox>
+			            	<label id="lblAuto" value="Automatique" collapsed = "true" />
+			            	<textbox id="ff-Fournisseur_Id" maxlength="10" size="11" oninput="setModifie();" />
+			            	<button id="bChgCodeFournisseur" oncommand="changerCodeFournisseur();" class="bIcoEdition" />
+			            </hbox>
+			          </row>
+			          <row align="center">
+		            	<label class="label" value="Type de société :" />
+									<hbox>
+										<menulist id="ff-Type_Societe" ref="http://www.opensi.org/facturation/typeS" datasources="rdf:null" oncommand="setModifie();">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+								      </menupopup>
+											<template>
+					     					<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeS/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeS/rdf#id" />
+					     					</menupopup>
+											</template>
+					   				</menulist>
+									</hbox>
+		          	</row>
+			          <row align="center">
+			            <label class="label" value="* Raison sociale :" />
+			            <hbox><textbox id="ff-Denomination" maxlength="50" size="25" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Civilité :" />
+			            <radiogroup id="ff-Civilite" orient="horizontal" oncommand="setModifie();">
+			              <radio id="ff-CiviliteM" value="1" label="M."  selected="true" />
+			              <radio id="ff-CiviliteMme" value="2" label="Mme"/>
+			              <radio id="ff-CiviliteMlle" value="3" label="Mlle"/>
+			            </radiogroup>
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Nom :" />
+			            <hbox><textbox id="ff-Nom" maxlength="30" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Prénom :" />
+			            <hbox><textbox id="ff-Prenom" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row >
+			          <row align="center">
+			            <label class="label" value="* Adresse :" />
+			            <hbox><textbox id="ff-Adresse" maxlength="80" size="25" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			            <hbox><textbox id="ff-Comp_Adresse" maxlength="50" size="25" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			            <hbox><textbox id="ff-Adresse_3" maxlength="50" size="25" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Code postal :" />
+			            <hbox><textbox id="ff-Code_Postal" class="rv_cp" idville="ff-Ville" idnextfocus="ff-Code_Pays" maxlength="10" size="6" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="* Ville :" />
+			            <hbox><textbox id="ff-Ville" class="rv_ville" idcp="ff-Code_Postal" idnextfocus="ff-Code_Pays" maxlength="50" size="25" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Pays :" />
+			            <hbox>
+				            <menulist id="ff-Code_Pays" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="setModifie();">
+										<template>
+				             	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+				             	</menupopup>
+										</template>
+										</menulist>
+			            </hbox>
+			          </row>
+							</rows>
+			      </grid>
+						<grid>
+			        <columns>
+			          <column/>
+			          <column/>
+			        </columns>
+			        <rows>
+								<row align="center">
+			            <label class="label" value="Tél. 1 :" />
+			            <hbox><textbox id="ff-Tel_1" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Tél. 2 :" />
+			            <hbox><textbox id="ff-Tel_2" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Tél. 3 :" />
+			            <hbox><textbox id="ff-Tel_3" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Fax 1 :" />
+			            <hbox><textbox id="ff-Fax_1" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Fax 2 :" />
+			            <hbox><textbox id="ff-Fax_2" maxlength="20" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="E-Mail 1 :" />
+			            <hbox><textbox id="ff-Email_1" maxlength="60" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="E-Mail 2 :" />
+			            <hbox><textbox id="ff-Email_2" maxlength="60" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Site Web :" />
+			            <hbox><textbox id="ff-Site_Web" maxlength="40" size="20" oninput="setModifie();" /></hbox>
+			          </row>
+			          <row style="height:20px" />
+			          <row align="center">
+		            	<label class="label" value="Famille :" />
+		            	<hbox align="center">
+		            		<menulist id="ff-Famille" ref="http://www.opensi.org/facturation/familles_fournisseur" datasources="rdf:null" style="width:180px" oncommand="setModifie();">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+											</menupopup>
+											<template>
+		              			<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_fournisseur/rdf#Famille_Id" />
+		              			</menupopup>
+											</template>
+		            		</menulist>
+		            		<button class="bIcoEdition" oncommand="ff_ouvrirEditionListe();" />
+									</hbox>
+		          	</row>
+		          	<row align="center">
+        					<label class="label" value="Pôle d'activité :" />
+        					<hbox>
+          					<menulist id="ff-Secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px" oncommand="setModifie();">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+											</menupopup>
+											<template>
+	            					<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+	            					</menupopup>
+											</template>
+          					</menulist>
+									</hbox>
+	      				</row>
+		          	<row align="center">
+		            	<label class="label" value="Numéro SIRET :" />
+		            	<hbox><textbox id="ff-Num_SIRET" maxlength="14" size="14" oninput="setModifie();" /></hbox>
+		          	</row>
+								<row align="center">
+		            	<label class="label" value="Code NAF :" />
+		            	<hbox><textbox id="ff-Code_NAF" maxlength="5" size="5" oninput="setModifie();" /></hbox>
+		          	</row>
+								<row align="center">
+		            	<label class="label" value="N° de TVA :" />
+		            	<hbox><textbox id="ff-Num_TVA_Intra" maxlength="14" size="14" oninput="setModifie();" /></hbox>
+		          	</row>
+			          <row align="center">
+									<label class="label" value="Fichiers associés :" />
+									<hbox>
+										<button id="bVoirFichier" label="Voir les fichiers" oncommand="afficherFichiers();" />
+						  		</hbox>
+						  	</row>
+						  	<row align="center">
+									<label value="" />
+									<checkbox id="ff-chkLogisticien" label="Logisticien" oncommand="setModifie();" />
+						  	</row>
+			        </rows>
+			      </grid>
+						</hbox>
+			    </groupbox>
+		
+				</vbox>
+				<vbox flex="1">
+		
+					<groupbox flex="1" pack="center" align="center">
+		      	<caption label="Informations complémentaires" />
+		      	<grid>
+		        	<columns>
+		          	<column/>
+		          	<column/>
+		        	</columns>
+		        	<rows>
+		        		<row align="center">
+			            <label class="label" value="Mon N° de client :" />
+									<hbox><textbox id="ff-Code_Client" maxlength="30" size="10" oninput="setModifie();" /></hbox>
+			          </row>
+		        		<row align="center">
+									<label value="Responsable :" class="label" />
+									<hbox>
+										<menulist id="ff-Responsable" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null" oncommand="setModifie();">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+             					</menupopup>
+											<template>
+              					<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+              					</menupopup>
+											</template>
+            				</menulist>
+									</hbox>
+								</row>
+		          	<row align="center">
+		            	<label class="label" value="Code couleur :" />
+									<hbox>
+		            		<menulist id="ff-Code_Couleur" oncommand="setModifie();">
+		              		<menupopup>
+		                  	<menuitem id="ff-vert" label="Vert" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_vert.jpg" value="2" />
+		                  	<menuitem id="ff-bleu" label="Bleu" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_bleu.jpg" value="3" />
+												<menuitem id="ff-rouge" label="Rouge" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_rouge.jpg" value="1" />
+												<menuitem id="ff-noir" label="Noir" class="menuitem-iconic" src="chrome://opensi/content/design/rectangle_noir.jpg" value="0" />
+		              		</menupopup>
+		            		</menulist>
+									</hbox>
+		          	</row>
+		          	<row align="center">
+			            <label class="label" value="Date d'ouverture du compte :" />
+			            <hbox><textbox id="ff-Date_Ouverture" maxlength="10" size="10" tooltiptext="format de saisie : jj/mm/aaaa" oninput="setModifie();" /></hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="Compte actif :" />
+									<radiogroup id="ff-Actif" orient="horizontal" oncommand="setModifie();">
+										<radio id="ff-ActifOui" value="1" label="Oui" selected="true" />
+										<radio id="ff-ActifNon" value="0" label="Non" />
+									</radiogroup>
+			          </row>
+								<row align="center">
+		            	<label class="label" value="Qualité de la relation :" style="padding-top:2px" />
+		            	<hbox>
+		            		<menulist id="ff-Qualite_Relation" oncommand="setModifie();">
+		              		<menupopup>
+		                  	<menuitem id="ff-QualiteE" label="Excellente" value="E" />
+		                  	<menuitem id="ff-QualiteB" label="Bonne" value="B" selected="true" />
+												<menuitem id="ff-QualiteM" label="Moyenne" value="M" />
+												<menuitem id="ff-QualiteN" label="Nulle" value="N" />
+		              		</menupopup>
+		            		</menulist>
+									</hbox>
+		          	</row>
+								<row align="center">
+		            	<label class="label" value="Délais respectés :" />
+									<radiogroup id="ff-Respect_Delai" orient="horizontal" oncommand="setModifie();">
+										<radio id="ff-DelaiOui" value="1" label="Oui" selected="true" />
+										<radio id="ff-DelaiNon" value="0" label="Non" />
+									</radiogroup>
+		          	</row>
+								<row align="center">
+		            	<label class="label" value="Compétitivité :" />
+									<radiogroup id="ff-Competitivite" orient="horizontal" oncommand="setModifie();">
+										<radio id="ff-Comp1" value="1" label="1" selected="true" />
+										<radio id="ff-Comp2" value="2" label="2" />
+										<radio id="ff-Comp3" value="3" label="3" />
+										<radio id="ff-Comp4" value="4" label="4" />
+										<radio id="ff-Comp5" value="5" label="5" />
+									</radiogroup>
+		          	</row>
+							</rows>
+		      	</grid>
+		    	</groupbox>
+		    	<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires" />
+						<textbox id="ff-Com_Libre" multiline="true" rows="3" cols="40" oninput="setModifie();" />
+					</groupbox>
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Indications de commande" />
+						<textbox id="ff-Indications" multiline="true" rows="3" cols="40" oninput="setModifie();" />
+					</groupbox>
+				</vbox>
+		
+		  </hbox>
+			
+		</vbox>
+	</tabpanel>
+
+</overlay>

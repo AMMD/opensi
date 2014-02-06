@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_overlay-historique"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-historique.js" />
+
+	<tabpanel id="tab-historique">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+		<label class="label_14" value="Historique des factures" />
+  	<tree id="tree-historique"
+        	flex="2"
+        	style="min-height: 100px;"
+        	hidecolumnpicker="true"
+					flags="dont-build-content"
+					ondblclick="choixDoc();"
+        	seltype="single"
+        	ref="http://www.opensi.org/facturation/histoClient"
+        	datasources="rdf:null">
+
+    	<treecols>
+      	<treecol id="ColDate_Doc" flex="1" label="Date" />
+				<splitter class="tree-splitter" />
+      	<treecol id="ColNumero" flex="1" label="Numéro" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColRefCommande" flex="1" label="Réf. Commande" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColAffaire" flex="1" label="Numéro d'affaire" />
+				<splitter class="tree-splitter" />
+      	<treecol id="ColTotal_HT" flex="1" label="Total HT" class="nombre" />
+				<treecol id="ColDoc_Id" collapsed="true" />
+				<treecol id="ColType_Doc" collapsed="true" />
+    	</treecols>
+    	<template>
+      	<treechildren>
+        	<treeitem uri="rdf:*">
+          	<treerow>
+            	<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Date_Doc" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Numero" />
+							<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Ref_Commande" />
+							<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Ref_Affaire" />
+            	<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Total_HT" />
+							<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Doc_Id" />
+							<treecell label="rdf:http://www.opensi.org/facturation/histoClient/rdf#Type_Doc" />
+          	</treerow>
+        	</treeitem>
+      	</treechildren>
+    	</template>
+  	</tree>
+
+		<hbox pack="end">
+			<label value="Chiffre d'affaires de la période :" style="font-weight:bold" />
+			<label id="cap" style="font-weight:bold" />
+		</hbox>
+
+		<box style="height:20px" />
+		<hbox>
+    	<label class="label" value="Période de l'historique :" style="padding-top:2px;" />
+    	<radiogroup id="Periode" orient="horizontal">
+				<vbox>
+					<radio id="Periode1" value="1" selected="true" label="Mois en cours" oncommand="loadHisto();" />
+					<radio id="Periode3" value="3" label="3 mois précédents" oncommand="loadHisto();" />
+				</vbox>
+				<box style="width:20px" />
+				<vbox>
+					<radio id="Periode6" value="6" label="6 mois précédents" oncommand="loadHisto();" />
+					<radio id="Periode12" value="12" label="12 mois précédents" oncommand="loadHisto();" />
+				</vbox>
+				<vbox>
+					<radio id="PeriodeN1" value="N1" label="Année N-1" oncommand="loadHisto();" />
+					<hbox align="center">
+						<radio id="PeriodeP" value="P" label="Personnalisée :" />
+						<label value="du" />
+						<textbox id="Date_Debut" size="10" maxlength="10" onfocus="selectPerso();" />
+						<label value="au" />
+						<textbox id="Date_Fin" size="10" maxlength="10" onfocus="selectPerso();" />
+						<button id="bOk" label="Ok" oncommand="verifPlageDates();" class="mini_bouton" />
+					</hbox>
+				</vbox>
+    	</radiogroup>
+  	</hbox>
+  	</vbox>
+
+	</tabpanel>
+
+</overlay>

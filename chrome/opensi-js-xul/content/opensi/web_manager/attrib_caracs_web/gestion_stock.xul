@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_attribution_carac" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestion_stock.js" />
+  
+  <hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<button class="bouton_menu" id="bMenuSites" oncommand="menuSite()"/>
+		<button class="bouton_menu" id="bGestionSite" oncommand="menuGestionSite()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="Etape 4" align="end" class="etape" id="lb_etape"/>
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Gestion du stock en ligne" class="label_14"/></box>
+		</vbox>
+
+		<!-- FIN Titre -->
+		
+		<label id="info" value="" />
+		
+		
+		<hbox>
+			<grid>
+	  		<columns>
+	    		<column />
+	    		<column />
+	  		</columns>
+	  		<rows>
+	    		<row align="center">
+      			<label class="label" value="Référence :" />
+      			<hbox>
+        			<textbox id="txt_reference" maxlength="15" size="25" onkeypress="keyPressee(event);"/>
+      			</hbox>
+	    		</row>
+				
+					<row align="center">
+	     			<label class="label" value="Marque :" />
+	     			<hbox>
+	       			<menulist id="menulist_marques" oncommand="pre_rechercher();" ref="http://www.opensi.org/WebManager/listeMarquesWeb" datasources="rdf:null" style="max-width:250px;min-width:250px">
+								<menupopup>
+									<menuitem label="[Toutes]" value="0"/>
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeMarquesWeb/rdf#Libelle" value="rdf:http://www.opensi.org/WebManager/listeMarquesWeb/rdf#Marque_Id" style="font-size:80%" />
+									</menupopup>
+								</template>
+							</menulist>
+	     			</hbox>
+	    		</row>
+				
+	    		<row align="center">
+      			<label class="label" value="Famille 1 :" />
+      			<hbox>
+							<menulist id="menulist_familles1"  oncommand="rechercher_famille();" ref="http://www.opensi.org/WebManager/listeFamillesWeb" datasources="rdf:null"  style="max-width:250px;min-width:250px">
+								<menupopup>
+									<menuitem label="[Toutes]" value="0" />
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeFamillesWeb/rdf#Libelle" value="http://www.opensi.org/WebManager/listeFamillesWeb/rdf#Famille_Id" style="font-size:80%"  />
+									</menupopup>
+								</template>
+							</menulist>
+	      		</hbox>
+	    		</row>
+				
+					<row align="center">
+						<label class="label" value="Famille 2 :" />
+						<hbox>
+							<menulist id="menulist_familles2" oncommand="pre_rechercher();" ref="http://www.opensi.org/WebManager/listeFamillesWeb" datasources="rdf:null" style="max-width:250px;min-width:250px">
+								<menupopup>
+									<menuitem label="[Toutes]"  value="0"/>
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeFamillesWeb/rdf#Libelle" value="rdf:http://www.opensi.org/WebManager/listeFamillesWeb/rdf#Famille_Id" style="font-size:80%" />
+									</menupopup>
+								</template>
+							</menulist>
+						</hbox>
+					</row>
+	  		</rows>
+			</grid>
+	
+			<box style="width:40px" />
+	
+			<grid>
+				<rows>
+					<row align="center">
+     				<label class="label" value="Désignation :" />
+     				<hbox>
+							<textbox id="txt_designation" maxlength="50" size="25" onkeypress="keyPressee(event);"/>
+	      		</hbox>
+	    		</row>
+					
+					<row align="center">
+	          <label class="label" id="lblAttribut1" />
+						<menulist id="menulist_attr1" oncommand="pre_rechercher();" ref="http://www.opensi.org/WebManager/listeAttributsWeb" datasources="rdf:null" flex="1" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Toutes]"  value=""/>
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Libelle" value="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Attribut_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+	        </row>
+					
+					<row align="center">
+	          <label class="label" id="lblAttribut2" />
+						<menulist id="menulist_attr2" oncommand="pre_rechercher();" ref="http://www.opensi.org/WebManager/listeAttributsWeb" datasources="rdf:null" flex="1" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Toutes]"  value=""/>
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Libelle" value="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Attribut_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+	        </row>
+					
+					<row align="center">
+	          <label class="label" id="lblAttribut3" />
+						<menulist id="menulist_attr3" oncommand="pre_rechercher();" ref="http://www.opensi.org/WebManager/listeAttributsWeb" datasources="rdf:null" flex="1" style="max-width:250px;min-width:250px">
+							<menupopup>
+								<menuitem label="[Toutes]"  value=""/>
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Libelle" value="rdf:http://www.opensi.org/WebManager/listeAttributsWeb/rdf#Attribut_Id" style="font-size:80%" />
+								</menupopup>
+							</template>
+						</menulist>
+	        </row>
+				</rows>
+			</grid>
+	
+			<vbox pack="end" align="end" flex="1">
+				<button label="Réinitialiser" oncommand="reinitialiser();" id="bt_reinit"/>
+			</vbox>
+		</hbox>
+		
+		<box height="20px"/>
+		
+		<tree id="tree_articles"
+	        flex="5"
+	        hidecolumnpicker="false"
+	        seltype="single"
+	        ref="http://www.opensi.org/WebManager/listeArticlesWebStocks"
+	        datasources="rdf:null"
+	        onselect="select_arbre()"
+			flags="dont-build-content">
+	
+	    <treecols>
+	      <treecol id="ColArticle_Id" label="Référence" flex="2" ignoreincolumnpicker="true" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Article_Id" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColMarque" label="Marque" flex="2" persist="hidden" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Marque" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColDesignation" flex="3" label="Désignation" ignoreincolumnpicker="true" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Designation" />
+				<splitter class="tree-splitter" />
+	      <treecol id="ColFamille1" flex="2" label="Famille 1" persist="hidden" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Famille_1" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColFamille2" flex="1" label="Famille 2" persist="hidden" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Famille_2" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColStock" flex="1" label="Stock" persist="hidden" />
+				<splitter class="tree-splitter" />
+				<treecol id="ColStockWeb" flex="1" label="Stock Web" persist="hidden" />
+				<splitter class="tree-splitter" />
+				<treecol id="colAttribut1" flex="1" persist="hidden" hidden="true" 
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_1" />
+				<splitter class="tree-splitter" />
+				<treecol id="colAttribut2" flex="1" persist="hidden" hidden="true"
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_2" />
+				<splitter class="tree-splitter" />
+				<treecol id="colAttribut3" flex="1" persist="hidden" hidden="true"
+					sort="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_3" />
+	    </treecols>
+	    <template>
+	      <treechildren>
+	        <treeitem uri="rdf:*">
+	          <treerow>
+	            <treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Article_Id" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Marque" />
+	            <treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Designation" />
+	            <treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Famille_1" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Famille_2" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Stock" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Stock_Web" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_1" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_2" />
+							<treecell label="rdf:http://www.opensi.org/WebManager/listeArticlesWebStocks/rdf#Attribut_3" />
+	          </treerow>
+	        </treeitem>
+	      </treechildren>
+	    </template>
+	  </tree>
+			
+		<box height="20px"/>
+		
+		<hbox>
+			<box width="10px"/>
+			<progressmeter id="barre_progression" mode="determined" value="0%" hidden="true"/>
+		</hbox>
+	
+	
+		<!-- Zone de saisie pour un article -->
+		<hbox hidden="true" id="boite_un_article">
+			<box width="10px"/>
+		
+				<hbox class="cadre" flex="1">
+		
+					<vbox flex="1">
+						<box height="10px"/>
+						<hbox>
+							<vbox flex="4">
+								<label id="lb_ref" value="Référence" />
+								<textbox id="txt_ref" value="" readonly="true"/>
+							</vbox>
+				
+							<vbox flex="4">
+								<label id="lb_design" value="Désignation" />
+								<textbox id="txt_design" value="" readonly="true"/>
+							</vbox>
+				
+							<vbox flex="1">
+								<label value="Stock" />
+								<textbox id="txt_stock" value="" readonly="true"/>
+							</vbox>
+						</hbox>
+				
+						<box height="20px"/>
+				
+						<hbox flex="1" align="end">
+							<vbox flex="1">
+								<label value="Stock Internet" />
+								<textbox id="txt_stockWeb" value="" oninput="stockWeb_modifie()"  onkeypress="keyPressee_unarticle(event);"/>
+							</vbox>
+				
+							<vbox flex="1">
+								<label value="Stock tampon" />
+								<textbox id="txt_stockTampon" value="" oninput="stockTampon_modifie()" onkeypress="keyPressee_unarticle(event);"/>
+							</vbox>
+				
+							<vbox flex="1">
+								<label value="% Stock Opensi" />
+								<textbox id="txt_stockOpensi" value="" oninput="stockOpensi_modifie()" onkeypress="keyPressee_unarticle(event);"/>
+							</vbox>
+				
+						</hbox>
+						
+						<box height="20px"/>
+					</vbox>
+	
+					<hbox align="end">
+						<vbox flex="1">
+							<button label="Valider" id="bt_valider" class="bValider" oncommand="clic_valider_article()"/>
+							<button label="Annuler" id="bt_annuler" class="bAnnuler" oncommand="clic_annuler_article()"/>
+							<box height="20px"/>
+						</vbox>
+					</hbox>
+	
+				</hbox>
+	
+			<box width="10px"/>
+		</hbox>
+	
+		<!-- Zone de saisie pour plein d'article -->
+		<hbox id="boite_liste_article">
+			<box width="10px"/>
+		
+			<hbox class="cadre" flex="1">
+	
+				<vbox flex="1">
+					<box height="10px"/>
+					<hbox>
+						<vbox flex="4">
+							<label id="lb_info" value="Sélection en cours:" class="label_12"/>
+							<label id="txt_info" value="Tous les articles" readonly="true"/>
+						</vbox>
+					</hbox>
+					<box height="20px"/>
+					<hbox>
+						<vbox flex="4">
+							<hbox align="center">
+								<label id="lb_info" value="Mode de calcul:" class="label_12"/>
+								<label id="lb_confirmation" />
+							</hbox>
+							<radiogroup id="choix_calcul">
+								<hbox align="center">
+									<radio id="rad_stock_tampon" label="Stock tampon" value="TAMPON"/>
+									<radio id="rad_meme" label="Même stock que Opensi" value="MEME"/>
+									<radio id="rad_pc_opensi" label="% Stock Opensi" selected="true" value="PC_OPENSI"/>
+									<box width="10px"/>
+									<label value="Valeur:" />
+									<textbox id="txt_valeur" value="" onkeypress="keyPressee_valeur(event);"/>
+								</hbox>
+							</radiogroup>
+						</vbox>
+					</hbox>
+					<box height="20px"/>
+				</vbox>
+	
+				<hbox align="end">
+					<vbox flex="1">
+						<button label="Valider" id="bt_valider_2" class="bValider" oncommand="clic_valider_liste()"/>
+						<box height="20px"/>
+					</vbox>
+				</hbox>
+			</hbox>
+		
+			<box width="10px"/>
+		</hbox>	
+
+	  <box height="20px"/>
+	  
+		<hbox>
+			<vbox flex="1">
+				<hbox>
+					<box width="10px" />
+					<button id="etape_precedente" label="Etape précédente" class="bIcoRetour" oncommand="etape_precedente()"/>
+				</hbox>
+	  	</vbox> 
+
+	  	<vbox align="end" flex="1">
+				<hbox align="end">
+					<label id="conclusion_test" value=""/>
+					<button id="etape_suivante" label="Etape suivante" class="bIcoAvance" oncommand="etape_suivante()"/>
+					<box width="10px" />
+				</hbox>
+	  	</vbox>
+		</hbox>
+		<box height="20px" />
+	</vbox>
+		
+</window>

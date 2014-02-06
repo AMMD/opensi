@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="liste_plan"
+  onload="init()"
+	title="OpenSi - Plan comptable"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="liste_plan.js" />
+
+	<hbox style="height:10px" />
+  <hbox pack="center">
+    <label class="label_16" id="titre"/>
+  </hbox>
+	<hbox style="height:20px" />
+	<vbox  pack="center" flex="1" style="overflow: auto;">
+		<hbox flex="20">
+ 			<vbox flex="1">
+    		<button label="Clients" oncommand="tab(-1)" />
+    		<button label="Fournisseurs" oncommand="tab(0)" />
+    		<button label="Auxiliaires" oncommand="tab(-2)" />
+    		<button label="Classe 1" oncommand="tab(1)" />
+    		<button label="Classe 2" oncommand="tab(2)" />
+    		<button label="Classe 3" oncommand="tab(3)" />
+    		<button label="Classe 4" oncommand="tab(4)" />
+    		<button label="Classe 5" oncommand="tab(5)" />
+    		<button label="Classe 6" oncommand="tab(6)" />
+    		<button label="Classe 7" oncommand="tab(7)" />
+    		<button label="Classe 8" collapsed="true" oncommand="tab(8)" />
+			</vbox>
+			<vbox flex="10">
+				<tree id="Classe" datasources="rdf:null" ref="http://www.opensi.org/Config/classes"
+      			hidecolumnpicker="true"
+      			seltype="single"
+						onkeypress="keypress(event)"
+						ondblclick="ouvrirClasse();"
+						flex="1">
+
+					<treecols>
+      			<treecol primary="true" id="num" flex="1" label="Numéro" />
+						<splitter class="tree-splitter" />
+						<treecol id="libelle" flex="6" label="Intitulé" />
+						<treecol id="code" label="Code" collapsed="true"/>
+					</treecols>
+  				<template>
+    				<rule>
+      				<treechildren>
+      				 <treeitem uri="rdf:*">
+        				 <treerow>
+        					 <treecell label="rdf:http://www.opensi.org/Config/classes/rdf#numero"/>
+									 <treecell label="rdf:http://www.opensi.org/Config/classes/rdf#libelle"/>
+									 <treecell label="rdf:http://www.opensi.org/Config/classes/rdf#code"/>
+        				 </treerow>
+      				 </treeitem>
+      				</treechildren>
+    				</rule>
+  				</template>
+				</tree>
+			</vbox>
+		</hbox>
+		<hbox style="height:20px" />
+  	<hbox pack="center">
+    	<button label="Ok" class="bValider" default="true" oncommand="ouvrirClasse()" />
+		</hbox>
+		<hbox style="height:10px" />
+  </vbox>
+</window>

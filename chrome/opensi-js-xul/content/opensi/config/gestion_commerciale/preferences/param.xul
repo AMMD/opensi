@@ -1,0 +1,881 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_manager_gestion_commerciale_parametre_param"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="param.js" />
+
+	<box style="height:10px" />
+	
+	<hbox flex="1" style="overflow:auto">
+		<vbox>
+			<groupbox>
+				<caption label="Logo de l'entreprise" />
+				<spacer style="height: 10px" />
+				<hbox pack="center">
+					<box style="border:solid 1px">
+						<image validate="always" id="Vignette" onerror="this.src='chrome://opensi/content/design/default_logo.jpg'" />
+					</box>
+					<vbox pack="end">
+						<button class="bIcoVisualiser" id="bVoirPhoto" tooltiptext="voir le logo" oncommand="voirPhoto();" />
+						<button class="bIcoEdition" id="bChangerPhoto" tooltiptext="changer le logo" oncommand="changerPhoto();" />
+					</vbox>
+				</hbox>
+				<spacer style="height: 20px" />
+				<checkbox id="Logo_Adr" label="Le logo contient les informations de l'entreprise" />
+			</groupbox>
+			<groupbox>
+				<caption label="Langue par défaut" />
+				<hbox>
+					<menulist id="langueDefaut" ref="http://www.opensi.org/config/listeLangues" datasources="rdf:null" style="width:200px">
+						<template>
+            	<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeLangues/rdf#Libelle" value="rdf:http://www.opensi.org/config/listeLangues/rdf#Langue_Id" />
+            	</menupopup>
+						</template>
+        	</menulist>
+				</hbox>
+			</groupbox>
+			<groupbox>
+				<caption label="Commentaires sur devis" />
+				<textbox id="Com_Devis" rows="4" cols="40" multiline="true" />
+			</groupbox>
+			<groupbox>
+				<caption label="Commentaires sur facture" />
+				<textbox id="Com_Fact" rows="4" cols="40" multiline="true" />
+			</groupbox>
+			<groupbox>
+				<caption label="Commentaires sur bon de livraison" />
+				<textbox id="Com_BL" rows="4" cols="40" multiline="true" />
+			</groupbox>
+			<groupbox>
+				<caption label="Facturation" />
+				<label value="Mode de facturation :" />
+				<hbox>
+					<menulist id="Type_Fact" oncommand="pressOnTypeFact();" style="width:200px">
+						<menupopup>
+							<menuitem label="Commande" value="CC" />
+							<menuitem label="Bon de Livraison" value="BL" />
+							<menuitem label="Groupement de Commandes" value="GC" />
+							<menuitem label="Groupement d'Affaires" value="GA" />
+						</menupopup>
+					</menulist>
+				</hbox>
+				<checkbox id="Mode_Facturation" label="Facturable avant livraison" />
+				<hbox align="center">
+        	<label class="label" value="Période de Facturation :" />
+					<menulist id="Periode_Facturation" style="width:200px">
+          	<menupopup>
+							<menuitem label="Immédiate" value="I" />
+							<menuitem label="Fin de mois" value="M" />
+          	</menupopup>
+        	</menulist>
+				</hbox>
+				<hbox align="center">
+					<label class="label" value="Mode d'envoi de la facture :" />
+					<menulist id="Mode_Envoi_Facture" style="width:200px">
+          	<menupopup>
+							<menuitem label="Courrier" value="C" />
+							<menuitem label="Fax" value="F" />
+							<menuitem label="Mail" value="M" />
+          	</menupopup>
+        	</menulist>
+				</hbox>
+        <checkbox id="Module_Envoi" label="Activer le module d'envoi des factures" />
+				<checkbox id="Imp_LCR" label="Imprimer le formulaire de LCR sur la facture" />
+				<checkbox id="Imp_RIB" label="Imprimer le RIB (virement) sur la facture" />
+				<checkbox id="Imp_Ex_Fact_Ent" label="Editer une facture d'archive" />
+				<hbox>
+					<label value="Imputation des frais de port :" />
+					<radiogroup id="Frais_Port_Prem">
+						<radio label="sur première facture" value="1" />
+						<radio label="sur dernière facture" value="0" />
+					</radiogroup>
+				</hbox>
+			</groupbox>
+
+			<groupbox style="padding:10px">
+				<caption label="Banque" />
+				<hbox>
+					<menulist id="Banque" ref="http://www.opensi.org/config/banques" datasources="rdf:null" style="width:200px">
+						<menupopup>
+							<menuitem label="[Aucune]" value="0" />
+						</menupopup>
+						<template>
+            	<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+            	</menupopup>
+						</template>
+        	</menulist>
+				</hbox>
+			</groupbox>
+
+			<groupbox style="padding:10px">
+				<caption label="Fichiers associés" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Lien local :" />
+							<textbox id="Lien_Fichier" size="30" maxlength="100" />
+						</row>
+						<row align="center">
+							<label class="label" value="Lien distant :" />
+							<textbox id="Lien_Distant" size="30" maxlength="100" />
+						</row>
+						<row align="center">
+							<label class="label" value="Répertoire racine :" />
+							<textbox id="Dossier_Fichier" size="30" maxlength="100" />
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<groupbox style="padding:10px">
+				<caption label="Gestion des emails" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Validation de commande :" />
+							<hbox>
+								<menulist id="Email_VCC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Annulation de commande :" />
+							<hbox>
+								<menulist id="Email_ACC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Expédition de commande :" />
+							<hbox>
+								<menulist id="Email_ECC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Préparation de commande :" />
+							<hbox>
+								<menulist id="Email_PCC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Validation de facture :" />
+							<hbox>
+								<menulist id="Email_VFC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Validation d'avoir :" />
+							<hbox>
+								<menulist id="Email_VAC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+			            	<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+			            	</menupopup>
+									</template>
+			        	</menulist>
+			        </hbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+		</vbox>
+
+		<vbox>
+			<groupbox style="padding:10px">
+				<caption label="Impression des documents" />
+				<hbox pack="center">
+					<grid>
+						<columns>
+							<column />
+							<column />
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<label class="case_entete" value="" />
+								<label class="row_entete" value="Description 1" />
+								<label class="row_entete" value="Description 2" />
+								<label class="row_entete" value="Nomenclature" />
+							</row>
+							<row>
+								<label class="col_entete" value="Fiche article" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_Fiche" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_Fiche" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_Fiche" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Devis / Commande" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_Devis" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_Devis" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_Devis" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Ordre de fabrication" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_OF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_OF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_OF" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Bon de préparation" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_BP" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_BP" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_BP" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Bon de livraison" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_Bon" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_Bon" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_Bon" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Facture" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_Facture" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_Facture" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_Facture" /></hbox>
+							</row>
+							<row>
+								<label class="col_entete" value="Commande fournisseur" />
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc1_BCF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Desc2_BCF" /></hbox>
+								<hbox class="case" pack="center"><checkbox id="Imp_Nom_BCF" /></hbox>
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+			</groupbox>
+
+			<hbox>
+				<vbox flex="1">
+					<groupbox flex="1">
+						<caption label="Mode de tarification" />
+						<radiogroup id="Mode_Tarif">
+							<radio label="Grille tarifaire par clients" value="G" />
+							<radio label="Tarification sur quantité" value="Q" />
+						</radiogroup>
+					</groupbox>
+
+					<groupbox flex="1">
+						<caption label="Modèle d'étiquette" />
+						<hbox>
+							<menulist id="Modele_Etiquette" ref="http://www.opensi.org/config/modeles_etiquettes" datasources="rdf:null">
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/modeles_etiquettes/rdf#Description" value="rdf:http://www.opensi.org/config/modeles_etiquettes/rdf#Modele_Id" />
+              		</menupopup>
+								</template>
+          		</menulist>
+						</hbox>
+					</groupbox>
+				</vbox>
+				<groupbox style="padding:10px">
+					<caption label="Libellés des tarifs" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="Tarif 1 :" />
+								<textbox id="lbl_1" size="15" maxlength="20"  />
+							</row>
+							<row align="center">
+								<label value="Tarif 2 :" />
+								<textbox id="lbl_2" size="15" maxlength="20"  />
+							</row>
+							<row align="center">
+								<label value="Tarif 3 :" />
+								<textbox id="lbl_3" size="15" maxlength="20"  />
+							</row>
+							<row align="center">
+								<label value="Tarif 4 :" />
+								<textbox id="lbl_4" size="15" maxlength="20"  />
+							</row>
+							<row align="center">
+								<label value="Tarif 5 :" />
+								<textbox id="lbl_5" size="15" maxlength="20"  />
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				<groupbox style="padding:10px">
+					<caption label="Coefficients tarifaires par défaut" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label id="lblCoeff1" />
+								<textbox id="Coeff_1" size="8" maxlength="7" class="nombre" />
+							</row>
+							<row align="center">
+								<label id="lblCoeff2" />
+								<textbox id="Coeff_2" size="8" maxlength="7" class="nombre" />
+							</row>
+							<row align="center">
+								<label id="lblCoeff3" />
+								<textbox id="Coeff_3" size="8" maxlength="7" class="nombre" />
+							</row>
+							<row align="center">
+								<label id="lblCoeff4" />
+								<textbox id="Coeff_4" size="8" maxlength="7" class="nombre" />
+							</row>
+							<row align="center">
+								<label id="lblCoeff5" />
+								<textbox id="Coeff_5" size="8" maxlength="7" class="nombre" />
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+
+			<hbox>
+				<groupbox style="padding:10px">
+					<caption label="Traitement des affaires" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row>
+								<vbox pack="center">
+									<label class="label" value="Mode de traitement par défaut :" />
+								</vbox>
+								<hbox>
+									<menulist id="Mode_Traitement" style="width:200px">
+				            <menupopup>
+											<menuitem label="Commande" value="C" />
+											<menuitem label="Affaire" value="A" />
+				            </menupopup>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row>
+								<vbox pack="center">
+									<label class="label" value="Etat de recherche de commande par défaut :" />
+								</vbox>
+								<hbox>
+									<menulist id="Def_Etat_Rech_Com" style="width:200px">
+				            <menupopup>
+											<menuitem label="Non validée" value="N" />
+											<menuitem label="En cours" value="T" />
+				            </menupopup>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row>
+								<vbox pack="center">
+									<label class="label" value="Etat de recherche logistique par défaut :" />
+								</vbox>
+								<hbox>
+									<menulist id="Def_Etat_Rech_Log" style="width:200px">
+				            <menupopup>
+				            	<menuitem label="[Tous]" value="TS" />
+											<menuitem label="A traiter" value="T" />
+											<menuitem label="A expédier" value="C" />
+											<menuitem label="Réassort" value="R" />
+				            </menupopup>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row collapsed="true">
+								<vbox pack="center">
+									<label class="label" value="Timeout de commande :" />
+								</vbox>
+				        <hbox>
+									<textbox id="Timeout_Commande" tooltiptext="saisir un nombre de jours" size="5" maxlength="3" />
+			        	</hbox>
+			        </row>
+	        	</rows>
+					</grid>
+				</groupbox>
+				
+				<groupbox style="padding:10px">
+					<caption label="Traitement des commandes fournisseur" />
+					<vbox pack="center">
+						<label class="label" value="Etat de recherche de commande par défaut :" />
+						<hbox>
+							<menulist id="Def_Etat_Rech_Com_Four" style="width:200px">
+		            <menupopup>
+									<menuitem label="Non validée" value="N" />
+									<menuitem label="Préparation" value="P" />
+									<menuitem label="En cours" value="T" />
+		            </menupopup>
+		        	</menulist>
+		        </hbox>
+					</vbox>
+				</groupbox>
+			</hbox>
+
+			<hbox flex="1">
+				<vbox>
+					<groupbox style="padding:10px">
+						<caption label="Chiffrage des documents" />
+						<checkbox id="BL_Chiffre" label="Bon de livraison chiffré par défaut" />
+						<checkbox id="BR_Chiffre" label="Bon de réception chiffré par défaut" />
+					</groupbox>
+					<groupbox style="padding:10px">
+						<caption label="Mode de livraison par défaut" />
+						<hbox>
+							<menulist id="Def_Mode_Expedition" ref="http://www.opensi.org/config/listeModesLivraison" datasources="rdf:null" style="width:200px">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+								</menupopup>
+								<template>
+              		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Nom" value="rdf:http://www.opensi.org/config/listeModesLivraison/rdf#Mode_Liv_Id" />
+              		</menupopup>
+								</template>
+          		</menulist>
+						</hbox>
+					</groupbox>
+				</vbox>
+				<vbox>
+					<groupbox style="padding:10px">
+						<caption label="Modules complémentaires" />
+						<checkbox id="Act_Code_Stats" label="Activer la gestion du code statistique" />
+						<checkbox id="Produit_Frais" label="Activer la gestion des DLC / Nb Pièces / N° Lot" />
+						<checkbox id="Act_Commission" label="Activer la gestion des commissions client" />
+						<checkbox id="Act_Code_Produit" label="Activer le module de gestion des codes produits" oncommand="checkActCodeProduit();" />
+						<checkbox id="Act_Activation_CP" label="Activation du module de gestion de l'activation des codes produits" />
+						<checkbox id="Act_Outillage" label="Activer le module d'outillage" />
+					</groupbox>
+				</vbox>
+			</hbox>
+			<hbox flex="1">
+				<vbox>
+	      	<groupbox style="padding:10px">
+	        	<caption label="Gestion du stock" />
+	        	<checkbox id="Calcul_Stock" label="Calcul du stock dans la liste des affaires" />
+	        	<checkbox id="Type_Calcul_Stock" label="Calcul du stock avec priorité à l'antériorité" />
+						<hbox align="center">
+							<label class="label" value="Durée de réservation :" />
+							<textbox id="Duree_Reservation" size="4" maxlength="4" class="nombre" />
+							<label value="jours" />
+						</hbox>
+	      	</groupbox>
+	      </vbox>
+	      <vbox>
+					<groupbox style="padding:10px">
+						<caption label="Ventes" />
+						<checkbox id="Vente_TTC" label="Ventes en TTC par défaut" />
+						<checkbox id="Imprimer_Adr_Liv" label="Afficher l'adresse de livraison pour les livraisons France" />
+						<label value="sur les documents de vente" />
+						<checkbox id="Statut_Expe_Prep" label="Activer le statut des expéditions 'Préparé'" />
+						<checkbox id="Alerte_Encours_Client" label="Alerte sur encours client dépassé" />
+					</groupbox>
+				</vbox>
+			</hbox>
+
+			<groupbox style="padding:10px">
+				<caption label="Déclaration d'échanges de biens" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row>
+							<label class="case_entete" value="" />
+							<label class="row_entete" value="Introduction" />
+							<label class="row_entete" value="Expédition" />
+						</row>
+						<row>
+							<label class="col_entete" value="Niveau d'obligation" />
+							<hbox class="case">
+								<menulist id="Niveau_Obligation_Intro" oncommand="action_DEB();" style="width:250px" sizetopopup="none">
+									<menupopup>
+										<menuitem label="1 : Déclaration détaillée" value="1" style="font-size:80%" />
+										<menuitem label="2 : Déclaration détaillée, données limitées à fournir" value="2" style="font-size:80%" />
+										<menuitem label="3 : Déclaration simplifiée" value="3" style="font-size:80%" />
+										<menuitem label="4 : Pas de déclaration" value="4" style="font-size:80%" />
+									</menupopup>
+								</menulist>
+							</hbox>
+							<hbox class="case">
+								<menulist id="Niveau_Obligation_Expe" oncommand="action_DEB();" style="width:250px" sizetopopup="none">
+									<menupopup>
+										<menuitem label="1 : Déclaration détaillée" value="1" style="font-size:80%" />
+										<menuitem label="2 : Déclaration détaillée, données limitées à fournir" value="2" style="font-size:80%" />
+										<menuitem label="3 : Déclaration simplifiée" value="3" style="font-size:80%" />
+										<menuitem label="4 : Déclaration fiscale" value="4" style="font-size:80%" />
+									</menupopup>
+								</menulist>
+							</hbox>
+						</row>
+						<row>
+							<label class="col_entete" value="Code Régime" />
+							<hbox class="case">
+								<menulist id="Code_Regime_Intro" oncommand="action_DEB();" ref="http://www.opensi.org/Config/listeCodesRegime" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeCodesRegime/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeCodesRegime/rdf#Code_Regime" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+							<hbox class="case">
+								<menulist id="Code_Regime_Expe" oncommand="action_DEB();" ref="http://www.opensi.org/Config/listeCodesRegime" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeCodesRegime/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeCodesRegime/rdf#Code_Regime" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+						</row>
+						<row>
+							<label class="col_entete" value="Nature de la transaction" />
+							<hbox class="case">
+								<menulist id="Nature_Transaction_Intro" ref="http://www.opensi.org/Config/listeNatureTransaction" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeNatureTransaction/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeNatureTransaction/rdf#Code_Transaction" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+							<hbox class="case">
+								<menulist id="Nature_Transaction_Expe" ref="http://www.opensi.org/Config/listeNatureTransaction" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeNatureTransaction/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeNatureTransaction/rdf#Code_Transaction" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+						</row>
+						<row>
+							<label class="col_entete" value="Conditions de livraison" />
+							<hbox class="case">
+								<menulist id="Conditions_Liv_Intro" ref="http://www.opensi.org/Config/listeConditionsLivraison" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeConditionsLivraison/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeConditionsLivraison/rdf#Code_Condition" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+							<hbox class="case">
+								<menulist id="Conditions_Liv_Expe" ref="http://www.opensi.org/Config/listeConditionsLivraison" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeConditionsLivraison/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeConditionsLivraison/rdf#Code_Condition" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+						</row>
+						<row>
+							<label class="col_entete" value="Mode de transport" />
+							<hbox class="case">
+								<menulist id="Modes_Transport_Intro" ref="http://www.opensi.org/Config/listeModesTransport" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModesTransport/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeModesTransport/rdf#Code_Transport" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+							<hbox class="case">
+								<menulist id="Modes_Transport_Expe" ref="http://www.opensi.org/Config/listeModesTransport" datasources="rdf:null" style="width:250px" sizetopopup="none">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModesTransport/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeModesTransport/rdf#Code_Transport" style="font-size:80%" />
+									</menupopup>
+								</template>
+								</menulist>
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<groupbox style="padding:10px">
+				<caption label="Modèles Pdf" />
+				
+				<hbox pack="center">
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Devis :" />
+								<hbox>
+									<menulist id="Modele_Pdf_DC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Commande client :" />
+								<hbox>
+									<menulist id="Modele_Pdf_CC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Bon de livraison :" />
+								<hbox>
+									<menulist id="Modele_Pdf_BL" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Bon de préparation :" />
+								<hbox>
+									<menulist id="Modele_Pdf_BP" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Bon de retour client :" />
+								<hbox>
+									<menulist id="Modele_Pdf_RC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Facture client :" />
+								<hbox>
+									<menulist id="Modele_Pdf_FC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Acompte client :" />
+								<hbox>
+									<menulist id="Modele_Pdf_FAC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Avoir client :" />
+								<hbox>
+									<menulist id="Modele_Pdf_AC" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+						</rows>
+					</grid>
+
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Commande fournisseur :" />
+								<hbox>
+									<menulist id="Modele_Pdf_CF" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Bon de réception :" />
+								<hbox>
+									<menulist id="Modele_Pdf_BR" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Facture fournisseur :" />
+								<hbox>
+									<menulist id="Modele_Pdf_FF" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Avoir fournisseur :" />
+								<hbox>
+									<menulist id="Modele_Pdf_AF" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Acompte fournisseur :" />
+								<hbox>
+									<menulist id="Modele_Pdf_FAF" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Bon de retour fournisseur :" />
+								<hbox>
+									<menulist id="Modele_Pdf_RF" ref="http://www.opensi.org/Config/listeModelesPdf" datasources="rdf:null" style="width:200px">
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Description" value="rdf:http://www.opensi.org/Config/listeModelesPdf/rdf#Modele_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+			</groupbox>
+
+		</vbox>
+	</hbox>
+
+	<box style="height:20px" />
+	<hbox pack="center"><button class="bEnregistrer" label="Enregistrer" oncommand="enregistrerParametrage();" /></hbox>
+	<box style="height:10px" />
+
+</window>

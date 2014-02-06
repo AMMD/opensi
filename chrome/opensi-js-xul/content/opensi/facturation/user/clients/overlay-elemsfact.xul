@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_overlay-elemsfact"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-elemsfact.js" />
+
+	<tabpanel id="tab-elemsfact" onchange="setModifie();">
+
+		<vbox flex="1">
+			<hbox pack="center" flex="1">
+
+				<vbox flex="1">
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Règlement" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label value="Mode de règlement :" class="label" />
+									<hbox>
+										<menulist id="oef-Mode_Reg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+		             			</menupopup>
+											<template>
+		              			<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+		              			</menupopup>
+											</template>
+		            		</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label value="Délai de règlement :" class="label" />
+									<hbox align="center"><textbox id="oef-Delai_Reg" maxlength="3" size="3" /><label value="jours" /></hbox>
+								</row>
+								<row>
+		            	<label class="label" value="Type de réglement :" style="padding-top:2px" />
+									<radiogroup id="oef-Type_Reg">
+										<radio id="oef-RegN" value="N" label="Net" />
+										<radio id="oef-RegF" value="F" label="Fin de mois" selected="true" />
+										<hbox><radio id="oef-RegL" value="L" label="Fin de mois le" /><textbox id="oef-Jour_Fact" size="2" maxlength="2" /></hbox>
+									</radiogroup>
+		          	</row>
+		          	<row align="center">
+									<label value="Banque de remise :" class="label" />
+									<hbox>
+										<menulist id="oef-banqueRemise" ref="http://www.opensi.org/config/banques" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Aucune]" value="0" />
+		             			</menupopup>
+											<template>
+		              			<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+		              			</menupopup>
+											</template>
+		            		</menulist>
+									</hbox>
+								</row>
+		        	</rows>
+		      	</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Comptabilité" />
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label value="Numéro de compte :" class="label" />
+									<hbox>
+		              	<textbox id="oef-Numero_Compte" maxlength="8" size="9" readonly="true" />
+		              	<button class="bIcoRechercher" oncommand="rechcompte('oef-Numero_Compte')" />
+		            	</hbox>
+								</row>
+								<row align="center">
+									<label value="Compte collectif :" class="label" />
+									<hbox><textbox id="oef-Collectif" maxlength="8" size="9" disabled="true" /></hbox>
+								</row>
+								<row align="center">
+									<label value="Encours autorisé :" class="label" />
+									<hbox><textbox id="oef-Encours_Auto" class="nombre" maxlength="10" size="9" /></hbox>
+								</row>
+		        	</rows>
+		      	</grid>
+					</groupbox>
+				</vbox>
+	
+				<vbox flex="1">
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Facturation" />
+		      	<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label value="Mode de facturation :" class="label" />
+									<hbox>
+										<menulist id="oef-Type_Fact" oncommand="oef_pressOnTypeFact();">
+											<menupopup>
+												<menuitem label="Commande" value="CC" />
+												<menuitem label="Bon de Livraison" value="BL" />
+												<menuitem label="Groupement de Commandes" value="GC" />
+												<menuitem label="Groupement d'Affaires" value="GA" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label value="" />
+									<checkbox id="oef-Mode_Facturation" label="Facturable avant livraison" />
+								</row>
+								<row align="center">
+									<label value="Période de facturation :" class="label" />
+									<hbox>
+										<menulist id="oef-Periode_Facturation">
+											<menupopup>
+												<menuitem label="Immédiate" value="I" />
+												<menuitem label="Fin de mois" value="M" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label value="Mode d'envoi de la facture :" class="label" />
+									<hbox>
+										<menulist id="oef-Mode_Envoi_Facture">
+											<menupopup>
+												<menuitem label="Courrier" value="C" />
+												<menuitem label="Fax" value="F" />
+												<menuitem label="Mail" value="M" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label value="Nombre d'exemplaires client :" class="label" />
+									<hbox>
+										<menulist id="oef-Nb_Ex">
+											<menupopup>
+												<menuitem label="1" value="1" />
+												<menuitem label="2" value="2" />
+												<menuitem label="3" value="3" />
+											</menupopup>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center" id="oef-rowActivation_CP" collapsed="true">
+									<label value="" />
+									<hbox><checkbox id="oef-Activation_CP" label="Activer les codes produits automatiquement à la livraison" /></hbox>
+								</row>
+								<row align="center" id="oef-rowFact_Sep_FP" collapsed="true">
+									<label value="" />
+									<hbox><checkbox id="oef-Fact_Sep_FP" label="Facturer les frais de port à part" /></hbox>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Commentaires sur facture" />
+						<textbox id="oef-Com_Fact" multiline="true" cols="35" rows="3" />
+					</groupbox>
+				</vbox>
+	
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Vente" />
+					<checkbox id="oef-Assujetti_TVA" checked="true" label="Assujetti à la TVA" />
+					<box style="height:15px" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="Taux de pénalité :" class="label" />
+								<hbox><textbox id="oef-Taux_Penalite" class="nombre" maxlength="5" size="5" /></hbox>
+							</row>
+							<row align="center">
+								<label value="Taux de remise :" class="label" />
+								<hbox><textbox id="oef-Taux_Remise" class="nombre" maxlength="5" size="5" /></hbox>
+							</row>
+							<row align="center" id="oef-rowTauxCommission">
+								<label value="Taux de commission :" class="label" />
+								<hbox><textbox id="oef-Taux_Commission" class="nombre" maxlength="5" size="5" /></hbox>
+							</row>
+							<row align="center" id="row_codeTarif">
+								<label value="Code tarifaire :" class="label" />
+								<hbox>
+									<menulist id="oef-Code_Tarif" ref="http://www.opensi.org/facturation/liste_types_tarifs" datasources="rdf:null">
+										<template>
+	              			<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Valeur" />
+	              			</menupopup>
+										</template>
+									</menulist>
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+			</hbox>
+			
+			<hbox pack="center" flex="1">
+				<groupbox flex="1" pack="center" align="center">
+					<caption label="Livraison" />
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label value="" />
+								<checkbox id="oef-chkFrancoPort" label="Franco de port" oncommand="oef_pressOnFrancoPort();" />
+							</row>
+							<row align="center">
+								<label value="Montant du franco :" class="label" />
+								<hbox><textbox id="oef-montantFranco" class="nombre" maxlength="8" size="8" oninput="setModifie();" /></hbox>
+							</row>
+							<row align="center">
+								<label value="Frais de port :" class="label" />
+								<hbox align="center">
+									<textbox id="oef-fraisPort" class="nombre" maxlength="8" size="8" oninput="setModifie();" />
+									<button id="oef-bTypePort" oncommand="oef_switchTypePort();" class="bIcoEuro" />
+								</hbox>
+							</row>
+							<row style="height:10px" />
+							<row align="center">
+								<label value="Organisme de livraison :" class="label" />
+								<hbox>
+									<menulist id="oef-Num_Org" ref="http://www.opensi.org/facturation/liste_orgliv" datasources="rdf:null">
+										<menupopup>
+											<menuitem label="[aucun]" value="0" />
+										</menupopup>
+										<template>
+	              			<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_orgliv/rdf#Nom_Org" value="rdf:http://www.opensi.org/facturation/liste_orgliv/rdf#Num_Org" />
+	              			</menupopup>
+										</template>
+	            		</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label value="Bon de livraison chiffré :" class="label" />
+								<radiogroup id="oef-Bon_Chiffre" orient="horizontal">
+									<radio id="oef-BCOui" value="1" label="Oui" />
+									<radio id="oef-BCNon" value="0" label="Non" />
+								</radiogroup>
+							</row>
+							<row align="center">
+								<label value="Nombre d'exemplaires client :" class="label" />
+								<hbox>
+									<menulist id="oef-Nb_Bon">
+										<menupopup>
+											<menuitem label="1" value="1" />
+											<menuitem label="2" value="2" />
+											<menuitem label="3" value="3" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+				</groupbox>
+				
+				<groupbox id="oef-grpMentions" flex="1" collapsed="true" pack="center">
+	   			<caption label="Mentions par défaut" />
+	
+					<listbox flex="1" id="oef-listeMentions" ref="http://www.opensi.org/Facturation/Clients/listeMentionsClient" datasources="rdf:null">
+						<listhead>
+			    		<listheader label="Mention" />
+					 	</listhead>
+						<listcols>
+							<listcol flex="1" />
+			  		</listcols>
+						<template>
+							<listitem uri="rdf:*" value="rdf:http://www.opensi.org/Facturation/Clients/listeMentionsClient/rdf#MentionId" allowevents="true">
+								<listcell type="checkbox" checked="rdf:http://www.opensi.org/Facturation/Clients/listeMentionsClient/rdf#Cocher" label="rdf:http://www.opensi.org/Facturation/Clients/listeMentionsClient/rdf#Libelle" onclick="oef_testCheck(this.parentNode)" />
+							</listitem>
+						</template>
+					</listbox>
+				</groupbox>
+			</hbox>
+		</vbox>
+
+		<observes element="oef-Mode_Reg" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Code_Tarif" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Nb_Ex" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Assujetti_TVA" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="oef-Num_Org" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Activation_CP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="oef-Fact_Sep_FP" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="oef-Type_Reg" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Bon_Chiffre" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Nb_Bon" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Type_Fact" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Mode_Facturation" attribute="checked" onbroadcast="setModifie();" />
+		<observes element="oef-Mode_Envoi_Facture" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-Periode_Facturation" attribute="value" onbroadcast="setModifie();" />
+		<observes element="oef-banqueRemise" attribute="value" onbroadcast="setModifie();" />
+		
+	</tabpanel>
+
+</overlay>

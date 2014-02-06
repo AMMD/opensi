@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_autres_envoiCompta" 
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="export.js" />
+
+  <hbox pack="left" align="center" class="bar_menu">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:60px" />
+	<hbox pack="center">
+    <label value="EXPORT DE DONNEES" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<vbox pack="center" align="right">
+			<hbox><label flex="1" value="Exercice à exporter : " /></hbox>
+			<hbox height="10px" />
+			<hbox><label flex="1" value="Format d'export : " /></hbox>
+		</vbox>
+		<vbox pack="center">
+			<hbox>
+				<menulist id="Exercice" ref="http://www.opensi.org/compta/exercices" datasources="rdf:null"  oncommand="initialiserPeriode();">
+					<template>			
+        		<menupopup>
+          		<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/exercices/rdf#dates" value="rdf:http://www.opensi.org/compta/exercices/rdf#nom_base" />
+        		</menupopup>
+					</template>
+    		</menulist>
+			</hbox>
+			<hbox>
+				<menulist id="Type_Export" ref="http://www.opensi.org/compta/types_export" datasources="rdf:null" oncommand="loadFormats(this.value);">
+					<template>
+        		<menupopup>
+          		<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/types_export/rdf#Nom_Export" value="rdf:http://www.opensi.org/compta/types_export/rdf#Export_Id" />
+        		</menupopup>
+					</template>
+    		</menulist>
+				<menulist id="Format_Export" ref="http://www.opensi.org/compta/formats_export" datasources="rdf:null">
+					<template>
+        		<menupopup>
+          		<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/formats_export/rdf#Nom_Format" value="rdf:http://www.opensi.org/compta/formats_export/rdf#Code_Export" />
+        		</menupopup>
+					</template>
+    		</menulist>
+			</hbox>
+		</vbox>
+	</hbox>
+	
+	<hbox id="Tableur" pack="center" class="auto-overflow">
+		<vbox pack="center">
+			<groupbox pack="center" class="pad_groupbox" id="type">
+				<caption label="1 - Type" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Type">
+								<radio id="TypeG" value="G" label="Général" selected="true" />
+								<radio id="TypeC" value="C" label="Clients" />
+								<radio id="TypeF" value="F" label="Fournisseurs" />
+								<radio id="TypeT" value="T" label="Global" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox pack="center" class="pad_groupbox" id="tab">
+				<caption label="2 - Période" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Periode">
+								<radio id="PeriodeEC" value="ec" label="Exercice courant" selected="true" oncommand="disableDates(true)" />
+								<hbox align="center">
+									<radio id="PeriodeDD" value="dd" label="Date à date" oncommand="disableDates(false)" />
+									<hbox style="width:20px" />
+									<label value="Date de début (jj/mm/aaaa) :" />
+									<textbox id="Date_Debut" maxlength="10" size="10" disabled="true" />
+									<label value="Date de fin (jj/mm/aaaa) :" />
+									<textbox id="Date_Fin" maxlength="10" size="10" disabled="true" />
+								</hbox>
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			<groupbox pack="center" class="pad_groupbox" id="autre">
+				<caption label="Choix" />
+				<grid>
+					<rows>
+						<row>
+						<hbox align="center">
+							<label value="Journal :" />
+							 <menulist id="journal"
+	                  ref="http://www.opensi.org/compta/journaux"
+	                  datasources="rdf:null"               
+	                  onkeypress="keypress(event);">
+			            <menupopup>
+			            	<menuitem label="[TOUS]" value="0"/>
+			            </menupopup>
+	         			 <template>
+			            <menupopup>
+			              <menuitem uri="rdf:*"
+			                        label="rdf:http://www.opensi.org/compta/journaux/rdf#libelle"
+			                        value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+			            </menupopup>
+			          </template>
+			        </menulist>
+			       </hbox>
+		        </row>
+		        <row>
+							<radiogroup id="Periode2">
+								<radio value="ec" label="Exercice courant" selected="true" oncommand="disableDates(true)" />
+								<hbox align="center">
+								<radio value="pp" label="De la période :" oncommand="disableDates(true)" />								
+					        <menulist id="periode_initiale"
+					                  ref="http://www.opensi.org/compta/getperiodes"
+					                  datasources="rdf:null"              
+					                  onkeypress="keypress(event);">
+					          <template>
+					            <menupopup>
+					              <menuitem uri="rdf:*"
+					                        label="rdf:http://www.opensi.org/compta/getperiodes/rdf#lettres"
+					                        value="rdf:http://www.opensi.org/compta/getperiodes/rdf#chiffres" />
+					            </menupopup>
+					          </template>
+					        </menulist>    
+					      
+					      <label value="à la période : " />
+					      <menulist id="periode_fin"
+					                  ref="http://www.opensi.org/compta/getperiodes"
+					                  datasources="rdf:null"              
+					                  onkeypress="keypress(event);">
+					          <template>
+					            <menupopup>
+					              <menuitem uri="rdf:*"
+					                        label="rdf:http://www.opensi.org/compta/getperiodes/rdf#lettres"
+					                        value="rdf:http://www.opensi.org/compta/getperiodes/rdf#chiffres" />
+					            </menupopup>
+					          </template>
+					     </menulist>    
+								</hbox>
+							</radiogroup>
+						</row>
+						<row>
+							<hbox align="center">
+								<label value="N° Ecriture : de" />
+								<textbox id="Debut_Ecriture" maxlength="10" size="10" />
+								<label value="à :" />
+								<textbox id="Fin_Ecriture" maxlength="10" size="10" />
+							</hbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</vbox>
+	</hbox>
+	
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<button id="bExporter" class="bExporter" label="Exporter" oncommand="exporter()" />
+  </hbox>	
+	<hbox style="height:60px" />
+	<vbox id="progression" align="center" collapsed="true">
+		<label value="Veuillez patienter..." />
+		<hbox style="height:30px" />
+		<progressmeter id="pm" />
+	</vbox>
+  
+</window>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_menu"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+	<script src="menu.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+		
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+      <button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+    </hbox>
+	</hbox>
+
+  <hbox pack="center" align="center">
+    <label value="Dossier :" />
+    <textbox id="dossier" onkeypress="keypress(event,'dossier')" />
+    <button class="bValider" id="ok" label="Ok" default="true" oncommand="ok();" />
+  </hbox>
+
+  <hbox flex="1">
+    <tree id="tree01"
+          ref="http://www.opensi.org/compta/dossiers"
+          seltype="single"
+          datasources="rdf:null"
+          flex="1"
+					hidecolumnpicker="true"
+          onkeypress="keypress(event,'dossier')"
+          ondblclick="ok()"
+          onselect="reporter(this)" >
+      <treecols>
+        <treecol id="num" flex="1" label="Identifiant dossier" sort="rdf:http://www.opensi.org/compta/dossiers/rdf#id" />
+				<splitter class="tree-splitter" />
+        <treecol id="lib" flex="2" label="Nom dossier" sort="rdf:http://www.opensi.org/compta/dossiers/rdf#libelle" />
+      </treecols>
+
+      <template>
+        <treechildren>
+          <treeitem uri="rdf:*">
+            <treerow>
+              <treecell label="rdf:http://www.opensi.org/compta/dossiers/rdf#id" />
+              <treecell label="rdf:http://www.opensi.org/compta/dossiers/rdf#libelle" />
+            </treerow>
+          </treeitem>
+        </treechildren>
+      </template>
+    </tree>
+  </hbox>
+
+</window>

@@ -1,0 +1,33 @@
+<html>
+<title>Mise &agrave; jour OpenSi</title>
+<script src="libs/util.js"></script>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function init() {
+  try {
+    document.getElementById("url").href = ParamValeur("urlupdate");
+    var innerHTML = "<br><br><br><br><br>";
+    innerHTML += "Une nouvelle mise &agrave; jour OpenSi est disponible (version "+ ParamValeur("versionServeur") +")<br><br>";
+		innerHTML += "Veuillez cliquer sur le lien ci-dessous pour installer cette mise &agrave; jour,<br>";
+		innerHTML += "puis <b>relancez</b> OpenSi une fois l'installation effectu&eacute;e :";
+    innerHTML += "<br><br><br>";
+    
+    document.getElementById("texte").innerHTML = innerHTML;
+  } catch (e) {
+    alert("erreur dans update.html : "+ e);
+  }
+}
+//-->
+</script>
+<body bgcolor="#EEEEEE" marginheight="0" marginwidth="0" style="background:url(design/login.jpg) no-repeat;color:#FFFFFF;font-size:9pt">
+<div id="texte" style="padding-left:10px;padding-top:150px"></div>
+<center>
+	<a style="color:#FFFFFF;font-size:11pt" id="url"><u>Mettre &agrave; jour OpenSi</u></a>
+</center>
+</body>
+<script language="JavaScript" type="text/JavaScript">
+<!--
+init();
+//-->
+</script>
+</html>

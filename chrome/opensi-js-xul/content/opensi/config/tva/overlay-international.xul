@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_tva_overlay-international"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-international.js" />
+
+	<tabpanel id="tab-international">
+
+  	<vbox pack="start" flex="1" class="auto-overflow">
+
+			<tree id="oi-listeInternational"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/config/liste-tauxInternational"
+      	datasources="rdf:null"
+				onselect="oi_reporter()"
+				height="250px">
+
+    		<treecols>
+      		<treecol id="oi-ColPays" flex="1" label="Pays" />
+      		<treecol id="oi-ColCompte_Achat" flex="1" label="Compte d'achat" />
+					<treecol id="oi-ColCompte_Vente" flex="1" label="Compte de vente" />
+					<treecol id="oi-ColCode_TVA" collapsed="true" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/config/liste-tauxInternational/rdf#Pays" />
+            		<treecell label="rdf:http://www.opensi.org/config/liste-tauxInternational/rdf#Compte_Achat" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-tauxInternational/rdf#Compte_Vente" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-tauxInternational/rdf#Code_TVA" />        		
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+  		
+			<box style="height:20px" />
+	
+			<hbox pack="center">
+  			<grid>
+    			<columns>
+      			<column />
+      			<column />
+    			</columns>
+    			<rows>
+    				<row align="center">
+        			<label class="label" value="Pays :" />
+							<textbox id="oi-Pays" size="30" disabled="true" />
+      			</row>
+      			<row align="center">
+        			<label class="label" value="Compte d'achat :" />
+        			<textbox id="oi-Compte_Achat" maxlength="8" size="9" disabled="true" />
+							<button class="bIcoRechercher" oncommand="changerCompte('oi-Compte_Achat','6','ACHAT');" />
+      			</row>
+						<row align="center">
+        			<label class="label" value="Compte de vente :" />
+        			<textbox id="oi-Compte_Vente" maxlength="8" size="9" disabled="true" />
+							<button class="bIcoRechercher" oncommand="changerCompte('oi-Compte_Vente','7','VENTE');" />
+      			</row>
+					</rows>
+  			</grid>
+			</hbox>
+
+			<box style="height:20px" />
+
+			<hbox pack="center">
+				<button id="oi-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oi_enregistrerComptes()" />
+  		</hbox>
+			
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

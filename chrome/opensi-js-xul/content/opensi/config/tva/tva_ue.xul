@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_tva_tvaUE"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="tva_ue.js" />
+  
+  <hbox pack="center" flex="1">
+		<tabbox flex="1">
+			<tabs>
+      	<tab label="Taux européens" />
+      	<tab label="Taux nationaux pour l'Europe" />
+    	</tabs>
+  		<tabpanels flex="1">
+    		<tabpanel>
+    			<vbox flex="1">
+						<tree id="liste_TVA"
+					      hidecolumnpicker="true"
+					      seltype="single"
+					      ref="http://www.opensi.org/Config/listeTauxTva"
+					      datasources="rdf:null"
+								onselect="reporter()"
+								height="250px">
+					
+					    <treecols>
+					    	<treecol id="ColPays" flex="1" label="Pays"/>
+					      <treecol id="ColTaux_TVA" flex="1" label="Taux de TVA"/>
+					      <treecol id="ColCompte_TVA_Vente" flex="1" label="Compte TVA vente" />
+					      <treecol id="ColCompte_Achat" flex="1" label="Compte d'achat" />
+								<treecol id="ColCompte_Vente" flex="1" label="Compte de vente" />
+								<treecol id="ColCode_TVA" collapsed="true" />
+								<treecol id="ColCode_Pays" collapsed="true" />
+								<treecol id="ColNormal" collapsed="true" />
+					    </treecols>
+					    <template>
+					      <treechildren>
+					        <treeitem uri="rdf:*">
+					          <treerow>
+					          	<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Pays" />
+					            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Taux_TVA" />
+					            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_TVA_Vente" />
+					            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_Achat" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_Vente" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Code_TVA" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Code_Pays" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Normal" />
+					          </treerow>
+					        </treeitem>
+					      </treechildren>
+					    </template>
+					  </tree>
+						
+					  <box style="height:20px" />
+						
+						<hbox pack="center">
+					  	<grid>
+					    	<columns>
+					      	<column />
+					      	<column />
+					    	</columns>
+					    	<rows>
+					    		<row align="center">
+					        	<label class="label" value="Pays :" />
+										<menulist id="Pays_UE" ref="http://www.opensi.org/Config/listePaysUE" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Pays UE]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listePaysUE/rdf#Pays" value="rdf:http://www.opensi.org/Config/listePaysUE/rdf#Code_Pays" />
+												</menupopup>
+											</template>
+										</menulist>
+					      	</row>
+					      	<row id="Row_Taux_TVA" align="center">
+					        	<label class="label" value="Taux TVA :" />
+										<textbox id="Taux_TVA" maxlength="5" size="6" />
+					      	</row>
+									<row id="Row_Compte_TVA_Ventes" align="center">
+					        	<label class="label" value="Compte TVA associé aux ventes :" />
+					        	<textbox id="Compte_TVA_Vente" maxlength="8" size="9" disabled="true" />
+										<button class="bIcoRechercher" oncommand="changerCompte('Compte_TVA_Vente', '44537', 'TVA');" />
+					      	</row>
+					      	<row align="center">
+					        	<label class="label" value="Compte d'achat :" />
+					        	<textbox id="Compte_Achat" maxlength="8" size="9" disabled="true" />
+										<button class="bIcoRechercher" oncommand="changerCompte('Compte_Achat', '6', 'ACHAT');" />
+					      	</row>
+									<row align="center">
+					        	<label class="label" value="Compte de vente :" />
+					        	<textbox id="Compte_Vente" maxlength="8" size="9" disabled="true" />
+										<button class="bIcoRechercher" oncommand="changerCompte('Compte_Vente', '7', 'VENTE');" />
+					      	</row>
+								</rows>
+					  	</grid>
+						</hbox>				
+						<box style="height:20px" />				
+						<hbox pack="center">
+							<button id="bAjouter" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerTVA()" />
+							<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierTVA()"	collapsed="true" />
+							<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerTVA()" collapsed="true" />
+							<button id="bNouveau"	class="bNouveau"	label="Nouveau" oncommand="nouvelleTVA()" collapsed="true" />
+					  </hbox>
+					</vbox>
+    		</tabpanel>
+    		
+    		<tabpanel>
+    			<vbox flex="1">
+						<tree id="liste_TVA_Nat_UE"
+					      hidecolumnpicker="true"
+					      seltype="single"
+					      ref="http://www.opensi.org/Config/listeTauxTvaNatUE"
+					      datasources="rdf:null"
+					      onselect="reporterNatUE()"
+								height="250px">
+					
+					    <treecols>
+					    	<treecol id="ColPays_Nat_UE" flex="1" label="Pays"/>
+					      <treecol id="ColTaux_TVA_Nat_UE" flex="1" label="Taux de TVA"/>
+								<treecol id="ColCompte_Vente_Nat_UE" flex="1" label="Compte vente" />
+								<treecol id="ColCode_TVA_Nat_UE" collapsed="true" />
+								<treecol id="ColCode_Pays_Nat_UE" collapsed="true" />
+					    </treecols>
+					    <template>
+					      <treechildren>
+					        <treeitem uri="rdf:*">
+					          <treerow>
+					          	<treecell label="rdf:http://www.opensi.org/Config/listeTauxTvaNatUE/rdf#Pays" />
+					            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTvaNatUE/rdf#Taux_TVA" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTvaNatUE/rdf#Compte_Vente" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTvaNatUE/rdf#Code_TVA" />
+											<treecell label="rdf:http://www.opensi.org/Config/listeTauxTvaNatUE/rdf#Code_Pays" />
+					          </treerow>
+					        </treeitem>
+					      </treechildren>
+					    </template>
+					  </tree>
+					  
+					  <box style="height:20px" />
+	
+						<hbox pack="center">
+			  			<grid>
+			    			<columns>
+			      			<column />
+			      			<column />
+			    			</columns>
+			    			<rows>
+			    				<row align="center">
+			        			<label class="label" value="Pays :" />
+										<textbox id="Pays_Nat_UE" size="30" disabled="true" />
+			      			</row>
+									<row align="center">
+			        			<label class="label" value="Compte de vente :" />
+			        			<textbox id="Compte_Vente_Nat_UE" maxlength="8" size="9" disabled="true" />
+										<button class="bIcoRechercher" oncommand="changerCompte('Compte_Vente_Nat_UE','7','VENTE');" />
+			      			</row>
+								</rows>
+			  			</grid>
+						</hbox>
+			
+						<box style="height:20px" />
+			
+						<hbox pack="center">
+							<button id="bEnregistrer_Nat_UE" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerComptesNatUE()" />
+			  		</hbox>
+					</vbox>					
+    		</tabpanel>
+			</tabpanels>
+		</tabbox>
+	</hbox>
+</window>

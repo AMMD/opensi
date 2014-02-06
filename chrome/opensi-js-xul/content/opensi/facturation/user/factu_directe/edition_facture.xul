@@ -1,0 +1,868 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_factuDirecte_editionFacture"
+  onload="init();"
+	onunload="desinit();"
+	onkeypress="pressOnWindow(event);"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="edition_facture.js" />
+
+	<box class="rv_pop" id="rv" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="demandeEnregistrement();retour_menu_principal();" />
+			<button class="bouton_menu" id="bMenuFactures" oncommand="demandeEnregistrement();retour_factures();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="demandeEnregistrement();quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+  <vbox flex="1" class="auto-overflow">
+	  <hbox>
+	  	<tabbox flex="1" pack="center">
+				<tabs>
+					<tab label="Facture" id="tabFacture" />
+					<tab label="Versions" id="tabVersionDocument" collapsed="true" />
+				</tabs>
+				<tabpanels flex="1">
+	    		<tabpanel pack="center" align="start" orient="horizontal">
+						<grid>
+							<columns>
+			        	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			         	<row align="center">
+			          	<label class="label" value="N° Facture :" />
+			           	<label id="Numero" />
+			         	</row>
+								<row align="center">
+			          	<label class="label" value="Date facture :" />
+			           	<label id="Date_Facture" />
+			          </row>
+			          <row align="center">
+			          	<label value="Pôle d'activité :" class="label" />
+			          	<hbox>
+			        			<menulist id="Secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px" oncommand="setModifie(true);">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+											</menupopup>
+											<template>
+			          				<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+			          				</menupopup>
+											</template>
+			        			</menulist>
+			          	</hbox>
+			          </row>
+			          <row align="center">
+									<label class="label" value="Mode d'envoi de la facture :" />
+									<hbox>
+										<menulist id="modeEnvoiFacture" oncommand="setModifie(true);">
+					            <menupopup>
+												<menuitem label="Courrier" value="C" />
+												<menuitem label="Fax" value="F" />
+												<menuitem label="Mail" value="M" />
+					            </menupopup>
+					        	</menulist>
+					        </hbox>
+				        </row>
+							</rows>
+						</grid>
+						
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+			            <label value="N° Client :" class="label" />
+			            <hbox>
+				            <label id="Client_Id" value="" collapsed="true" />
+				            <label id="labelClient" />
+				          </hbox>
+			          </row>
+								<row align="center">
+			           	<label class="label" value="Responsable :" />
+								 	<hbox>
+										<menulist id="Login_Resp" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+			             		</menupopup>
+											<template>
+			              		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+			              		</menupopup>
+											</template>
+			            	</menulist>
+									</hbox>
+			         	</row>
+			  			  <row align="center" id="row_tarif">
+			 			  	  <label value="Code tarifaire :" class="label" />
+				  			  <hbox>
+			  			  	  <menulist id="Code_Tarif" ref="http://www.opensi.org/facturation/liste_types_tarifs" datasources="rdf:null" oncommand="setModifie(true);">
+			 			  				<template>
+			             			<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Valeur" />
+			             			</menupopup>
+											</template>
+				  				  </menulist>
+			  				  </hbox>
+			 				  </row>
+			 				  <row align="center">
+			            <label value="" />
+			            <checkbox id="Assujetti_TVA" label="Assujetti à la TVA" oncommand="changerAssujettiTVA(this.checked); calculerTvaPort();" />
+			          </row>
+			          <row align="center">
+			            <label class="label" value="N° TVA :" />
+			            <textbox id="Num_TVA" maxlength="14" size="14" oninput="setModifie(true);" />
+			          </row>
+			          <row align="center">
+			  			  	<label value="Application de la TVA :" class="label" />
+					  			<hbox>
+				  			  	<menulist id="Regime_TVA" oncommand="calculerTvaPort(); listeTVA(); setModifie(true);">
+			  			  			<menupopup>
+						  					<menuitem label="Régime général de TVA" value="G" />
+					  					  <menuitem label="Forcer l'application de la TVA" value="T" />
+				  					  	<menuitem label="Forcer l'exonération de TVA" value="E" />
+						  				</menupopup>
+					  				</menulist>
+				  				</hbox>
+			  				</row>
+								<row align="center">
+									<label value="" />
+									<checkbox id="Edition_TTC" label="Edition en TTC" oncommand="changerTypeEdition(this.checked);" />
+								</row>
+							</rows>
+						</grid>
+					</tabpanel>
+					<tabpanel flex="1" pack="center" orient="vertical">
+						<tree id="listeVersion"
+							hidecolumnpicker="true"
+			        seltype="single"
+			        ref="http://www.opensi.org/facturation/historiqueEditions"
+			        datasources="rdf:null"
+			        flex="1">
+					    <treecols>
+					      <treecol flex="1" label="N° Edition" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Date d'édition" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Login" />
+								<splitter class="tree-splitter" />
+								<treecol flex="1" label="Envoyé à" />
+					    </treecols>
+					    <template>
+					      <treechildren>
+					        <treeitem uri="rdf:*">
+					          <treerow>
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#numVersion" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#dateEdition" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#editeur" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/historiqueEditions/rdf#email" />
+					          </treerow>
+					        </treeitem>
+					      </treechildren>
+					    </template>
+					  </tree>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+	
+	    <tabbox flex="1" pack="center">
+				<tabs>
+	      	<tab label="Facturation" />
+	      	<tab label="Livraison" />
+	      	<tab label="Envoi" />
+	     	</tabs>
+	  		<tabpanels flex="1">
+	    		<tabpanel pack="center" align="start" orient="horizontal">
+			      <grid>
+			        <columns>
+			        	<column />
+			         	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			         	<row align="center">
+			          	<label class="label" value="Raison sociale :" />						
+			    				<hbox>
+										<textbox id="Denomination_Fact" maxlength="50" size="40" oninput="setModifie(true);" />
+										<button id="chercher_client" class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="rechercherClient();" flex="1" />
+									</hbox>
+									<label value="" />
+			         	</row>
+			         	<row align="center">
+			          	<label class="label" value="Adresse :" />
+			   				  <textbox id="Adresse_1_Fact" maxlength="80" size="30" oninput="setModifie(true);" />
+			   				  <hbox align="center">
+										<button id="chercher_adrfact" class="bIcoEnveloppe" tooltiptext="changer l'adresse de facturation" oncommand="rechercherAdrFact();" />
+									</hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			      			<hbox>
+										<textbox id="Adresse_2_Fact" maxlength="50" flex="1" oninput="setModifie(true);" />
+										<textbox id="Adresse_3_Fact" maxlength="50" flex="1" oninput="setModifie(true);" />
+									</hbox>
+									<label value="" />
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Code postal :" />
+									<hbox align="center">
+			      				<textbox id="Code_Postal_Fact" class="rv_cp" idville="Ville_Fact" idnextfocus="Code_Pays_Fact" maxlength="10" size="6" oninput="setModifie(true);" />
+			            	<label class="label" value="Ville :" />
+			            	<textbox id="Ville_Fact" class="rv_ville" idcp="Code_Postal_Fact" idnextfocus="Code_Pays_Fact" maxlength="50" size="30" oninput="setModifie(true);" />
+			          	</hbox>
+			          	<label value="" />
+			          </row>
+								<row align="center">
+			            <label class="label" value="Pays :" />
+			            <hbox>
+			            	<menulist id="Code_Pays_Fact" oncommand="setModifie(true);" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+										<template>
+			             		<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+			             		</menupopup>
+										</template>
+										</menulist>
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center" id="row_inter_fact">
+			            <label class="label" value="Contact :" />
+									<hbox>
+										<menulist id="Civ_Inter_Fact" oncommand="setModifie(true);">
+											<menupopup>
+			                  <menuitem label="" value="0" />
+												<menuitem label="M." value="1" />
+												<menuitem label="Mme" value="2" />
+												<menuitem label="Mlle" value="3" />
+											</menupopup>
+										</menulist>
+										<hbox align="center">
+			              	<textbox id="Nom_Inter_Fact" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="setModifie(true);" />
+											<textbox id="Prenom_Inter_Fact" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="setModifie(true);" />
+										</hbox>
+			            </hbox>
+			            <hbox align="center">
+										<button id="chercher_inter" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurFact();" />
+									</hbox>
+			          </row>
+							  <row align="center" id="row_telfax_fact">
+			            <label class="label" value="Tél :" />
+									<hbox align="center">
+			              <textbox id="Tel_Inter_Fact" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="setModifie(true);" />
+			             	<label class="label" value="Fax :" />
+			              <textbox id="Fax_Inter_Fact" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="setModifie(true);" />
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center" id="row_email_fact">
+			            <label class="label" value="Email :" />
+			           	<textbox id="Email_Inter_Fact" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="setModifie(true);" />
+			           	<hbox align="center">
+										<button id="bCopierFactVersLivEnvoi" class="bIcoCopierAdr" tooltiptext="Reporter les coordonnées en envoi et livraison" oncommand="copierFactVersLivEnvoi();" />
+									</hbox>
+			          </row>
+			        </rows>
+			      </grid>
+	    		</tabpanel>
+	
+					<tabpanel pack="center" align="start" orient="horizontal">
+			      <grid>
+			        <columns>
+			        	<column />
+			         	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			         	<row align="center">
+			          	<label class="label" value="Raison sociale :" />						
+			    				<hbox><textbox id="Denomination_Liv" maxlength="50" size="40" oninput="setModifie(true);" /></hbox>
+			    				<label value="" />
+			         	</row>
+			         	<row align="center">
+			          	<label class="label" value="Adresse :" />
+			   				  <textbox id="Adresse_1_Liv" maxlength="80" size="30" oninput="setModifie(true);" />
+			   				  <hbox align="center">
+										<button id="chercher_adrliv" class="bIcoEnveloppe" tooltiptext="changer l'adresse de livraison" oncommand="rechercherAdrLiv();" />
+									</hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			      			<hbox>
+										<textbox id="Adresse_2_Liv" maxlength="50" flex="1" oninput="setModifie(true);" />
+										<textbox id="Adresse_3_Liv" maxlength="50" flex="1" oninput="setModifie(true);" />
+									</hbox>
+									<label value="" />
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Code postal :" />
+									<hbox align="center">
+			      				<textbox id="Code_Postal_Liv" class="rv_cp" idville="Ville_Liv" idnextfocus="Code_Pays_Liv" maxlength="10" size="6" oninput="setModifie(true);" />
+			            	<label class="label" value="Ville :" />
+			            	<textbox id="Ville_Liv" class="rv_ville" idcp="Code_Postal_Liv" idnextfocus="Code_Pays_Liv" maxlength="50" size="30" oninput="setModifie(true);" />
+			          	</hbox>
+			          	<label value="" />
+			          </row>
+								<row align="center">
+			            <label class="label" value="Pays :" />
+			            <hbox>
+			            	<menulist id="Code_Pays_Liv"  style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="calculerTvaPort(); selectPaysLiv(); setModifie(true);">
+											<template>
+				             		<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+				             		</menupopup>
+											</template>
+										</menulist>
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center" id="row_inter_liv">
+			            <label class="label" value="Contact :" />
+									<hbox>
+										<menulist id="Civ_Inter_Liv" oncommand="setModifie(true);">
+											<menupopup>
+			                  <menuitem label="" value="0" />
+												<menuitem label="M." value="1" />
+												<menuitem label="Mme" value="2" />
+												<menuitem label="Mlle" value="3" />
+											</menupopup>
+										</menulist>
+										<hbox align="center">
+			              	<textbox id="Nom_Inter_Liv" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="setModifie(true);" />
+											<textbox id="Prenom_Inter_Liv" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="setModifie(true);" />
+										</hbox>
+			            </hbox>
+			            <hbox align="center">
+										<button id="chercher_inter_liv" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurLiv();" />
+									</hbox>
+			          </row>
+							  <row align="center" id="row_telfax_liv">
+			            <label class="label" value="Tél :" />
+									<hbox align="center">
+			              <textbox id="Tel_Inter_Liv" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="setModifie(true);" />
+			             	<label class="label" value="Fax :" />
+			              <textbox id="Fax_Inter_Liv" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="setModifie(true);" />
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center" id="row_email_liv">
+			            <label class="label" value="Email :" />
+			           	<textbox id="Email_Inter_Liv" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="setModifie(true);" />
+			           	<label value="" />
+			          </row>
+			        </rows>
+			      </grid>
+	    		</tabpanel>
+	    		
+	    		<tabpanel pack="center" align="start" orient="horizontal">
+			      <grid>
+			        <columns>
+			        	<column />
+			         	<column />
+			         	<column />
+			       	</columns>
+			       	<rows>
+			         	<row align="center">
+			          	<label class="label" value="Raison sociale :" />						
+			    				<hbox><textbox id="Denomination_Envoi" maxlength="50" size="40" oninput="setModifie(true);" /></hbox>
+			    				<label value="" />
+			         	</row>
+			         	<row align="center">
+			          	<label class="label" value="Adresse :" />
+			   				  <textbox id="Adresse_1_Envoi" maxlength="80" size="30" oninput="setModifie(true);" />
+			   				  <hbox align="center">
+										<button id="chercher_adrenvoi" class="bIcoEnveloppe" tooltiptext="changer l'adresse d'envoi" oncommand="rechercherAdrEnvoi();" />
+									</hbox>
+			          </row>
+								<row align="center">
+			            <label class="label" value="" />
+			      			<hbox>
+										<textbox id="Adresse_2_Envoi" maxlength="50" flex="1" oninput="setModifie(true);" />
+										<textbox id="Adresse_3_Envoi" maxlength="50" flex="1" oninput="setModifie(true);" />
+									</hbox>
+									<label value="" />
+			          </row>
+			          <row align="center">
+			            <label class="label" value="Code postal :" />
+									<hbox align="center">
+			      				<textbox id="Code_Postal_Envoi" class="rv_cp" idville="Ville_Envoi" idnextfocus="Code_Pays_Envoi" maxlength="10" size="6" oninput="setModifie(true);" />
+			            	<label class="label" value="Ville :" />
+			            	<textbox id="Ville_Envoi" class="rv_ville" idcp="Code_Postal_Envoi" idnextfocus="Code_Pays_Envoi" maxlength="50" size="30" oninput="setModifie(true);" />
+			          	</hbox>
+			          	<label value="" />
+			          </row>
+								<row align="center">
+			            <label class="label" value="Pays :" />
+			            <hbox>
+			            	<menulist id="Code_Pays_Envoi" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="setModifie(true);">
+										<template>
+			             		<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+			             		</menupopup>
+										</template>
+										</menulist>
+			            </hbox>
+			            <label value="" />
+			          </row>
+			          <row align="center" id="row_inter_envoi">
+			            <label class="label" value="Contact :" />
+									<hbox>
+										<menulist id="Civ_Inter_Envoi" oncommand="setModifie(true);">
+											<menupopup>
+			                  <menuitem label="" value="0" />
+												<menuitem label="M." value="1" />
+												<menuitem label="Mme" value="2" />
+												<menuitem label="Mlle" value="3" />
+											</menupopup>
+										</menulist>
+										<hbox align="center">
+			              	<textbox id="Nom_Inter_Envoi" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="setModifie(true);" />
+											<textbox id="Prenom_Inter_Envoi" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="setModifie(true);" />
+										</hbox>
+			            </hbox>
+			            <hbox align="center">
+										<button id="chercher_inter_envoi" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurEnvoi();" />
+									</hbox>
+			          </row>
+							  <row align="center" id="row_telfax_envoi">
+			            <label class="label" value="Tél :" />
+									<hbox align="center">
+			              <textbox id="Tel_Inter_Envoi" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="setModifie(true);" />
+			             	<label class="label" value="Fax :" />
+			              <textbox id="Fax_Inter_Envoi" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="setModifie(true);" />
+			            </hbox>
+			            <label value="" />
+			          </row>
+							  <row align="center" id="row_email_envoi">
+			            <label class="label" value="Email :" />
+			           	<textbox id="Email_Inter_Envoi" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="setModifie(true);" />
+			           	<label value="" />
+			          </row>
+			        </rows>
+			      </grid>
+	    		</tabpanel>
+	  		</tabpanels>
+			</tabbox>
+	
+		</hbox>
+	
+    <vbox flex="1">
+    	<hbox flex="1">
+	    	<tree id="articles"
+	            flex="1"
+	            style="min-height: 100px;"
+							flags="dont-build-content"
+	            seltype="single"
+	            ref="http://www.opensi.org/facturation/articles_facture"
+	            datasources="rdf:null"
+							ondblclick="ouvrirCommentaire();"
+							onselect="ouvrirLigne();"
+	            width="800px">
+	
+	        <treecols>
+	        	<treecol id="ColCode_Stats" label="CS" tooltiptext="Code Statistiques" flex="1" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColReference" label="Référence" flex="2" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColDesignation" label="Désignation" flex="5" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColNum_Lot" label="N° Lot" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColNb_Pieces" label="Nb Pièces" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColQuantite" label="Quantité" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColUnite" label="Unité" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColDate_Peremption" label="DLC" tooltiptext="Date Limite de Consommation" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColPU" label="P.U HT" flex="2" style="text-align:right" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColRistourne" label="Ristourne (%)" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColTauxCommission" label="Com. (%)" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="ColMontantCommission" label="Montant Com." flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="colMarge" label="Marge" hidden="true" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol id="colPrixAchat" label="Prix d'achat" hidden="true" flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+	          <treecol id="ColTotal" label="Total HT" flex="2" style="text-align:right" />
+	          <splitter class="tree-splitter" />
+						<treecol label="Taux TVA" flex="1" style="text-align:right" hidden="true" />
+						<treecol id="ColCode_TVA" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ColType_Ligne" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ColLigne_Id" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="ColLibelle" collapsed="true" ignoreincolumnpicker="true" />
+	        </treecols>
+	        <template>
+	        	<treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	              	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Code_Stats" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Reference" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Designation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Num_Lot" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Nb_Pieces" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Quantite" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Unite" />
+	              	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Date_Peremption" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Prix" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Ristourne" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Taux_Commission" />
+				        	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Montant_Commission" />
+				        	<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Marge_HT" />
+			            <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Prix_Achat" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Total" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Taux_TVA" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Code_TVA" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Type_Ligne" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Ligne_Id" />
+									<treecell label="rdf:http://www.opensi.org/facturation/articles_facture/rdf#Libelle" />
+	              </treerow>
+	            </treeitem>
+	        	</treechildren>
+	        </template>
+	      </tree>
+	      <vbox>
+		    	<button class="bIcoFlecheHaut" id="bFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="deplacerLigneHaut();" />
+		    	<button class="bIcoFlecheBas" id="bFlecheBas" tooltiptext="déplacer vers le bas" oncommand="deplacerLigneBas();" />
+		    </vbox>
+			</hbox>
+
+			<grid>
+				<rows>
+					<row />
+					<row />
+				</rows>
+				<columns>
+					<column id="Act_Code_Stats">
+						<hbox align="end"><label value="CS :" tooltiptext="Code Statistiques" /></hbox>
+						<hbox><textbox id="Code_Stats" maxlength="10" size="7" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label id="labelRef" value="Référence :" /></hbox>
+						<hbox><textbox id="Reference" maxlength="40" size="15" onkeypress="pressOnReference(event);" /></hbox>
+					</column>
+					<column flex="1">
+						<hbox align="end"><label value="Désignation :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Designation" flex="1" maxlength="100" style="margin-left:0px" /></hbox>
+					</column>
+					<column id="Produit_Frais_1">
+						<hbox align="end"><label value="N° Lot :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Num_Lot" maxlength="15" size="10" style="margin-left:0px" /></hbox>
+					</column>
+					<column id="Produit_Frais_2">
+						<hbox align="end"><label value="Nb Pc :" tooltiptext="Nombre de Pièces" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Nb_Pieces" maxlength="15" size="6" style="margin-left:0px" class="nombre" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Qté :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Quantite" maxlength="15" size="7" style="margin-left:0px" class="nombre" onkeypress="pressOnQuantite(event);" /></hbox>
+					</column>
+					<column id="Produit_Frais_3">
+						<hbox align="end"><label class="label" value="Unité :" style="margin-left:0px" /></hbox>
+	        	<hbox>
+							<menulist id="Unite" ref="http://www.opensi.org/facturation/unites_vente" datasources="rdf:null" style="margin-left:0px">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" value="rdf:http://www.opensi.org/facturation/unites_vente/rdf#Unite" />
+									</menupopup>
+								</template>
+							</menulist>
+						</hbox>
+					</column>
+					<column id="Produit_Frais_4">
+						<hbox align="end"><label value="DLC :" tooltiptext="Date Limite de Consommation" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Date_Peremption" maxlength="10" size="8" style="margin-left:0px" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label id="lblPU" value="P.U HT :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="PU" maxlength="16" size="14" style="margin-left:0px" class="nombre" onkeypress="evaluer(this, event);" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label value="Ristourne :" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Ristourne" maxlength="15" size="8" style="margin-left:0px" class="nombre" /></hbox>
+					</column>
+					<column id="ActCommission">
+						<hbox align="end"><label value="Com. % :" tooltiptext="Taux de commission sur l'article" style="margin-left:0px" /></hbox>
+						<hbox><textbox id="Commission" maxlength="15" size="7" style="margin-left:0px" class="nombre" /></hbox>
+					</column>
+					<column>
+						<hbox align="end"><label class="label" value="Tva :" style="margin-left:0px" /></hbox>
+        		<hbox>
+							<menulist id="Code_TVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null" style="margin-left:0px">
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" style="font-size:80%;padding-left:0px" label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA" value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA" />
+									</menupopup>
+								</template>
+							</menulist>
+						</hbox>
+					</column>
+					<column>
+						<hbox align="center">
+							<button id="bArticle" class="bIcoRechercher" tooltiptext="rechercher un article" oncommand="rechercherStock();" style="margin-left:0px" flex="1" />
+							<button id="bCommentaire" class="bIcoCommentaire" tooltiptext="éditer les commentaires sur ligne" oncommand="editerCommentaire();" style="margin-left:0px" flex="1" />
+						</hbox>
+						<hbox>
+							<button id="bAnnuler" class="bIcoAnnuler" tooltiptext="annuler la ligne" oncommand="annulerLigne();" style="margin-left:0px" />
+							<button id="bValider" class="bIcoValider" tooltiptext="valider la ligne" oncommand="validerLigne();" style="margin-left:0px" />
+							<button id="bSupprimer" class="bIcoSupprimer" tooltiptext="supprimer la ligne" oncommand="supprimerLigne();" style="margin-left:0px" />
+						</hbox>
+					</column>
+				</columns>
+			</grid>
+
+		</vbox>
+	
+		<hbox>
+	
+			<groupbox flex="1" pack="center" align="center">
+				<caption label="Commentaires" />
+	      <vbox pack="center">
+	        <grid>
+		       	<columns>
+		        	<column />
+		         	<column />
+		       	</columns>
+		       	<rows>
+		       		<row align="center">
+		       			<label value="Commentaires de fin de facture :" />
+		       			<label value="Commentaires non imprimables :" />
+		       		</row>
+		       		<row align="center">
+		       			<textbox id="Commentaires_Fin" multiline="true" cols="35" rows="6" oninput="setModifie(true);" />
+		       			<textbox id="Commentaires_Int" multiline="true" cols="35" rows="6" oninput="setModifie(true);" />
+		       		</row>
+		       	</rows>
+		      </grid>
+		      <box style="height:5px" />
+					<hbox pack="center">
+						<button id="bOuvrirCommentairesCaches" tooltiptext="Editer les commentaires internes" class="bIcoCommentaireHid" oncommand="editerCommentairesCaches();" />
+						<button id="bChoisirMentions" tooltiptext="Sélectionner les mentions" class="bIcoMentions" oncommand="choisirMentions();" />
+					</hbox>
+					<box style="height:5px" />
+	      </vbox>
+			</groupbox>
+			<groupbox flex="1" pack="center" align="center">
+				<caption label="Paramètres" />
+				<command id="maj" oncommand="calculTotaux();" />
+				<grid>
+	       	<columns>
+	        	<column />
+	         	<column />
+	       	</columns>
+	       	<rows>
+						<row align="center">
+							<label class="label" value="Echéance :" />
+							<hbox><textbox id="Echeance" maxlength="10" size="10" oninput="setModifie(true);" /></hbox>
+						</row>
+						<row align="center">
+							<label value="Mode de règlement :" class="label" />
+							<hbox align="center">
+								<menulist id="Mode_Reg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" oncommand="setModifie(true);">
+									<menupopup>
+										<menuitem label="[Aucun]" value="0" />
+									</menupopup>
+									<template>
+	              		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+	              		</menupopup>
+									</template>
+	            	</menulist>
+	            	<button id="bEchMultiples" class="bIcoCalendrier" oncommand="pressOnEcheancesMultiples();" tooltiptext="échéances multiples" />
+							</hbox>
+						</row>
+						<row align="center">
+							<hbox align="center" pack="end">
+								<label class="label" value="Remise en" />
+								<button id="bRemise" oncommand="switchRemise();" class="bIcoPourcentage" />
+								<label value=":" />
+							</hbox>
+							<hbox><textbox id="Remise" onkeypress="evaluer(this, event);" maxlength="7" size="10" timeout="200" command="maj" type="timed" oninput="setModifie(true);" class="nombre" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" id="lblFrais_Port" value="Frais de port (ht) :" />
+							<hbox><textbox id="Frais_Port" onkeypress="evaluer(this, event);" maxlength="12" size="10" timeout="200" command="maj" type="timed" oninput="setModifie(true);" class="nombre" /></hbox>
+						</row>
+						<row align="center">
+							<hbox align="center" pack="end">
+								<label class="label" value="Remise sur frais de port en" />
+								<button id="bRemiseFP" oncommand="switchRemiseFP();" class="bIcoPourcentage" />
+								<label value=":" />
+							</hbox>
+							<hbox><textbox id="RemiseFP" onkeypress="evaluer(this, event);" maxlength="7" size="10" timeout="200" command="maj" type="timed" oninput="setModifie(true);" class="nombre" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Escompte (%) :" />
+							<hbox><textbox id="Escompte" onkeypress="evaluer(this, event);" maxlength="5" size="10" timeout="200" command="maj" type="timed" oninput="setModifie(true);" class="nombre" /></hbox>
+						</row>
+					</rows>
+				</grid>
+	    </groupbox>
+			<groupbox flex="1" pack="center" align="center">
+				<caption label="Totaux" />
+	      <grid id="piedHT">
+	        <columns>
+	          <column />
+	          <column />
+	        </columns>
+	        <rows>
+	          <row align="center">
+	            <label class="label" value="Montant HT :" />
+	            <label id="MontantHT" style="text-align:right" />
+						</row>
+						<row align="center" id="rowRemiseHT">
+	  					<label class="label" value="Remise :" />
+	  					<label id="MontantRemise" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Frais de port :" />
+	  					<label id="MontantFrais_Port" style="text-align:right" />
+						</row>
+						<row align="center" id="rowRemiseFPHT">
+	  					<label class="label" value="Remise sur frais de port :" />
+	  					<label id="MontantRemiseFP" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Total HT :" />
+	  					<label id="TotalHT" style="text-align:right" />
+						</row>
+						<row id="rowCommissionHT" align="center">
+	  					<label class="label" value="Commission :" />
+	  					<label id="commissionHT" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="TVA :" />
+	  					<label id="TVA" style="text-align:right" />
+						</row>
+						<row id="rowMontantTTC" align="center">
+	  					<label class="label" value="Montant TTC :" />
+	  					<label id="MontantTTC" style="text-align:right" />
+						</row>
+						<row align="center" id="rowEscompteHT">
+	  					<label class="label" value="Escompte :" />
+	  					<label id="MontantEscompte" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Total TTC :" />
+	  					<label id="TotalTTC" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Acompte :" />
+	  					<label id="montantAcompte" style="text-align:right" />
+						</row>
+	        </rows>
+	      </grid>
+				<grid id="piedTTC" collapsed="true">
+	        <columns>
+	          <column />
+	          <column />
+	        </columns>
+	        <rows>
+						<row align="center">
+	  					<label class="label" value="Montant TTC :" />
+	  					<label id="pttcMontantTTC" style="text-align:right" />
+						</row>
+						<row align="center" id="rowRemiseTTC">
+	  					<label class="label" value="Remise :" />
+	  					<label id="pttcMontantRemise" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Frais de port :" />
+	  					<label id="pttcMontantFrais_Port" style="text-align:right" />
+						</row>
+						<row align="center" id="rowRemiseFPTTC">
+	  					<label class="label" value="Remise sur frais de port :" />
+	  					<label id="pttcMontantRemiseFP" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Total TTC :" />
+	  					<label id="pttcTotalTTC" style="text-align:right" />
+						</row>
+						<row id="rowCommissionTTC" align="center">
+	  					<label class="label" value="Commission :" />
+	  					<label id="pttcCommissionTTC" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Dont TVA :" />
+	  					<label id="pttcTVA" style="text-align:right" />
+						</row>
+						<row align="center" id="rowEscompteTTC">
+	  					<label class="label" value="Escompte :" />
+	  					<label id="pttcMontantEscompte" style="text-align:right" />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Acompte :" />
+	  					<label id="pttcMontantAcompte" style="text-align:right"  />
+						</row>
+						<row align="center">
+	  					<label class="label" value="Net à payer :" />
+	  					<label id="pttcNetTTC" style="text-align:right" />
+						</row>					
+	        </rows>
+	      </grid>
+			</groupbox>
+	
+	  </hbox>
+	
+		<hbox pack="center">
+			<button id="bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerFacture();" tooltiptext="enregistrer la facture" />
+			<button id="bSupFacture" class="bSupprimer" label="Supprimer" oncommand="supprimerFacture();" tooltiptext="supprimer la facture" />
+	    <button id="bApercu" class="bPDFVert" label="Aperçu" oncommand="apercuFacture();" />
+	    <button id="bVisualiser" class="bPDF" label="Edition PDF" oncommand="visualiserFacture();" />
+	    <button id="bProforma" class="bPDFBleu" label="Proforma" oncommand="editerProforma();" />
+	    <button id="bTransAvoir" class="bTransformer" label="Transformer en avoir" oncommand="transformerAvoir();" collapsed="true" />
+	    <button id="bCopierFacture" class="bCopier" label="Copier la facture" oncommand="copierFacture();"/>
+		</hbox>
+		<box style="height:5px" />
+
+	</vbox>
+
+	<statusbar>
+		<statusbarpanel id="Creation" />
+		<statusbarpanel id="Modification" />
+		<statusbarpanel id="Fiche" flex="1" style="text-align:right;font-weight:bold;" />
+	</statusbar>
+
+  <label id="Type_Ligne" collapsed="true" />
+	<label id="Tarif_Id" collapsed="true" />
+	<label id="Ligne_Id" collapsed="true" />
+	<label id="Libelle" collapsed="true" />
+
+	<observes element="Edition_TTC" attribute="checked" onbroadcast="setModifie(true);" />
+
+</window>

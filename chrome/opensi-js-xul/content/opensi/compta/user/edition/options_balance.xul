@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_edition_optionsBalance"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_balance.js" />
+  
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+    	<button class="bouton_menu" id="bRetourOptions" oncommand="retour_options();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:50px" />
+	<deck id="deck" flex="1">
+	<vbox pack="center" flex="1">
+			<hbox pack="center">
+			
+				<label value="OPTIONS POUR L'EDITION DE LA BALANCE" class="label_16" />
+			</hbox>
+			<hbox style="height:30px" />
+		
+			<hbox pack="center" flex="1" class="auto-overflow">
+				<vbox pack="center">
+		      <hbox>
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="1 - Type" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Type">
+										<radio value="G" label="Générale" selected="true" />
+										<radio value="C" label="Clients" />
+										<radio value="F" label="Fournisseurs" />
+										<radio value="A" label="Auxiliaires" />
+										<radio value="T" label="Globale" />
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="2 - Période" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Periode">
+										<radio id="PeriodeEC" value="ec" label="Exercice courant" selected="true" oncommand="disableDates(true)" />
+										<hbox align="center">
+											<radio id="PeriodeDD" value="dd" label="Date à date" oncommand="disableDates(false)" />
+											<hbox style="width:20px" />
+											<label value="Date de début (jj/mm/aaaa) :" />
+											<textbox id="Date_Debut" maxlength="10" size="10" disabled="true" />
+											<label value="Date de fin (jj/mm/aaaa) :" />
+											<textbox id="Date_Fin" maxlength="10" size="10" disabled="true" />
+										</hbox>
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					</hbox>
+					<hbox>
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="3 - Sélection" />
+						<grid>
+							<rows>
+								<row align="center">
+									<label class="label" value="Edition balance :" />
+									<radiogroup id="Edition" orient="horizontal">
+										<radio id="EditionC" value="C" label="Complète" selected="true" oncommand="disableCptes(true)" />
+										<radio id="EditionT" value="T" label="Totaux" oncommand="disableCptes(true)" />
+										<radio id="EditionP" value="P" label="Partielle" oncommand="disableCptes(false)" />
+									</radiogroup>
+								</row>
+								<row align="center">
+									<label class="label" value="Compte de début :" />
+									<hbox align="center">
+										<textbox id="Cpte_Debut" maxlength="8" size="8" disabled="true" onkeypress="keypress(event, id);" />
+										<button id="bCpte_Debut" class="bIcoRechercher" tooltiptext="rechercher un compte de début" oncommand="rechcompte('Cpte_Debut')" disabled="true" />
+										<label class="label" value="Compte de fin :" />
+										<textbox id="Cpte_Fin" maxlength="8" size="8" disabled="true" onkeypress="keypress(event, id);" />
+										<button id="bCpte_Fin" class="bIcoRechercher" tooltiptext="rechercher un compte de fin" oncommand="rechcompte('Cpte_Fin')" disabled="true" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Edition des comptes :" />
+									<radiogroup id="Ed_Cpte" orient="horizontal">
+										<radio id="EdCpteT" value="T" label="Tous" selected="true" />
+										<radio id="EdCpteN" value="N" label="Non soldés" />
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="4 - Sortie" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Sortie">
+										<radio id="SortieE" value="E" label="Ecran" selected="true" oncommand="cacheChampsMail(true);" />
+										<radio id="SortieP" value="P" label="PDF imprimable" oncommand="cacheChampsMail(true);" />
+										<radio id="SortieC" value="C" label="Tableur (CSV)" oncommand="cacheChampsMail(true);" />
+										<radio id="SortieM" value="M" label="E-Mail" oncommand="cacheChampsMail(false);" />
+									</radiogroup>
+								</row>
+								<row id="ChampsMail" collapsed="true">
+									<grid>
+										<rows>
+											<row><label class="label" value="Adresse e-mail :" /><textbox id="Email" size="40" maxlength="60" /></row>
+											<row><label class="label" value="Sujet :" /><textbox id="Sujet" size="40" maxlength="60" /></row>
+											<row><label class="label" value="Message :" /><textbox id="Message" multiline="true" rows="7" cols="40" /></row>
+										</rows>
+									</grid>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					</hbox>
+				</vbox>
+			</hbox>
+		
+			<hbox style="height:30px" />
+		
+			<hbox pack="center">
+				<button id="BoutonEdition" label="EDITER LA BALANCE" oncommand="editerBalance();" />
+			</hbox>
+		
+			<hbox style="height:10px" />
+			<hbox flex="1" />
+</vbox>
+<vbox>
+<iframe type="content" id="balance_pdf" flex="1" />
+
+</vbox>
+<vbox>
+	<hbox pack="center">
+		<button id="bF" label="Fournisseurs" oncommand="loadBalance('F','');" tooltiptext="comptes fournisseurs" />
+		<button id="bC" label="Clients" oncommand="loadBalance('C','');" tooltiptext="comptes clients" />
+		<button id="bA" label="Auxiliaires" oncommand="loadBalance('A','');" tooltiptext="comptes auxiliaires" />
+		<button id="bG" label="Généraux" oncommand="loadBalance('G','');" tooltiptext="comptes généraux" />
+		<button id="b1" label="1" oncommand="loadBalance('G','1');" tooltiptext="classe 1" />
+		<button id="b2" label="2" oncommand="loadBalance('G','2');" tooltiptext="classe 2" />
+		<button id="b3" label="3" oncommand="loadBalance('G','3');" tooltiptext="classe 3" />
+		<button id="b4" label="4" oncommand="loadBalance('G','4');" tooltiptext="classe 4" />
+		<button id="b5" label="5" oncommand="loadBalance('G','5');" tooltiptext="classe 5" />
+		<button id="b6" label="6" oncommand="loadBalance('G','6');" tooltiptext="classe 6" />
+		<button id="b7" label="7" oncommand="loadBalance('G','7');" tooltiptext="classe 7" />
+	</hbox>
+
+	<hbox style="height:15px" />
+
+	<hbox align="center">
+		<label class="label_16" id="Titre" />
+		<hbox flex="1" />
+		<vbox>
+		<hbox id="Progression" align="center" collapsed="true">
+			<label value="chargement en cours..." />
+			<hbox style="width:10px" />
+			<progressmeter id="pm" />
+			<hbox style="width:10px" />
+		</hbox>
+		</vbox>
+	</hbox>
+
+	<hbox style="height:20px" />
+
+	<tree id="balance"
+          flex="1"
+          hidecolumnpicker="true"
+          flags="dont-build-content"
+          seltype="single"
+          ref="http://www.opensi.org/compta/etats/balance"
+          datasources="rdf:null"
+					ondblclick="goToCompte()"
+					onkeypress="keypress(event)">
+
+    <treecols>
+      <treecol id="ColCompte"
+               flex="1"
+               sort="rdf:http://www.opensi.org/compta/etats/balance/rdf#Numero_Compte"
+               label="Compte" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColIntitule"
+               flex="3"
+               sort="rdf:http://www.opensi.org/compta/etats/balance/rdf#Libelle"
+               label="Intitulé" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDebit"
+               flex="1"
+               label="Débit"
+               sort="rdf:http://www.opensi.org/compta/etats/balance/rdf#triDebit"
+               style="text-align:right" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColCredit"
+               flex="1"
+               label="Crédit"
+               sort="rdf:http://www.opensi.org/compta/etats/balance/rdf#triCredit"
+               style="text-align:right" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColSolde"
+               flex="1"
+               label="Solde"
+               sort="rdf:http://www.opensi.org/compta/etats/balance/rdf#triSolde"
+               style="text-align:right" />
+
+      <treecol id="triColDebit" collapsed="true"/>
+      <treecol id="triColCredit" collapsed="true"/>
+      <treecol id="triColSolde" collapsed="true"/>
+    </treecols>
+    <template>
+      <treechildren ondblclick="goToCompte();">
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#Numero_Compte" />
+            <treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#Libelle" />
+            <treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#Debit" />
+						<treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#Credit" />
+						<treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#Solde" />
+            <treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#triDebit" />
+						<treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#triCredit" />
+						<treecell label="rdf:http://www.opensi.org/compta/etats/balance/rdf#triSolde" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+	<hbox style="height:8px" />
+	<hbox pack="end">
+		<label value="" flex="6" />
+		<label value="Total Débit :" flex="2" style="text-align:right;font-weight:bold" />
+		<label id="TotalDebit" value="0.00" flex="1" style="text-align:right;font-weight:bold" />
+		<label value="Total Crédit :" flex="2" style="text-align:right;font-weight:bold" />
+		<label id="TotalCredit" value="0.00" flex="1" style="text-align:right;font-weight:bold" />
+		<label value="Solde :" flex="2" style="text-align:right;font-weight:bold" />
+		<label id="TotalSolde" value="0.00" flex="1" style="text-align:right;font-weight:bold" />
+		<label value="" flex="1" />
+	</hbox>
+	<hbox style="height:10px" />
+</vbox>
+</deck>
+</window>
+

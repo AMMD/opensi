@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_abonnement_ParametresAbonnement"
+ 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="parametre_abonnement.js" />
+
+<tabpanel id="parametre_abonnement">
+<vbox flex="1" class="auto-overflow">
+	<hbox>
+		<vbox flex="2">
+			
+			<groupbox flex="2" pack="top" align="center">
+				<caption label="Paramètres abonnement" id="Param_abonnement" />
+				<hbox>
+					<grid>
+						<rows>
+							<row align="center">
+								<label class="label" value="Numéro de contrat :" />
+								<hbox><label class="label" id="numContrat" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Etat du contrat :" />
+								<hbox><label class="label" id="etatContrat" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Référence modèle :" />
+								<hbox>
+									<textbox id="RefModele" maxlength="10" size="11" disabled="true" />
+								</hbox>
+							</row>
+							<row align="center">
+		          	<label value="Pôle d'activité :" class="label" />
+		          	<hbox>
+		        			<menulist id="Secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+											<menuitem label="[Aucun]" value="0" />
+										</menupopup>
+										<template>
+		          				<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+		          				</menupopup>
+										</template>
+		        			</menulist>
+		          	</hbox>
+		          </row>
+							<row>
+								<label class="label" value="Libellé :" />
+								<hbox><textbox id="Libelle_abo" maxlength="30" size="31" /></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Périodicité de facturation :" />
+								<hbox align="center">
+									<textbox id="PeriodFactu" maxlength="2" size="3" oninput="menu_abonnement_setModifie(true);" />
+									<menulist id="TypePeriodicite"  oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+											<menuitem label="Jour(s)" value="1" />
+											<menuitem label="Semaine(s)" value="2" />
+											<menuitem label="Mois" value="3" />
+											<menuitem label="Année(s)" value="4" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Durée du contrat :" />
+								<hbox align="center">
+									<textbox id="DureeContrat" maxlength="3" size="3" onkeypress= "Parametre_abonnement_pressOnDuree(event);" oninput="menu_abonnement_setModifie(true);"/>
+									<menulist id="TypeDureeContrat"  oncommand="Parametre_abonnement_PutDateFin();menu_abonnement_setModifie(true);">
+										<menupopup>
+											<menuitem label="Jour(s)" value="1" />
+											<menuitem label="Semaine(s)" value="2" />
+											<menuitem label="Mois" value="3" />
+											<menuitem label="Année(s)" value="4" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Durée de reconduction du contrat :" />
+								<hbox align="center">
+									<textbox id="Duree_recon_contrat" maxlength="3" size="3" oninput="menu_abonnement_setModifie(true);" />
+									<menulist id="Type_duree_recon_contrat" oncommand="menu_abonnement_setModifie(true);" >
+										<menupopup>
+											<menuitem label="Jour(s)" value="1" />
+											<menuitem label="Semaine(s)" value="2" />
+											<menuitem label="Mois" value="3" />
+											<menuitem label="Année(s)" value="4" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Date de début (jj/mm/aaaa) :" />
+								<hbox><textbox id="dateDeb" maxlength="10" size="10" oninput="menu_abonnement_setModifie(true);"/></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Date de fin (jj/mm/aaaa) :" />
+								<hbox><textbox id="dateFin" maxlength="10" size="10" onfocus="Parametre_abonnement_PutDateFin();menu_abonnement_setModifie(true);"/></hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Type de contrat :"  />
+									<hbox>
+									<menulist id="typeReconduction" oncommand="menu_abonnement_setModifie(true);Parametre_abonnement_initRachat();" >
+										<menupopup>
+											<menuitem label="sans reconduction" value="1" />
+											<menuitem label="reconduction tacite" value="2" selected="true" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center" id="rowRachat">
+								<spacer flex="1"/>
+								<checkbox id="optionRachat" label="option de rachat" oncommand="menu_abonnement_setModifie(true); Parametre_abonnement_initChoixAchat();" />
+							</row>
+							<row align="center" id="rowPourcentage">
+								<label class="label" value="Pourcentage :" />
+								<hbox align="center">
+									<textbox id="pourcentage" maxlength="5" size="10" value="0" oninput="menu_abonnement_setModifie(true);" onkeypress="Parametre_abonnement_pressOnPourcentage(event);" class="nombre"/>
+									<label class="label" value="%" />
+								</hbox>
+							</row>
+							<row align="center" id="rowValeur">
+								<label class="label" value="Valeur : HT" />
+								<hbox align="center">
+									<textbox id="valeur" maxlength="10" size="10" value="0" oninput="menu_abonnement_setModifie(true);" onkeypress="Parametre_abonnement_pressOnValeur(event)" class="nombre"/>
+									<label class="label" value="TTC" />
+									<textbox id="valeurTTC" maxlength="10" size="10" value="0" class="nombre" disabled="true"/>
+								</hbox>
+							</row>
+							<row align="center" >
+								<label class="label" value="Délai de préavis :" />
+								<hbox align="center">
+									<menulist id="delaiPreavis" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+											<menuitem label="1" value="1" />
+											<menuitem label="2" value="2" />
+											<menuitem label="3" value="3" />
+										</menupopup>
+									</menulist>
+									<label class="label" value="mois" />
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Génération facture :" />
+								<hbox align="center">
+									<textbox id="generationFacture" maxlength="2" size="3" oninput="menu_abonnement_setModifie(true);" />
+									<label class="label" value="jours à l'avance" />
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Nombre de périodes offertes :" />
+								<hbox><textbox id="nbPeriodeOfferte" maxlength="2" size="3" oninput="menu_abonnement_setModifie(true);" /></hbox>
+							</row>
+							<row>								
+								<label class="label" value="Type de facturation :" />								
+								<radiogroup id="TypeFacturation" oncommand="menu_abonnement_setModifie(true);">
+									<radio id="AEcheoir" value="1" label="terme à échoir" selected="true" />	
+									<radio id="AEchu" value="2" label="terme échu" />          						
+								</radiogroup>								
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+			</groupbox>
+		</vbox>
+
+		<vbox flex="3">
+			<tabbox flex="1" pack="center">
+			<tabs>
+      	<tab label="Facturation" />
+      	<tab label="Livraison" />
+      	<tab label="Envoi" />
+     	</tabs>
+  		<tabpanels flex="1">
+    		<tabpanel pack="center" align="start" orient="horizontal">
+		      <grid>
+		        <columns>
+		        	<column />
+		         	<column />
+		         	<column />
+		       	</columns>
+		       	<rows>
+						  <row>
+		            <label id="Client_Id" value="" collapsed="true" />
+		            <label id="labelClientFact" value="Client" />
+		            <label value="" />
+		          </row>
+		         	<row align="center">
+		          	<label class="label" value="Raison sociale :" />						
+		    				<hbox>
+									<textbox id="Denomination_Fact" maxlength="50" size="40" oninput="menu_abonnement_setModifie(true);" />
+									<button id="chercher_client" class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="Parametre_abonnement_rechercherClient();" flex="1" />
+								</hbox>
+								<label value="" />
+		         	</row>
+		         	<row align="center">
+		          	<label class="label" value="Adresse :" />
+		   				  <textbox id="Adresse_1_Fact" maxlength="80" size="30" oninput="menu_abonnement_setModifie(true);" />
+		   				  <hbox align="center">
+									<button id="chercher_adrfact" class="bIcoEnveloppe" tooltiptext="changer l'adresse de facturation" oncommand="rechercherAdrFact();" />
+								</hbox>
+		          </row>
+							<row align="center">
+		            <label class="label" value="" />
+		      			<hbox>
+									<textbox id="Adresse_2_Fact" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+									<textbox id="Adresse_3_Fact" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+								</hbox>
+								<label value="" />
+		          </row>
+		          <row align="center">
+		            <label class="label" value="Code postal :" />
+								<hbox align="center">
+		      				<textbox id="Code_Postal_Fact" class="rv_cp" idville="Ville_Fact" idnextfocus="Code_Pays_Fact" maxlength="10" size="6" oninput="menu_abonnement_setModifie(true);" />
+		            	<label class="label" value="Ville :" />
+		            	<textbox id="Ville_Fact" class="rv_ville" idcp="Code_Postal_Fact" idnextfocus="Code_Pays_Fact" maxlength="50" size="30" oninput="menu_abonnement_setModifie(true);" />
+		          	</hbox>
+		          	<label value="" />
+		          </row>
+							<row align="center">
+		            <label class="label" value="Pays :" />
+		            <hbox>
+		            	<menulist id="Code_Pays_Fact" oncommand="menu_abonnement_setModifie(true);" style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+									<template>
+		             		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		             		</menupopup>
+									</template>
+									</menulist>
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_inter_fact">
+		            <label class="label" value="Contact :" />
+								<hbox>
+									<menulist id="Civ_Inter_Fact" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+		                  <menuitem label="" value="0" />
+											<menuitem label="M." value="1" />
+											<menuitem label="Mme" value="2" />
+											<menuitem label="Mlle" value="3" />
+										</menupopup>
+									</menulist>
+									<hbox align="center">
+		              	<textbox id="Nom_Inter_Fact" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+										<textbox id="Prenom_Inter_Fact" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+									</hbox>
+		            </hbox>
+		            <hbox align="center">
+									<button id="chercher_inter" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurFact();" />
+								</hbox>
+		          </row>
+						  <row align="center" id="row_telfax_fact">
+		            <label class="label" value="Tél :" />
+								<hbox>
+		              <textbox id="Tel_Inter_Fact" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		             	<label class="label" value="Fax :" />
+		              <textbox id="Fax_Inter_Fact" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_email_fact">
+		            <label class="label" value="Email :" />
+		           	<textbox id="Email_Inter_Fact" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		          	<hbox align="center">
+									<button id="bCopierFactVersLivEnvoi" class="bIcoCopierAdr" tooltiptext="Reporter les coordonnées en envoi et livraison" oncommand="copierFactVersLivEnvoi();" />
+								</hbox>
+		          </row>
+		        </rows>
+		      </grid>
+    		</tabpanel>
+
+				<tabpanel pack="center" align="start" orient="horizontal">
+		      <grid>
+		        <columns>
+		        	<column />
+		         	<column />
+		         	<column />
+		       	</columns>
+		       	<rows>
+		       		<row>
+		            <label value="" collapsed="true" />
+		            <label id="labelClientLiv" value="Client" />
+		            <label value="" />
+		          </row>
+		         	<row align="center">
+		          	<label class="label" value="Raison sociale :" />						
+		    				<hbox><textbox id="Denomination_Liv" maxlength="50" size="30" oninput="menu_abonnement_setModifie(true);" /></hbox>
+		    				<label value="" />
+		         	</row>
+		         	<row align="center">
+		          	<label class="label" value="Adresse :" />
+		   				  <textbox id="Adresse_1_Liv" maxlength="80" size="30" oninput="menu_abonnement_setModifie('modifié');" />
+		   				  <hbox align="center">
+									<button id="chercher_adrliv" class="bIcoEnveloppe" tooltiptext="changer l'adresse de livraison" oncommand="rechercherAdrLiv();" />
+								</hbox>
+		          </row>
+							<row align="center">
+		            <label class="label" value="" />
+		      			<hbox>
+									<textbox id="Adresse_2_Liv" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+									<textbox id="Adresse_3_Liv" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+								</hbox>
+								<label value="" />
+		          </row>
+		          <row align="center">
+		            <label class="label" value="Code postal :" />
+								<hbox align="center">
+		      				<textbox id="Code_Postal_Liv" class="rv_cp" idville="Ville_Liv" idnextfocus="Code_Pays_Liv" maxlength="10" size="6" oninput="menu_abonnement_setModifie(true);" />
+		            	<label class="label" value="Ville :" />
+		            	<textbox id="Ville_Liv" class="rv_ville" idcp="Code_Postal_Liv" idnextfocus="Code_Pays_Liv" maxlength="50" size="30" oninput="menu_abonnement_setModifie(true);" />
+		          	</hbox>
+		          	<label value="" />
+		          </row>
+							<row align="center">
+		            <label class="label" value="Pays :" />
+		            <hbox>
+		            	<menulist id="Code_Pays_Liv"  style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="FactureType_calculerTvaPort(); selectPaysLiv(); menu_abonnement_setModifie(true);">
+									<template>
+		             		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		             		</menupopup>
+									</template>
+									</menulist>
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_inter_liv">
+		            <label class="label" value="Contact :" />
+								<hbox>
+									<menulist id="Civ_Inter_Liv" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+		                  <menuitem label="" value="0" />
+											<menuitem label="M." value="1" />
+											<menuitem label="Mme" value="2" />
+											<menuitem label="Mlle" value="3" />
+										</menupopup>
+									</menulist>
+									<hbox align="center">
+		              	<textbox id="Nom_Inter_Liv" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+										<textbox id="Prenom_Inter_Liv" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+									</hbox>
+		            </hbox>
+		            <hbox align="center">
+									<button id="chercher_inter_liv" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurLiv();" />
+								</hbox>
+		          </row>
+						  <row align="center" id="row_telfax_liv">
+		            <label class="label" value="Tél :" />
+								<hbox>
+		              <textbox id="Tel_Inter_Liv" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		             	<label class="label" value="Fax :" />
+		              <textbox id="Fax_Inter_Liv" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_email_liv">
+		            <label class="label" value="Email :" />
+		           	<textbox id="Email_Inter_Liv" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		           	<label value="" />
+		          </row>
+		        </rows>
+		      </grid>
+    		</tabpanel>
+    		
+    		<tabpanel pack="center" align="start" orient="horizontal">
+		      <grid>
+		        <columns>
+		        	<column />
+		         	<column />
+		         	<column />
+		       	</columns>
+		       	<rows>
+		       		<row>
+		            <label value="" collapsed="true" />
+		            <label id="labelClientEnvoi" value="Client" />
+		            <label value="" />
+		          </row>
+		         	<row align="center">
+		          	<label class="label" value="Raison sociale :" />						
+		    				<hbox><textbox id="Denomination_Envoi" maxlength="50" size="30" oninput="menu_abonnement_setModifie(true);" /></hbox>
+		    				<label value="" />
+		         	</row>
+		         	<row align="center">
+		          	<label class="label" value="Adresse :" />
+		   				  <textbox id="Adresse_1_Envoi" maxlength="80" size="30" oninput="menu_abonnement_setModifie(true);" />
+		   				  <hbox align="center">
+									<button id="chercher_adrEnvoi" class="bIcoEnveloppe" tooltiptext="changer l'adresse d'envoi" oncommand="rechercherAdrEnvoi();" />
+								</hbox>
+		          </row>
+							<row align="center">
+		            <label class="label" value="" />
+		      			<hbox>
+									<textbox id="Adresse_2_Envoi" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+									<textbox id="Adresse_3_Envoi" maxlength="50" flex="1" oninput="menu_abonnement_setModifie(true);" />
+								</hbox>
+								<label value="" />
+		          </row>
+		          <row align="center">
+		            <label class="label" value="Code postal :" />
+								<hbox align="center">
+		      				<textbox id="Code_Postal_Envoi" class="rv_cp" idville="Ville_Envoi" idnextfocus="Code_Pays_Envoi" maxlength="10" size="6" oninput="menu_abonnement_setModifie(true);" />
+		            	<label class="label" value="Ville :" />
+		            	<textbox id="Ville_Envoi" class="rv_ville" idcp="Code_Postal_Envoi" idnextfocus="Code_Pays_Envoi" maxlength="50" size="30" oninput="menu_abonnement_setModifie(true);" />
+		          	</hbox>
+		          	<label value="" />
+		          </row>
+							<row align="center">
+		            <label class="label" value="Pays :" />
+		            <hbox>
+		            	<menulist id="Code_Pays_Envoi"  style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" oncommand="menu_abonnement_setModifie(true);">
+									<template>
+		             		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+		             		</menupopup>
+									</template>
+									</menulist>
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_inter_envoi">
+		            <label class="label" value="Contact :" />
+								<hbox>
+									<menulist id="Civ_Inter_Envoi" oncommand="menu_abonnement_setModifie(true);">
+										<menupopup>
+		                  <menuitem label="" value="0" />
+											<menuitem label="M." value="1" />
+											<menuitem label="Mme" value="2" />
+											<menuitem label="Mlle" value="3" />
+										</menupopup>
+									</menulist>
+									<hbox align="center">
+		              	<textbox id="Nom_Inter_Envoi" size="15" maxlength="30" tooltiptext="nom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+										<textbox id="Prenom_Inter_Envoi" size="15" maxlength="20" tooltiptext="prénom de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+									</hbox>
+		            </hbox>
+		            <hbox align="center">
+									<button id="chercher_inter_envoi" class="bIcoContact" tooltiptext="changer de contact" oncommand="rechercherInterlocuteurEnvoi();" />
+								</hbox>
+		          </row>
+						  <row align="center" id="row_telfax_envoi">
+		            <label class="label" value="Tél :" />
+								<hbox>
+		              <textbox id="Tel_Inter_Envoi" size="15" maxlength="20" tooltiptext="téléphone de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		             	<label class="label" value="Fax :" />
+		              <textbox id="Fax_Inter_Envoi" size="15" maxlength="20" tooltiptext="fax de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		            </hbox>
+		            <label value="" />
+		          </row>
+						  <row align="center" id="row_email_envoi">
+		            <label class="label" value="Email :" />
+		           	<textbox id="Email_Inter_Envoi" size="15" maxlength="64" tooltiptext="Email de l'interlocuteur" oninput="menu_abonnement_setModifie(true);" />
+		           	<label value="" />
+		          </row>
+		        </rows>
+		      </grid>
+    		</tabpanel>
+  		</tabpanels>
+		</tabbox>
+		
+		<groupbox flex="3" pack="center" align="center">
+			<caption label="Règlement" />
+			<grid>
+				<rows>
+					<row align="center">
+						<label class="label" value="Délai de règlement :"/>
+						<hbox align="center">
+							<textbox id="delaiReglement" maxlength="2" size="3" oninput="menu_abonnement_setModifie(true);"/>
+							<label class="label" value="jours"/>
+						</hbox>
+					</row>
+					<row>
+						<label class="label" value="Type de règlement :" />
+						<radiogroup id="TypeReglement" oncommand="menu_abonnement_setModifie(true);parametre_abonnement_enableJourReglement();">
+								<radio id="RegNet" value="1" label="Net" selected="true" />       						
+								<radio id="RegFinMois" value="2" label="Fin de mois" />          				
+								<hbox align="center">
+									<radio id="RegFinMoisLe" value="3" label="Fin de mois le" />
+									<textbox id="jourReglement" maxlength="2" size="3" oninput="menu_abonnement_setModifie(true);" disabled="true" />
+         				</hbox>
+						</radiogroup>						
+					</row>
+					<row align="center">
+            <label value="" />
+            <checkbox id="Assujetti_TVA" label="Assujetti à la TVA" oncommand="menu_abonnement_setModifie(true); changerAssujettiTVA(this.checked);" />
+          </row>
+          <row align="center">
+            <label class="label" value="N° TVA :" />
+            <textbox id="Num_TVA" maxlength="14" size="14" oninput="menu_abonnement_setModifie(true);" />
+          </row>
+				</rows>
+			</grid>
+		</groupbox>
+		</vbox>
+	</hbox>
+
+</vbox>
+
+</tabpanel>
+
+</overlay>
+
+
+

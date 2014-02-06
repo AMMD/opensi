@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_import_banque_overlay-listeImport"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-listeImport.js" /> 
+
+	<vbox id="deckListeImport" flex="1">
+		
+		<hbox>
+			<hbox flex="1" align="center">
+				<label value="Date de modification : " />
+				<textbox id="oli-filtreDateModif" maxlength="10" size="10" onkeypress="oli_keyPressOnDateModif(event);" tooltiptext="Date au format : jj/mm/aaaa" />
+				<label value="Etat de l'import : " />
+				<menulist id="oli-filtreEtat" style="width:160px" sizetopopup="none" oncommand="oli_selectOnFiltreEtat();">
+					<menupopup>
+						<menuitem label="[Tous]" value="%" />
+						<menuitem label="En cours" value="N" />
+						<menuitem label="Validé" value="V" /> 
+					</menupopup>
+				</menulist>
+				<label class="label" value="Journal de banque : " />
+		 		<menulist id="oli-filtreJournal" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null" style="width:160px" sizetopopup="none" oncommand="oli_selectOnFiltreJournal();">
+					<menupopup>
+						<menuitem label="[Tous]" value="0" />
+						<menuitem label="[Non défini]" value="1" />
+					</menupopup>
+					<template>
+						<menupopup>
+							<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#Libelle_Long" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+						</menupopup>
+					</template>
+				</menulist>
+				<box flex="1" />
+				<button id="oli-nouvelImport" class="bNouveau" label="Nouvel import" oncommand="oli_pressOnNouveau();" />
+			</hbox>
+		</hbox>
+		
+		<hbox>
+			<box flex="1" />
+			<hbox flex="1" pack="center" align="center" >
+				<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="oli-bPrec" oncommand="oli_pressOnPrec();" tooltiptext="Page précédente" />
+				<vbox>
+					<hbox>
+						<label value="Page" />
+						<label id="oli-pageDeb" />
+						<label value="/" />
+						<label id="oli-pageFin" />
+					</hbox>
+				</vbox>
+				<button disabled="true" class="bIcoAvance" id="oli-bSuiv" oncommand="oli_pressOnSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+			<box flex="1" />
+		</hbox>
+		
+		<vbox flex="1">
+			<tree id="oli-treeImport" flex="1"
+				ondblclick="oli_dblClickOnTreeImport();"
+				hidecolumnpicker="true" 
+				flags="dont-build-content"
+				datasources="rdf:null" 
+				ref="http://www.opensi.org/compta/import_banque"
+				seltype="single">
+				
+				<treecols>
+					<treecol label="Date modification" flex="1" sort="rdf:http://www.opensi.org/compta/import_banque/rdf#Date_M" />
+					<splitter class="tree-splitter" />
+					<treecol label="Journal" flex="1" sort="rdf:http://www.opensi.org/compta/import_banque/rdf#Journal" />
+					<splitter class="tree-splitter" />
+					<treecol label="Etat" flex="1" sort="rdf:http://www.opensi.org/compta/import_banque/rdf#Etat" />
+					<splitter class="tree-splitter" />
+					<treecol label="Format" flex="1" sort="rdf:http://www.opensi.org/compta/import_banque/rdf#Format_Import" />
+					<treecol id="oli-colImportId" collapsed="true" ignoreincolumnpicker="true" sort="rdf:http://www.opensi.org/compta/import_banque/rdf#Import_Id" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Date_M" />
+								<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Journal" />
+								<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Etat" />
+								<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Format_Import" />
+								<treecell label="rdf:http://www.opensi.org/compta/import_banque/rdf#Import_Id" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>
+			</tree>
+		</vbox>
+		
+	</vbox>
+	
+</overlay>

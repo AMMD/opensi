@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<bindings xmlns="http://www.mozilla.org/xbl"
+					xmlns:xbl="http://www.mozilla.org/xbl"
+					xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <binding id="rv_pop">
+		<content>
+			<xul:popup id="liste_villes" ref="http://www.opensi.org/commun/liste_villes" datasources="rdf:null">
+				<xul:template>
+    			<xul:menuitem oncommand="reportVille(this)" uri="rdf:*"
+									label="rdf:http://www.opensi.org/commun/liste_villes/rdf#Ville ( rdf:http://www.opensi.org/commun/liste_villes/rdf#CP )"
+									code_postal="rdf:http://www.opensi.org/commun/liste_villes/rdf#CP"
+									value="rdf:http://www.opensi.org/commun/liste_villes/rdf#Ville" />
+				</xul:template>
+  		</xul:popup>
+			<pop id="popupid" />
+		</content>
+		<implementation>
+			<field name="cpid" />
+			<field name="villeid" />
+			<field name="nextfocusid" />
+			<constructor>
+				<![CDATA[
+					this.cpid = "";
+					this.villeid = "";
+					this.nextfocusid = "";
+				]]>
+			</constructor>
+			<method name="loadListe">
+				<parameter name="params" />
+      	<body>
+					<![CDATA[
+						this.deleteListe();
+						var paramlist = "&Page=Commun/getVilles.tmpl&ContentType=xml"+ params;
+  					load_rdf_async('liste_villes', getUrlOpeneas(paramlist), this.afficheListe);
+					]]>
+      	</body>
+    	</method>
+			<method name="deleteListe">
+				<body>
+					<![CDATA[
+    				var database = document.getElementById("liste_villes").database;
+    				var datasources = database.GetDataSources();
+    				while (datasources.hasMoreElements()) {
+      				var ds = datasources.getNext();
+      				database.RemoveDataSource(ds);
+    				}
+						document.getElementById('liste_villes').builder.rebuild();
+					]]>
+				</body>
+			</method>
+			<method name="afficheListe">
+				<body>
+					<![CDATA[
+						var popupid = document.getElementById('popupid').value;
+						document.getElementById('liste_villes').showPopup(document.getElementById(popupid), -1, -1,"popup", "bottomleft", "topleft");
+					]]>
+				</body>
+			</method>
+			<method name="rechVilleCP">
+				<parameter name="ev" />
+				<parameter name="idcp" />
+				<parameter name="idville" />
+				<parameter name="idnextfocus" />
+				<body>
+					<![CDATA[
+						this.villeid = idville;
+						this.cpid = idcp;
+						this.nextfocusid = idnextfocus;
+						var cp = document.getElementById(this.cpid).value;
+						if (ev.keyCode==13 && cp.length==5) {
+							document.getElementById('popupid').value = this.cpid;
+							this.loadListe("&Rech=cp&CP="+ urlEncode(cp));
+						}
+					]]>
+				</body>
+			</method>
+			<method name="rechVilleLike">
+				<parameter name="ev" />
+				<parameter name="idville" />
+				<parameter name="idcp" />
+				<parameter name="idnextfocus" />
+				<body>
+					<![CDATA[
+						this.nextfocusid = idnextfocus;
+						this.villeid = idville;
+						this.cpid = idcp;
+						var ville = document.getElementById(this.villeid).value;
+						var cp = document.getElementById(this.cpid).value;
+						if (ev.keyCode==13 && ville.length>2) {
+							document.getElementById('popupid').value = this.villeid;
+							this.loadListe("&Rech=ville&CP="+ urlEncode(cp) +"&Ville="+ urlEncode(ville));
+						}
+					]]>
+				</body>
+			</method>
+			<method name="reportVille">
+				<parameter name="item" />
+				<body>
+					<![CDATA[
+						document.getElementById(this.villeid).value = item.value;
+						document.getElementById(this.cpid).value = item.getAttribute('code_postal');
+						document.getElementById(this.nextfocusid).focus();
+					]]>
+				</body>
+			</method>
+		</implementation>
+	</binding>
+
+	<binding id="rv_cp" extends="chrome://global/content/bindings/textbox.xml#textbox">
+		<implementation>
+		  <constructor>
+			  <![CDATA[
+				  this.setAttribute('context', 'liste_villes');
+        ]]>
+      </constructor>
+		</implementation>
+		<handlers>
+			<handler event="keypress">
+				<![CDATA[
+				  document.getElementById('rv').rechVilleCP(event, this.id, this.getAttribute("idville"), this.getAttribute("idnextfocus"));
+        ]]>
+			</handler>
+  	</handlers>
+	</binding>
+
+	<binding id="rv_ville" extends="chrome://global/content/bindings/textbox.xml#textbox">
+		<implementation>
+		  <constructor>
+			  <![CDATA[
+				  this.setAttribute('context', 'liste_villes');
+			  ]]>
+      </constructor>
+		</implementation>
+		<handlers>
+			<handler event="keypress">
+				<![CDATA[
+				  document.getElementById('rv').rechVilleLike(event, this.id, this.getAttribute("idcp"), this.getAttribute("idnextfocus"));
+        ]]>
+			</handler>
+  	</handlers>
+	</binding>
+</bindings>

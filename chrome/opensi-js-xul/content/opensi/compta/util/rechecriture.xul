@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_util_rechecriture"
+  onload="init()"
+	title="OpenSi - Recherche d'écriture"
+	width="900"
+	height="600"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rechecriture.js" />
+
+	<hbox style="height:10px" />
+  <hbox pack="center">
+    <label class="label_16" value="RECHERCHE D'ÉCRITURE" />
+  </hbox>
+	<hbox style="height:20px" />
+
+	<hbox pack="center">
+  	<grid onkeypress="keypress(event)">
+    	<columns>
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+      	<row align="center">
+        	<label class="label" value="Numéro de compte :" />
+        	<hbox>
+          	<textbox id="compte" size="10" maxlength="8" />
+          	<button class="bIcoRechercher" oncommand="recherche_compte()" />
+        	</hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Journal :" />
+        	<menulist id="journaux" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Tous]" value="" />
+						</menupopup>
+          	<template>
+            	<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+            	</menupopup>
+          	</template>
+        	</menulist>
+      	</row>
+				<row align="center">
+        	<label class="label" value="Libellé :" />
+        	<textbox id="libelle" />
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Numéro de pièce :" />
+        	<hbox><textbox id="piece" size="15" /></hbox>
+      	</row>
+				<row>
+					<label class="label" value="Ecritures :" />
+					<radiogroup id="Lettrage">
+						<radio label="Toutes" value="T" selected="true" />
+						<radio label="Lettrées" value="L" />
+						<radio label="Non lettrées" value="N" />
+					</radiogroup>
+				</row>
+			</rows>
+		</grid>
+		<hbox style="width:30px" />
+		<grid onkeypress="keypress(event)">
+    	<columns>
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+      	<row>
+        	<label class="label" value="Montant débit :" />
+        	<radiogroup id="debitbox" oncommand="selectradio(this)" orient="horizontal">
+          	<vbox>
+            	<radio id="isdebitexact" label="égal" selected="true" />
+							<radio id="isdebitinter" label="entre" />
+          	</vbox>
+          	<vbox>
+            	<hbox><textbox id="debit" size="12" onblur="blurmontant(this)" /></hbox>
+            	<hbox align="center">
+              	<textbox id="debitinf" size="12" onblur="blurmontant(this)" readonly="true" />
+            		<label value="et" />
+              	<textbox id="debitsup" size="12" onblur="blurmontant(this)" readonly="true" />
+            	</hbox>
+          	</vbox>
+        	</radiogroup>
+      	</row>
+				<row height="10" />
+      	<row>
+        	<label class="label" value="Montant crédit :" />
+        	<radiogroup id="creditbox" oncommand="selectradio(this)" orient="horizontal">
+          	<vbox>
+            	<radio id="iscreditexact" label="égal" selected="true" />
+            	<radio id="iscreditinter" label="entre" />
+          	</vbox>
+          	<vbox>
+							<hbox><textbox id="credit" size="12" onblur="blurmontant(this)" /></hbox>
+            	<hbox>
+              	<textbox id="creditinf" size="12" onblur="blurmontant(this)" readonly="true" />
+            		<label value="et" />
+              	<textbox id="creditsup" size="12" onblur="blurmontant(this)" readonly="true" />
+            	</hbox>
+          	</vbox>
+        	</radiogroup>
+      	</row>
+				<row height="15" />
+      	<row>
+        	<label class="label" value="Date (jj/mm/aaaa) :" />
+        	<radiogroup id="datebox" oncommand="selectradio(this)" orient="horizontal">
+          	<vbox>
+            	<radio id="isdateexact" label="égal" selected="true" />
+            	<radio id="isdateinter" label="du" />
+          	</vbox>
+          	<vbox>
+							<hbox><textbox id="date" size="10" maxlength="10" /></hbox>
+            	<hbox>
+              	<textbox id="dateinf" size="10" maxlength="10" readonly="true" />
+            		<label value="au" />
+              	<textbox id="datesup" size="10" maxlength="10" readonly="true" />
+            	</hbox>
+          	</vbox>
+        	</radiogroup>
+      	</row>
+    	</rows>
+  	</grid>
+	</hbox>
+
+	<hbox style="height:10px" />
+  <hbox pack="center">
+    <button class="bRechercher" label="Rechercher" default="true" oncommand="ok()" />
+    <button class="bAnnuler" label="Annuler" oncommand="window.close()" />
+    <button class="bCSV" label="Export CSV" oncommand="export_csv()" />
+  </hbox>
+	<hbox style="height:15px" align="center">
+		<vbox><progressmeter id="pm" collapsed="true" /></vbox>
+		<label id="labelpm" value="" />
+	</hbox>
+
+	<tree id="ecritures"
+        flex="1"
+        hidecolumnpicker="true"
+        seltype="single"
+        ref="http://www.opensi.org/compta/operations"
+        datasources="rdf:null"
+        onkeypress="keypress(event,id)"
+        ondblclick="goToSaisie()">
+
+    <treecols>
+      <treecol id="ColDate_Op" label="Date" flex="2" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColCJ_Op" label="CJ" flex="2" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColNumero_Compte" flex="1" label="Compte" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColLibelle" flex="4" label="Libellé" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDate_Echeance" flex="1" label="Echéance" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColLettre" flex="1" label="Let." />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDebit" style="text-align:right" flex="2" label="Débit" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColCredit" style="text-align:right" flex="2" label="Crédit" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColNum_Piece" style="text-align:right" flex="1" label="Pièce" />
+      <treecol id="ColOp_Id" collapsed="true" />
+      <treecol id="ColCode_Journal" collapsed="true" />
+    </treecols>
+
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Date_Op" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Code_Journal" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Numero_Compte" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Libelle" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Date_Echeance" />
+						<treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Lettre" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Montant_D" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Montant_C" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Num_Piece" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Op_Id" />
+            <treecell label="rdf:http://www.opensi.org/compta/operations/rdf#Code_Journal" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+</window>

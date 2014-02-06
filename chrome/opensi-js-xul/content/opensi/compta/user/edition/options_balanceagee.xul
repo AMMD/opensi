@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_edition_optionsBalanceAgee"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_balanceagee.js" />
+
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+    	<button class="bouton_menu" id="bRetourOptions" oncommand="retour_options();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:50px" />
+	<deck id="deck" flex="1">
+	 <vbox pack="center" flex="1">
+	<hbox pack="center">
+		<label value="OPTIONS POUR L'EDITION DE LA BALANCE AGEE" class="label_16" />
+	</hbox>
+	<hbox style="height:30px" />
+
+	<hbox pack="center" flex="1" class="auto-overflow">
+		<vbox pack="center">
+		<hbox pack="center">
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="1 - Type" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Type">
+								<radio id="TypeC" value="C" label="Clients" selected="true" />
+								<radio id="TypeF" value="F" label="Fournisseurs" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="2 - Période" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Periode">
+								<radio id="PeriodeEC" value="ec" label="Jusqu'à présent" selected="true" oncommand="disableDates(true)" />
+								<hbox align="center">
+									<radio id="PeriodeDD" value="dd" label="Jusqu'au" oncommand="disableDates(false)" />
+									<hbox style="width:10px" />
+									<textbox id="Date_Fin" maxlength="10" size="10" disabled="true" />
+									<label value="(jj/mm/aaaa)" />
+
+								</hbox>
+							</radiogroup>
+						</row>
+						<row>
+							<hbox style="height:10px" />
+						</row>
+						<row>
+							<grid>
+								<rows>
+									<row>
+										<hbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-bottom:none;border-right:none"><label value="Tranche 1" style="font-weight:bold" /></hbox>
+										<hbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-bottom:none;border-right:none"><label value="Tranche 2" style="font-weight:bold" /></hbox>
+										<hbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-bottom:none;border-right:none"><label value="Tranche 3" style="font-weight:bold" /></hbox>
+										<hbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-bottom:none;border-right:none"><label value="Tranche 4" style="font-weight:bold" /></hbox>
+										<hbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-bottom:none"><label value="Tranche 5" style="font-weight:bold" /></hbox>
+									</row>
+									<row>
+										<vbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-right:none">
+											<label value="de 0 à" />
+											<hbox style="height:8px" />
+											<hbox align="center">
+												<textbox id="Tranche1" size="3" maxlength="3" value="30" onchange="updateTranche()" />
+												<label value="jours" />
+											</hbox>
+										</vbox>
+										<vbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-right:none">
+											<label id="Label2" value="de 30 à" />
+											<hbox style="height:8px" />
+											<hbox align="center">
+												<textbox id="Tranche2" size="3" maxlength="3" value="60" onchange="updateTranche()" />
+												<label value="jours" />
+											</hbox>
+										</vbox>
+										<vbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-right:none">
+											<label id="Label3" value="de 60 à" />
+											<hbox style="height:8px" />
+											<hbox align="center">
+												<textbox id="Tranche3" size="3" maxlength="3" value="90" onchange="updateTranche()" />
+												<label value="jours" />
+											</hbox>
+										</vbox>
+										<vbox align="center" pack="center" style="padding:5px;border:solid #000000 1px;border-right:none">
+											<label id="Label4" value="de 90 à" />
+											<hbox style="height:8px" />
+											<hbox align="center">
+												<textbox id="Tranche4" size="3" maxlength="3" value="120" onchange="updateTranche()" />
+												<label value="jours" />
+											</hbox>
+										</vbox>
+										<vbox align="center" pack="center" style="padding:5px;border:solid #000000 1px">
+											<label value="plus de" />
+											<label id="Label5" value="120 jours" />
+										</vbox>
+									</row>
+								</rows>
+							</grid>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</hbox>
+		<hbox pack="center">
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="3 - Tri" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Tri">
+								<radio id="TriN" value="N" label="Numérique" selected="true" />
+								<radio id="TriA" value="A" label="Alphabétique" />
+								<radio id="TriS" value="S" label="Par solde" />
+							</radiogroup>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+
+			<groupbox flex="1" pack="center" class="pad_groupbox">
+				<caption label="4 - Sortie" />
+				<grid>
+					<rows>
+						<row>
+							<radiogroup id="Sortie">
+								<!--<radio id="SortieE" value="E" label="Ecran" selected="true" oncommand="cacheChampsMail(true);" />-->
+								<radio id="SortieP" value="P" label="PDF imprimable" oncommand="cacheChampsMail(true);" selected="true" />
+								<radio id="SortieM" value="M" label="E-Mail" oncommand="cacheChampsMail(false);" />
+							</radiogroup>
+						</row>
+						<row id="ChampsMail" collapsed="true">
+							<grid>
+								<rows>
+									<row><label class="label" value="Adresse e-mail :" /><textbox id="Email" size="40" maxlength="60" /></row>
+									<row><label class="label" value="Sujet :" /><textbox id="Sujet" size="40" maxlength="60" /></row>
+									<row><label class="label" value="Message :" /><textbox id="Message" multiline="true" rows="7" cols="40" /></row>
+								</rows>
+							</grid>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+		</hbox>
+		</vbox>
+	</hbox>
+
+	<hbox style="height:30px" />
+
+	<hbox pack="center">
+		<button id="BoutonEdition" label="EDITER LA BALANCE AGEE" oncommand="editerBalanceAgee();" />
+	</hbox>
+
+	<hbox style="height:10px" />
+	<hbox flex="1" />
+</vbox>
+<vbox>
+<iframe type="content" id="balanceagee" flex="1" />
+
+</vbox>
+</deck>
+</window>
+

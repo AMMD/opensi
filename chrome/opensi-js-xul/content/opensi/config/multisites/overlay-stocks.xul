@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_multistocks_overlay-stocks"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-stocks.js" />
+
+	<tabpanel id="tab-stocks">
+
+  	<vbox pack="center" flex="1" class="auto-overflow">
+
+			<tree id="tree-stocks"
+        flex="1"
+        hidecolumnpicker="true"
+        seltype="single"
+        ref="http://www.opensi.org/config/liste-stocks"
+				onclick="reporterStock()"
+				onselect="reporterStock()"
+        datasources="rdf:null">
+
+    		<treecols>
+     			<treecol id="ost-ColIntitule" label="Intitulé" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColDenomination" label="Raison sociale" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColAdresse_1" label="Adresse" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColAdresse_2" label="" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColAdresse_3" label="" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColCode_Postal" label="CP" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColVille" label="Ville" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColPays" label="Pays" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ost-ColStock_Id" collapsed="true" />
+					<treecol id="ost-ColCode_Pays" collapsed="true" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Intitule" />
+            		<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Denomination" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Adresse_1" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Adresse_2" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Adresse_3" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Code_Postal" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Ville" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Pays" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Stock_Id" />
+								<treecell label="rdf:http://www.opensi.org/config/liste-stocks/rdf#Code_Pays" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+
+			<groupbox>
+				<caption label="Stock" />
+				<hbox>
+				<spacer flex="2" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="* Intitulé :" />
+							<textbox id="ost-Intitule" size="20" maxlength="30" />
+						</row>
+					</rows>
+				</grid>
+				<spacer flex="1" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="* Raison sociale :" />
+							<hbox><textbox id="ost-Denomination" size="30" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="* Adresse :" />
+							<hbox><textbox id="ost-Adresse_1" size="40" maxlength="80" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="" />
+							<hbox><textbox id="ost-Adresse_2" size="40" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="" />
+							<hbox><textbox id="ost-Adresse_3" size="40" maxlength="50" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Code postal :" />
+							<hbox><textbox id="ost-Code_Postal" size="10" maxlength="10" class="rv_cp" idville="ost-Ville" idnextfocus="ost-Code_Pays" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="* Ville :" />
+							<hbox><textbox id="ost-Ville" size="30" maxlength="50" class="rv_ville" idcp="ost-Code_Postal" idnextfocus="ost-Code_Pays" /></hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Pays :" />
+							<hbox>
+                <menulist id="ost-Code_Pays"  style="width:200px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+	                <template>
+	                  <menupopup>
+	                    <menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+	                  </menupopup>
+	                </template>
+                </menulist>
+              </hbox>
+						</row>
+					</rows>
+				</grid>
+				<spacer flex="2" />
+				</hbox>
+				<box style="height:20px" />
+				<hbox pack="center">
+					<button id="ost-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerStock();" tooltiptext="enregistrer le stock" />
+					<button id="ost-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerStock();" tooltiptext="supprimer le stock" />
+					<button id="ost-bNouveau" class="bNouveau" label="Nouveau" oncommand="nouveauStock();" tooltiptext="nouveau stock" />
+				</hbox>
+				<box style="height:10px" />
+			</groupbox>
+
+		</vbox>
+
+	</tabpanel>
+
+</overlay>

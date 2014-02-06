@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_tva_tvaTaxation"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="tva_taxation.js" />
+	
+	<tree id="liste_Taxation"
+      hidecolumnpicker="true"
+      seltype="single"
+      ref="http://www.opensi.org/Config/listeTaxation"
+      datasources="rdf:null"
+			onselect="reporter()"
+			height="250px">
+
+    <treecols>
+    	<treecol id="ColPays" flex="1" label="Pays"/>
+			<treecol id="ColSeuil_CA" flex="1" label="Seuil CA"/>
+			<treecol id="ColTaxation" flex="1" label="Option de Taxation"/>
+			<treecol id="ColCode_Pays" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+          	<treecell label="rdf:http://www.opensi.org/Config/listeTaxation/rdf#Pays" />
+          	<treecell label="rdf:http://www.opensi.org/Config/listeTaxation/rdf#Seuil_CA" />
+          	<treecell label="rdf:http://www.opensi.org/Config/listeTaxation/rdf#Option_Taxation" />
+						<treecell label="rdf:http://www.opensi.org/Config/listeTaxation/rdf#Code_Pays" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+	
+  <box style="height:20px" />
+	
+	<hbox pack="center">
+  	<grid>
+    	<columns>
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+				<row align="center" id="Row_Seuil_CA" collapsed="true">
+        	<label class="label" value="Seuil CA :" />
+        	<textbox id="Seuil_CA" size="9" disabled="true" />
+      	</row>
+      	<row align="center" id="Row_Taxation" collapsed="true">
+        	<label class="label" value="Taxation :" />
+        	<checkbox id="Taxation" />
+      	</row>
+			</rows>
+  	</grid>
+	</hbox>
+
+	<box style="height:20px" />
+
+	<hbox pack="center">
+		<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierTaxation()"	collapsed="true" />
+  </hbox>	
+
+</window>

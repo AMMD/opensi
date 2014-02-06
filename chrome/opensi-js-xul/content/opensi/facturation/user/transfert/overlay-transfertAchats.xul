@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libre de gestion d'entreprise                              -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_transfert_overlay-transfertAchats"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-transfertAchats.js" />
+  
+  <tabpanel id="tabAchats">
+
+		<vbox pack="center" flex="1" style="overflow:auto">
+
+			<box style="height:10px;" />
+			<label class="label_16" value="Transfert des achats en comptabilité" />
+			<box style="height:10px;" />
+			<hbox>
+				<groupbox orient="horizontal" align="start">
+					<caption label="Sélection des achats à transférer" />
+					<radiogroup id="ota-Type_Periode">
+		      	<hbox align="center">
+		        	<radio value="P" label="Période" selected="true" oncommand="ota_changerTypePeriode(this.value);" />
+		        	<menulist id="ota-Periode" ref="http://www.opensi.org/facturation/liste_periodes" datasources="rdf:null" oncommand="ota_actualiserSelection();">
+		      			<template>
+		        			<menupopup>
+		          			<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#PeriodeAff" value="rdf:http://www.opensi.org/facturation/liste_periodes/rdf#Periode" />
+		        			</menupopup>
+		      			</template>
+		    			</menulist>
+		      	</hbox>
+						<hbox align="center">
+		      		<radio value="D" label="De date à date" oncommand="ota_changerTypePeriode(this.value);" />
+							<label value="Du" />
+							<textbox id="ota-Date_Debut" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+							<label value="au" />
+							<textbox id="ota-Date_Fin" size="10" maxlength="10" tooltiptext="jj/mm/aaaa" />
+						</hbox>
+		    	</radiogroup>
+					<vbox>
+						<hbox align="center">
+							<label value="N° Fournisseur :" />
+							<textbox id="ota-Fournisseur_Id" maxlength="10" size="10" />
+							<button oncommand="ota_rechercherFournisseur();" tooltiptext="rechercher un fournisseur" class="bIcoRechercher" />
+						</hbox>
+						<hbox align="center">
+							<label value="Pôle d'activité :" />
+							<menulist id="ota-secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" width="120px">
+								<menupopup>
+									<menuitem label="[Tous]" value="T" style="font-size:80%" />
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" style="font-size:80%" />
+									</menupopup>
+								</template>
+							</menulist>
+						</hbox>
+						<hbox pack="end"><button class="bIcoActualiser" tooltiptext="actualiser" oncommand="ota_actualiserSelection();" /></hbox>
+					</vbox>
+				</groupbox>
+		
+				<spacer flex="1" />
+				
+				<groupbox align="start">
+					<caption label="Transfert en comptabilité" />
+					<hbox align="center" id="ota-boxJournalAchat">
+			    	<label value="Journal d'achat :" />
+			    	<menulist id="ota-journalAchat" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+					</hbox>
+					<hbox align="center" id="ota-boxJournalTransfert">
+			    	<label value="Journal de transfert :" />
+			    	<menulist id="ota-journalTransfert" ref="http://www.opensi.org/compta/journaux"	datasources="rdf:null">
+			    		<menupopup>
+			    			<menuitem label="[Choisir]" value="0" />
+			    		</menupopup>
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+					</hbox>
+					<button id="ota-bTransfert" class="bTransformer" label="Transférer en comptabilité" oncommand="ota_transferer();" />
+					<box style="height:20px;" />
+					<hbox align="center">
+						<label class="label" value="Exporter au format" />
+						<menulist id="ota-formatExport" ref="http://www.opensi.org/comboliste/formats"	datasources="rdf:null">
+			    		<menupopup>
+			    			<menuitem label="[Choisir]" value="" />
+			    		</menupopup>
+			      	<template>
+			        	<menupopup>
+			          	<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/comboliste/formats/rdf#Export_Id" label="rdf:http://www.opensi.org/comboliste/formats/rdf#Intitule" />
+			        	</menupopup>
+			      	</template>
+			    	</menulist>
+			    	<button id="ota-bExporter" class="bValider" label="Ok" oncommand="ota_exporter();" />
+					</hbox>
+				</groupbox>
+			</hbox>
+			<box style="height:10px;" />
+			
+			<hbox align="center">
+				<label value="Type de transfert :" />
+				<radiogroup id="ota-typeTransfert" orient="horizontal" oncommand="ota_switchTypeTransfert();">
+					<radio value="FA" label="Factures / Avoirs" />
+					<radio value="AC" label="Factures d'acompte" />
+				</radiogroup>
+			</hbox>
+			
+			<box style="height:10px;" />
+		
+			<vbox flex="1" id="ota-boxFacturesAvoirs">
+				<hbox align="end">
+					<label class="label_14" value="Factures de la période" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('ota-factures', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('ota-factures', false)" />
+						<box width="30px" />
+						<checkbox id="ota-chkAffFacturesTrans" label="Afficher les factures déjà transférées" oncommand="ota_actualiserListeFactures()" />
+					</hbox>
+				</hbox>
+			  <listbox id="ota-factures" flex="1" ref="http://www.opensi.org/facturation/factures_transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+						<listheader label="Transférée" />
+			      <listheader label="Numéro" />
+			      <listheader label="N° Fournisseur" />
+			      <listheader label="Fournisseur" />
+						<listheader label="Compte fournisseur" />
+			      <listheader label="Responsable" />
+			      <listheader label="Total HT" class="nombre" />
+			    </listhead>
+			    <listcols>
+						<listcol flex="1" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Facture_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Date_Facture" onclick="testcheck(this.parentNode)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Transferee" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Num_Facture" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Fournisseur_Id" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Denomination" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Numero_Compte" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Login_Resp" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Total_HT" style="text-align:right; padding-right:20px" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+		        </listitem>
+			    </template>
+			  </listbox>
+			
+				<box style="height:10px;" />
+			
+				<hbox align="end">
+					<label class="label_14" value="Avoirs de la période" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('ota-avoirs', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('ota-avoirs', false)" />
+						<box width="30px" />
+						<checkbox id="ota-chkAffAvoirsTrans" label="Afficher les avoirs déjà transférés" oncommand="ota_actualiserListeAvoirs()" />
+					</hbox>
+				</hbox>
+			  <listbox id="ota-avoirs" flex="1" ref="http://www.opensi.org/facturation/avoirs_transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+						<listheader label="Transféré" />
+			      <listheader label="Numéro" />
+						<listheader label="N° Fournisseur" />
+			      <listheader label="Fournisseur" />
+						<listheader label="Compte fournisseur" />
+			      <listheader label="Responsable" />
+			      <listheader label="Total HT" class="nombre" />
+			    </listhead>
+			    <listcols>
+						<listcol flex="1" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Avoir_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Date_Avoir" onclick="testcheck(this.parentNode)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Transfere" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Num_Avoir" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Fournisseur_Id" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Denomination" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Numero_Compte" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Login_Resp" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/avoirs_transfert/rdf#Total_HT" style="text-align:right; padding-right:20px" ondblclick="affecterCompteFournisseur(this.parentNode,3)" />
+		        </listitem>
+			    </template>
+			  </listbox>
+			</vbox>
+			
+			<vbox flex="1" id="ota-boxAcomptes">
+				<hbox align="end">
+					<label class="label_14" value="Acomptes de la période" />
+					<hbox pack="end" flex="1">
+						<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher('ota-acomptes', true)" />
+						<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher('ota-acomptes', false)" />
+						<box width="30px" />
+						<checkbox id="ota-chkAffAcomptesTrans" label="Afficher les acomptes déjà transférés" oncommand="ota_actualiserListeAcomptes()" />
+					</hbox>
+				</hbox>
+			  <listbox id="ota-acomptes" flex="1" ref="http://www.opensi.org/facturation/factures_transfert" datasources="rdf:null">
+			    <listhead>
+			     	<listheader label="Date" />
+			     	<listheader label="Transféré" />
+			     	<listheader label="Statut" />
+			      <listheader label="Numéro" />
+			      <listheader label="N° Fournisseur" />
+			      <listheader label="Fournisseur" />
+			      <listheader label="Compte fournisseur" />
+			      <listheader label="Responsable" />
+			      <listheader label="Total HT" class="nombre" />
+			      <listheader collapsed="true" />
+			    </listhead>
+			    <listcols>
+						<listcol flex="1" />
+						<listcol style="width:100px" />
+						<listcol style="width:100px" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="3" />
+						<listcol flex="1" />
+						<listcol flex="1" />
+						<listcol flex="2" />
+						<listcol collapsed="true" />
+		  		</listcols>
+			    <template>
+		        <listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Acompte_Id" allowevents="true">
+	            <listcell type="checkbox" label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Date_Acompte" onclick="testcheck(this.parentNode)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Transfere" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Lbl_Statut" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Num_Acompte" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Fournisseur_Id" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Denomination" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+							<listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Numero_Compte" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Login_Resp" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Total_HT" style="text-align:right; padding-right:20px" ondblclick="affecterCompteFournisseur(this.parentNode,4)" />
+	            <listcell label="rdf:http://www.opensi.org/facturation/factures_transfert/rdf#Statut" />
+		        </listitem>
+					</template>
+				</listbox>
+			</vbox>
+		</vbox>
+	</tabpanel>
+</overlay> 
+

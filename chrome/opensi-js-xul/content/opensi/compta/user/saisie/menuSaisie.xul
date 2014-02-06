@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<?xul-overlay href="overlay-avancement.xul"?>
+<?xul-overlay href="overlay-saisie.xul"?>
+
+<window
+  id="opensi_compta_saisie_menuSaisie"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menuSaisie.js" />
+	
+	<keyset>
+		<key keycode="VK_F10" oncommand="if (getCurrentDeck()==1) osa_openPlanComptable();" />
+		<key keycode="VK_F11" oncommand="if (getCurrentDeck()==1) osa_confirmerAction(osa_menuRevision)" />
+		<key keycode="VK_F12" oncommand="gms_openRechercheEcriture()" />
+	</keyset>
+
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="if (getCurrentDeck()==1) osa_confirmerAction(retourMenuPrincipal); else retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bEtatAvancement" oncommand="osa_confirmerAction(retourAvancement)" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="if (getCurrentDeck()==1) osa_confirmerAction(quit); else quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+	<deck id="dk-menuSaisie" flex="1">
+ 		<vbox id="edk-avancement" />
+ 		<vbox id="edk-saisie" />
+	</deck>
+
+</window>

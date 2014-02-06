@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageEcommerce_overlay-sitesWeb"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-sitesWeb.js" />
+  
+  <tabpanel id="tab-sitesWeb">
+  	<vbox flex="1" style="overflow:auto">
+
+			<tree id="osw-listeSites"
+						hidecolumnpicker="true"
+          	ref="http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb"
+          	seltype="single"
+          	datasources="rdf:null"
+						onselect="osw_ouvrirSite()"
+						flex="1">
+      	<treecols>
+        	<treecol id="osw-colCodeSite" label="Code" flex="1" />
+        	<treecol id="osw-colNomSite" label="Nom du site" flex="1" />
+        	<treecol id="osw-colAdresse" label="Adresse" flex="3" />
+        	<treecol label="Actif" flex="1" />
+        	<treecol id="osw-colActif" collapsed="true" />
+        	<treecol id="osw-colSiteId" collapsed="true" />
+        	<treecol id="osw-colBanqueRemiseCB" collapsed="true" />
+        	<treecol id="osw-colLogoAdr" collapsed="true" />
+        	<treecol id="osw-colEmailVCC" collapsed="true" />
+        	<treecol id="osw-colEmailACC" collapsed="true" />
+        	<treecol id="osw-colEmailECC" collapsed="true" />
+        	<treecol id="osw-colEmailPCC" collapsed="true" />
+        	<treecol id="osw-colEmailVFC" collapsed="true" />
+        	<treecol id="osw-colEmailVAC" collapsed="true" />
+      	</treecols>
+      	<template>
+         	<treechildren>
+           	<treeitem uri="rdf:*">
+             	<treerow>
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Code_Site" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Nom_Site" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Adresse" />
+               	<treecell src="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Picto_Actif" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Actif" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Site_Id" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Banque_Remise_CB" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Logo_Adr" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_VCC" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_ACC" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_ECC" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_PCC" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_VFC" />
+               	<treecell label="rdf:http://www.opensi.org/Config/parametrageEcommerce/listeSitesWeb/rdf#Email_VAC" />
+             	</treerow>
+           	</treeitem>
+         	</treechildren>
+      	</template>
+    	</tree>
+    	
+    	<hbox>
+    		<groupbox flex="1" pack="center" align="center">
+    			<caption label="Site web" />
+    			<grid>
+    				<columns>
+    					<column />
+    					<column />
+    				</columns>
+    				<rows>
+    					<row align="center">
+    						<label class="label" value="* Code site :" />
+    						<hbox><textbox id="osw-codeSite" size="6" maxlength="5" /></hbox>
+    					</row>
+    					<row align="center">
+    						<label class="label" value="* Nom du site :" />
+    						<hbox><textbox id="osw-nomSite" size="21" maxlength="40" /></hbox>
+    					</row>
+    					<row align="center">
+    						<label class="label" value="Adresse du site :" />
+    						<hbox><textbox id="osw-adresseSite" size="21" maxlength="100" /></hbox>
+    					</row>
+    					<row align="center">
+    						<label value="" />
+    						<checkbox id="osw-chkActif" label="Actif" />
+    					</row>
+    					<row align="center">
+    						<label class="label" value="Banque de remise CB :" />
+								<hbox>
+									<menulist id="osw-banqueRemiseCB" ref="http://www.opensi.org/config/banques" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucune]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+								</hbox>
+							</row>
+    				</rows>
+    			</grid>
+    		</groupbox>
+    		
+    		<groupbox flex="1" pack="center" align="center">
+    			<caption label="Gestion des emails" />
+    			<grid>
+    				<columns>
+    					<column />
+    					<column />
+    				</columns>
+    				<rows>
+    					<row align="center">
+								<label class="label" value="Validation de commande :" />
+								<hbox>
+									<menulist id="osw-emailVCC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Annulation de commande :" />
+								<hbox>
+									<menulist id="osw-emailACC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Expédition de commande :" />
+								<hbox>
+									<menulist id="osw-emailECC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Préparation de commande :" />
+								<hbox>
+									<menulist id="osw-emailPCC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Validation de facture :" />
+								<hbox>
+									<menulist id="osw-emailVFC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Validation d'avoir :" />
+								<hbox>
+									<menulist id="osw-emailVAC" ref="http://www.opensi.org/Config/listeEmails" datasources="rdf:null" style="width:200px">
+										<menupopup>
+											<menuitem label="[Aucun]" value="" />
+										</menupopup>
+										<template>
+				            	<menupopup>
+												<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listeEmails/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listeEmails/rdf#Email_Id" />
+				            	</menupopup>
+										</template>
+				        	</menulist>
+				        </hbox>
+							</row>
+    				</rows>
+    			</grid>
+    		</groupbox>
+    		
+    		<groupbox flex="1" pack="center" align="center">
+    			<caption label="Logo" />
+    			<spacer style="height: 10px" />
+					<hbox pack="center">
+						<box style="border:solid 1px">
+							<image validate="always" id="osw-vignette" onerror="this.src='chrome://opensi/content/design/default_logo.jpg'" />
+						</box>
+						<vbox pack="end">
+							<button class="bIcoVisualiser" id="osw-bVoirPhoto" tooltiptext="voir le logo" oncommand="osw_voirPhoto();" />
+							<button class="bIcoEdition" id="osw-bChangerPhoto" tooltiptext="changer le logo" oncommand="osw_changerPhoto();" />
+						</vbox>
+					</hbox>
+					<spacer style="height: 20px" />
+					<checkbox id="osw-chkLogoAdr" label="Le logo contient les informations de l'entreprise" />
+    		</groupbox>
+    	</hbox>
+    	
+    	<hbox pack="center" align="center">
+				<button id="osw-bNouveau" label="Nouveau" class="bNouveau" oncommand="osw_nouveauSiteWeb();" />
+				<button id="osw-bSupprimer" label="Supprimer" class="bSupprimer" oncommand="osw_supprimerSiteWeb();" />
+				<button id="osw-bEnregistrer" label="Enregistrer" class="bEnregistrer" oncommand="osw_enregistrerSiteWeb();" />
+			</hbox>
+		</vbox>
+	</tabpanel>
+</overlay>

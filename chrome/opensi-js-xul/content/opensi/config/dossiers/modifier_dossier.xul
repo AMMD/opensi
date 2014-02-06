@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_dossiers_modifierDossier"
+	flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="modifier_dossier.js" />
+
+	<box class="rv_pop" id="rv" />
+
+  <hbox pack="left" align="center" class="bar_menu_conf">
+		<hbox class="bar_menu_conf_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menuManager()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:20px" />
+	<hbox flex="1" pack="center">
+    <label id="titre" class="label_16" />
+  </hbox>
+	<hbox style="height:10px" />
+	<hbox flex="1" pack="center">
+    <label value="Informations dossier" class="label_14" />
+  </hbox>
+	<hbox style="height:20px" />
+	<vbox flex="20" align="center">
+		<hbox align="center" flex="1" style="overflow:auto">
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="* Raison sociale :" />
+						<hbox><textbox id="Denomination" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Enseigne :" />
+						<hbox><textbox id="Enseigne" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Adresse :" />
+						<hbox><textbox id="Adresse" maxlength="150" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="" />
+						<hbox><textbox id="Comp_Adresse" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="" />
+						<hbox><textbox id="Adresse_3" maxlength="150" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Code postal :" />
+						<hbox><textbox id="Code_Postal" class="rv_cp" idville="Ville" idnextfocus="Email" maxlength="10" size="5" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Ville :" />
+						<hbox><textbox id="Ville" class="rv_ville" idcp="Code_Postal" idnextfocus="Email" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="E-Mail :" />
+						<hbox><textbox id="Email" maxlength="64" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Téléphone :" />
+						<hbox><textbox id="Telephone" maxlength="20" size="16" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Fax :" />
+						<hbox><textbox id="Fax" maxlength="20" size="16" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Site Web :" />
+						<hbox><textbox id="Site_Web" maxlength="60" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Numéro SIRET :" />
+						<hbox><textbox id="Num_SIRET" maxlength="14" size="15" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Code NAF :" />
+						<hbox><textbox id="Code_NAF" maxlength="10" size="8" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Numéro TVA intracommunautaire :" />
+						<hbox><textbox id="Num_TVA_Intra" maxlength="14" size="14" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="RCS (Ville) :" />
+						<hbox><textbox id="Ville_RCS" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Type de société :" />
+						<hbox>
+							<menulist id="Type_Societe" ref="http://www.opensi.org/facturation/typeS" datasources="rdf:null">
+								<template>
+		     					<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeS/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeS/rdf#id" />
+		     					</menupopup>
+								</template>
+		   				</menulist>
+						</hbox>
+					</row>
+				</rows>
+			</grid>
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="Type d'activité :" />
+						<hbox>
+							<menulist id="Typologie">
+        				<menupopup>
+          				<menuitem label="Activité de négoce" value="AN" />
+									<menuitem label="Production de service" value="PS" />
+									<menuitem label="Autre activité" value="AA" />
+        				</menupopup>
+    					</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Date de création (jj/mm/aaaa) :" />
+						<hbox><textbox id="Date_Creation" maxlength="10" size="10" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Durée de la société :" />
+						<hbox><textbox id="Duree_Societe" maxlength="2" size="2" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Montant du capital :" />
+						<hbox><textbox id="Montant_Capital" maxlength="15" size="15" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Nombre de parts :" />
+						<hbox><textbox id="Nb_Parts" maxlength="10" size="4" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Expert comptable :" />
+						<hbox><textbox id="Expert" maxlength="40" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Devise :" />
+						<hbox>
+							<menulist id="monnaieTenue" ref="http://www.opensi.org/config/devises" datasources="rdf:null" disabled="true">
+								<template>
+		     					<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/devises/rdf#Libelle" value="rdf:http://www.opensi.org/config/devises/rdf#Devise_Id" />
+		     					</menupopup>
+								</template>
+		   				</menulist>
+						</hbox>
+					</row>
+					<row>
+						<label class="label" value="Régime fiscal :" style="padding-top:2px;" />
+						<hbox>
+							<radiogroup id="Regime_Fiscal">
+								<radio group="Regime_Fiscal" label="Impôt sur le revenu" value="IR" selected="true" />
+								<radio group="Regime_Fiscal" label="Impôt sur les sociétés" value="IS" />
+							</radiogroup>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Régime de groupe :" />
+						<hbox>
+							<radiogroup id="Regime_Groupe" orient="horizontal">
+								<radio group="Regime_Groupe" label="Oui" value="1" selected="true"/>
+								<radio group="Regime_Groupe" label="Non" value="0"/>
+							</radiogroup>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Centre des impôts :" />
+						<hbox>
+							<menulist editable="true" id="Centre_Impot" ref="http://www.opensi.org/Config/listeCentreImpot" datasources="rdf:null">
+      					<template>
+        					<menupopup>
+          					<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/Config/listeCentreImpot/rdf#nom_centre" value="rdf:http://www.opensi.org/Config/listeCentreImpot/rdf#nom_centre" />
+        					</menupopup>
+      					</template>
+    					</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Trésorerie :" />
+						<hbox>
+							<menulist editable="true" id="Tresorerie" ref="http://www.opensi.org/Config/listeTresorerie" datasources="rdf:null">
+      					<template>
+        					<menupopup>
+          					<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/Config/listeTresorerie/rdf#nom_tresorerie" value="rdf:http://www.opensi.org/Config/listeTresorerie/rdf#nom_tresorerie" />
+        					</menupopup>
+      					</template>
+    					</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Centre de gestion :" />
+						<hbox><textbox id="Centre_Gestion" maxlength="60" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Fin de l'exercice courant (jj/mm/aaaa) :" />
+						<hbox><textbox id="Fin_Exercice" maxlength="10" size="10" /></hbox>
+					</row>
+        </rows>
+			</grid>
+		</hbox>
+		<hbox pack="center">
+    	<button class="bEnregistrer" label="Enregistrer" oncommand="modifierDossier()" />
+  	</hbox>
+		<hbox flex="1" />
+	</vbox>
+
+</window>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi"
+  id="opensi_config_gestion_commerciale"
+  onload="init()"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="changePhoto.js" />
+
+	<vbox align="center" class="auto-overflow">
+		<box style="height:10px" />
+		<label value="Changement de l'image du logo" class="label_14" />
+		<box style="height:20px" />
+		<label value="L'image doit être au format JPEG" />
+		<label value="La taille maximale de l'image est fixée à 500 Ko" />
+		<label value="Pour plus de fluidité, il est recommandé de ne pas dépasser les 250 Ko." />
+		<box style="height:20px" />
+		<hbox>
+			<label class="label" value="Image du logo : " />
+    	<html:form enctype="multipart/form-data" method="POST" id="uploadform">
+      	<html:input type="file" size="40" name="uploadfile" value="" id="Photo" />
+    	</html:form>
+		</hbox>
+		<box style="height:20px" />
+		<hbox>
+			<button class="bAnnuler" label="Annuler" oncommand="window.close();" />
+			<box style="width:20px" />
+			<button class="bValider" label="Valider" oncommand="validerPhoto();" />
+		</hbox>
+	</vbox>
+
+</window>

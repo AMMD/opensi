@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_commerciaux_statistique"
+ 	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="statistique.js" />
+
+	<tabpanel id="statistiques">
+ 		<hbox flex="1">
+			<vbox>
+				<groupbox>
+ 					<caption label="Critères d'édition" />
+					<vbox>
+						<label value="Période de tri :" />
+						<radiogroup id="rgp_date" oncommand="action_date();">
+							<radio id="moisCourant" value="MC" label="Mois en cours" selected="true"/>
+							<radio id="moisPrec" value="MP" label="Mois précédent"/>
+							<radio id="anneeCourant" value="AC" label="Année en cours"/>
+							<radio id="anneePrec" value="AP" label="Année précédente"/>
+							<radio id="interval" value="DD" label="Choix des dates: (jj/mm/aaaa)" />
+							<hbox>
+								<label value="du " />
+								<hbox><textbox id="date1" maxlength="10" size="9" oninput="action_params_edition();"/></hbox>
+								<label value="au " />
+								<hbox><textbox id="date2" maxlength="10" size="9" oninput="action_params_edition();"/></hbox>
+							</hbox>
+						</radiogroup>
+
+						<label value="Filtrage des ventes :" />
+						<radiogroup id="rgp_filtre" oncommand="action_params_edition();">
+							<radio id="no_detail" value="ND" label="Pas de détails" selected="true"/>
+							<radio id="client" value="C" label="Client"/>
+							<radio id="marque" value="MQ" label="Marque"/>
+							<radio id="famille1" value="F1" label="Famille 1"/>
+							<radio id="famille2" value="F2" label="Famille 2"/>
+							<radio id="famille3" value="F3" label="Famille 3"/>
+							<radio id="article" value="A" label="Article"/>
+						</radiogroup>
+					</vbox>
+				</groupbox>
+
+				<vbox>
+					<groupbox>
+						<caption label="Synthèse" />
+						<label id="lbl_periode" value="Période" style="font-weight:bold" />
+						<hbox><label value="Chiffre d'Affaires HT" /><label class="label_petit" value="(hors frais de port)" /></hbox>
+						<textbox id="txt_CAHT" disabled="true" />
+						<hbox><label value="Chiffre d'Affaires TTC" /><label class="label_petit" value="(hors frais de port)" /></hbox>
+						<textbox id="txt_CATTC" disabled="true" />
+						<label value="Rémunération sur cette période" />
+						<textbox id="txt_remuneration" disabled="true" />
+					</groupbox>
+					<vbox>
+						<button id="btn_lister" label="Aperçu des ventes" oncommand="lister_statistiques();" />
+					</vbox>
+				</vbox>
+			</vbox>
+			
+			<vbox flex="1">
+
+				<tree id="statistiques_commercial"
+	       			ref="http://www.opensi.org/facturation/statistiques_commercial"
+	       			seltype="single"
+	       			datasources="rdf:null"
+	       			flex="1"
+	       			hidecolumnpicker="true"
+	       			flags="dont-build-content">
+	 				<treecols>
+	 					<treecol id="ColPeriode" flex="1" label="Période" />
+						<treecol id="ColClient" flex="1" label="Client" collapsed="true" />
+						<treecol id="ColMarque" flex="1" label="Marque" collapsed="true" />
+						<treecol id="ColFamille1" flex="1" label="Famille 1" collapsed="true" />
+						<treecol id="ColFamille2" flex="1" label="Famille 2" collapsed="true" />
+						<treecol id="ColFamille3" flex="1" label="Famille 3" collapsed="true" />
+						<treecol id="ColArticle" flex="1" label="Article" collapsed="true" />
+						<treecol id="ColFacture" flex="1" label="N° Facture" />
+	     			<treecol id="ColCommission" flex="1" label="Commission" style="text-align:right" />
+	   			</treecols>
+	   			<template>
+	   				<treechildren>
+	     				<treeitem uri="rdf:*">
+	       				<treerow properties="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Couleur">
+	       					<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Periode" />
+									<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Client" />
+									<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Marque" />
+									<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Famille_1" />
+									<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Famille_2" />
+									<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Famille_3" />
+					  			<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Article" />
+					  			<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Num_Facture" />
+					  			<treecell label="rdf:http://www.opensi.org/facturation/statistiques_commercial/rdf#Commission" />
+	         			</treerow>
+	       			</treeitem>
+	     			</treechildren>
+	   			</template>
+	 			</tree>
+	 			
+	 			<groupbox id="grp_edition" collapsed="true">
+					<caption label="Edition" />
+					<grid flex="1">
+						<columns>
+							<column flex="1" />
+		     			<column flex="20" />
+						</columns>
+						<rows>
+							<row>
+								<label value="Valeur d'ajustement :" />
+								<hbox>
+									<hbox><textbox id="txt_valAjustement" size="10" flex="1" /></hbox>
+									<label value="Type :" />
+									<radiogroup id="rgp_typeAjustement">
+										<hbox>
+											<radio id="rgp_debit" value="D" label="Débit" selected="true" />
+											<radio id="rgp_credit" value="C" label="Crédit" />
+										</hbox>
+									</radiogroup>
+								</hbox>
+							</row>
+							<row>
+								<label value="Commentaires :" />
+								<textbox id="txt_commentaires" multiline="true" rows="3" size="200" />
+							</row>
+						</rows>
+					</grid>
+					<hbox pack="center">
+						<button id="btn_pdf" class="bValider" label="Valider" oncommand="generer_pdf();" />
+					</hbox>
+				</groupbox>
+	 		</vbox>
+ 		</hbox>
+	</tabpanel>
+
+</overlay>

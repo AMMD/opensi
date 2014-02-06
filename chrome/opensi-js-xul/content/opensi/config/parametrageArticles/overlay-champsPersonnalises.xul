@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_config_parametrageArticles_overlay-champsPersonnalises"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-champsPersonnalises.js" />
+  
+  <tabpanel id="tab-champs">
+  
+  	<vbox flex="1" style="overflow:auto">
+
+			<box style="height:30px" />
+			<hbox pack="center">
+		    <label class="label_16" value="CHAMPS PERSONNALISES" />
+		  </hbox>
+			<hbox style="height:30px" />
+		
+			<hbox flex="1" pack="center">
+			
+			  <vbox flex="2">
+					<groupbox flex="1">
+						<caption label="Champs existants" />
+		      	<tree id="ocp-liste_champs"
+		      			flex="1"
+								hidecolumnpicker="true"
+		          	seltype="single"
+		          	flags="dont-build-content"
+		        		ref="http://www.opensi.org/Config/listeChamps"
+		        		datasources="rdf:null"
+		          	onselect="ocp_selectionnerChamp();">
+			      	<treecols>
+			        	<treecol id="ocp-ColLibelle" flex="1" label="Libellé" />
+			        	<splitter class="tree-splitter" />
+			        	<treecol id="ocp-ColLblType" flex="1" label="Type" />
+			        	<splitter class="tree-splitter" />
+			        	<treecol id="ocp-ColLblFamille1" flex="1" label="Famille 1" />
+			        	<splitter class="tree-splitter" />
+			        	<treecol id="ocp-ColLblFamille2" flex="1" label="Famille 2" />
+			        	<splitter class="tree-splitter" />
+			        	<treecol id="ocp-ColLblFamille3" flex="1" label="Famille 3" />
+			        	<treecol id="ocp-ColFamille1" collapsed="true" />
+			        	<treecol id="ocp-ColFamille2" collapsed="true" />
+			        	<treecol id="ocp-ColFamille3" collapsed="true" />
+			        	<treecol id="ocp-ColType" collapsed="true" />
+			        	<treecol id="ocp-ColChampId" collapsed="true" />
+			      	</treecols>
+			        <template>
+			      		<treechildren>
+			         		<treeitem uri="rdf:*">
+			           		<treerow>
+											<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#libelle" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#lbltype" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#lblfamille1" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#lblfamille2" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#lblfamille3" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#famille1" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#famille2" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#famille3" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#type" />
+			             		<treecell label="rdf:http://www.opensi.org/Config/listeChamps/rdf#champ_id" />
+			           		</treerow>
+			         		</treeitem>
+			      		</treechildren>
+			    		</template>
+			    	</tree>
+					</groupbox>
+				</vbox>
+				
+				<vbox flex="1">
+					<groupbox flex="1" pack="center" align="center">
+						<caption label="Champ personnalisé" />
+						<grid>
+		       		<columns>
+		         		<column/>
+								<column/>
+		       		</columns>
+							<rows>
+								<row align="center">
+				      		<label class="label" value="Famille 1 :" />
+				      		<hbox>
+										<menulist id="ocp-Famille_1" oncommand="ocp_chargerFamilles2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+											<menupopup>
+												<menuitem label="[toutes]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+				      		</hbox>
+				    		</row>
+								<row align="center">
+									<label class="label" value="Famille 2 :" />
+									<hbox>
+										<menulist id="ocp-Famille_2" oncommand="ocp_chargerFamilles3();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+											<menupopup>
+												<menuitem label="[toutes]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Famille 3 :" />
+									<hbox>
+										<menulist id="ocp-Famille_3" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+											<menupopup>
+												<menuitem label="[toutes]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Libellé du champ :" />
+									<hbox><textbox id="ocp-Libelle_Champ" maxlength="50" size="25" /></hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Type du champ :" />
+									<hbox>
+										<menulist id="ocp-Type_Champ">
+					        	 	<menupopup>
+					         	  	<menuitem label="case à cocher" value="CC" />
+					        			<menuitem label="zone de texte" value="ZT" />
+					       				<menuitem label="champ texte" value="CT" />
+					       				<menuitem label="champ numérique décimal" value="ND" />
+					       				<menuitem label="champ numérique entier" value="NE" />
+					     					<menuitem label="liste déroulante" value="LD" />
+					     					<menuitem label="groupe de boutons radio" value="BR" />
+					     					<menuitem label="liste personnalisée" value="LP" />
+											</menupopup>
+										</menulist>
+										<label class="label" id="ocp-label_type" collapsed="true" />
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+						<hbox style="height:30px" />
+						<hbox>
+						  <hbox flex="1" pack="center">
+						  	<button id="ocp-bNouveau" class="bNouveau" label="Nouveau" oncommand="ocp_initChamps()" collapsed="true" />
+								<button id="ocp-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="ocp_enregistrerChamp()" />
+								<button id="ocp-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="ocp_supprimerChamp()" disabled="true" />
+							</hbox>
+						</hbox>
+					</groupbox>
+		
+			 		<groupbox id="ocp-Options" pack="center" flex="1">
+						<caption label="Détail des options" />
+				  	<hbox pack="center" flex="1">
+				  		<vbox flex="2">
+								<tree id="ocp-liste_options"
+											hidecolumnpicker="true"
+					          	seltype="single"
+					          	flags="dont-build-content"
+				        			ref="http://www.opensi.org/Config/listeOptions"
+				        			datasources="rdf:null"
+											onselect="ocp_selectionnerOption();"
+											flex="2">
+					      	<treecols>
+					        	<treecol id="ocp-ColLibelle" flex="1" label="Libellé" />
+					        	<splitter class="tree-splitter" />
+					        	<treecol id="ocp-ColValeur" flex="1" label="Valeur" />
+					        	<treecol id="ocp-ColListeId" collapsed="true" />
+					      	</treecols>
+					        <template>
+					      		<treechildren>
+					         		<treeitem uri="rdf:*">
+					           		<treerow>
+													<treecell label="rdf:http://www.opensi.org/Config/listeOptions/rdf#libelle" />
+					             		<treecell label="rdf:http://www.opensi.org/Config/listeOptions/rdf#valeur" />
+					             		<treecell label="rdf:http://www.opensi.org/Config/listeOptions/rdf#liste_id" />
+					           		</treerow>
+					         		</treeitem>
+					      		</treechildren>
+					    		</template>
+					    	</tree>
+					    </vbox>
+							<vbox flex="1" pack="center">
+								<hbox style="overflow:auto">
+									<grid>
+										<columns>
+											<column />
+											<column />
+										</columns>
+										<rows>
+											<row align="center">
+												<label class="label" value="Libellé de l'option :" />
+												<hbox><textbox id="ocp-Libelle_Option" maxlength="50" size="25" /></hbox>
+											</row>
+											<row align="center">
+												<label class="label" value="Valeur de l'option :" />
+												<hbox><textbox id="ocp-Valeur_Option" maxlength="50" size="25" /></hbox>
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+								<hbox style="height:30px" />
+								<hbox align="center" pack="center">
+									<button id="ocp-bNouvelleOption" class="bNouveau" label="Nouvelle Option" oncommand="ocp_nouvelleOption()" collapsed="true" />
+									<button id="ocp-bAjouterOption" class="bEnregistrer" label="Enregistrer" oncommand="ocp_enregistrerOption()" />
+									<button id="ocp-bSupprimerOption" class="bSupprimer" label="Supprimer" oncommand="ocp_supprimerOption()" disabled="true" />
+								</hbox>
+							</vbox>
+						</hbox>
+			 		</groupbox>
+			 		
+			 		<groupbox id="ocp-Colonnes" pack="center" flex="1">
+						<caption label="Détail des colonnes" />
+				  	<hbox pack="center" flex="1">
+				  		<vbox flex="2">
+								<tree id="ocp-liste_colonnes"
+											hidecolumnpicker="true"
+					          	seltype="single"
+					          	flags="dont-build-content"
+				        			ref="http://www.opensi.org/Config/listeColonnes"
+				        			datasources="rdf:null"
+											onselect="ocp_selectionnerColonne();"
+											flex="2">
+					      	<treecols>
+					        	<treecol id="ocp-ColLibelle" flex="1" label="Libellé" />
+					        	<treecol id="ocp-ColColonneId" collapsed="true" />
+					      	</treecols>
+					        <template>
+					      		<treechildren>
+					         		<treeitem uri="rdf:*">
+					           		<treerow>
+													<treecell label="rdf:http://www.opensi.org/Config/listeColonnes/rdf#libelle" />
+					             		<treecell label="rdf:http://www.opensi.org/Config/listeColonnes/rdf#colonne_id" />
+					           		</treerow>
+					         		</treeitem>
+					      		</treechildren>
+					    		</template>
+					    	</tree>
+					    </vbox>
+							<vbox flex="1" pack="center">
+								<hbox style="overflow:auto">
+									<label class="label" value="Libellé de la colonne :" />
+									<textbox id="ocp-Libelle_Colonne" maxlength="50" size="25" />
+								</hbox>
+								<hbox style="height:30px" />
+								<hbox align="center" pack="center">
+									<button id="ocp-bNouvelleColonne" class="bNouveau" label="Nouvelle Colonne" oncommand="ocp_nouvelleColonne()" collapsed="true" />
+									<button id="ocp-bAjouterColonne" class="bEnregistrer" label="Enregistrer" oncommand="ocp_enregistrerColonne()" />
+									<button id="ocp-bSupprimerColonne" class="bSupprimer" label="Supprimer" oncommand="ocp_supprimerColonne()" disabled="true" />
+								</hbox>
+							</vbox>
+						</hbox>
+			 		</groupbox>
+			 	</vbox>
+			</hbox>
+		</vbox>
+	</tabpanel>
+</overlay>

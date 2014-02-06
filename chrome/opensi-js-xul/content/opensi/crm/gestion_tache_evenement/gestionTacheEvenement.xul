@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+
+<?xul-overlay href="overlay-ficheTache.xul"?>
+ 
+<window
+  id="opensi_crm_gestionTacheEvenement_gestionTacheEvenement"
+  flex="1" onload="initGestionTacheEvenement();" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="gestionTacheEvenement.js" />
+  
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bRetourReglementsFournisseurs" oncommand="retourListeCompte();" collapsed="true" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="retourGestionCompte();" tooltiptext="fermer la session" collapsed="true"/>
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide();" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	
+	<deck id="deck" flex="1">	
+	
+	   <vbox flex="1" >
+	  	<label class="label_16" value="Gestion des tâches et évènements" />		
+		<hbox>	
+			
+			<vbox >
+				<hbox >	
+				
+					<vbox  >	
+				
+			 		<grid >
+			 			<columns>
+							<box width="20px" />
+			 				<column />
+			 				<column />
+			 			</columns>
+			 		 	<rows>
+			 				<row align="center">
+			 					<label class="label" value="Compte :" />
+			 					<textbox id="numCompte" maxlength="10" size="10" oncommand="rechercher();" />
+			 				</row>
+			 				<row align="center">
+			 					<label class="label" value="Contact :" />
+			 					<textbox id="contact" maxlength="10" size="10" oncommand="rechercher();" />
+			 				</row>
+			 			</rows>
+			 		</grid>	
+					
+					</vbox>
+								
+					
+		
+			
+			 		<grid >
+			 			<columns>
+							<box width="20px" />
+			 				<column />
+			 				<column />
+			 			</columns>
+			 		 	<rows>
+			 				<row align="center">
+			 					<label class="label" value="N° Client :" />
+			 					<textbox id="ClientId" maxlength="10" size="10" oncommand="rechercher();" />
+			 				</row>
+			 				<row align="center">
+								<label class="label" value="Intitule :" />
+								<textbox id="intitule" maxlength="10" size="10" oncommand="rechercher();" />
+			 				</row>
+			 			</rows>
+			 		</grid>	
+			
+				</hbox>
+							
+				<hbox>
+					<box width="20px" />		
+					<label class="label" value="Date du :" />
+		  			<textbox id="dateDebut" maxlength="10" size="10" oncommand="rechercher();" />
+		  			<label class="label" value="au" />
+	  				<textbox id="dateFin" maxlength="10" size="10" oncommand="rechercher();" />  		
+				</hbox>	
+					
+				
+			</vbox>
+		
+				
+				<box width="40px" />
+		 		<grid >
+		 			<columns>
+		 				<column />
+		 				<column />
+		 				<box width="20px" />
+		 				<column />
+		 				<box width="5px" />
+		 				<column />
+		 			</columns>
+		 		 	<rows>
+		 		 	
+		 				<row align="center">
+		 					<label id="labelListeResponsable" class="label" value="Responsable :" />
+			  				<menulist id="listeResponsable" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Tous]" value="TOUS" />
+								</menupopup>
+								 <template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Util_R" />
+									</menupopup>
+								</template> 
+							</menulist>
+							<label value="" />
+							<label value="" />
+		 				</row>
+		 				
+		 				<row align="center">
+		  					<label class="label" value="Action :" />	  					
+			  				<menulist id="listeActions" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionTachesEvenements" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucune]" value="TOUS" />
+								</menupopup>
+								 <template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionTachesEvenements/rdf#Libelle" value="rdf:http://www.opensi.org/crm/gestionTachesEvenements/rdf#Action_Id" />
+									</menupopup>
+								</template> 
+							</menulist>
+							<label  value="" />
+							<label  value="" />					
+		 				</row>
+	
+		 				<row align="center">
+		  					<label class="label" value="Etat :" />	  					
+			  				<menulist id="listeEtats" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Tous]" value="TOUS" />
+									<menuitem label="A traiter" value="N" />
+									<menuitem label="En cours" value="T" />
+									<menuitem label="Effectuée" value="C" />
+								</menupopup>
+							</menulist>						
+				  			<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="rechercher();" />
+							<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="reinitialiser();" />					
+		 				</row>
+	
+		 			</rows>
+		 		</grid>
+		 		
+		 		<hbox pack="end" flex="1">
+				  	<vbox>
+						<button id="bNouvelleTache" class="bNouveau" tooltiptext="nouvelle tâche" label="Nouvelle tâche" oncommand="nouvelleTache();" />
+					</vbox>
+				</hbox>
+							
+	 	</hbox>
+		
+		
+		<hbox>
+		
+			<label class="label" value="Tâches :" />
+			
+			<hbox flex="1" pack="center" >
+				<hbox flex="1" pack="center" >
+					<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="bPrec" oncommand="pressOnPageTacPrec();" tooltiptext="Page précédente" />
+					<vbox>
+						<hbox flex="1" pack="center" align="center">
+							<label value="Page" />
+							<label id="pageDebTac" />
+							<label value="/" />
+							<label id="pageFinTac" />
+						</hbox>
+					</vbox>
+						<button disabled="true" class="bIcoAvance" id="bSuiv" oncommand="pressOnPageTacSuiv();" tooltiptext="Page suivante" />
+				</hbox>
+				
+				<hbox pack="end" align="center" >
+					<label class="label" value="Nb de lignes par page :" />
+					<menulist id="nbLignePageTac" oncommand="majNbrLigneEvent();">
+						<menupopup>
+							<menuitem label="100" value="100" />
+							<menuitem label="500" value="500" />
+							<menuitem label="1000" value="1000" />
+						</menupopup>
+					</menulist>	
+						
+				</hbox>
+				<box width="20px" />
+			</hbox>
+	
+		</hbox> 	  
+	  
+	  
+	  
+	  
+	  	<tree flex="1" id="listeTaches" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionTaches"
+		datasources="rdf:null" seltype="single" ondblclick="dbClickListeTaches();" >
+			<treecols>		
+				<treecol id="priorite" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Priorite" />
+				<splitter class="tree-splitter" />
+				<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Date" />
+				<splitter class="tree-splitter" />
+				<treecol label="Intitule" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Intitule" />
+				<splitter class="tree-splitter" />
+				<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Action" />
+				<splitter class="tree-splitter" />
+				<treecol label="Etat" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Etat" />
+				<splitter class="tree-splitter" />
+				<treecol label="Contact" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Contact" />
+				<splitter class="tree-splitter" />
+				<treecol label="Responsable" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Nom_Responsable" />
+				<splitter class="tree-splitter" />
+				
+				<treecol id ="Prospect_Id" label="Prospect_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Prospect_Id" collapsed="false"/>
+				<splitter class="tree-splitter" />
+			
+				<treecol id ="Tache_Id" label="Tache Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Tache_Id" collapsed="false"/>
+				<splitter class="tree-splitter" />
+			
+			
+			</treecols>
+			<template>
+				<treechildren>
+					<treeitem uri="rdf:*">
+						<treerow>
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Priorite" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Date" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Intitule" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Action" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Etat" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Contact" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Nom_Responsable" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Prospect_Id" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionTaches/rdf#Tache_Id" />									
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</template>		
+		</tree>
+	  
+			<hbox>
+				<button disabled="false" class="bCSV" label="Export CSV" id="gestionComptes-CSV" oncommand="genCSVgestionTaches();" tooltiptext="Edition CSV" />
+			</hbox>
+		  
+		 		<hbox pack="end" >
+				  	<vbox>
+						<button id="bNouvelEvenement" class="bNouveau" tooltiptext="nouveau compte" label="Nouvel évènement" oncommand="nouveauProspect();" />
+					</vbox>
+				</hbox>
+		  
+			<hbox>
+		
+			<label class="label" value="Evènements :" />
+			
+			<hbox flex="1" pack="center" >
+				<hbox flex="1" pack="center" >
+					<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="bPrec" oncommand="pressOnPagePrec();" tooltiptext="Page précédente" />
+					<vbox>
+						<hbox flex="1" pack="center" align="center">
+							<label value="Page" />
+							<label id="pageDebEvent" />
+							<label value="/" />
+							<label id="pageFinEvent" />
+						</hbox>
+					</vbox>
+						<button disabled="true" class="bIcoAvance" id="bSuiv" oncommand="pressOnPageSuiv();" tooltiptext="Page suivante" />
+				</hbox>
+				
+				<hbox pack="end" align="center" >
+					<label class="label" value="Nb de lignes par page :" />
+					<menulist id="nbLignePage" oncommand="majNbrLigneEvent();">
+						<menupopup>
+							<menuitem label="100" value="100" />
+							<menuitem label="500" value="500" />
+							<menuitem label="1000" value="1000" />
+						</menupopup>
+					</menulist>	
+						
+				</hbox>
+				<box width="20px" />
+			</hbox>
+	
+		</hbox> 
+		  
+		  
+		  
+		  
+		  
+	
+	 	<tree flex="1" id="listeEvenements" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionEvenements"
+		datasources="rdf:null" seltype="single" ondblclick="dbClickListeEvenements();" >
+			<treecols>		
+				<treecol id="priorite" label="Date début" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Date_Debut" />
+				<splitter class="tree-splitter" />
+				<treecol label="Date fin" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Date_Fin" />
+				<splitter class="tree-splitter" />
+				<treecol label="Intitule" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Intitule" />
+				<splitter class="tree-splitter" />
+				<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Action" />
+				<splitter class="tree-splitter" />
+				<treecol label="Contact" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Contact" />
+				<splitter class="tree-splitter" />
+				<treecol label="Responsable" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Nom_Responsable" />
+				<splitter class="tree-splitter" />
+				
+				<treecol id ="Prospect_Id" label="Prospect_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Prospect_Id" collapsed="false"/>
+				<splitter class="tree-splitter" />
+				<treecol id ="Responsable_Id" label="Responsable_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Responsable_Id" collapsed="false" />
+				<splitter class="tree-splitter" />						
+			</treecols>
+			<template>
+				<treechildren>
+					<treeitem uri="rdf:*">
+						<treerow>
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Date_Debut" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Date_Fin" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Intitule" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Action" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Contact" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Nom_Responsable" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Prospect_Id" />
+							<treecell label="rdf:http://www.opensi.org/crm/gestionEvenements/rdf#Responsable_Id" />									
+						</treerow>
+					</treeitem>
+				</treechildren>
+			</template>		
+		</tree>
+	
+	
+	
+		<hbox>
+			<button disabled="false" class="bCSV" label="Export CSV" id="gestionComptes-CSV" oncommand="genCSVgestionEvenements();" tooltiptext="Edition CSV" />
+		</hbox>
+	
+		  
+		  
+	
+	  </vbox>
+	  
+	  <vbox id="ficheTache"/> 
+	  
+	</deck>
+
+</window>

@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_crm_user_gestionCompte_overlayFicheContact"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-ficheContact.js" />
+	
+	<script src="chrome://opensi/content/libs/util.js" />
+  
+	<tabpanel id="tabContact" flex="1">
+		<vbox flex="1">
+			<tree flex="1" id="ofc-listeContacts" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionComptes"
+				datasources="rdf:null" seltype="single" ondblclick="onClickListeContact();" >
+				<treecols>		
+					<treecol id="civilite" label="Civilité" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Civilite" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id="nom" label="Nom" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id="prenom" label="Prénom" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prenom" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id="fonction" label="Fonction" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Fonction" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id="telephone" label="Téléphone" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Telephone" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id="relation" label="Relation" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Relation" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id ="pays" label="Pays" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Pays" />
+					<splitter class="tree-splitter" />
+					
+					<treecol id ="Contact_Id" label="Contact_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact_Id" collapsed="true"/>
+				<splitter class="tree-splitter" />
+				</treecols>
+				<template>
+					<treechildren>
+						<treeitem uri="rdf:*">
+							<treerow>
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Civilite" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prenom" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Fonction" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Telephone" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Relation" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Pays" />
+								<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Contact_Id" />
+							</treerow>
+						</treeitem>
+					</treechildren>
+				</template>		
+			</tree>
+			<box height="15px" />
+			<groupbox align ="center">
+				<caption label="Contact"/>
+				<hbox>		
+					<grid>
+						<columns>
+							<column/>
+							<column/>
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Civilité :"/>
+								<radiogroup id="ofc-Civilite" orient="horizontal">
+				                	<radio value="1" label="M." selected="true" />
+				                	<radio value="2" label="Mme" />
+				                	<radio value="3" label="Mlle" />
+				              	</radiogroup>
+							</row>
+							<row align="center">
+								<label class="label" value="* Nom :"/>
+								<hbox><textbox id="ofc-Nom" maxlength="20" size="20" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Prénom :"/>
+								<hbox><textbox id="ofc-Prenom" maxlength="20" size="20" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Fonction :"/>
+								<hbox><textbox id="ofc-Fonction" maxlength="25" size="20" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Date de naissance :"/>
+							<hbox><textbox id="ofc-DNaiss" maxlength="10" size="10" tooltiptext="format de saisie : jj/mm/aaaa" /></hbox>
+							</row>
+				
+				
+							<row align="center">
+								<label class="label" value="* Type de relation :"/>
+								<radiogroup id="ofc-relation" orient="horizontal">
+				                	<radio value="H" label="Habituelle" />
+				                	<radio value="O" label="Occasionnelle" selected="true" />
+				              	</radiogroup>
+								
+							</row>
+
+						</rows>
+					</grid>
+
+					<box width="75px" />
+
+
+					<grid>
+						<columns>
+							<column/>
+							<column/>
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Téléphone :"/>
+								<hbox><textbox id="ofc-Telephone" maxlength="20" size="15" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Portable :"/>
+								<hbox><textbox id="ofc-Portable" maxlength="20" size="15" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Fax :"/>
+								<hbox><textbox id="ofc-Fax" maxlength="20" size="15" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="E-Mail :"/>
+								<hbox><textbox id="ofc-mail" maxlength="60" size="40" /></hbox>
+							</row>
+							
+							<row align="center">
+								<label class="label" value="Adresse :"/>
+								<hbox><textbox id="ofc-Adresse" maxlength="100" size="40" /></hbox>
+							</row>
+				
+							<row align="center">
+								<label class="label" value="Code postal :"/>
+								<hbox><textbox id="ofc-CP" maxlength="10" size="5" /></hbox>
+							</row>
+
+							<row align="center">
+								<label class="label" value="Ville :"/>
+								<hbox><textbox id="ofc-Ville" maxlength="50" size="30" /></hbox>
+							</row>
+
+							<row align="center">
+								<label class="label" value="Pays :"/>
+								<menulist id="ofc-listePays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+									<template>
+	              						<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+	              						</menupopup>
+									</template>
+								</menulist>
+   
+							</row>
+						</rows>
+					</grid>
+									
+					<box width="75px" />
+					
+					<vbox align ="left" >
+						<label align ="left" class="label" value="Commentaires :"/>
+						<hbox flex="1">
+							<textbox id="ofc-comLibre" multiline="true" rows="8" cols="35" />
+						</hbox>	
+					</vbox>
+					
+
+				</hbox>
+				
+				<box height="15px" />
+				
+				<hbox flex="1" pack="center" >
+						<button id="bofc-Nouveau" class="bNouveau" tooltiptext="Supprimer contact" label="Nouveau" oncommand="ofsNouveauContact();" />
+						<button id="bofc-Enregistrer" class="bEnregistrer" tooltiptext="Enregistrer contact" label="Enregistrer " oncommand="ofcEnregistrer();" />
+						<button id="bofc-Supprimer" class="bSupprimer" tooltiptext="Supprimer contact" label="Supprimer " oncommand="ofc_pressOnSupprimer();" />
+				</hbox>
+			
+			
+			</groupbox>
+		</vbox>
+	</tabpanel>
+	
+</overlay>

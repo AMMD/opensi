@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="statistique.css" type="text/css"?>
+
+<?xul-overlay href="interface_commerciaux.xul"?>
+<?xul-overlay href="statistique.xul"?>
+<?xul-overlay href="historique.xul"?>
+	
+
+<window id="opensi_facturation_user_commerciaux_gestionCommerciaux"
+  flex="1"
+  onload="init();"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+	<script src="gestion_commerciaux.js" />
+	
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="demandeEnregistrement();retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bMenuCommerciaux" oncommand="demandeEnregistrement(); retourChoixCommercial();" />
+			<button class="bouton_menu" id="bRetourCommercial" oncommand="retour_commercial();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="demandeEnregistrement();quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+	<deck id="deck" flex="1">
+
+	 	<vbox pack="center" flex="1">
+			<tabbox flex="1" id="Panneau">
+				<tabs>
+		     	<tab label="Fiche signalétique" onclick="desactiverRetourCommercial();" />
+		      <tab label="Statistiques de vente" id="tabStatistiques" onclick="init_stats();" />
+		      <tab label="Historique des commissionnements" id="tabHistorique" onclick="init_historique();" />
+				</tabs>
+		 		<tabpanels flex="1">
+					<tabpanel id="infos" />
+					<tabpanel id="statistiques" />
+					<tabpanel id="historique" />
+		 		</tabpanels>
+		   </tabbox>
+	
+			<statusbar>
+				<statusbarpanel id="Creation" label="Créé le " />
+				<statusbarpanel id="Modification" label="Dernière modification le " />
+				<statusbarpanel id="Fiche" flex="1" style="text-align:right;font-weight:bold;" />
+			</statusbar>
+		</vbox>
+		
+		<vbox>
+			<iframe type="content" id="pdf_commission" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

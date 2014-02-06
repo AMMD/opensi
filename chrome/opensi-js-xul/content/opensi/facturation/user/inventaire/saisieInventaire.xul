@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_saisieInventaire"
+  flex="1"
+  onload="init()"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="saisieInventaire.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bMenuInventaire" oncommand="retourMenuInventaire();" />
+			<button class="bouton_menu" id="bRetourInventaire" oncommand="retourInventaire();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	
+	<deck id="deck" selectedIndex="0" flex="1">
+	
+		<vbox flex="1">
+	
+			<hbox style="height:15px" />
+			<hbox>
+				<label value="Inventaire N°" class="label_16" />
+				<label id="Num_Inventaire" class="label_16" />
+			</hbox>
+			<hbox style="height:10px" />
+		
+			<hbox>				
+				<menulist id="Marque" oncommand="switchSelection();" ref="http://www.opensi.org/facturation/combo-marquesArticle" datasources="rdf:null" style="max-width:250px;min-width:180px">
+					<menupopup>
+						<menuitem label="[Marque]" value="0" />
+					</menupopup>
+					<template>
+						<menupopup>
+							<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/combo-marquesArticle/rdf#Marque_Id" style="font-size:80%" />
+						</menupopup>
+					</template>
+				</menulist>
+				
+				<menulist id="Famille_1" oncommand="pressOnFamille1();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+					<menupopup>
+						<menuitem label="[Famille 1]" value="0" />
+					</menupopup>
+					<template>
+						<menupopup>
+							<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+						</menupopup>
+					</template>
+				</menulist>
+						
+				<menulist id="Famille_2" oncommand="pressOnFamille2();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+					<menupopup>
+						<menuitem label="[Famille 2]" value="0" />
+					</menupopup>
+					<template>
+						<menupopup>
+							<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+						</menupopup>
+					</template>
+				</menulist>
+				
+				<menulist id="Famille_3" oncommand="switchSelection();" ref="http://www.opensi.org/facturation/liste-famillesArticle" datasources="rdf:null" style="max-width:250px;min-width:250px">
+					<menupopup>
+						<menuitem label="[Famille 3]" value="0" />
+					</menupopup>
+					<template>
+						<menupopup>
+							<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste-famillesArticle/rdf#Famille_Id" style="font-size:80%" />
+						</menupopup>
+					</template>
+				</menulist>
+				
+				<hbox pack="end" align="center" flex="1">
+					<button id="bPagePrec" class="bIcoRetour" oncommand="decalerPage(-1)" tooltiptext="page précédente" />
+					<textbox id="Num_Page" size="3" onkeypress="pressOnNumPage(event);" />
+					<label value="/" class="label_16" />
+					<textbox id="Nb_Page" size="3" readonly="true" />
+					<button id="bPageSuiv" class="bIcoAvance" oncommand="decalerPage(1)" tooltiptext="page suivante" />
+				</hbox>
+			</hbox>
+
+			<tree id="tree-articlesInventaire"
+        		flex="1"
+        		hidecolumnpicker="false"
+        		seltype="single"
+        		flags="dont-build-content"
+        		ref="http://www.opensi.org/facturation/liste-articlesInventaire"
+						onselect="reporterLigneInventaire();"
+        		datasources="rdf:null">
+
+    		<treecols>
+      		<treecol id="ColArticle_Id" label="Référence" flex="2" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColDesignation" label="Désignation" flex="3" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColUnite" label="Unité" flex="1" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColQte_Theorique" label="Stock informatique" flex="1" style="text-align:right" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColQte_Inventaire" label="Stock physique" flex="1" style="text-align:right" />
+					<splitter class="tree-splitter" />
+					<treecol id="ColEcart" label="Ecart" flex="1" style="text-align:right" />
+					<treecol id="ColValide" collapsed="true" ignoreincolumnpicker="true" />     
+					<treecol id="ColLigne_Id" collapsed="true" ignoreincolumnpicker="true" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Article_Id" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Designation" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Unite" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Qte_Theorique" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Qte_Inventaire" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Ecart" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Valide" />
+								<treecell label="rdf:http://www.opensi.org/facturation/liste-articlesInventaire/rdf#Ligne_Id" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+
+			<box style="height:5px" />
+
+			<grid>
+				<rows>
+					<row />
+					<row />
+				</rows>
+				<columns>
+					<column>
+						<label value="Référence :" />
+						<textbox id="Article_Id" size="25" maxlength="40" onkeypress="pressOnArticle_Id(event);" />
+					</column>
+					<column>
+						<label value="Désignation :" />
+						<textbox id="Designation" size="40" readonly="true" />
+					</column>
+					<column>
+						<label value="SI :" />
+						<textbox id="Qte_Theorique" size="7" readonly="true" class="nombre" />
+					</column>
+					<column>
+						<label value="SP :" />
+						<textbox id="Qte_Inventaire" size="7" onkeypress="pressOnQteInventaire(event);" class="nombre" />
+					</column>
+					<column>
+						<label value="" />
+						<button id="bValiderLigne" label="Valider" class="bValider" oncommand="validerLigneInventaire();" tooltiptext="valider la quantité inventoriée" />
+					</column>
+				</columns>
+			</grid>	
+
+			<box style="height:5px" />
+			<hbox>
+				<label value="Méthode :" class="label" />
+				<radiogroup id="Methode">
+					<radio label="Liste" value="L" oncommand="switchMethode();" />
+					<radio label="Article" value="A" selected="true" oncommand="switchMethode();" />
+				</radiogroup>
+				<hbox pack="end" align="end" flex="1">
+					<groupbox align="center" orient="horizontal">
+						<caption label="Edition" />
+						<radiogroup id="rgpSortie">
+							<hbox align="center">
+								<radio label="PDF" value="PDF" />
+								<radio label="CSV" value="CSV" />
+							</hbox>
+						</radiogroup>
+						<button id="bEditerInventaire" label="Edition de l'inventaire" class="bPDF" oncommand="editionInventaire('R');" tooltiptext="Edition de l'inventaire" />
+						<button id="bEditerEcarts" label="Edition des écarts" class="bPDF" oncommand="editionInventaire('E');" tooltiptext="Edition des écarts" />
+					</groupbox>
+					<button id="bEditerPdfVierge" label="Pdf Vierge" class="bPDF" oncommand="editionInventaire('V');" tooltiptext="Edition d'un PDF vierge" />
+					<button id="bAnnuler" label="Annuler l'inventaire" class="bAnnuler" oncommand="annulerInventaire();" tooltiptext="Annuler l'inventaire" />
+					<button id="bCloturer" label="Clôturer l'inventaire" oncommand="cloturerInventaire();" tooltiptext="Clôturer l'inventaire" />
+				</hbox>
+			</hbox>
+			<box style="height:15px" />
+			
+		</vbox>
+		
+		<vbox>		
+			<iframe type="content" id="pdf" flex="1" />		
+		</vbox>
+		
+	</deck>
+
+</window>

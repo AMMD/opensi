@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_factu_auto_factuAuto"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menuFactuAuto.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bRetourFacturation" oncommand="retourFacturation();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	
+	<deck id="deck" flex="1">
+		<vbox>	
+			<label class="label_14" value="Affaires en attente de facturation" />
+			
+			<groupbox orient="horizontal">
+				<caption label="Filtres" />
+				
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Mode de facturation :" />
+							<hbox align="center">
+								<menulist id="typeFacturation" oncommand="listerAffaires();">
+									<menupopup>
+										<menuitem label="[Tous]" value="T" selected="true" />
+										<menuitem label="Commande" value="CC" />
+										<menuitem label="Bon de Livraison" value="BL" />
+										<menuitem label="Groupement de Commandes" value="GC" />
+										<menuitem label="Groupement d'Affaires" value="GA" />
+									</menupopup>
+								</menulist>
+								<menulist id="modeFacturation" oncommand="listerAffaires();">
+			            <menupopup>
+			            	<menuitem label="[Tous]" value="T" selected="true" />
+										<menuitem label="Facturable après livraison" value="E" />
+										<menuitem label="Facturable avant livraison" value="C" />
+			            </menupopup>
+			        	</menulist>
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Mode d'envoi :" />
+							<hbox align="center">
+								<menulist id="modeEnvoiFacture" oncommand="listerAffaires();">
+			            <menupopup>
+			            	<menuitem label="[Tous]" value="T" selected="true" />
+										<menuitem label="Courrier" value="C" />
+										<menuitem label="Fax" value="F" />
+										<menuitem label="Mail" value="M" />
+			            </menupopup>
+			        	</menulist>
+			        </hbox>
+						</row>
+					</rows>
+				</grid>
+				<box style="width:20px" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Date affaire :" />
+							<hbox align="center">
+								<label value="du" />
+								<textbox id="dateDebut" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" onkeypress="onKeyPress(event);" />
+								<label value="au" />
+								<textbox id="dateFin" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" onkeypress="onKeyPress(event);" />
+							</hbox>
+						</row>
+						<row align="center">
+							<label class="label" value="Clients :" />
+							<hbox align="center">
+								<menulist id="client" oncommand="listerAffaires();">
+			            <menupopup>
+			            	<menuitem label="[Tous]" value="T" selected="true" />
+										<menuitem id="itemClientsWeb" label="Clients Web" value="CW" />
+										<menuitem label="Clients en compte" value="CC" />
+										<menuitem label="Autres clients" value="AC" />
+			            </menupopup>
+			        	</menulist>
+			        </hbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<hbox pack="end">
+				<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher();" />
+				<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutDecocher();" />
+			</hbox>
+
+			<listbox flex="1" id="listeAffairesEnAttente" ref="http://www.opensi.org/facturation/affairesEnAttente" datasources="rdf:null">
+				<listhead>
+					<listheader label="Date" />	
+		  		<listheader label="N° Affaire" />		  
+		  		<listheader label="Intitulé" />
+		  		<listheader label="N° Client" />
+		  		<listheader label="Client" />
+		  		<listheader label="Mode de facturation" />
+					<listheader label="Commandes expédiées" style="text-align:right" />
+		  		<listheader label="Total HT à facturer" style="text-align:right" />
+		  		<listheader collapsed="true" />
+				</listhead>
+				<listcols>
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol flex="1" />
+					<listcol collapsed="true" />
+				</listcols>
+				<template>
+					<listitem uri="rdf:*" value="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Affaire_Id" allowevents="true">
+						<listcell type="checkbox" checked="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Facturer" disabled="false" onclick="testcheck(this.parentNode)" label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Date_C" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Num_Entier" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Intitule" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Client_Id" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Denomination" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Mode" />
+						<listcell style="text-align:right" label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#NbComExp" />
+						<listcell style="text-align:right; margin-right:20px" label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#AffTotal_HT" />
+						<listcell label="rdf:http://www.opensi.org/facturation/affairesEnAttente/rdf#Total_HT" />
+					</listitem>
+				</template>
+			</listbox>
+
+			<box style="height:10px;" />
+			<hbox align="center">
+				<label value="Total HT à facturer :" />
+				<textbox id="totalHT" class="nombre" readonly="true" />
+				<button label="Générer les factures" oncommand="genererFactures();" />
+				<hbox align="center" flex="1" pack="end">
+					<menulist id="timeEdition" ref="http://www.opensi.org/facturation/historiqueEditionFactures" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Choisir]" />
+						</menupopup>
+						<template>
+							<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/historiqueEditionFactures/rdf#labelDate_Edition_Auto" value="rdf:http://www.opensi.org/facturation/historiqueEditionFactures/rdf#Date_Edition_Auto" />
+							</menupopup>
+						</template>
+					</menulist>
+					<button id="bReediter" class="bPDF" label="Rééditer" oncommand="reediter();" />
+				</hbox>
+				
+			</hbox>
+			<box style="height:10px;" />			
+		</vbox>
+		
+		<vbox>
+			<vbox id="pmbox" collapsed="true" align="center">
+				<hbox style="height:30px" />
+				<label value="La génération des factures peut durer quelques minutes. Veuillez patienter..." />
+				<hbox style="height:30px" />
+				<hbox>
+					<progressmeter id="pm" />
+				</hbox>
+			</vbox>
+			<iframe type="content" id="pdf" flex="1" />
+		</vbox>
+	</deck>
+
+</window>

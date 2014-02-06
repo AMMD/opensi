@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_commandes_menuCommandes"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_commandes.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+
+	<vbox flex="1">
+	
+		<hbox>
+			<vbox flex="1">
+				<label class="label_16" value="Gestion des commandes fournisseurs" />
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<groupbox flex="1">
+				<caption label="Recherche" />
+				
+				<hbox>
+					<vbox>
+						<label value="N° Commande :" />
+						<textbox id="numCommande" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="Intitulé :" />
+						<textbox id="intitule" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="Etat commande :" />
+						<hbox align="center">
+							<menulist id="etatCommande" oncommand="listerCommandes();" width="160px">
+								<menupopup>
+									<menuitem label="[Tous]" value="TS" />
+									
+									<menuitem label="Non validée" value="N" />
+									<menuitem label="Préparation" value="P" />
+									<menuitem label="En cours" value="T" />
+									<menuitem label="Annulée" value="A" />
+									<menuitem label="Clôturée" value="C" />
+								</menupopup>
+							</menulist>
+						</hbox>
+					</vbox>
+					<vbox>
+						<label value="Bloquée :" />
+						<menulist id="bloque" oncommand="listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+								<menuitem label="Bloquée" value="1" />
+	              <menuitem label="Non bloquée" value="0" />
+							</menupopup>
+						</menulist>
+					</vbox>
+				</hbox>
+				<hbox>
+					<vbox>
+						<label value="N° Fournisseur :" />
+						<textbox id="numFournisseur" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="Fournisseur :" />
+						<textbox id="nomFournisseur" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="Réf. Article :" />
+						<textbox id="refArticle" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox>
+					<vbox>
+						<label value="N° BR :" />
+						<textbox id="numBR" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="N° Facture :" />
+						<textbox id="numFacture" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+					<vbox>
+						<label value="N° Acompte :" />
+						<textbox id="numAcompte" width="120px" onkeypress="onKeyPress(event);" />
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox>
+					<vbox>
+						<label value="Date de commande :" />
+						<hbox align="center">
+							<label value="Du" />
+							<textbox id="dateCommandeDebut" size="10" maxlength="10" onkeypress="onKeyPress(event);" />
+							<label value="au" />
+							<textbox id="dateCommandeFin" size="10" maxlength="10" onkeypress="onKeyPress(event);" />
+						</hbox>
+					</vbox>
+					<vbox>
+						<label value="Etat paiement :" />
+						<menulist id="etatPaiement" oncommand="listerCommandes();" style="width:120px">
+							<menupopup>
+								<menuitem label="[Tous]" value="TS" />
+								<menuitem label="Payée" value="T" />
+	              <menuitem label="Part. payée" value="P" />
+	              <menuitem label="Non payée" value="N" />
+							</menupopup>
+						</menulist>
+					</vbox>
+					<vbox>
+						<label value="Pôle d'activité :" />
+						<menulist id="secteurActivite" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" oncommand="listerCommandes();" style="width:120px" sizetopopup="none">
+							<menupopup>
+								<menuitem label="[Tous]" value="T" />
+							</menupopup>
+							<template>
+								<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+								</menupopup>
+							</template>
+						</menulist>
+					</vbox>
+				</hbox>
+				<box height="10px" />
+				<hbox pack="end">
+					<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="listerCommandes();" />
+					<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="initCriteres();" />
+				</hbox>
+			</groupbox>
+			<vbox flex="1">
+				<hbox pack="end" id="boxNouvelleCommande" collapsed="true">
+					<vbox>
+						<button label="Nouvelle Commande" class="bNouveau" oncommand="pressOnNouvelleCommande();"/>
+					</vbox>
+				</hbox>
+				
+				
+				<vbox flex="1">
+					<label value="Aperçu de la commande :" />
+					<tree
+						id="apercu"
+		      	flex="1"
+		      	hidecolumnpicker="true"
+		      	seltype="single"
+		      	ref="http://www.opensi.org/facturation/apercu_commande_fournisseur"
+		      	datasources="rdf:null"
+						flags="dont-build-content"
+						enableColumnDrag="true"
+					>
+		    		<treecols>
+		      		<treecol flex="1" label="Référence" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="2" label="Désignation" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Quantité" class="nombre" />
+		      		<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Reliquat" class="nombre" />
+		    		</treecols>
+		    		<template>
+		      		<treechildren>
+		        		<treeitem uri="rdf:*">
+		          		<treerow>
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Reference" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Designation" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Quantite" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_commande_fournisseur/rdf#Quantite_Reliquat" />
+		          		</treerow>
+		        		</treeitem>
+		      		</treechildren>
+		    		</template>
+		  		</tree>
+				</vbox>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+
+		<hbox flex="1">
+			<vbox flex="1">
+			
+				<hbox>
+					<hbox flex="1" pack="center">
+						<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="bPrec" oncommand="pressOnPagePrec();" tooltiptext="Page précédente" />
+						<vbox pack="center">
+							<hbox>
+								<label value="Page" />
+								<label id="pageDeb" />
+								<label value="/" />
+								<label id="pageFin" />
+							</hbox>
+						</vbox>
+						<button disabled="true" class="bIcoAvance" id="bSuiv" oncommand="pressOnPageSuiv();" tooltiptext="Page suivante" />
+					</hbox>
+					
+					<hbox align="center" pack="end">
+						<label value="Nb de lignes par page :" />
+						<menulist id="nbLignesParPage" oncommand="listerCommandes();" width="120px">
+							<menupopup>
+								<menuitem label="100" value="100" />
+								<menuitem label="500" value="500" />
+								<menuitem label="1000" value="1000" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</hbox>
+
+				<tree
+					id="listeCommandes"
+					flex="1"
+					flags="dont-build-content"
+					seltype="single"
+					ref="http://www.opensi.org/facturation/commandes"
+					datasources="rdf:null"
+					onselect="selectOnListeCommandes()"
+					ondblclick="pressOnListeCommandes()"
+					enableColumnDrag="true"
+				>
+					<treecols>
+		     		<treecol label="Date" tooltiptext="Date commande" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triDate_Commande" />
+						<splitter class="tree-splitter" />
+	        	<treecol label="N° Commande" flex="1"
+	        		sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Num_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="Intitulé" flex="1"
+	        		sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Intitule" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Fournisseur" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Num_Fournisseur" />
+						<splitter class="tree-splitter" />
+						<treecol label="Fournisseur" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Nom_Fournisseur" />
+						<splitter class="tree-splitter" />
+						<treecol label="Responsable" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Nom_Responsable" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat" tooltiptext="Etat commande" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#Etat_Commande" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Réceptionné" flex="1" class="nombre" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triCA_Recep" />
+						<splitter class="tree-splitter" />
+						<treecol label="CA Restant" flex="1" class="nombre" hidden="true"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triCA_Restant" />
+						<splitter class="tree-splitter" />
+						<treecol label="Nb Lignes" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triNbLignes" />
+						<splitter class="tree-splitter" />
+						<treecol label="Total HT" flex="1" class="nombre"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triMontant_HT" />
+						<treecol label="Statut paiement" width="20px" tooltiptext="Statut de paiement" class="treecol-image" 
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triStatut_Paiement" />
+						<splitter class="tree-splitter" />
+						<treecol label="Statut facturation" width="20px" tooltiptext="Statut de facturation" class="treecol-image"
+							sort="rdf:http://www.opensi.org/facturation/commandes/rdf#triStatut_Facturation" />
+						<treecol id="colCommandeId" collapsed="true" ignoreincolumnpicker="true" />
+		    	</treecols>
+					<template>
+	        	<treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	              	<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Date_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Num_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Intitule" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Num_Fournisseur" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Nom_Fournisseur" />
+									<treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Nom_Responsable" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Etat_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#CA_Recep" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#CA_Restant" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#NbLignes" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Montant_HT" />
+	                <treecell src="rdf:http://www.opensi.org/facturation/commandes/rdf#Statut_Paiement" />
+	                <treecell src="rdf:http://www.opensi.org/facturation/commandes/rdf#Statut_Facturation" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#Commande_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triDate_Commande" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triCA_Recep" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triCA_Restant" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triNbLignes" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/commandes/rdf#triMontant_HT" />
+	              </treerow>
+	            </treeitem>
+	        	</treechildren>
+	        </template>
+				</tree>
+				
+				<hbox pack="end" align="center">
+					<label value="Total HT :" />
+					<textbox id="totalHT" class="nombre" readonly="true" />
+				</hbox>
+				<hbox pack="end" align="center">
+					<label value="Total CA réceptionné :" />
+					<textbox id="totalCARecep" class="nombre" readonly="true" />
+				</hbox>
+				<hbox pack="end" align="center">
+					<label value="Total CA restant :" />
+					<textbox id="totalCARestant" class="nombre" readonly="true" />
+				</hbox>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<hbox align="center" flex="1">
+				<vbox><button class="bCSV" id="bEditionCsv" label="Edition CSV" oncommand="pressOnEditionCsv();" /></vbox>
+				<vbox><button class="bSupprimer" id="bSupprimerPrep" label="Supprimer les commandes en préparation" oncommand="supprimerCommandesPrep();" disabled="true" /></vbox>
+			</hbox>
+		</hbox>
+		
+		<box height="10px" />
+	</vbox>
+
+</window>

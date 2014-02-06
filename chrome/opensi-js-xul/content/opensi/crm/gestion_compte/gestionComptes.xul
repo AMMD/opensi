@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+ 
+<?xul-overlay href="overlay-ficheCompte.xul"?>
+ 
+<window
+  id="opensi_crm_gestionCompte_gestionComptes"
+  flex="1" onload="init()" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="gestionComptes.js" />
+  
+  <hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+			<button class="bouton_menu" id="bMenuComptes" oncommand="retourListeCompte();" collapsed="true" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="retourGestionCompte();" tooltiptext="fermer la session" collapsed="true"/>
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide();" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	
+  <hbox flex="1" class="auto-overflow">	
+	  <deck id="deck" flex="1">
+	  	<vbox flex="1"  >
+	  		<label class="label_16" value="Gestion des comptes" />	
+			<hbox>
+			<box width="20px" />
+				  	<grid >
+					  	<columns>
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+							<column />
+						</columns>
+						
+						<rows>
+							<row align="center">
+								<label class="label" value="Dénomination :" />
+				  				<textbox id="denomination" maxlength="10" size="10" onkeypress="oe_onKeyPress(event);" />
+				  				<label class="label" value="N° Client :" />
+				  			  	<textbox id="numClient" maxlength="10" size="10" onkeypress="oe_onKeyPress(event);" />
+				  				<label id="labelListeResponsable" class="label" value="Responsable : " collapsed="true"/>
+				  				<menulist id="listeResponsable" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null" collapsed="true">
+									<menupopup>
+										<menuitem label="[Tous]" value="TOUS" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Util_R" />
+										</menupopup>
+									</template>
+									
+								</menulist>
+								<label class="label" value="" />
+				  			  	<label class="label" value="" />
+							</row>
+																						
+							<row align="center">
+								<label class="label" value="Code postal :" />																
+				  				<textbox id="codePostal" maxlength="10" size="10" onkeypress="oe_onKeyPress(event);" />
+				  				<label class="label" value="Type :" />														
+				  				<menulist id="listeType" oncommand="rechercher();" ref="http://www.opensi.org/crm/gestionComptes" datasources="rdf:null">
+									<menupopup>
+										<menuitem label="[Tous]" value="TOUS" />
+									</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Libelle" value="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Type_Id" />
+									</menupopup>
+								</template>
+								</menulist>
+								<label class="label" value="" />
+				  			  	<label class="label" value="" />
+				  			  	<label class="label" value="" />
+				  			  	<label class="label" value="" />
+							</row>
+							
+							<row align="center">
+							<label class="label" value="Pays : " />
+							<hbox>
+				  			<menulist id="listePays" style="width:160px" sizetopopup="none" ref="http://www.opensi.org/facturation/liste_pays"  oncommand="rechercher();" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Tous]" value="TOUS" />
+								</menupopup>
+								<template>
+									<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+									</menupopup>
+								</template>
+							</menulist>
+							</hbox>
+							<label class="label" value="Contact :" />
+				  			<textbox id="contact" maxlength="10" size="10" onkeypress="oe_onKeyPress(event);" />
+				  			<hbox>
+					  			<button class="bIcoActualiser" tooltiptext="actualiser" oncommand="rechercher();" />
+								<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="reinitialiser();" />
+							</hbox>
+				  			<label class="label" value="" />
+				  			<label class="label" value="" />
+				  			<label class="label" value="" />
+							</row>
+						
+					</rows>
+				  	
+				  	</grid>
+				  	<hbox pack="end" flex="1">
+				  		<vbox>
+				  			<button id="bNouveauProspect" class="bNouveau" tooltiptext="nouveau compte" label="Nouveau compte" oncommand="nouveauProspect();" />
+				  		</vbox>
+				  	</hbox>
+				  	<box width="20px" />
+			</hbox>
+	  			
+			<hbox pack="center" >
+			<hbox flex="1" pack="center" >
+					<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="bPrec" oncommand="pressOnPagePrec();" tooltiptext="Page précédente" />
+				<vbox>
+					<hbox flex="1" pack="center" align="center">
+						<label value="Page" />
+						<label id="pageDeb" />
+						<label value="/" />
+						<label id="pageFin" />
+					</hbox>
+				</vbox>
+					<button disabled="true" class="bIcoAvance" id="bSuiv" oncommand="pressOnPageSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+					<hbox pack="end" align="center" >
+						<label class="label" value="Nb de lignes par page :" />
+						<menulist id="nbLignePage" oncommand="majNbrLigne();">
+							<menupopup>
+								<menuitem label="100" value="100" />
+								<menuitem label="500" value="500" />
+								<menuitem label="1000" value="1000" />
+							</menupopup>
+						</menulist>	
+						
+					</hbox>
+					<box width="20px" />
+			</hbox>
+			<vbox flex="1" >
+				<tree flex="1" id="listeComptes" flags="dont-build-content" ref="http://www.opensi.org/crm/gestionComptes"
+				datasources="rdf:null" seltype="single" ondblclick="dbClickListeComptes();" >
+					<treecols>		
+						<treecol id="denomination" label="Dénomination" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Denomination" />
+						<splitter class="tree-splitter" />
+						<treecol label="Code postal" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Code_Postal" />
+						<splitter class="tree-splitter" />
+						<treecol label="Ville" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Ville" />
+						<splitter class="tree-splitter" />
+						<treecol label="Pays" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Pays" />
+						<splitter class="tree-splitter" />
+						<treecol label="Type" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Type" />
+						<splitter class="tree-splitter" />
+						<treecol label="Responsable" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+						<splitter class="tree-splitter" />
+						<treecol id ="Prospect_Id" label="Prospect_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prospect_Id" collapsed="true"/>
+						<splitter class="tree-splitter" />
+						<treecol id ="Responsable_Id" label="Responsable_Id" flex="1" sort="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Responsable_Id" collapsed="true" />
+						<splitter class="tree-splitter" />						
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Denomination" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Code_Postal" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Ville" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Pays" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Type" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Nom_Responsable" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Prospect_Id" />
+									<treecell label="rdf:http://www.opensi.org/crm/gestionComptes/rdf#Responsable_Id" />									
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>		
+				</tree>
+			</vbox>
+			
+			<hbox>
+				<button disabled="false" class="bCSV" label="Export CSV" id="gestionComptes-CSV" oncommand="genCSVgestionComptes();" tooltiptext="Edition CSV" />
+			</hbox>
+			
+		</vbox>
+	
+	<vbox id="overlay-ficheCompte" />
+	 
+	  </deck>
+  </hbox>
+</window>

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Recherche d'un devis"
+  id="opensi_compta_user_devis_rechDevis"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rech_devis.js" />
+
+  <hbox style="height:10px" />
+	<hbox pack="center">
+  	<label class="label_14" value="RECHERCHE D'UN DEVIS" style="text-align:center" />
+	</hbox>
+	<hbox style="height:20px" />
+
+	<hbox style="height:120px">
+  	<grid pack="center">
+    	<columns>
+      	<column />
+      	<column />
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+				<row>
+					<label value="" />
+				</row>
+      	<row align="center">
+        	<label class="label" value="Numéro du devis :" />
+        	<hbox><textbox id="Numero" maxlength="10" size="15" onkeypress="pressOnId(event);" /></hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Numéro de client :" />
+        	<hbox><textbox id="Client_Id" maxlength="10" size="15" onkeypress="pressOnClientId(event);" /></hbox>
+        	<label class="label" value="Client :" />
+        	<hbox><textbox id="Denomination" maxlength="20" size="20" onkeypress="pressOnRaisonSociale(event);" /></hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Référence article :" />
+        	<hbox><textbox id="Article_Id" maxlength="15" size="15" onkeypress="pressOnArticle(event);" /></hbox>
+      	</row>
+      	<row align="center">
+        	<label class="label" value="Etat :" />
+        	<hbox>
+        		<menulist id="Etat" oncommand="rechercher();">
+        			<menupopup>
+        				<menuitem label="[Tous]" value="" />
+        				<menuitem label="En cours" value="N" />
+        				<menuitem label="Validé en affaire" value="A" />
+        				<menuitem label="Facturé" value="F" />
+        				<menuitem label="Archivé" value="H" />
+        			</menupopup>
+        		</menulist>
+        	</hbox>
+      	</row>
+    	</rows>
+  	</grid>
+
+		<box style="width:30px;" />
+
+		<vbox flex="1">
+			<hbox>
+				<label value="Aperçu du devis N°" />
+				<label id="Num_Devis" />
+			</hbox>
+			<tree id="apercu"
+      	flex="1"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/apercu_devis"
+      	datasources="rdf:null"
+				flags="dont-build-content">
+
+    		<treecols>
+      		<treecol id="ColReference" label="Référence" flex="1" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColDesignation" flex="2" label="Désignation" />
+					<splitter class="tree-splitter" />
+      		<treecol id="ColQuantite" flex="1" label="Quantité" class="nombre" />
+    		</treecols>
+    		<template>
+      		<treechildren>
+        		<treeitem uri="rdf:*">
+          		<treerow>
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_devis/rdf#Reference" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_devis/rdf#Designation" />
+            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_devis/rdf#Quantite" />
+          		</treerow>
+        		</treeitem>
+      		</treechildren>
+    		</template>
+  		</tree>
+		</vbox>
+
+	</hbox>
+
+	<label value="Devis trouvés :" />
+	<tree id="devis"
+      	flex="1"
+      	hidecolumnpicker="true"
+      	seltype="single"
+      	ref="http://www.opensi.org/facturation/devis"
+      	datasources="rdf:null"
+				flags="dont-build-content"
+      	onkeypress="pressOnTree(event);"
+				ondblclick="choixDevis();"
+				onselect="loadApercu();"
+      	height="150px"
+      	width="600px">
+
+    <treecols>
+      <treecol id="ColDate_Creation" label="Date de création" flex="1" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Date_Creation" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColNumero" flex="2" label="Numéro" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Num_Entier" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColClient_Id" flex="1" label="Numéro client" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Client_Id" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDenomination" flex="5" label="Client" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Denomination" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColEtat" flex="4" label="Etat" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Etat" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColTotal_HT" flex="3" label="Total HT" class="nombre" sort="rdf:http://www.opensi.org/facturation/devis/rdf#Total_HT" />
+			<treecol id="ColDevis_Id" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Date_Creation" />
+            <treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Num_Entier" />
+						<treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Client_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Denomination" />
+						<treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Etat" />
+            <treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Total_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/devis/rdf#Devis_Id" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+	<box style="height:20px" />
+  <hbox pack="center">
+		<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+  	<button label="Ok" class="bValider" oncommand="choixDevis();" />
+  </hbox>
+	<box style="height:20px;"/>
+
+</window>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_facturation_user_outillage"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	title="Outillage">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="outils.js" />
+
+	<vbox flex="1">
+		<hbox style="height:20px" />
+		<hbox pack="center">
+			<label value="OUTILLAGE" class="label_16" />
+		</hbox>
+		<hbox style="height:20px" />
+		<hbox align="center" flex="1">
+			<vbox flex="1">
+				<groupbox flex="1" pack="center" >
+					<caption label="Recherche" />
+					<hbox pack="center">
+						<grid>
+							<columns>
+								<column />
+								<column />
+								<column />
+								<column />
+							</columns>	
+							<rows>
+								<row align="center">
+									<label class="label" value="Numéro :" />
+									<hbox><textbox id="Rnumero" maxlength="9" /></hbox>
+									<label class="label" value="Catégorie :" />
+									<vbox>
+										<menulist id="Rcategorie" maxlength="30" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[toutes]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Categorie" />
+												</menupopup>
+											</template>
+										</menulist>
+									</vbox>
+								</row> 
+								<row align="center">
+									<label class="label" value="Forme :" />
+									<vbox>
+										<menulist id="Rforme" maxlength="30" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[toutes]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Forme" />
+												</menupopup>
+											</template>
+										</menulist>
+									</vbox>
+									<label class="label" value="Type :" />
+									<vbox>
+										<menulist id="Rtype" maxlength="20" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[tous]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Type" />
+												</menupopup>
+											</template>
+										</menulist>       
+									</vbox>
+								</row>
+								<row align="center">						
+									<label class="label" value="Diamètre :" />
+									<hbox><textbox id="Rdiametre" maxlength="7" /></hbox>
+									<label class="label" value="Rayon :" />
+									<hbox><textbox id="Rrayon" maxlength="7" /></hbox>
+								</row>
+								<row align="center">					
+									<label class="label" value="Longueur :" />
+									<hbox><textbox id="Rlongueur" maxlength="7" /></hbox>
+									<label class="label" value="Largeur :" />
+									<hbox><textbox id="Rlargeur" maxlength="7" /></hbox>
+								</row>
+								<row align="center">						
+									<label class="label" value="Hauteur :" />
+									<hbox><textbox id="Rhauteur" maxlength="7" /></hbox>
+									<label class="label" value="Hauteur Lame :" />
+									<hbox><textbox id="Rhaut_lame" maxlength="7" /></hbox>
+								</row>
+							</rows>	
+						</grid>
+					</hbox>
+					<hbox style="height:20px" />
+					<hbox pack="center">
+						<button id="BoutonRechercher" label="Rechercher" oncommand="rechercher();" />
+					</hbox>
+					<hbox style="height:20px" />
+				</groupbox>
+
+				<groupbox flex="1">
+					<caption label="Résultats de recherche" />
+					<box style="height:20px" />
+					<tree id="tree-outils"
+							hidecolumnpicker="false"
+							seltype="single"
+							flags="dont-build-content"
+							ref="http://www.opensi.org/facturation/outillage/rechOutils"
+							datasources="rdf:null"
+							onkeypress="pressOntree(event);"
+							onclick="selectOutil();"
+							height="200px"
+						>
+						<treecols>
+							<treecol id="colNumero" label="Numéro" flex="1" ignoreincolumnpicker="true"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Numero" />
+							<splitter class="tree-splitter" />
+							<treecol id="colForme" flex="1" label="Forme"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Forme" />
+							<splitter class="tree-splitter" />
+							<treecol id="colCategorie" flex="1" label="Catégorie"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Categorie" />
+							<splitter class="tree-splitter" />
+							<treecol id="colType" flex="1" label="Type"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Type" />
+							<splitter class="tree-splitter" />
+							<treecol id="colDiametre" flex="1" label="Diamètre"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Diametre" />
+							<splitter class="tree-splitter" />
+							<treecol id="colRayon" flex="1" label="Rayon"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Rayon" />
+							<splitter class="tree-splitter" />
+							<treecol id="colLongueur" flex="1" label="Longueur"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Longueur" />
+							<splitter class="tree-splitter" />
+							<treecol id="colLargeur" flex="1" label="Largeur"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Largeur" />
+							<splitter class="tree-splitter" />
+							<treecol id="colHauteur" flex="1" label="Hauteur"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Hauteur" />
+							<splitter class="tree-splitter" />
+							<treecol id="colHauteurLame" flex="1" label="Hauteur Lame"
+								sort="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Haut_Lame" />
+							<treecol id="colOutilId" ignoreincolumnpicker="true" collapsed="true" />
+						</treecols>
+						<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Numero" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Forme" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Categorie" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Type"/>
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Diametre" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Rayon" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Longueur" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Largeur" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Hauteur" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Haut_Lame" />
+										<treecell label="rdf:http://www.opensi.org/facturation/outillage/rechOutils/rdf#Outil_Id" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</template>
+					</tree>
+					<box style="height:20px" />
+				</groupbox>
+				<hbox>
+					<checkbox id="gerer" label="Gérer les outils" oncommand="changergroupbox(this.checked);" />
+				</hbox>
+
+				<groupbox id="gpGerer" flex="1" collapsed="true" >
+					<caption label="Outil" />
+					<hbox pack="center">
+						<grid>
+							<columns>
+								<column />
+								<column />
+								<column />
+								<column />
+							</columns>	
+							<rows>
+								<row align="center">							    			 			
+									<label class="label" value="Numéro :" />									 
+									<hbox><textbox id="numero" maxlength="9" disabled="true"/></hbox>
+									<label class="label" value="Catégorie :" />
+									<hbox>
+										<menulist id="categorie" maxlength="30" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[aucune]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Categorie" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row> 
+								<row align="center">  
+									<label class="label" value="Forme :" />
+									<hbox>
+										<menulist id="forme" maxlength="30" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[aucune]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Forme" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+									<label class="label" value="Type :" />
+									<hbox>
+										<menulist id="type" maxlength="20" editable="true" ref="http://www.opensi.org/facturation/outillage/liste_critere_outils" datasources="rdf:null" style="width:200px">
+											<menupopup>
+												<menuitem label="[aucun]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/outillage/liste_critere_outils/rdf#Type" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Diamètre :" />
+									<hbox><textbox id="diametre" maxlength="7" /></hbox>
+									<label class="label" value="Rayon :" />
+									<hbox><textbox id="rayon"  maxlength="7" /></hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Longueur :" />
+									<hbox><textbox id="longueur" maxlength="7" /></hbox>
+									<label class="label" value="Largeur :" />
+									<hbox><textbox id="largeur" maxlength="7" /></hbox>
+								</row>
+								<row align="center">					
+									<label class="label" value="Hauteur :" />
+									<hbox><textbox id="hauteur" maxlength="7" /></hbox>
+									<label class="label" value="Hauteur Lame :" />
+									<hbox><textbox id="haut_lame" maxlength="7" /></hbox>
+								</row>
+							</rows>	
+						</grid>
+					</hbox>
+					<hbox style="height:20px" />
+					<hbox pack="center">
+						<button id="bNouveau" label="Nouveau" oncommand="nouvelOutil();" />
+						<button id="bEnregistrer" label="Enregistrer" oncommand="enregistrerOutil();" />
+						<button id="bSupprimer" label="Supprimer" oncommand="supprimerOutil();" />
+					</hbox>
+					<hbox style="height:20px" />
+				</groupbox>
+			</vbox>
+		</hbox>
+	</vbox>
+
+</window>

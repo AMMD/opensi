@@ -1,0 +1,166 @@
+/******************************************************************************/
+/* OpenSi : Outils libres de gestion d'entreprise                             */
+/* Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   */
+/* Contact: contact@opensi.org                                                */
+/*                                                                            */
+/* This program is free software; you can redistribute it and/or              */
+/* modify it under the terms of the GNU General Public License                */
+/* as published by the Free Software Foundation; either version 2             */
+/* of the License, or (at your option) any later version.                     */
+/*                                                                            */
+/* This program is distributed in the hope that it will be useful,            */
+/* but WITHOUT ANY WARRANTY; without even the implied warranty of             */
+/* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               */
+/* GNU General Public License for more details.                               */
+/*                                                                            */
+/* You should have received a copy of the GNU General Public License          */
+/* along with this program; if not, write to the Free Software                */
+/* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. */
+/******************************************************************************/
+
+
+#bouton_stock { width:238px;height:60px;background-image: url("boutons_menu/stocks.png") }
+#bouton_stock:hover { background-image: url("boutons_menu/stocks_over.png") }
+#bouton_stock:focus { background-image: url("boutons_menu/stocks_select.png") }
+
+#bouton_tiers { width:238px;height:60px;background-image: url("boutons_menu/tiers.png") }
+#bouton_tiers:hover { background-image: url("boutons_menu/tiers_over.png") }
+#bouton_tiers:focus { background-image: url("boutons_menu/tiers_select.png") }
+
+#bouton_opdiv { width:238px;height:60px;background-image: url("boutons_menu/operations.png") }
+#bouton_opdiv:hover { background-image: url("boutons_menu/operations_over.png") }
+#bouton_opdiv:focus { background-image: url("boutons_menu/operations_select.png") }
+
+#bouton_analytique { width:238px;height:60px;background-image: url("boutons_menu/analytique.png") }
+#bouton_analytique:hover { background-image: url("boutons_menu/analytique_over.png") }
+#bouton_analytique:focus { background-image: url("boutons_menu/analytique_select.png") }
+
+#bouton_ventes { width:238px;height:60px;background-image: url("boutons_menu/ventes.png") }
+#bouton_ventes:hover { background-image: url("boutons_menu/ventes_over.png") }
+#bouton_ventes:focus { background-image: url("boutons_menu/ventes_select.png") }
+
+#bouton_achats { width:238px;height:60px;background-image: url("boutons_menu/achats.png") }
+#bouton_achats:hover { background-image: url("boutons_menu/achats_over.png") }
+#bouton_achats:focus { background-image: url("boutons_menu/achats_select.png") }
+
+#bouton_comptabilite { width:238px;height:60px;background-image: url("boutons_menu/comptabilite.png") }
+#bouton_comptabilite:hover { background-image: url("boutons_menu/comptabilite_over.png") }
+#bouton_comptabilite:focus { background-image: url("boutons_menu/comptabilite_select.png") }
+
+#bouton_editions { width:238px;height:60px;background-image: url("boutons_menu/editions.png") }
+#bouton_editions:hover { background-image: url("boutons_menu/editions_over.png") }
+#bouton_editions:focus { background-image: url("boutons_menu/editions_select.png") }
+
+#bouton_suiviactivite { width:238px;height:60px;background-image: url("boutons_menu/suiviactivite.png") }
+#bouton_suiviactivite:hover { background-image: url("boutons_menu/suiviactivite_over.png") }
+#bouton_suiviactivite:focus { background-image: url("boutons_menu/suiviactivite_select.png") }
+
+#bouton_comptes { width:238px;height:60px;background-image: url("boutons_menu/comptes.png") }
+#bouton_comptes:hover { background-image: url("boutons_menu/comptes_over.png") }
+#bouton_comptes:focus { background-image: url("boutons_menu/comptes_select.png") }
+
+#bouton_contacts { width:238px;height:60px;background-image: url("boutons_menu/contacts.png") }
+#bouton_contacts:hover { background-image: url("boutons_menu/contacts_over.png") }
+#bouton_contacts:focus { background-image: url("boutons_menu/contacts_select.png") }
+
+#bouton_taches { width:238px;height:60px;background-image: url("boutons_menu/taches.png") }
+#bouton_taches:hover { background-image: url("boutons_menu/taches_over.png") }
+#bouton_taches:focus { background-image: url("boutons_menu/taches_select.png") }
+
+#bouton_opportunites { width:238px;height:60px;background-image: url("boutons_menu/opportunites.png") }
+#bouton_opportunites:hover { background-image: url("boutons_menu/opportunites_over.png") }
+#bouton_opportunites:focus { background-image: url("boutons_menu/opportunites_select.png") }
+
+
+
+#bouton_bmenu_utilisateurs { width:275px;height:68px;background-image: url("boutons_menu/bmenu_utilisateurs.png") }
+#bouton_bmenu_utilisateurs:hover { background-image: url("boutons_menu/bmenu_utilisateurs_over.jpg") }
+#bouton_bmenu_utilisateurs:focus { background-image: url("boutons_menu/bmenu_utilisateurs_select.png") }
+
+#bouton_bmenu_profils { width:275px;height:68px;background-image: url("boutons_menu/bmenu_profils.png") }
+#bouton_bmenu_profils:hover { background-image: url("boutons_menu/bmenu_profils_over.jpg") }
+#bouton_bmenu_profils:focus { background-image: url("boutons_menu/bmenu_profils_select.png") }
+
+#bouton_bmenu_tva { width:275px;height:68px;background-image: url("boutons_menu/bmenu_tva.jpg") }
+#bouton_bmenu_tva:hover { background-image: url("boutons_menu/bmenu_tva_over.jpg") }
+#bouton_bmenu_tva:focus { background-image: url("boutons_menu/bmenu_tva_select.jpg") }
+
+#bouton_bmenu_gesco { width:275px;height:68px;background-image: url("boutons_menu/bmenu_gesco.jpg") }
+#bouton_bmenu_gesco:hover { background-image: url("boutons_menu/bmenu_gesco_over.jpg") }
+#bouton_bmenu_gesco:focus { background-image: url("boutons_menu/bmenu_gesco_select.jpg") }
+
+#bouton_bmenu_moddossier { width:275px;height:68px;background-image: url("boutons_menu/bmenu_moddossier.jpg") }
+#bouton_bmenu_moddossier:hover { background-image: url("boutons_menu/bmenu_moddossier_over.jpg") }
+#bouton_bmenu_moddossier:focus { background-image: url("boutons_menu/bmenu_moddossier_select.jpg") }
+
+#bouton_bmenu_restauration { width:275px;height:68px;background-image: url("boutons_menu/bmenu_restauration.jpg") }
+#bouton_bmenu_restauration:hover { background-image: url("boutons_menu/bmenu_restauration_over.jpg") }
+#bouton_bmenu_restauration:focus { background-image: url("boutons_menu/bmenu_restauration_select.jpg") }
+
+#bouton_bmenu_particles { width:275px;height:68px;background-image: url("boutons_menu/bmenu_particles.jpg") }
+#bouton_bmenu_particles:hover { background-image: url("boutons_menu/bmenu_particles_over.jpg") }
+#bouton_bmenu_particles:focus { background-image: url("boutons_menu/bmenu_particles_select.jpg") }
+
+#bouton_bmenu_pfournisseurs { width:275px;height:68px;background-image: url("boutons_menu/bmenu_pfournisseurs.jpg") }
+#bouton_bmenu_pfournisseurs:hover { background-image: url("boutons_menu/bmenu_pfournisseurs_over.jpg") }
+#bouton_bmenu_pfournisseurs:focus { background-image: url("boutons_menu/bmenu_pfournisseurs_select.jpg") }
+
+#bouton_bmenu_pclients { width:275px;height:68px;background-image: url("boutons_menu/bmenu_pclients.jpg") }
+#bouton_bmenu_pclients:hover { background-image: url("boutons_menu/bmenu_pclients_over.jpg") }
+#bouton_bmenu_pclients:focus { background-image: url("boutons_menu/bmenu_pclients_select.jpg") }
+
+#bouton_bmenu_pecommerce { width:275px;height:68px;background-image: url("boutons_menu/bmenu_pecommerce.jpg") }
+#bouton_bmenu_pecommerce:hover { background-image: url("boutons_menu/bmenu_pecommerce_over.jpg") }
+#bouton_bmenu_pecommerce:focus { background-image: url("boutons_menu/bmenu_pecommerce_select.jpg") }
+
+#bouton_bmenu_comptabilite { width:275px;height:68px;background-image: url("boutons_menu/bmenu_comptabilite.jpg") }
+#bouton_bmenu_comptabilite:hover { background-image: url("boutons_menu/bmenu_comptabilite_over.jpg") }
+#bouton_bmenu_comptabilite:focus { background-image: url("boutons_menu/bmenu_comptabilite_select.jpg") }
+
+#bouton_bmenu_gestionentreprises { width:275px;height:68px;background-image: url("boutons_menu/bmenu_gestionentreprises.jpg") }
+#bouton_bmenu_gestionentreprises:hover { background-image: url("boutons_menu/bmenu_gestionentreprises_over.jpg") }
+#bouton_bmenu_gestionentreprises:focus { background-image: url("boutons_menu/bmenu_gestionentreprises_select.jpg") }
+
+#bouton_bmenu_gestiondossiers { width:275px;height:68px;background-image: url("boutons_menu/bmenu_gestiondossiers.jpg") }
+#bouton_bmenu_gestiondossiers:hover { background-image: url("boutons_menu/bmenu_gestiondossiers_over.jpg") }
+#bouton_bmenu_gestiondossiers:focus { background-image: url("boutons_menu/bmenu_gestiondossiers_select.jpg") }
+
+#bouton_bmenu_gestionutilisateurs { width:275px;height:68px;background-image: url("boutons_menu/bmenu_gestionutilisateurs.jpg") }
+#bouton_bmenu_gestionutilisateurs:hover { background-image: url("boutons_menu/bmenu_gestionutilisateurs_over.jpg") }
+#bouton_bmenu_gestionutilisateurs:focus { background-image: url("boutons_menu/bmenu_gestionutilisateurs_select.jpg") }
+
+#bouton_bmenu_passwordsuperviseur { width:275px;height:68px;background-image: url("boutons_menu/bmenu_passwordsuperviseur.jpg") }
+#bouton_bmenu_passwordsuperviseur:hover { background-image: url("boutons_menu/bmenu_passwordsuperviseur_over.jpg") }
+#bouton_bmenu_passwordsuperviseur:focus { background-image: url("boutons_menu/bmenu_passwordsuperviseur_select.jpg") }
+
+#bouton_bmenu_notification { width:275px;height:68px;background-image: url("boutons_menu/bmenu_notification.jpg") }
+#bouton_bmenu_notification:hover { background-image: url("boutons_menu/bmenu_notification_over.jpg") }
+#bouton_bmenu_notification:focus { background-image: url("boutons_menu/bmenu_notification_select.jpg") }
+
+#bouton_bmenu_accesconf { width:275px;height:68px;background-image: url("boutons_menu/bmenu_accesconf.jpg") }
+#bouton_bmenu_accesconf:hover { background-image: url("boutons_menu/bmenu_accesconf_over.jpg") }
+#bouton_bmenu_accesconf:focus { background-image: url("boutons_menu/bmenu_accesconf_select.jpg") }
+
+
+
+
+.bouton_sousmenu {
+	border:solid 1px #DDDDDD;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	width: 238px;
+	padding:0px;
+	padding-left:60px;
+	margin:0px;
+	background-color: #EEEEEE;
+	-moz-user-focus: normal;
+}
+
+.bouton_sousmenu:hover {
+	background:url(boutons_menu/background-sousmenu.jpg) repeat-x;
+}
+
+.bouton_sousmenu:focus {
+	background:url(boutons_menu/background-sousmenu.jpg) repeat-x;
+}

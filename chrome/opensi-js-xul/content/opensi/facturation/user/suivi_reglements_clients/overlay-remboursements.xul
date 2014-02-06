@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_suiviReglementsClients_overlayRemboursements"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-remboursements.js" />
+
+	<tabpanel id="tabRemboursements" flex="1">
+		<vbox flex="1" class="auto-overflow">
+
+			<hbox>
+				<hbox flex="1" align="center">
+					<label class="label" value="N° Client :" />
+					<textbox id="orbt-numClient" maxlength="10" size="10" onkeypress="orbt_onKeyPress(event);" />
+					<button class="bIcoRechercher" tooltiptext="rechercher un client" oncommand="orbt_rechercherClient();" />
+					<box width="20px" />
+					<label value="Date remboursement du :" />
+					<textbox id="orbt-dateDebut" maxlength="10" size="10" onkeypress="orbt_onKeyPress(event);" />
+					<label value="au" />
+					<textbox id="orbt-dateFin" maxlength="10" size="10" onkeypress="orbt_onKeyPress(event);" />
+					<box width="20px" />
+					<label class="label" value="Etat :"/>
+					<menulist id="orbt-etat" oncommand="orbt_initListeRemboursements()">
+						<menupopup>
+							<menuitem label="[Tous]" value="0" />
+							<menuitem label="A affecter" value="N" />
+							<menuitem label="Affecté" value="A" />
+						</menupopup>
+					</menulist>
+					<box width="20px" />
+					<button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="orbt_reinitialiser();" />
+				</hbox>
+				<hbox collapsed="true">
+					<button id="orbt-bAffecterRemb" label="Affecter les remboursements" oncommand="orbt_affecterRemboursements();" />
+				</hbox>
+			</hbox>
+			
+			<hbox pack="center">
+				<button disabled="true" class="bIcoRetour" style="margin-right:0px" id="orbt-bPrec" oncommand="orbt_pressOnPagePrec();" tooltiptext="Page précédente" />
+				<vbox pack="center">
+					<hbox>
+						<label value="Page" />
+						<label id="orbt-pageDeb" />
+						<label value="/" />
+						<label id="orbt-pageFin" />
+					</hbox>
+				</vbox>
+				<button disabled="true" class="bIcoAvance" id="orbt-bSuiv" oncommand="orbt_pressOnPageSuiv();" tooltiptext="Page suivante" />
+			</hbox>
+
+			<vbox flex="1">
+				<tree id="orbt-listeRemboursements"
+						flex="1"
+						seltype="single"
+						flags="dont-build-content"
+						ref="http://www.opensi.org/facturation/suiviReglementsClients"
+						datasources="rdf:null"
+						onselect="orbt_selectOnListeRemboursements();"
+						ondblclick="orbt_pressOnListeRemboursements();">
+					<treecols>
+						<treecol id="orbt-colClientId" label="N° Client" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Client" />
+						<splitter class="tree-splitter" />
+						<treecol id="orbt-colDenomination" label="Client" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Denomination" />
+						<splitter class="tree-splitter" />
+						<treecol id="orbt-colNumPiece" label="N° Pièce" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+						<splitter class="tree-splitter" />
+						<treecol label="Banque retrait" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Banque_Retrait" />
+						<splitter class="tree-splitter" />
+						<treecol id="orbt-colDateRemboursement" label="Date remboursement" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Remboursement" />
+						<splitter class="tree-splitter" />
+						<treecol label="Mode règlement" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reglement" />
+						<splitter class="tree-splitter" />
+						<treecol label="Montant" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant" style="text-align:right" />
+						<splitter class="tree-splitter" />
+						<treecol label="Restant à imputer" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Restant" style="text-align:right" />
+						<treecol id="orbt-colMontant" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colModeRegId" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colBanqueRetrait" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colCommentaires" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colTypeModification" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colTypeSuppression" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colMotif" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colLettreEditable" collapsed="true" ignoreincolumnpicker="true" />
+						<treecol id="orbt-colRemboursementId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<rule>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Client" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Denomination" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Banque_Retrait" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Date_Remboursement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reglement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Aff_Montant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Montant_Restant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Montant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reg_Id" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Banque_Retrait_Id" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Commentaires" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Type_Modification" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Type_Suppression" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Motif" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lettre_Editable" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Remboursement_Id" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Remboursement" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant" />
+										<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Restant" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+						</rule>
+					</template>
+				</tree>
+				
+				<hbox>
+					<hbox align="center">
+						<button id="orbt-bEditerPdf" class="bPDF" label="Editer une lettre de remboursement" oncommand="orbt_editerPdf();" disabled="true" />
+					</hbox>
+					<box flex="1" />
+					<hbox pack="end" align="center">
+						<label value="Total :" />
+						<textbox id="orbt-totalRemboursement" class="nombre" readonly="true" />
+						<box width="20px" />
+						<label value="Total à imputer :" />
+						<textbox id="orbt-totalRestant" class="nombre" readonly="true" />
+					</hbox>
+				</hbox>
+			</vbox>
+			
+			<hbox>
+				<groupbox flex="1" orient="vertical">
+					<caption label="Détail des règlements imputés" />
+					
+					<tree id="orbt-listeReglements"
+							flex="1"
+							flags="dont-build-content"
+							ref="http://www.opensi.org/facturation/suiviReglementsClients"
+							datasources="rdf:null"
+							onselect="orbt_selectOnListeImputations();">
+						<treecols>
+							<treecol label="Type" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Type" />
+							<splitter class="tree-splitter" />
+							<treecol label="Date" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Reglement" />
+							<splitter class="tree-splitter" />
+							<treecol label="N° Pièce" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+							<splitter class="tree-splitter" />
+							<treecol label="Mode règlement" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reg" />
+							<splitter class="tree-splitter" />
+							<treecol label="Montant règlement" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Total" style="text-align:right" />
+							<splitter class="tree-splitter" />
+							<treecol label="Montant imputé" flex="1" sort="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Impute" style="text-align:right" />
+							<treecol id="orbt-colType" collapsed="true" ignoreincolumnpicker="true" />
+							<treecol id="orbt-colImputationId" collapsed="true" ignoreincolumnpicker="true" />
+						</treecols>
+						<template>
+							<rule>
+								<treechildren>
+									<treeitem uri="rdf:*">
+										<treerow>
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Lbl_Type" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Date_Reglement" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Num_Piece" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Mode_Reg" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Aff_Montant_Total" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Aff_Montant_Impute" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Type" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#Imputation_Id" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triDate_Echeance" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Total" />
+											<treecell label="rdf:http://www.opensi.org/facturation/suiviReglementsClients/rdf#triMontant_Impute" />
+										</treerow>
+									</treeitem>
+								</treechildren>
+							</rule>
+						</template>
+					</tree>
+					
+					<hbox pack="end">
+						<button id="orbt-bDesaffecter" label="Désaffecter" oncommand="orbt_pressOnDesaffecter();" disabled="true" />
+					</hbox>
+				</groupbox>
+				
+				<groupbox orient="vertical">
+					<caption label="Remboursement" />
+					
+					<hbox>
+						<grid flex="1">
+							<columns>
+								<column />
+								<column />
+							</columns>
+		 					<rows>
+								<row align="center">
+									<label class="label" value="Date :"/>
+									<hbox><textbox id="orbt-dateRemboursement" maxlength="10" size="10"/></hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Banque de retrait :"/>
+									<hbox>
+										<menulist id="orbt-banqueRetrait" ref="http://www.opensi.org/config/banques" style="width:160px" sizetopopup="none" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/banques/rdf#Nom" value="rdf:http://www.opensi.org/config/banques/rdf#Banque_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Client :"/>
+									<hbox align="center">
+										<menulist id="orbt-client" ref="http://www.opensi.org/facturation/clients" style="width:160px" sizetopopup="none" datasources="rdf:null">
+											<menupopup>
+												<menuitem label="[Choisir]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/clients/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/clients/rdf#Client_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+										<button class="bIcoRechercher" id="orbt-bRechClient" tooltiptext="rechercher un client" oncommand="orbt_ajouterClientListe();" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Motif :"/>
+									<hbox>
+										<menulist id="orbt-motif" ref="http://www.opensi.org/facturation/motifs" datasources="rdf:null" style="width:160px" sizetopopup="none">
+											<menupopup>
+												<menuitem label="[Choisir]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/motifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/motifs/rdf#Motif_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+						
+						<box width="20px" />
+						
+						<grid flex="1">
+							<columns>
+								<column />
+								<column />
+							</columns>
+		 					<rows>
+								<row align="center">
+									<label class="label" value="Mode de règlement :"/>
+									<hbox>
+										<menulist id="orbt-modeReglement" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null" style="width:160px" sizetopopup="none">
+											<menupopup>
+												<menuitem label="[Aucun]" value="0" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+												</menupopup>
+											</template>
+										</menulist>
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Numéro de pièce :" />
+									<hbox><textbox id="orbt-numPiece" maxlength="20"/></hbox>
+			 			 		</row>
+								<row align="center">
+	 						 		<label class="label" value="Montant :" />
+			 						<hbox><textbox id="orbt-montant" class="nombre" maxlength="14"/></hbox>
+								</row>
+							</rows>
+						</grid>
+					
+						<box width="20px" />
+					
+						<vbox>
+							<hbox><label value="Commentaires :" /></hbox>
+							<hbox><textbox id="orbt-commentaires" multiline="true" rows="3" /></hbox>
+						</vbox>
+					</hbox>
+					
+					<hbox pack="center">
+						<button id="orbt-bNouveauRemboursement" class="bNouveau" label="Nouveau" oncommand="orbt_nouveauRemboursement();" />
+						<button id="orbt-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="orbt_pressOnSupprimer();" disabled="true" />
+						<button id="orbt-bAnnuler" class="bAnnuler" label="Annuler" oncommand="orbt_pressOnAnnuler();" collapsed="true" />
+						<button id="orbt-bEnregistrerRemboursement" class="bEnregistrer" label="Enregistrer" oncommand="orbt_enregistrerRemboursement();" />
+					</hbox>
+					
+				</groupbox>
+			</hbox>
+			
+		</vbox>
+	</tabpanel>
+
+</overlay>

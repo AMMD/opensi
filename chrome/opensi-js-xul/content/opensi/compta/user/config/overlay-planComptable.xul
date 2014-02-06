@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay id="opensi_compta_config_comptabilite_overlay-planComptable"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-planComptable.js" />
+
+	<tabpanel id="tabPlan">
+
+		<vbox pack="center" flex="1" class="auto-overflow">
+
+			<hbox pack="center" flex="1" style="overflow:auto">
+				<vbox flex="1">
+					<hbox flex="1" pack="center">
+						<label id="opc-nomClasse" class="label_14" />
+					</hbox>
+
+					<hbox flex="2">
+						<vbox flex="1">
+							<button label="Clients" oncommand="opc_tab(-1)" />
+							<button label="Fournisseurs" oncommand="opc_tab(0)" />
+							<button label="Auxiliaires" oncommand="opc_tab(-2)" />
+							<button label="Classe 1" oncommand="opc_tab(1)" />
+							<button label="Classe 2" oncommand="opc_tab(2)" />
+							<button label="Classe 3" oncommand="opc_tab(3)" />
+							<button label="Classe 4" oncommand="opc_tab(4)" />
+							<button label="Classe 5" oncommand="opc_tab(5)" />
+							<button label="Classe 6" oncommand="opc_tab(6)" />
+							<button label="Classe 7" oncommand="opc_tab(7)" />
+							<button label="Classe 8" collapsed="true" oncommand="opc_tab(8)" />
+						</vbox>
+						<vbox flex="10">
+							<tree id="opc-Compte"
+								datasources="rdf:null"
+								ref="http://www.opensi.org/Config/classes"
+								hidecolumnpicker="true"
+								seltype="single"
+								ondblclick="opc_ouvrirCompte();"
+								flags="dont-build-content"
+								flex="1">
+								<treecols>
+									<treecol primary="true" id="opc-num" flex="1" label="Numéro" />
+									<splitter class="tree-splitter" />
+									<treecol id="opc-libelle" flex="20" label="Intitulé" />
+								</treecols>
+								<template>
+									<rule>
+										<treechildren>
+											<treeitem uri="rdf:*">
+												<treerow>
+													<treecell
+														label="rdf:http://www.opensi.org/Config/classes/rdf#numero" />
+													<treecell
+														label="rdf:http://www.opensi.org/Config/classes/rdf#libelle" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</rule>
+								</template>
+							</tree>
+						</vbox>
+					</hbox>
+					
+					<hbox pack="end">
+						<grid>
+							<columns>
+								<column />
+								<column />
+							</columns>
+							<rows>
+								<row align="center">
+									<label
+										value="Niveau dans l'arborescence : " />
+									<hbox>
+										<radiogroup id="opc-Niveau" orient="horizontal" oncommand="opc_niv();">
+											<radio id="opc-1" group="opc-Niveau" label="1" value="1" />
+											<radio id="opc-2" group="opc-Niveau" label="2" value="2" selected="true" />
+											<radio id="opc-3" group="opc-Niveau" label="3" value="3" />
+											<radio id="opc-4" group="opc-Niveau" label="4" value="4" />
+											<radio id="opc-5" group="opc-Niveau" label="5" value="5" />
+											<radio id="opc-6" group="opc-Niveau" label="6" value="6" />
+										</radiogroup>
+									</hbox>
+								</row>
+							</rows>
+						</grid>
+					</hbox>
+					
+					<hbox flex="1">
+						<groupbox flex="1" pack="center" align="center">
+							<caption label="Plan comptable" />
+							<hbox>
+								<label id="opc-nomPlan" />
+							</hbox>
+							<hbox height="10px" />
+							<hbox id="opc-boxPlan">
+								<menulist id="opc-Plan" ref="http://www.opensi.org/Config/listePlan" datasources="rdf:null">
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Config/listePlan/rdf#Libelle" value="rdf:http://www.opensi.org/Config/listePlan/rdf#Code_Plan" />
+										</menupopup>
+									</template>
+								</menulist>
+								<button label="Enregistrer" class="bEnregistrer" oncommand="opc_enregistrerPlan()" />
+							</hbox>
+								<label value="Importer les comptes du dossier " />
+							<hbox>
+							</hbox>
+							<hbox align="center">
+								<menulist id="opc-dossier" ref="http://www.opensi.org/compta/config/liste_dossier" datasources="rdf:null" onkeypress="opc_keypress(event);">
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" value="rdf:http://www.opensi.org/compta/config/liste_dossier/rdf#code" label="rdf:http://www.opensi.org/compta/config/liste_dossier/rdf#libelle" />
+										</menupopup>
+									</template>
+								</menulist>
+								<button label="Importer" oncommand="opc_import_compte()" />
+							</hbox>
+						</groupbox>
+
+						<groupbox flex="1" pack="end" orient="horizontal">
+							<caption label="Détails du compte" />
+							<vbox>
+								<grid>
+									<columns>
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<label class="label" value="* Numéro :" />
+											<hbox>
+												<textbox id="opc-Numero_Compte" size="9" maxlength="8" onblur="opc_leaveNumero_Compte()" />
+											</hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="* Intitulé :" />
+											<hbox>
+												<textbox id="opc-Intitule" size="27" maxlength="100" />
+											</hbox>
+										</row>
+										<row align="center">
+											<label class="label" value="Type de compte :" />
+											<hbox>
+												<menulist id="opc-Type_Compte" oncommand="opc_pressOnTypeCompte();">
+													<menupopup>
+														<menuitem label="GENERAL" value="G" />
+														<menuitem label="CLIENT" value="C" />
+														<menuitem label="FOURNISSEUR" value="F" />
+														<menuitem label="AUXILIAIRE" value="A" />
+													</menupopup>
+												</menulist>
+											</hbox>
+										</row>
+										<row align="center" id="opc-rCentralisateur">
+											<label value="" />
+											<checkbox label="Centralisateur" id="opc-chkCentralisateur" disabled="true" />
+										</row>
+										<row align="center">
+											<label class="label" value="Taux de TVA :" />
+											<hbox>
+												<menulist id="opc-Code_TVA" ref="http://www.opensi.org/facturation/taux_tva" datasources="rdf:null">
+													<template>
+														<menupopup>
+															<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Taux_TVA" value="rdf:http://www.opensi.org/facturation/taux_tva/rdf#Code_TVA" />
+														</menupopup>
+													</template>
+												</menulist>
+											</hbox>
+										</row>
+										<row align="center" id="opc-rDetail">
+											<label value="" />
+											<checkbox id="opc-Detail_Cloture" label="Détail en cloture" checked="true" />
+										</row>
+										<row align="center" id="opc-rCumul" collapsed="true">
+											<label value="" />
+											<checkbox id="opc-Cumul_Journal" label="Cumul en pied de journal" checked="false" />
+										</row>
+										<row align="center" id="opc-rTva">
+											<label value="" />
+											<checkbox id="opc-Tva_Encaissement" checked="false" label="TVA sur encaissement" />
+										</row>
+										<row align="center" id="opc-rContrepartie">
+											<label class="label" value="Contrepartie :" />
+											<hbox>
+												<hbox align="center">
+													<textbox id="opc-Contrepartie" size="8" maxlength="8" onkeypress="opc_keypress(event, id, value);" />
+												</hbox>
+												<button class="bIcoRechercher" oncommand="opc_recherche_compte('', 'opc-Contrepartie');" />
+											</hbox>
+										</row>
+										<row align="center" id="opc-rCollectif">
+											<label class="label" value="Compte collectif :" />
+											<hbox>
+												<hbox align="center">
+													<textbox id="opc-Collectif" size="8" maxlength="8" onkeypress="opc_keypress(event, id, value);" />
+												</hbox>
+												<button id="opc-bRechCollectif" class="bIcoRechercher" oncommand="opc_recherche_compte('', 'opc-Collectif');" />
+											</hbox>
+										</row>
+									</rows>
+								</grid>
+
+								<hbox pack="center">
+									<button label="Enregistrer" class="bEnregistrer" oncommand="opc_enregistrerCompte()" />
+									<button id="opc-bSupprimer" label="Supprimer" class="bSupprimer" oncommand="opc_supprimerCompte()" />
+									<button label="Nouveau" class="bNouveau" oncommand="opc_nouveauCompte()" />
+								</hbox>
+							</vbox>
+
+							<box width="10px" />
+
+							<vbox flex="1">
+								<box height="10px" />
+								<hbox pack="center">
+									<grid>
+										<columns>
+											<column style="width:100px" />
+											<column style="width:110px" />
+											<column style="width:110px" />
+										</columns>
+										<rows>
+											<row align="center">
+												<label value="" class="case_entete" />
+												<label value="Total Débit" class="row_entete" />
+												<label value="Total Crédit" class="row_entete" />
+											</row>
+											<row align="center">
+												<label value="Exercice N" class="col_entete" />
+												<label id="opc-debit_compte" class="case" style="text-align:right" />
+												<label id="opc-credit_compte" class="case" style="text-align:right" />
+											</row>
+											<row align="center">
+												<label value="Exercice N-1" class="col_entete" />
+												<label id="opc-old_debit_compte" class="case" style="text-align:right" />
+												<label id="opc-old_credit_compte" class="case" style="text-align:right" />
+											</row>
+											<row align="center">
+												<label value="Exercice N-2" class="col_entete" />
+												<label id="opc-old_2_debit_compte" class="case" style="text-align:right" />
+												<label id="opc-old_2_credit_compte" class="case" style="text-align:right" />
+											</row>
+										</rows>
+									</grid>
+								</hbox>
+
+								<box height="10px" />
+
+								<groupbox flex="1" orient="vertical" id="opc-listeprofil" collapsed="true">
+									<caption label="Profil" />
+
+									<tree id="opc-liste_profil_compte"
+										hidecolumnpicker="true"
+										seltype="single" flex="1"
+										ref="http://www.opensi.org/Compta/listeProfilcompte"
+										datasources="rdf:null"
+										flags="dont-build-content"
+										onselect="opc_selectProfil();">
+										<treecols>
+											<treecol id="opc-Profilnom" flex="1" label="Profil" />
+											<treecol id="opc-ColProfil_Id" flex="1" label="Code" collapsed="true" />
+										</treecols>
+										<template>
+											<treechildren>
+												<treeitem uri="rdf:*">
+													<treerow>
+														<treecell label="rdf:http://www.opensi.org/Compta/listeProfilcompte/rdf#Nom" />
+														<treecell label="rdf:http://www.opensi.org/Compta/listeProfilcompte/rdf#profil_id" />
+													</treerow>
+												</treeitem>
+											</treechildren>
+										</template>
+									</tree>
+
+									<hbox pack="center" align="center">
+										<label value="Choix du profil :" />
+										<menulist id="opc-liste_profil" ref="http://www.opensi.org/Utilisateurs/listeProfil" datasources="rdf:null" oncommand="opc_pressOnListeProfils();">
+											<menupopup>
+												<menuitem label="[Choisir]" />
+											</menupopup>
+											<template>
+												<menupopup>
+													<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/Utilisateurs/listeProfil/rdf#Nom" value="rdf:http://www.opensi.org/Utilisateurs/listeProfil/rdf#profil_id" />
+												</menupopup>
+											</template>
+										</menulist>
+
+										<button id="opc-bAjouterProfil" tooltiptext="Ajouter" class="bIcoValider" oncommand="opc_ajouterProfil();" style="margin-left:0px" />
+										<button id="opc-bSupprimerProfil" tooltiptext="Supprimer" class="bIcoSupprimer" oncommand="opc_supprimerProfil()" style="margin-left:0px" />
+									</hbox>
+								</groupbox>
+							</vbox>
+							
+							<groupbox id="opc-groupeVentilation" flex="1" >
+								<caption label="Ventilation analytique" />
+								<hbox flex="1">
+									<tree id="opc-treeVentilations"
+										hidecolumnpicker="true"
+										seltype="single" flex="1"
+										ref="http://www.opensi.org/compta/analytique/comptes"
+										datasources="rdf:null"
+										flags="dont-build-content"
+										onselect="opc_selectOnTreeVentilation();">
+										<treecols>
+											<treecol id="opc-colNumeroAna" label="N° Compte" />
+											<splitter class="tree-splitter" />
+											<treecol id="opc-colLibelleAna" flex="1" label="Libellé" />
+											<splitter class="tree-splitter" />
+											<treecol id="opc-colVentilation" label="Ventilation" />
+											<treecol id="opc-colVentilationId" collapsed="true" ignoreincolumnpicker="true" />
+											<treecol id="opc-colCompteAnaId" collapsed="true" ignoreincolumnpicker="true" />
+											<treecol id="opc-colRank" collapsed="true" ignoreincolumnpicker="true" />
+										</treecols>
+										<template>
+											<treechildren>
+												<treeitem uri="rdf:*">
+													<treerow>
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Numero" />
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Libelle" />
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Ventilation" />
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Ventilation_Id" />
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Compte_Ana" />
+														<treecell label="rdf:http://www.opensi.org/compta/analytique/comptes/rdf#Rank" />
+													</treerow>
+												</treeitem>
+											</treechildren>
+										</template>
+									</tree>
+									<vbox>
+										<button id="opc-bFlecheHaut" class="bIcoFlecheHaut" tooltiptext="déplacer vers le haut" oncommand="opc_pressOnFlecheHaut();" />
+		    							<button id="opc-bFlecheBas" class="bIcoFlecheBas" tooltiptext="déplacer vers le bas" oncommand="opc_pressOnFlecheBas();" />
+									</vbox>
+								</hbox>
+								<box height="5px" />
+								<grid>
+									<columns>
+										<column />
+										<column />
+										<column flex="1" />
+										<column />
+										<column />
+										<column />
+										<column />
+										<column />
+									</columns>
+									<rows>
+										<row align="center">
+											<label value="*N° Compte :" />
+											<box />
+											<label value="*Libellé :" />
+											<label value="*Ventilation :" />
+											<label />
+											<box />
+											<box />
+											<box />
+										</row>
+										<row align="center">
+											<textbox id="opc-numeroAna" size="15" maxlength="10" />
+											<button id="opc-bRechercheCompteAna" class="bIcoRechercher" tooltiptext="rechercher un compte analytique" oncommand="opc_pressOnRechercheCompteAna();" flex="1" />
+											<textbox id="opc-libelleAna" maxlength="50" />
+											<textbox id="opc-ventilation" class="nombre" size="10" maxlength="8" style="margin-right:0px" />
+											<label value="%" style="margin-left:2px" />
+											<button id="opc-bAnnulerAna" class="bIcoAnnuler" tooltiptext="annuler" oncommand="opc_pressOnAnnulerAna();" />
+											<button id="opc-bValiderAna" class="bIcoValider" tooltiptext="valider" oncommand="opc_pressOnValiderAna();" />
+											<button id="opc-bSupprimerAna" class="bIcoSupprimer" tooltiptext="supprimer" oncommand="opc_pressOnSupprimerAna();" />
+										</row>
+									</rows>
+								</grid>
+							</groupbox>
+							
+						</groupbox>
+					</hbox>
+					
+				</vbox>
+			</hbox>
+
+		</vbox>
+	</tabpanel>
+</overlay>

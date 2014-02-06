@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_stocks_overlay-fournisseurs"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-supplements.js" />
+
+	<tabpanel id="tab-supplements">
+			<vbox flex="1">
+				<vbox flex="1" pack="center">
+					<hbox flex="1" pack="center">
+						<groupbox flex="1" pack="center">
+							<caption label="Publication Web" />
+							<listbox flex="1" id="web" ref="http://www.opensi.org/facturation/liste_publication_web" datasources="rdf:null">
+								<listhead>
+									<listheader label="Site Web" />
+						 		</listhead>
+								<listcols>
+									<listcol flex="1" />
+								</listcols>
+								<template>
+									<listitem value="rdf:http://www.opensi.org/facturation/liste_publication_web/rdf#Site_Id" uri="rdf:*" allowevents="true">
+										<listcell type="checkbox" checked="rdf:http://www.opensi.org/facturation/liste_publication_web/rdf#Cocher" label="rdf:http://www.opensi.org/facturation/liste_publication_web/rdf#Nom_Site" onclick="os_testCheck(this.parentNode);" />
+									</listitem>
+								</template>
+							</listbox>
+						</groupbox>
+					</hbox>
+				</vbox>
+			</vbox>
+	</tabpanel>
+</overlay>

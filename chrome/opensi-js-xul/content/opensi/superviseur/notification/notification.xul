@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_superviseur_notification_envoiMail"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="notification.js" />
+
+	<hbox align="center" class="bar_menu_conf">
+		<hbox class="bar_menu_conf_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menuManager()" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	<hbox style="height:10px" />
+	
+	<tabbox flex="1">
+		<tabs>
+     	<tab label="Liste des entreprises avec e-mail" />
+     	<tab label="Liste des entreprises sans e-mail" />
+     	<tab label="Interface d'envoi" />
+    	</tabs>
+ 		<tabpanels flex="1">
+   		<tabpanel>
+   			<hbox pack="center" flex="1">
+   				<vbox flex="1">
+	    			<hbox style="height:50px" />
+						<hbox pack="center">
+					    <label class="label_16" value="Liste des entreprises qui ont un e-mail" />
+					  </hbox>
+						<hbox style="height:40px" />
+						<hbox>
+							<button class="bIcoCocher" tooltiptext="Tout cocher" oncommand="toutCocher(true);" />
+							<button class="bIcoDecocher" tooltiptext="Tout décocher" oncommand="toutCocher(false);" />
+						</hbox>
+	    			<hbox pack="center" flex="1">
+							<listbox flex="1" id="liste_entreprises_mail" ref="http://www.opensi.org/Superviseur/listeEntreprises" datasources="rdf:null">
+								<listhead>
+					    		<listheader label="Identifiant" />
+					    		<listheader label="Dénomination" />					    		
+					    		<listheader label="Téléphone" />
+					    		<listheader label="E-mail" />
+					    		<listheader label="Responsable" />
+							 	</listhead>
+								<listcols>
+									<listcol flex="1" />
+									<listcol flex="1" />
+									<listcol flex="1" />
+									<listcol flex="1" />
+									<listcol flex="1" />
+					  		</listcols>
+								<template>
+									<listitem id="it" value="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Entreprise_Id" uri="rdf:*" allowevents="true">
+										<listcell id="check" type="checkbox" checked="true" label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Identifiant" onclick="testcheckEntMail()"/>
+										<listcell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Denomination"/>
+										<listcell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Telephone"/>
+										<listcell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Email"/>
+										<listcell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Responsable"/>
+									</listitem>
+								</template>
+							</listbox>
+						</hbox>
+					</vbox>
+				</hbox>
+   		</tabpanel>
+   		
+   		<tabpanel>
+   			<hbox pack="center" flex="1">
+   				<vbox flex="1">
+	    			<hbox style="height:50px" />
+						<hbox pack="center">
+					    <label class="label_16" value="Liste des entreprises qui n'ont pas d'e-mail" />
+					  </hbox>
+						<hbox style="height:40px" />
+						<hbox flex="1">
+					    <tree id="liste_entreprises_nomail"
+				          hidecolumnpicker="true"
+				          seltype="single"
+									flex="1"
+				          ref="http://www.opensi.org/Superviseur/listeEntreprises"
+				          datasources="rdf:null">
+					      <treecols>
+					      	<treecol flex="1" id="ColIdentifiant" label="Identifiant" />
+					        <treecol flex="1" id="ColDenomination" label="Dénomination" />
+					        <treecol flex="1" id="ColTelephone" label="Téléphone" />
+					        <treecol flex="1" id="ColResponsable" label="Responsable" />
+					      </treecols>
+					
+					      <template>
+					        <treechildren>
+					          <treeitem uri="rdf:*">
+					            <treerow>
+					            	<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Identifiant" />
+					              <treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Denomination" />
+												<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Telephone" />
+					              <treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Responsable" />
+					            </treerow>
+					          </treeitem>
+					        </treechildren>
+					      </template>
+					    </tree>
+					  </hbox>
+					</vbox>
+				</hbox>
+   		</tabpanel>
+   		
+   		<tabpanel>
+   			<hbox pack="center" flex="1">
+   				<vbox flex="1">
+	    			<hbox style="height:50px" />
+						<hbox pack="center">
+					    <label class="label_16" value="Interface d'envoi" />
+					  </hbox>
+						<hbox style="height:40px" />
+						<hbox flex="1" pack="center">
+					    <grid>
+					    	<columns>
+					      	<column />
+					      	<column />
+					    	</columns>
+					    	<rows>
+					      	<row align="center">
+					        	<label class="label" value="Sujet :" />
+					        	<hbox><textbox id="Sujet" maxlength="100" size="100" /></hbox>
+					      	</row>
+					      	<row flex="1">
+					        	<label class="label" value="Message :" />
+					        	<hbox flex="1"><textbox id="Message" multiline="true" flex="1" /></hbox>
+					      	</row>      	
+					    	</rows>
+					  	</grid>
+					  </hbox>
+					  <hbox style="height:20px" />
+					  <hbox pack="center">
+							<checkbox id="Copie" label="Envoyer le message en copie aux utilisateurs" />
+							<hbox pack="center">
+								<button class="bValider" label="Envoyer" oncommand="envoyerMail();" />
+							</hbox>
+						</hbox>
+						<hbox style="height:50px" />
+					</vbox>
+				</hbox>
+   		</tabpanel>
+   		
+   	</tabpanels>
+   </tabbox>
+
+</window>

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_abonnement_overlay-criteresAnalyse"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-formatComptes.js" />
+
+	<tabpanel id="tabFormat" flex="1">
+	
+		<hbox flex="1" class="auto-overflow" pack="center">
+			
+			<vbox pack="center">
+			
+				<hbox align="center">
+					<label class="label" value="Composition du format des numéros de comptes :" />
+				</hbox>
+				
+				<box height="20px" />
+				
+				<hbox>
+				
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Critère d'analyse n°1 :" />
+								<menulist id="ofc-filtreCritere1" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnFiltreCritere1();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+							<row align="center">
+								<label class="label" value="Critère d'analyse n°2 :" />
+								<menulist id="ofc-filtreCritere2" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnFiltreCritere2();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+							<row align="center">
+								<label class="label" value="Critère d'analyse n°3 :" />
+								<menulist id="ofc-filtreCritere3" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnFiltreCritere3();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+							<row align="center">
+								<label class="label" value="Critère d'analyse n°4 :" />
+								<menulist id="ofc-filtreCritere4" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnFiltreCritere4();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+							<row align="center">
+								<label class="label" value="Critère d'analyse n°5 :" />
+								<menulist id="ofc-filtreCritere5" ref="http://www.opensi.org/compta/analytique/parametrages" datasources="rdf:null" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnFiltreCritere5();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+									</menupopup>
+									<template>
+										<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" value="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+										</menupopup>
+									</template>
+								</menulist>
+							</row>
+							<row align="center">
+								<label class="label" value="" />
+								<label class="label" value="" />
+							</row>
+							<row align="center">
+							<label class="label" value="N°Incremental sur :" />
+								<menulist id="ofc-listeNumIncremental" style="width:130px" sizetopopup="none" oncommand="ofc_selectOnListeNumIncremental();">
+									<menupopup>
+										<menuitem label="[Choisir]" value="0" />
+										<menuitem label="3" value="3" />
+										<menuitem label="4" value="4" />
+										<menuitem label="5" value="5" />
+										<menuitem label="6" value="6" />
+										<menuitem label="7" value="7" />
+										<menuitem label="8" value="8" />
+										<menuitem label="9" value="9" />
+									</menupopup>
+								</menulist>
+							</row>
+						</rows>
+					</grid>
+					
+					<vbox>
+						<hbox align="center">
+							<label class="label" value="Format d'un numéro de compte :" />
+						</hbox>
+						<hbox align="center">
+							<hbox>
+								<textbox id="ofc-formatCompte" size="10" maxlength="29" />
+							</hbox>
+							<button id="ofc-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="ofc_pressOnEnregistrer();" />
+						</hbox>
+					</vbox>
+				
+				</hbox>
+				
+				<hbox>
+					
+				</hbox>
+			
+			</vbox>
+			
+		</hbox>
+		
+	</tabpanel>
+
+</overlay>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_tva_tvaFrance"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="tva_france.js" />
+	
+	<tree id="liste_TVA"
+      hidecolumnpicker="true"
+      seltype="single"
+      ref="http://www.opensi.org/Config/listeTauxTva"
+      datasources="rdf:null"
+			onselect="reporter()"
+			height="250px">
+
+    <treecols>
+      <treecol id="ColTaux_TVA" flex="1" label="Taux de TVA"/>
+      <treecol id="ColCompte_TVA_Achat" flex="1" label="Compte TVA achat" />
+      <treecol id="ColCompte_TVA_Vente" flex="1" label="Compte TVA vente" />
+			<treecol id="ColCompte_Achat" flex="1" label="Compte d'achat" />
+			<treecol id="ColCompte_Vente" flex="1" label="Compte de vente" />
+			<treecol id="ColCode_TVA" collapsed="true" />
+			<treecol id="ColNPR" collapsed="true" />
+			<treecol id="ColNormal" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Taux_TVA" />
+            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_TVA_Achat" />
+            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_TVA_Vente" />
+						<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_Achat" />
+            <treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Compte_Vente" />
+						<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Code_TVA" />
+						<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#NPR" />
+						<treecell label="rdf:http://www.opensi.org/Config/listeTauxTva/rdf#Normal" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+	
+  <box style="height:20px" />
+	
+	<hbox pack="center">
+  	<grid>
+    	<columns>
+      	<column />
+      	<column />
+    	</columns>
+    	<rows>
+      	<row id="Row_Taux_TVA" align="center">
+        	<label class="label" value="Taux TVA :" />
+					<hbox align="center">
+						<textbox id="Taux_TVA" maxlength="5" size="6" oncommand="enregistrerTVA()" />
+						<checkbox id="NPR" label="NPR" />              			
+					</hbox>
+      	</row>
+				<row id="Row_Compte_TVA_Achats" align="center">
+        	<label class="label" value="Compte TVA associé aux achats :" />
+        	<textbox id="Compte_TVA_Achat" maxlength="8" size="9" disabled="true" />
+					<button class="bIcoRechercher" oncommand="changer('Compte_TVA_Achat');" />
+      	</row>
+      	<row id="Row_Compte_TVA_Ventes" align="center">
+        	<label class="label" value="Compte TVA associé aux ventes :" />
+        	<textbox id="Compte_TVA_Vente" maxlength="8" size="9" disabled="true" />
+					<button class="bIcoRechercher" oncommand="changer('Compte_TVA_Vente');" />
+      	</row>
+				<row align="center">
+        	<label class="label" value="Compte d'achat :" />
+        	<textbox id="Compte_Achat" maxlength="8" size="9" disabled="true" />
+					<button class="bIcoRechercher" oncommand="changer('Compte_Achat');" />
+      	</row>
+				<row align="center">
+        	<label class="label" value="Compte de vente :" />
+        	<textbox id="Compte_Vente" maxlength="8" size="9" disabled="true" />
+					<button class="bIcoRechercher" oncommand="changer('Compte_Vente');" />
+      	</row>
+			</rows>
+  	</grid>
+	</hbox>
+
+	<box style="height:20px" />
+
+	<hbox pack="center">
+		<button id="bAjouter" class="bEnregistrer" label="Enregistrer" oncommand="enregistrerTVA()" />
+		<button id="bModifier" class="bEnregistrer" label="Enregistrer" oncommand="modifierTVA()"	collapsed="true" />
+		<button id="bSupprimer" class="bSupprimer" label="Supprimer" oncommand="supprimerTVA()" collapsed="true" />
+		<button id="bNouveau"	class="bNouveau"	label="Nouveau" oncommand="nouvelleTVA()" collapsed="true" />
+  </hbox>	
+
+</window>

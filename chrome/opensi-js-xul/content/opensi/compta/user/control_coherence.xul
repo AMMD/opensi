@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_controlCoherence"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="control_coherence.js" />
+
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuDossiers" oncommand="retourChoixDossier();" />
+    	<button class="bouton_menu" id="bMenuExercices" oncommand="retour_exercice();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:40px" />
+  <hbox pack="center">
+    <label value="CONTROLE DE COHERENCE DE VOTRE COMPTABILITE" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<label id="Sous_Titre" class="label_12" />
+	</hbox>
+	<hbox style="height:20px" />
+	<hbox pack="center">
+		<progressmeter id="progression" mode="normal" width="300px" />
+	</hbox>
+	<hbox style="height:50px" />
+	<hbox flex="1"><vbox flex="1" style="overflow: auto;">
+	<hbox pack="center">
+		<vbox>
+			<hbox pack="center">
+				<label value="EQUILIBRE DES COMPTES" class="label_14" />
+			</hbox>
+			<hbox style="height:30px" />
+			<hbox pack="center">
+				<vbox>
+					<label value="Débit :" />
+					<textbox id="Debit_Compte" class="nombre" size="14" disabled="true" />
+				</vbox>
+				<vbox>
+					<label value="Crédit :" />
+					<textbox id="Credit_Compte" class="nombre" size="14" disabled="true" />
+				</vbox>
+				<vbox>
+					<label value="Ecart :" />
+					<textbox id="Ecart_Compte" class="nombre" size="14" disabled="true" />
+				</vbox>
+			</hbox>
+			<hbox style="height:50px" />
+			<hbox pack="center">
+				<label value="EQUILIBRE DES JOURNAUX" class="label_14" />
+			</hbox>
+			<hbox style="height:30px" />
+			<hbox pack="center">
+				<vbox>
+					<label value="Débit :" />
+					<textbox id="Debit_Journal" class="nombre" size="14" disabled="true" />
+				</vbox>
+				<vbox>
+					<label value="Crédit :" />
+					<textbox id="Credit_Journal" class="nombre" size="14" disabled="true" />
+				</vbox>
+				<vbox>
+					<label value="Ecart :" />
+					<textbox id="Ecart_Journal" class="nombre" size="14" disabled="true" />
+				</vbox>
+			</hbox>
+		</vbox>
+		<vbox style="width:50px" />
+		<vbox>
+			<hbox pack="center">
+				<label value="CONTROLE DES TIERS" class="label_14" />
+			</hbox>
+			<hbox style="height:30px" />
+			<vbox align="right">
+				<grid>
+					<columns>
+						<column /><column /><column /><column />
+					</columns>
+					<rows>
+						<row>
+							<label value="" />
+							<label value="Débit :" />
+							<label value="Crédit :" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Comptes Fournisseurs :" />
+							<textbox id="Debit_Fournisseur" class="nombre" size="14" disabled="true" />
+							<textbox id="Credit_Fournisseur" class="nombre" size="14" disabled="true" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Comptes collectifs 401 :" />
+							<textbox id="Debit_401" class="nombre" size="14" disabled="true" />
+							<textbox id="Credit_401" class="nombre" size="14" disabled="true" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Ecart :" />
+							<textbox id="Ecart_DF" class="nombre" size="14" disabled="true" />
+							<textbox id="Ecart_CF" class="nombre" size="14" disabled="true" />
+						</row>
+					</rows>
+				</grid>
+				<hbox style="height:30px" />
+				<grid>
+					<columns>
+						<column /><column /><column /><column />
+					</columns>
+					<rows>
+						<row>
+							<label value="" />
+							<label value="Débit :" />
+							<label value="Crédit :" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Comptes Clients :" />
+							<textbox id="Debit_Client" class="nombre" size="14" disabled="true" />
+							<textbox id="Credit_Client" class="nombre" size="14" disabled="true" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Comptes collectifs 411 :" />
+							<textbox id="Debit_411" class="nombre" size="14" disabled="true" />
+							<textbox id="Credit_411" class="nombre" size="14" disabled="true" />
+						</row>
+						<row>
+							<label style="text-align:right" value="Ecart :" />
+							<textbox id="Ecart_DC" class="nombre" size="14" disabled="true" />
+							<textbox id="Ecart_CC" class="nombre" size="14" disabled="true" />
+						</row>
+					</rows>
+				</grid>
+			</vbox>
+		</vbox>
+	</hbox>
+	<hbox style="height:60px" />
+	<hbox pack="center">
+    <button id="bEntrer" label="ENTRER DANS L'EXERCICE" oncommand="entrer();" collapsed="true" />
+		<button id="bRapport" label="VOIR LE RAPPORT DE COHERENCE" oncommand="editerRapport();" collapsed="true" />
+		<button id="bContact" label="ENVOYER LE RAPPORT A OPENSI" oncommand="envoyerRapport();" collapsed="true" />
+  </hbox>
+  <hbox flex="1" />
+	</vbox></hbox>
+
+</window>

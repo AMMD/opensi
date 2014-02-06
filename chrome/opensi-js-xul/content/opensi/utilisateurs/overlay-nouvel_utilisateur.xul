@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="overlay-nouvel_utilisateur"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-nouvel_utilisateur.js" />
+  
+  <vbox id="nouvel_utilisateur">
+	  <hbox style="height:50px" />
+		<hbox pack="center">
+	    <label value="CREATION D'UN UTILISATEUR" class="label_16" />
+	  </hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="* Login :" />
+						<hbox><textbox id="nu-Login" maxlength="15" size="16" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Mot de passe :" />
+						<hbox><textbox id="nu-Password" maxlength="15" size="16" type="password" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Mot de passe :" />
+						<hbox><textbox id="nu-Password2" maxlength="15" size="16" type="password" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Civilité :" />
+						<radiogroup id="nu-Civilite" orient="horizontal" value="0">
+							<radio label="M." value="1" />
+							<radio label="Mme" value="2" />
+							<radio label="Mlle" value="3" />
+						</radiogroup>
+					</row>
+					<row align="center">
+						<label class="label" value="* Nom :" />
+						<hbox><textbox id="nu-Nom" maxlength="30" size="31" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Prénom :" />
+						<hbox><textbox id="nu-Prenom" maxlength="30" size="31" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Fonction :" />
+						<hbox><textbox id="nu-Fonction" maxlength="30" size="31" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="" />
+						<checkbox id="nu-membreDirection" label="Membre de la direction" />
+					</row>
+					<row align="center">
+						<label class="label" value="Téléphone :" />
+						<hbox><textbox id="nu-Telephone" maxlength="20" size="31" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="E-Mail :" />
+						<hbox><textbox id="nu-Email" maxlength="60" size="31" /></hbox>
+					</row>
+				</rows>
+			</grid>
+		</hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+	    <button class="bEnregistrer" label="Enregistrer" oncommand="creerUtilisateur()" />
+	  </hbox>
+	</vbox>
+
+</overlay>

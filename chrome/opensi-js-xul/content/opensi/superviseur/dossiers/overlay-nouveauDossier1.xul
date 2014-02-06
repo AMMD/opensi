@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_compta_manager_dossiers_overlay-nouveauDossier1"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+  <script src="overlay-nouveauDossier1.js" />
+  
+  <vbox id="nouveauDossier1" flex="1">
+	  <hbox style="height:20px" />
+		<hbox pack="center">
+	    <label value="CREATION D'UN DOSSIER: ETAPE 1/4" class="label_16" />
+	  </hbox>
+		<hbox style="height:10px" />
+		<hbox pack="center">
+	    <label value="Informations de la société" class="label_14" />
+	  </hbox>
+		<hbox style="height:40px" />
+		<hbox pack="center">
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="* Raison sociale :" />
+						<hbox><textbox id="ond1-denomination" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Enseigne :" />
+						<hbox><textbox id="ond1-enseigne" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Adresse :" />
+						<hbox><textbox id="ond1-adresse1" maxlength="150" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="" />
+						<hbox><textbox id="ond1-adresse2" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="" />
+						<hbox><textbox id="ond1-adresse3" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Code postal :" />
+						<hbox><textbox id="ond1-codePostal" class="rv_cp" idville="ond1-ville" idnextfocus="ond1-email" maxlength="10" size="5" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Ville :" />
+						<hbox><textbox id="ond1-ville" class="rv_ville" idcp="ond1-codePostal" idnextfocus="ond1-email" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="E-Mail :" />
+						<hbox><textbox id="ond1-email" maxlength="64" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Téléphone :" />
+						<hbox><textbox id="ond1-telephone" maxlength="20" size="16" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Fax :" />
+						<hbox><textbox id="ond1-fax" maxlength="20" size="16" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Site Web :" />
+						<hbox><textbox id="ond1-siteWeb" maxlength="60" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Numéro SIRET :" />
+						<hbox><textbox id="ond1-numSIRET" maxlength="14" size="15" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Code NAF :" />
+						<hbox><textbox id="ond1-codeNAF" maxlength="10" size="8" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Numéro TVA intracommunautaire :" />
+						<hbox><textbox id="ond1-numTvaIntra" maxlength="14" size="14" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="RCS (Ville) :" />
+						<hbox><textbox id="ond1-villeRCS" maxlength="50" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Type de société :" />
+						<hbox>
+							<menulist id="ond1-typeSociete" ref="http://www.opensi.org/facturation/typeS" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Choisir]" value="0" />
+					      </menupopup>
+								<template>
+		     					<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeS/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeS/rdf#id" />
+		     					</menupopup>
+								</template>
+		   				</menulist>
+						</hbox>
+					</row>
+				</rows>
+			</grid>
+			<grid>
+				<columns>
+					<column />
+					<column />
+				</columns>
+				<rows>
+					<row align="center">
+						<label class="label" value="Type d'activité :" />
+						<hbox>
+							<menulist id="ond1-typologie">
+	        			<menupopup>
+	          			<menuitem label="Activité de négoce" value="AN" />
+									<menuitem label="Production de service" value="PS" />
+									<menuitem label="Autre activité" value="AA" />
+	        			</menupopup>
+	    				</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Date de création :" />
+						<hbox><textbox id="ond1-dateCreation" tooltiptext="jj/mm/aaaa" maxlength="10" size="10" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Durée de la société :" />
+						<hbox><textbox id="ond1-dureeSociete" maxlength="2" size="2" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Montant du capital :" />
+						<hbox><textbox id="ond1-montantCapital" maxlength="15" size="15" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Nombre de parts :" />
+						<hbox><textbox id="ond1-nbParts" maxlength="10" size="4" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Expert comptable :" />
+						<hbox><textbox id="ond1-expert" maxlength="40" size="30" /></hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="* Devise :" />
+						<hbox>
+							<menulist id="ond1-monnaieTenue" ref="http://www.opensi.org/config/devises" datasources="rdf:null">
+								<template>
+		     					<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/config/devises/rdf#Libelle" value="rdf:http://www.opensi.org/config/devises/rdf#Devise_Id" />
+		     					</menupopup>
+								</template>
+		   				</menulist>
+						</hbox>
+					</row>
+					<row align="start">
+						<label class="label" value="Régime fiscal :" style="padding-top: 2px" />
+						<radiogroup id="ond1-regimeFiscal">
+							<radio group="ond1-regimeFiscal" label="Impôt sur le revenu" value="IR" />
+							<radio group="ond1-regimeFiscal" label="Impôt sur les sociétés" value="IS" />
+						</radiogroup>
+					</row>
+					<row align="center">
+						<label class="label" value="Régime de groupe :" />
+						<hbox>
+							<radiogroup id="ond1-regimeGroupe" orient="horizontal">
+								<radio group="ond1-regimeGroupe" label="Oui" value="1" />
+								<radio group="ond1-regimeGroupe" label="Non" value="0" />
+							</radiogroup>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Centre des impôts :" />
+						<hbox>
+							<menulist editable="true" id="ond1-centreImpot" ref="http://www.opensi.org/Superviseur/listeCentreImpot" datasources="rdf:null">
+	      				<template>
+	        				<menupopup>
+	          				<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/Superviseur/listeCentreImpot/rdf#nom_centre" value="rdf:http://www.opensi.org/Superviseur/listeCentreImpot/rdf#nom_centre" />
+	        				</menupopup>
+	      				</template>
+	    				</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Trésorerie :" />
+						<hbox>
+							<menulist editable="true" id="ond1-tresorerie" ref="http://www.opensi.org/Superviseur/listeTresorerie" datasources="rdf:null">
+	      				<template>
+	        				<menupopup>
+	          				<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/Superviseur/listeTresorerie/rdf#nom_tresorerie" value="rdf:http://www.opensi.org/Superviseur/listeTresorerie/rdf#nom_tresorerie" />
+	        				</menupopup>
+	      				</template>
+	    				</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label class="label" value="Centre de gestion :" />
+						<hbox><textbox id="ond1-centreGestion" maxlength="60" size="30" /></hbox>
+					</row>
+				</rows>
+			</grid>
+		</hbox>
+		<box style="height:20px" />
+		<hbox pack="center">
+	    <button label="Etape suivante" class="bIcoAvance" oncommand="ond1_etapeSuivante()" />
+	  </hbox>
+	</vbox>
+</overlay>

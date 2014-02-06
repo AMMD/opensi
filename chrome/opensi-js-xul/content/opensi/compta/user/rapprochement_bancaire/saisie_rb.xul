@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+ 	id="opensi_compta_user_rapprochement_validation"
+	onload="init()"
+ 	flex="1"
+	title="OpenSi - Saisie RB"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	height="300"
+	width="850">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="saisie_rb.js" />
+
+	<vbox flex="1">
+		<hbox flex="20">
+			<tree id="listerb"
+        		flex="1"
+        		hidecolumnpicker="true"
+        		enableColumnDrag="false"
+	        	seltype="single"
+        		ref="http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB"
+	        	datasources="rdf:null"
+	        	onselect="selectlig();">
+
+	    	<treecols>
+					<treecol id="id"	collapsed="true" />
+	      			<treecol id="date_op" flex="1" label="Date" />
+						<splitter class="tree-splitter" />
+	      			<treecol id="libelle"	label="Libellé" flex="3" />
+						<splitter class="tree-splitter"/>
+  					<treecol id="depenses" label="Débit"	flex="1" style="text-align:right" />
+						<splitter class="tree-splitter" />
+					<treecol id="recettes" label="Crédit"	flex="1" style="text-align:right" />
+	    	</treecols>
+	    	<template>
+        	<treechildren>
+          	<treeitem uri="rdf:*">
+          		<treerow>
+								<treecell value="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB/rdf#id" />
+            					<treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB/rdf#date" />
+								<treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB/rdf#libelle" />
+								<treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB/rdf#debit" />
+								<treecell label="rdf:http://www.opensi.org/compta/RapprochementBancaire/rapproListeRB/rdf#credit" />
+            	</treerow>
+          	</treeitem>
+        	</treechildren>
+      	</template>
+	  	</tree>
+		</hbox>
+		<hbox pack="center" flex="1">
+			<vbox pack="center">
+				<grid>
+					<rows>
+						<row align="center">
+							<label value="Date (jj/mm/aaaa) :" />
+							<label value="Libellé :" />
+							<label value="Débit :" />
+							<label value="Crédit :" />
+						</row>
+						<row align="center">
+							<textbox id="dateOp"  oninput="test_rempli()" size="10" maxlength="10" />
+							<textbox id="labelrb"  oninput="test_rempli()" size="25" />
+							<textbox id="debit"  oninput="test_rempli()" size="10" />
+							<textbox id="credit" oninput="test_rempli()" size="10" />
+							<button class="bIcoAnnuler" id="bAnnuler" tooltiptext="Annuler" oncommand="annuler()" disabled="true" />
+							<button class="bIcoValider" id="bValider" tooltiptext="Valider" oncommand="valider()" disabled="true" />
+							<button class="bIcoSupprimer" id="bSupprimer" tooltiptext="Supprimer" oncommand="supprimer()" disabled="true" />
+						</row>
+					</rows>
+				</grid>
+			</vbox>
+		</hbox>
+		<hbox flex="1" align="center" pack="center">
+			<button class="bExit" label="Quitter" oncommand="fermer()" />
+		</hbox>
+	</vbox>
+
+</window>
+
+
+
+
+
+
+

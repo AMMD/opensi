@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-menu.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_menuPrincipal"
+  flex="1"
+  onload="init()"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_principal.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuDossiers" oncommand="retourChoixDossier();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height:40px" />
+
+	<hbox flex="1">
+
+		<hbox style="width:30px" />
+
+		<!-- menu gauche -->
+		<vbox>
+			<box style="height:30px" />
+			<button class="bouton_menu" id="bouton_comptes" tabindex="10" oncommand="goToMenu(1)" />
+			<button class="bouton_menu" id="bouton_contacts" tabindex="20" oncommand="goToMenu(2)" />
+			<button class="bouton_menu" id="bouton_taches" tabindex="30" oncommand="goToMenu(3)" />
+			<button class="bouton_menu" id="bouton_opportunites" tabindex="40" oncommand="goToMenu(4)" />
+		</vbox>
+		<vbox flex="1" align="center" pack="center" class="auto-overflow">
+
+			<tabbox id="tbActivite" flex="1" pack="center">
+			<tabs>
+      			<tab label="Suivi d'activité" />
+      			<tab label="News OpenSi" />
+     		</tabs>
+  			<tabpanels flex="1" style="background: #E8E8E8 url(chrome://opensi/content/design/filigrane.jpg) no-repeat bottom left">
+    			<tabpanel pack="center" align="start" orient="horizontal">
+    			<hbox flex="1" >
+						<vbox align="center" >
+							<label value="Indicateurs clés" style="font-weight:bold;color:#000000" />
+							<box style="height:15px" />
+							<grid style="width:250px;border:1px solid #DDDDDD">
+  							<columns>
+    							<column flex="3" />
+    							<column flex="2" />
+  							</columns>
+  							<rows>
+								<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Nombre de tâches en retard :" />
+										<label id="nbrTacheRetard" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Nombre de tâches en cours :" />
+										<label id="nbrTacheCours" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Nombre de prospect en projet :" />
+										<label id="nbrProjet" style="text-align:right" />
+    							</row>				
+    							<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Nombre d'opportunités en cours:" />
+										<label id="nbrOpportunite" value="ND" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#FFFFFF;" height="33" align="center">
+										<label value="Montant des opportunités en cours :" />
+										<label id="montantOpportunite" value="ND" style="text-align:right" />
+    							</row>
+    							<row style="background-color:#E8E8E8;" height="33" align="center">
+										<label value="Taux de conversion des opportunités :" />
+										<label id="txConversOpportunite" value="ND" style="text-align:right" />
+    							</row>
+  							</rows>
+							</grid>
+						</vbox>
+							<box style="width:120px" />
+							<vbox pack="center" flex="1">
+								<label value="Tâches en cours" style="font-weight:bold;color:#000000" />
+								<box style="height:20px" />
+								<tree flex="1" id="listeTacheCours" flags="dont-build-content" ref="http://www.opensi.org/crm/menu"
+								datasources="rdf:null" seltype="single" ondblclick="dbClickListeTacheCours();">
+									<treecols>
+										<treecol sort="rdf:http://www.opensi.org/crm/menu/rdf#Retard" />
+										<splitter class="tree-splitter" />
+										<treecol sort="rdf:http://www.opensi.org/crm/menu/rdf#Priorite" />
+										<splitter class="tree-splitter" />
+										<treecol label="Date"  sort="rdf:http://www.opensi.org/crm/menu/rdf#Date" />
+										<splitter class="tree-splitter" />
+										<treecol label="Intitulé" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Intitule" />
+										<splitter class="tree-splitter" />
+										<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Action" />
+										<treecol label="TacheId" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Tache_Id" />
+									</treecols>
+									<template>
+										<treechildren>
+											<treeitem uri="rdf:*">
+												<treerow>
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Retard" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Priorite" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Date" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Intitule" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Action" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Tache_Id" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</template>		
+								</tree> 
+				
+					
+								
+								<label value="Evènement à venir" style="font-weight:bold;color:#000000" />
+								<box style="height:20px" />
+								<tree flex="1" id="evenementsAVenir" flags="dont-build-content" ref="http://www.opensi.org/crm/menu"
+								datasources="rdf:null" seltype="single" style="border:3px solid purple" >
+									<treecols>
+										<treecol label="Date Debut" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Date_Debut" />
+										<splitter class="tree-splitter" />
+										<treecol label="Intitulé" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Intitule" />
+										<splitter class="tree-splitter" />
+										<treecol label="Action" flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Action" />
+										<splitter class="tree-splitter" />
+										<treecol label="Evenement_Id"  flex="1" sort="rdf:http://www.opensi.org/crm/menu/rdf#Evenement_Id" />
+										<splitter class="tree-splitter" />
+									</treecols>
+									<template>
+										<treechildren>
+											<treeitem uri="rdf:*">
+												<treerow>
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Date_Debut" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Intitule" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Action" />
+													<treecell label="rdf:http://www.opensi.org/crm/menu/rdf#Evenement_Id" />
+												</treerow>
+											</treeitem>
+										</treechildren>
+									</template>		
+								</tree>
+
+								
+							</vbox>
+						</hbox>
+					</tabpanel>
+					<tabpanel>
+						<hbox flex="1">
+							<iframe id="news" flex="1" style="width:850px;" />
+						</hbox>
+					</tabpanel>
+				</tabpanels>
+			</tabbox>
+
+			<box flex="1" />
+
+		</vbox>
+		
+  </hbox>
+
+</window>

@@ -1,0 +1,21 @@
+.focus {
+ background: #FFFFFF;
+ border: none; 
+}
+
+.normal {
+  background: lightgray;
+  border: none;
+}
+
+.debitcredit-focus{
+ text-align: right;
+ background: #FFFFFF;
+ border: none; 
+}
+
+.debitcredit-normal{
+ text-align: right;
+ background: lightgray;
+ border: none; 
+}

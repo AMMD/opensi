@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_config_util_rechcompte"
+  onload="init()"
+	title="OpenSi - Recherche de compte"
+	width="700"
+	height="500"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="rechcompte.js" />
+
+	<hbox style="height:10px" />
+  <hbox pack="center">
+    <label class="label_16" id="titre" />
+  </hbox>
+	<hbox style="height:20px" />
+  <hbox pack="center" flex="1" style="overflow: auto;">
+		<vbox>
+    	<hbox>
+      	<vbox pack="center">
+        	<label value="Numéro de compte commençant par :" />
+        	<label value="Libellé du compte contenant :" />
+      	</vbox>
+      	<vbox pack="center">
+        	<textbox id="num_compte" onkeypress="keypress(event,id)" size="10" maxlength="8" />
+        	<textbox id="lib_compte" size="20" onkeypress="keypress(event,id)" />
+      	</vbox>
+      	<vbox pack="center">
+        	<button id="refresh" label="Actualiser" oncommand="init_tree();" />
+        	<button id="nouv" class="bNouveau" label="Nouveau compte" oncommand="creer_compte();" />
+      	</vbox>
+    	</hbox>
+			<hbox style="height:30px" />
+    	<tree id="comptes_tree"
+          	ref="http://www.opensi.org/Config/listeComptes"
+          	hidecolumnpicker="true"
+          	seltype="single"
+          	datasources="rdf:null"
+          	flex="1"
+          	ondblclick="ok()"
+						onkeypress="keypress(event,id);"
+          	onselect="reporter()">
+      	<treecols>
+        	<treecol id="num" flex="1" label="Numéro" />      
+        	<treecol id="lib" flex="3" label="Intitulé" />
+        	<treecol id="gen" label="" tooltiptext="type de compte" />
+        	<treecol id="debit" flex="1" label="Débit" style="text-align: right" />
+        	<treecol id="credit" flex="1" label="Crédit" style="text-align: right" />
+        	<treecol id="solde" flex="1" label="Solde" style="text-align: right" />
+      	</treecols>
+      	<template>
+          <treechildren>
+            <treeitem uri="rdf:*">
+              <treerow>
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#numero" />           
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#libelle" />
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#gen" />
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#debit" />
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#credit" />
+                <treecell label="rdf:http://www.opensi.org/Config/listeComptes/rdf#solde" />
+              </treerow>
+            </treeitem>
+          </treechildren>
+      	</template>
+  		</tree>
+			<hbox style="height:20px" />
+  		<hbox pack="center">
+				<button class="bAnnuler" label="Annuler" oncommand="window.close()" />
+    		<button class="bValider" label="Ok" oncommand="ok()" />
+  		</hbox>
+			<hbox style="height:10px" />
+  	</vbox>
+	</hbox>
+
+</window>

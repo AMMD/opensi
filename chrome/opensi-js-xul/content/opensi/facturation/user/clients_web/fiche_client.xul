@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	id="opensi_facturation_clientsWeb_fiche_client"
+	onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="chrome://opensi/content/libs/util.js" />
+	<script src="fiche_client.js" />
+
+	<hbox id="menu_haut" class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="menu_principal();" />
+			<button class="bouton_menu" id="bChangerClient" oncommand="menu_client();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+	<hbox flex="1">
+		<vbox flex="1" />
+		<vbox flex="1">
+			<groupbox pack="center" align="center">
+				<caption label="Fiche signalétique" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<label class="label" value="Code client (OpenSi) :" />
+							<label id="txt_num_opensi" readonly="true" />
+						</row>
+						<row align="center">
+							<label class="label" value="Login :" />
+							<label id="txt_num_site" readonly="true" />
+						</row>
+            <row align="center">
+              <label class="label" value="Password :" />
+              <label id="txt_password" readonly="true" />
+            </row>
+						<row align="center">
+							<label class="label" value="Liaison fiche client :" />
+							<label id="txt_num_liaison" readonly="true" />
+						</row>
+						<box height="5px" />
+						<row align="center">
+							<label class="label" value="" />
+							<button label="Voir la fiche client" id="bt_voir_fiche" collapsed="true" />
+						</row>
+						<box height="15px" />
+					</rows>
+				</grid>
+				<hbox>
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Civilité :" />
+								<hbox>
+									<menulist id="txt_civ">
+										<menupopup>
+											<menuitem label="" value="0" />
+											<menuitem label="M." value="1" />
+											<menuitem label="Mme" value="2" />
+											<menuitem label="Mlle" value="3" />
+										</menupopup>
+									</menulist>
+								</hbox>
+							</row>
+							<row align="center">
+								<label class="label" value="Nom :" />
+								<textbox id="txt_nom" />
+							</row>
+							<row align="center">
+								<label class="label" value="Prénom :" />
+								<textbox id="txt_prenom" />
+							</row>
+							<row align="center">
+								<label class="label" value="Adresse :" />
+								<textbox id="txt_adresse_1" />
+							</row>
+							<row align="center">
+								<label class="label" value="" />
+								<textbox id="txt_adresse_2" />
+							</row>
+							<row align="center">
+								<label class="label" value="" />
+								<textbox id="txt_adresse_3" />
+							</row>
+							<row align="center">
+								<label class="label" value="Code postal :" />
+								<textbox id="txt_cp" />
+							</row>
+							<row align="center">
+								<label class="label" value="Ville :" />
+								<textbox id="txt_ville" />
+							</row>
+							<row align="center">
+								<label class="label" value="Pays :" />
+								<hbox>
+									<menulist style="width:200px" sizetopopup="none" id="Code_Pays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null">
+									<template>
+	              		<menupopup>
+											<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+	              		</menupopup>
+									</template>
+									</menulist>
+								</hbox>
+							</row>
+						</rows>
+					</grid>
+					<grid>
+						<columns>
+							<column />
+							<column />
+						</columns>
+						<rows>
+							<row align="center">
+								<label class="label" value="Société :" />
+								<textbox id="txt_entreprise" />
+							</row>
+							<row align="center">
+								<label class="label" value="Téléphone :" />
+								<textbox id="txt_tel" />
+							</row>
+							<row align="center">
+								<label class="label" value="Fax :" />
+								<textbox id="txt_fax" />
+							</row>
+							<row align="center">
+								<label class="label" value="E-mail :" />
+								<textbox id="txt_email" />
+							</row>
+						</rows>
+					</grid>
+				</hbox>
+			</groupbox>
+			<label value="Historique des commandes:" />
+			<hbox flex="10">
+				<tree id="liste_com" ref="http://www.opensi.org/Facturation/listeCommandesClient" seltype="single" datasources="rdf:null" flex="10" ondblclick="voirCommande()" onselect="selectArbre()" hidecolumnpicker="true">
+					<treecols>
+						<treecol id="date" flex="1" label="Date" />
+						<splitter class="tree-splitter" />
+						<treecol id="nom" flex="1" label="N° commande" />
+						<splitter class="tree-splitter" />
+						<treecol id="nb_articles" flex="1" label="Nombre d'articles" />
+						<splitter class="tree-splitter" />
+						<treecol id="montant" flex="1" label="Total HT" style="text-align: right" />
+						<treecol id="num" collapsed="true" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeCommandesClient/rdf#date" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeCommandesClient/rdf#nom" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeCommandesClient/rdf#nb" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeCommandesClient/rdf#montant" />
+									<treecell label="rdf:http://www.opensi.org/Facturation/listeCommandesClient/rdf#num" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+			</hbox>
+			<vbox align="end">
+				<hbox align="center">
+					<label class="label_12" value="Total :" />
+					<label class="label_12" id="total" />
+				</hbox>
+			</vbox>
+			<hbox align="center" pack="center">
+				<button label="Voir la commande" id="bt_voirCommande" oncommand="voirCommande()" disabled="true" />
+			</hbox>
+			<box height="20px" />
+		</vbox>
+		<vbox flex="1" />
+	</hbox>
+</window>

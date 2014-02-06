@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_facturation_user_clients_tarifsClient"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+	<script src="overlay-tarifs.js" />
+
+	<tabpanel id="tab-tarifs">
+		<vbox pack="center" flex="1" class="auto-overflow">
+  		<hbox>
+  			<label class="label_14" value="Tarifs spécifiques" />
+				<hbox flex="1" pack="end">
+					<button id="bRAZ" class="bSupprimer" label="RAZ" oncommand="razTarifs();"/>
+					<button id="bTraitementLot" label="Traitement par lot" oncommand="traitement_lot();"/>
+					<button id="changeur_affiche" class="bPDF" label="Editer les tarifs spécifiques" oncommand="change_affiche()" />
+				</hbox>
+			</hbox>
+			<deck flex="1" id="switchboite" selectedIndex="0">
+				<vbox id="treeboite" pack="center" flex="1" class="auto-overflow">
+  				<tree id="tree-tarifs"
+        				flex="1"
+        				hidecolumnpicker="true"
+								flags="dont-build-content"
+        				seltype="single"
+								onselect="reporterTarif();"
+								onclick="reporterTarif();"
+        				ref="http://www.opensi.org/facturation/tarifs_client"
+        				datasources="rdf:null">
+
+    				<treecols>
+      				<treecol id="ColArticle_Id" flex="1" label="Référence" />
+							<splitter class="tree-splitter" />
+      				<treecol id="ColDesignation" flex="2" label="Désignation" />
+							<splitter class="tree-splitter" />
+      				<treecol id="ColPrix_Achat" flex="1" label="Prix d'achat HT" class="nombre" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColTaux_TVA" flex="1" label="TVA" class="nombre" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColTarif_HT" flex="1" label="Prix de vente HT" class="nombre" />
+							<splitter class="tree-splitter" />
+      				<treecol id="ColTarif_TTC" flex="1" label="Prix de vente TTC" class="nombre" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColCoeff" flex="1" label="Pourc. du PV HT" class="nombre" />
+							<splitter class="tree-splitter" />
+							<treecol id="ColPrix_HT" flex="1" label="Prix spé. HT" class="nombre" />
+							<splitter class="tree-splitter" />
+      				<treecol id="ColPrix_TTC" flex="1" label="Prix spé. TTC" class="nombre" />
+      				<splitter class="tree-splitter" />
+      				<treecol id="ColMarge" flex="1" label="Marge spé. (%)" class="nombre" />
+    				</treecols>
+    				<template>
+      				<treechildren>
+        				<treeitem uri="rdf:*">
+          				<treerow>
+            				<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Article_Id" />
+            				<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Designation" />
+										<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Prix_Achat" />
+										<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Taux_TVA" />
+										<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Tarif" />
+            				<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Tarif_TTC" />
+										<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Coeff" />
+										<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Prix_HT" />
+            				<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Prix_TTC" />
+            				<treecell label="rdf:http://www.opensi.org/facturation/tarifs_client/rdf#Marge" />
+          				</treerow>
+        				</treeitem>
+      				</treechildren>
+    				</template>
+  				</tree>
+
+					<hbox>
+						<groupbox flex="1" align="center" pack="center">
+							<caption label="Infos article" />
+							<grid>
+								<columns>
+									<column />
+									<column />
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="Référence :" />
+										<hbox><textbox id="Reference" size="15" readonly="true" /></hbox>
+										<label class="label" value="Désignation :" />
+										<hbox><textbox id="Designation" flex="1" readonly="true" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Prix d'achat HT :" />
+										<hbox><textbox id="Prix_Achat" size="15" class="nombre" readonly="true" /></hbox>
+										<label class="label" value="Taux de TVA :" />
+										<hbox><textbox id="Taux_TVA" size="5" class="nombre" readonly="true" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Prix de vente HT :" />
+										<hbox><textbox id="BasePrix_HT" size="15" class="nombre" readonly="true" /></hbox>
+										<label class="label" value="Prix de vente TTC :" />
+										<hbox><textbox id="BasePrix_TTC" size="15" class="nombre" readonly="true" /></hbox>
+									</row>
+								</rows>
+							</grid>
+						</groupbox>
+
+						<groupbox flex="1" align="end">
+							<caption label="Tarif spécifique" />
+							<grid>
+								<columns>
+									<column />
+									<column />
+								</columns>
+								<rows>
+									<row align="center">
+										<label class="label" value="Prix de vente HT :" />
+										<hbox><textbox id="Prix_HT" maxlength="14" size="15" class="nombre" oninput="calculerTarif('h');" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Prix de vente TTC :" />
+										<hbox><textbox id="Prix_TTC" maxlength="14" size="15" class="nombre" oninput="calculerTarif('t');" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="% du PV HT (+/-) :" />
+										<hbox><textbox id="Coeff" maxlength="10" size="15" class="nombre" oninput="calculerTarif('c');" /></hbox>
+									</row>
+									<row align="center">
+										<label class="label" value="Marge % :" />
+										<hbox><textbox id="Marge" maxlength="6" size="15" class="nombre" oninput="calculerTarif('m');" /></hbox>
+									</row>
+								</rows>
+							</grid>
+							<box style="height:10px" />
+							<hbox>
+								<button id="bValiderTarif" class="bValider" label="Valider" tooltiptext="valider le tarif" oncommand="validerTarif();" style="margin-left:0px" />
+								<button id="bSupprimerTarif" class="bSupprimer" label="Supprimer" tooltiptext="supprimer le tarif" oncommand="supprimerTarif();" style="margin-left:0px" />
+								<button id="bNouveauTarif" class="bNouveau" label="Nouveau" tooltiptext="nouvel article" oncommand="nouveauTarif();" style="margin-left:0px" />
+							</hbox>
+						</groupbox>
+					</hbox>
+
+				</vbox>
+				<iframe type="content" id="pdf" flex="1"/>
+			</deck>
+  	</vbox>
+	</tabpanel>
+
+</overlay>

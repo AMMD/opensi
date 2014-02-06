@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_edition_optionsGrandLivre"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="options_grandlivre.js" />
+
+	<hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+    	<button class="bouton_menu" id="bRetourOptions" oncommand="retour_options();" collapsed="true" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:50px" />
+	<deck id="deck" flex="1">
+	<vbox pack="center" flex="1">
+			<hbox pack="center">
+				<label value="OPTIONS POUR L'EDITION DU GRAND LIVRE" class="label_16" />
+			</hbox>
+			<hbox style="height:30px" />
+		
+			<hbox pack="center" flex="1" class="auto-overflow">
+				<vbox pack="center">
+				<hbox  pack="center">
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="1 - Type" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Type">
+										<radio value="G" label="Général" selected="true" />
+										<radio value="C" label="Clients" />
+										<radio value="F" label="Fournisseurs" />
+										<radio value="A" label="Auxiliaires" />
+										<radio value="T" label="Global" />
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="2 - Période" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Periode">
+										<radio id="PeriodeEC" value="ec" label="Exercice courant" selected="true" oncommand="disableDates(true)" />
+										<hbox align="center">
+											<radio id="PeriodeDD" value="dd" label="Date à date" oncommand="disableDates(false)" />
+											<hbox style="width:20px" />
+											<label value="Date de début (jj/mm/aaaa) :" />
+											<textbox id="Date_Debut" maxlength="10" size="10" disabled="true" />
+											<label value="Date de fin (jj/mm/aaaa) :" />
+											<textbox id="Date_Fin" maxlength="10" size="10" disabled="true" />
+										</hbox>
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					</hbox>
+					<hbox  pack="center">
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="3 - Sélection" />
+						<grid>
+							<rows>
+								<row align="center">
+									<label class="label" value="Edition grand livre :" />
+									<radiogroup id="Edition" orient="horizontal">
+										<radio id="EditionC" value="C" label="Complet" selected="true" oncommand="disableCptes(true)" />
+										<radio id="EditionP" value="P" label="Partiel" oncommand="disableCptes(false)" />
+									</radiogroup>
+								</row>
+								<row align="center">
+									<label class="label" value="Compte de début :" />
+									<hbox align="center">
+										<textbox id="Cpte_Debut" maxlength="8" size="8" disabled="true" onkeypress="keypress(event, id);" />
+										<button id="bCpte_Debut" class="bIcoRechercher" tooltiptext="rechercher un compte de début" oncommand="rechcompte('Cpte_Debut')" disabled="true" />
+										<label class="label" value="Compte de fin :" />
+										<textbox id="Cpte_Fin" maxlength="8" size="8" disabled="true" onkeypress="keypress(event, id);" />
+										<button id="bCpte_Fin" class="bIcoRechercher" tooltiptext="rechercher un compte de fin" oncommand="rechcompte('Cpte_Fin')" disabled="true" />
+									</hbox>
+								</row>
+								<row align="center">
+									<label class="label" value="Edition des écritures :" />
+									<radiogroup id="Ed_Ecriture" orient="horizontal">
+										<radio id="EdEcrT" value="T" label="Toutes" selected="true" />
+										<radio id="EdEcrS" value="S" label="Lettrées" />
+										<radio id="EdEcrN" value="N" label="Non lettrées" />
+									</radiogroup>
+								</row>
+								<row align="center">
+									<label class="label" value="Edition des comptes :" />
+									<radiogroup id="Ed_Cpte" orient="horizontal">
+										<radio id="EdCpteT" value="T" label="Tous" selected="true" />
+										<radio id="EdCpteN" value="N" label="Non soldés" />
+									</radiogroup>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+		
+					<groupbox flex="1" pack="center" class="pad_groupbox">
+						<caption label="4 - Sortie" />
+						<grid>
+							<rows>
+								<row>
+									<radiogroup id="Sortie">
+										<!--<radio id="SortieE" value="E" label="Ecran" selected="true" oncommand="cacheChampsMail(true);" />-->
+										<radio id="SortieP" value="P" label="PDF imprimable" oncommand="cacheChampsMail(true);" selected="true" />
+										<radio id="SortieC" value="C" label="Tableur (CSV)" oncommand="cacheChampsMail(true);" />
+										<radio id="SortieM" value="M" label="E-Mail" oncommand="cacheChampsMail(false);" />
+									</radiogroup>
+								</row>
+								<row id="ChampsMail" collapsed="true">
+									<grid>
+										<rows>
+											<row><label class="label" value="Adresse e-mail :" /><textbox id="Email" size="40" maxlength="60" /></row>
+											<row><label class="label" value="Sujet :" /><textbox id="Sujet" size="40" maxlength="60" /></row>
+											<row><label class="label" value="Message :" /><textbox id="Message" multiline="true" rows="7" cols="40" /></row>
+										</rows>
+									</grid>
+								</row>
+							</rows>
+						</grid>
+					</groupbox>
+					</hbox>
+				</vbox>
+			</hbox>
+		
+			<hbox style="height:30px" />
+		
+			<hbox pack="center">
+				<button id="BoutonEdition" label="EDITER LE GRAND LIVRE" oncommand="editerGrandLivre();" />
+			</hbox>
+		
+			<hbox style="height:10px" />
+			<hbox flex="1" />
+</vbox>
+<vbox>
+<iframe type="content" id="grandlivre" flex="1" />
+
+</vbox>
+</deck>
+</window>
+

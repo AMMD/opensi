@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+<?xml-stylesheet href="statistique.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_commerciaux_choixCommerciaux"
+  flex="1"
+  onload="init()"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="choix_commerciaux.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retourMenuPrincipal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  <hbox style="height: 15px" />
+
+	<label class="label_16" value="Commerciaux" />
+	<label id="acces_restreint" class="label_restreint" value="" />
+
+	<tree id="liste_commerciaux"
+        ref="http://www.opensi.org/facturation/commerciaux"
+        seltype="single"
+				flags="dont-build-content"
+        datasources="rdf:null"
+        flex="1"
+        onclick="pressOnTree()"
+				ondblclick="modifierCommercial()"
+				hidecolumnpicker="true">
+  	
+		<treecols>
+			<treecol id="ColCode_Commercial" flex="1" label="Code commercial" sort="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Code_Commercial" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColNom" flex="1" label="Nom" sort="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Nom" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColPrenom" flex="1" label="Prénom" sort="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Prenom" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColSecteur" flex="1" label="Secteur" sort="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Secteur" />
+      <splitter class="tree-splitter" />
+      <treecol id="ColStatut" flex="1" label="Statut" sort="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Statut" />
+      <treecol id="ColCommercial_Id" collapsed="true" />
+      <treecol id="ColSupprime" collapsed="true" />
+		</treecols>
+		<template>
+    	<treechildren>
+      	<treeitem uri="rdf:*">
+        	<treerow properties="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Couleur">
+						<treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Code_Commercial" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Nom" />
+            <treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Prenom" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Secteur" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Statut" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Commercial_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/commerciaux/rdf#Supprime" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+	<hbox id="barre_actions" pack="center" collapsed="true">
+		<button id="bNouveau" class="bNouveau" label="Nouveau commercial" oncommand="nouveauCommercial();" />
+		<button id="bModifier" label="Ouvrir ce commercial" disabled="true" oncommand="modifierCommercial();" />
+		<button id="bSupprimer" label="Désactiver ce commercial" disabled="true" oncommand="desactiverCommercial();" />
+		<button id="bReactiver" label="Réactiver ce commercial" disabled="true" oncommand="reactiverCommercial();" />
+	</hbox>
+
+</window>

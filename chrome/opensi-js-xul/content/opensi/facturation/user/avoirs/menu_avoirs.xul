@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_avoirs_menuAvoirs"
+  onload="init();"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="menu_avoirs.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+      <button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+    </hbox>
+  </hbox>
+
+	<hbox>
+		<label class="label_14" value="Avoirs en cours" />
+		<hbox flex="1" pack="end">
+			<button label="Nouvel avoir" class="bNouveau" oncommand="nouvel_avoir();" />
+			<button label="Rechercher un avoir" class="bRechercher" oncommand="rechercher_avoir();" />
+		</hbox>
+	</hbox>
+
+  <tree id="avoirs"
+        flex="1"
+        hidecolumnpicker="true"
+        seltype="single"
+        flags="dont-build-content"
+        ref="http://www.opensi.org/facturation/avoirs"
+				ondblclick="ouvrirFromTree('avoirs');"
+				onkeypress="pressOnAvoirs(event);"
+        datasources="rdf:null">
+
+    <treecols>
+			<treecol id="ColDate_Creation" label="Date de création" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#triDate_Creation" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColClient_Id" label="N° Client" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Client_Id" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDenomination" label="Client" flex="3"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Denomination" />
+			<splitter class="tree-splitter" />		 
+      <treecol id="ColLogin_Resp" label="Responsable" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Login_Resp" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColTotal_HT" class="nombre" label="Total HT" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#triTotal_HT" />
+			<treecol id="ColAvoir_Id" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Date_Creation" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Client_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Denomination" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Login_Resp" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Total_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Avoir_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#triTotal_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#triDate_Creation" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+	
+	<hbox align="center">
+ 		<label class="label_14" value="Historique des avoirs récents" />
+		<label class="label_12" value="(les 20 derniers)" />
+	</hbox>
+  <tree id="historique"
+        flex="1"
+        hidecolumnpicker="true"
+        seltype="single"
+        flags="dont-build-content"
+        ref="http://www.opensi.org/facturation/avoirs"
+				ondblclick="ouvrirFromTree('historique');"
+				onkeypress="pressOnHistorique(event);"
+        datasources="rdf:null">
+
+		<treecols>
+     	<treecol id="ColDate_AvoirH" label="Date" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#triDate_Avoir" />
+			<splitter class="tree-splitter" />      
+      <treecol id="ColNum_EntierH" label="Numéro" flex="1" 
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Num_Entier" />
+			<splitter class="tree-splitter" />
+			<treecol id="ColClient_IdH" label="N° Client" flex="1"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Client_Id" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColDenominationH" label="Client" flex="3"
+							 sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Denomination" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColResponsableH" label="Responsable" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#Login_Resp" />
+			<splitter class="tree-splitter" />
+      <treecol id="ColTotal_HTH" class="nombre" label="Total HT" flex="1"
+               sort="rdf:http://www.opensi.org/facturation/avoirs/rdf#triTotal_HT" />
+			<treecol id="ColAvoir_IdH" collapsed="true" />
+    </treecols>
+    <template>
+      <treechildren>
+        <treeitem uri="rdf:*">
+          <treerow>
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Date_Avoir" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Num_Entier" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Client_Id" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Denomination" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Login_Resp" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Total_HT" />
+            <treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#Avoir_Id" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#triTotal_HT" />
+						<treecell label="rdf:http://www.opensi.org/facturation/avoirs/rdf#triDate_Avoir" />
+          </treerow>
+        </treeitem>
+      </treechildren>
+    </template>
+  </tree>
+
+</window>

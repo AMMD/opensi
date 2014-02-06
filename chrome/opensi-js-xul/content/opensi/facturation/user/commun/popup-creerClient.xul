@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+	title="OpenSi - Ajouter un client"
+  id="opensi_facturation_user_affaires_creerClient"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="popup-creerClient.js" />
+  
+  <vbox flex="1" pack="center">
+
+		<box style="height:10px" />
+		<hbox pack="center">
+	  	<label class="label_14" value="NOUVEAU CLIENT" style="text-align:center" />
+		</hbox>
+		<box style="height:20px" />
+		
+		<hbox pack="center">
+	   	<grid>
+	     	<columns>
+	       	<column />
+	       	<column />
+	     	</columns>
+	     	<rows>
+	       	<row align="center">
+	         	<label class="label" value="* Code client :" />
+	         	<hbox>
+	         		<label id="lblAuto" value="Automatique" collapsed="true" />
+	         		<textbox id="Client_Id" maxlength="10" size="11" />
+	         	</hbox>
+	       	</row>
+					<row>
+						<label class="label" value="Type client :" />
+						<radiogroup id="Type_Client" orient="horizontal">
+							<vbox>
+		           	<radio id="TypeP" value="P" label="Particulier" oncommand="selTypeClient(value);" />
+		           	<radio id="TypeE" value="E" label="Entreprise" selected="true" oncommand="selTypeClient(value);" />
+							</vbox>
+							<vbox>
+		           	<radio id="TypeA" value="A" label="Association" oncommand="selTypeClient(value);" />
+								<radio id="TypeO" value="O" label="Organisme public" oncommand="selTypeClient(value);" />
+							</vbox>
+	         	</radiogroup>
+					</row>
+					<row style="height:10px" />
+					<row align="center" id="rowType_Societe">
+	         	<label class="label" value="Type société :" />
+						<hbox>
+							<menulist id="Type_Societe" ref="http://www.opensi.org/facturation/typeS" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+					      </menupopup>
+								<template>
+		     					<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/typeS/rdf#libelle" value="rdf:http://www.opensi.org/facturation/typeS/rdf#id" />
+		     					</menupopup>
+								</template>
+		   				</menulist>
+						</hbox>
+	       	</row>
+					<row align="center" observes="bcParticulier">
+	         	<label class="label" value="* Raison sociale :" />
+	         	<hbox><textbox id="Denomination" maxlength="50" size="30" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="Civilité :" />
+	         	<radiogroup id="Civilite" orient="horizontal">
+	         		<radio value="0" label="" collapsed="true" />
+	           	<radio value="1" label="M." selected="true" />
+	           	<radio value="2" label="Mme" />
+	           	<radio value="3" label="Mlle" />
+	         	</radiogroup>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="Nom :" />
+	         	<hbox><textbox id="Nom" maxlength="30" size="20" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="Prénom :" />
+	         	<hbox><textbox id="Prenom" maxlength="20" size="20" /></hbox>
+	       	</row >
+	       	<row align="center">
+	         	 <label class="label" value="* Adresse :" />
+	         	 <hbox><textbox id="Adresse_1" maxlength="80" size="30" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="" />
+	         	<hbox><textbox id="Adresse_2" maxlength="50" size="30" /></hbox>
+	       	</row>
+					<row align="center">
+	         	<label class="label" value="" />
+	         	<hbox><textbox id="Adresse_3" maxlength="50" size="30" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="Code postal :" />
+	         	<hbox><textbox id="Code_Postal" class="rv_cp" idnextfocus="Code_Pays" idville="Ville" maxlength="10" size="6" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="* Ville :" />
+	         	<hbox><textbox id="Ville" class="rv_ville" idnextfocus="Code_Pays" idcp="Code_Postal" maxlength="50" size="30" /></hbox>
+	       	</row>
+					<row align="center">
+	         	<label class="label" value="Pays :" />
+	         	<hbox>
+	         		<menulist id="Code_Pays" ref="http://www.opensi.org/facturation/liste_pays" datasources="rdf:null" style="width:200px" sizetopopup="none">
+							<template>
+	        			<menupopup>
+									<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_pays/rdf#NomPaysFR" value="rdf:http://www.opensi.org/facturation/liste_pays/rdf#CodePays" />
+	        			</menupopup>
+							</template>
+						</menulist>
+	         	</hbox>
+	       	</row>
+	     	</rows>
+	   	</grid>
+			<box style="width:10px" />
+	   	<grid>
+	     	<columns>
+	       	<column />
+	       	<column />
+	     	</columns>
+	     	<rows>
+	       	<row align="center">
+	         	<label class="label" value="Tél. :" />
+	         	<hbox><textbox id="Tel" maxlength="20" size="20" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="Fax :" />
+	         	<hbox><textbox id="Fax" maxlength="20" size="20" /></hbox>
+	       	</row>
+	       	<row align="center">
+	         	<label class="label" value="E-Mail :" />
+	         	<hbox><textbox id="Email" maxlength="60" size="20" /></hbox>
+	       	</row>
+					<row style="height:20px" />
+					<row align="center">
+			   		<label class="label" value="Famille :" />
+			   		<hbox align="center">
+				     	<menulist id="Famille" ref="http://www.opensi.org/facturation/familles_client" datasources="rdf:null" style="width:180px">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+								</menupopup>
+								<template>
+				       		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/familles_client/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/familles_client/rdf#Famille_Id" />
+				       		</menupopup>
+								</template>
+				     	</menulist>
+				     	<button class="bIcoEdition" oncommand="ouvrirEditionListe();" />
+						</hbox>
+					</row>
+					<row align="center">
+		    		<label class="label" value="Pôle d'activité :" />
+		    		<hbox>
+		      		<menulist id="Secteur" ref="http://www.opensi.org/facturation/secteurs_activite" datasources="rdf:null" style="width:180px">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+								</menupopup>
+								<template>
+		        			<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/secteurs_activite/rdf#Secteur_Id" />
+		        			</menupopup>
+								</template>
+		      		</menulist>
+						</hbox>
+		  		</row>
+					<row align="center">
+						<label class="label" value="Responsable :" />
+						<hbox>
+							<menulist id="Login_Resp" ref="http://www.opensi.org/facturation/liste_responsables" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+	         			</menupopup>
+								<template>
+		         			<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_responsables/rdf#Utilisateur_Id" />
+		         			</menupopup>
+								</template>
+		       		</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+	         	<label class="label" value="" />
+	          <checkbox id="Assujetti_TVA" checked="true" label="Assujetti à la TVA" oncommand="changerAssujettiTVA(this.checked);" />
+	       	</row>
+					<row align="center" id="row_tva">
+		        <label class="label" value="N° de TVA :" />
+		        <hbox><textbox id="Num_TVA_Intra" maxlength="14" size="15" /></hbox>
+	       	</row>
+	       	<row align="center">
+						<label value="Numéro de compte :" class="label" />
+						<hbox>
+	           	<textbox id="Numero_Compte" maxlength="8" size="9" readonly="true" />
+	           	<button class="bIcoRechercher" oncommand="rechcompte('Numero_Compte')" />
+	         	</hbox>
+					</row>
+	       	<row align="center" id="row_codeTarif">
+						<label value="Code tarifaire :" class="label" />
+						<hbox>
+							<menulist id="Code_Tarif" ref="http://www.opensi.org/facturation/liste_types_tarifs" datasources="rdf:null">
+								<template>
+	           			<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_types_tarifs/rdf#Valeur" />
+	           			</menupopup>
+								</template>
+							</menulist>
+						</hbox>
+					</row>
+					<row align="center">
+						<label value="Mode de règlement :" class="label" />
+						<hbox>
+							<menulist id="Mode_Reg" ref="http://www.opensi.org/facturation/liste_reglements" datasources="rdf:null">
+								<menupopup>
+									<menuitem label="[Aucun]" value="0" />
+	           		</menupopup>
+								<template>
+	            		<menupopup>
+										<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Libelle" value="rdf:http://www.opensi.org/facturation/liste_reglements/rdf#Mode_Reg_Id" />
+	            		</menupopup>
+								</template>
+	          	</menulist>
+						</hbox>
+					</row>
+	     	</rows>
+	   	</grid>
+	 	</hbox>
+	
+		<box style="height:30px" />
+		<hbox pack="center">
+			<button label="Annuler" class="bAnnuler" oncommand="window.close();" />
+			<button label="Ok" class="bValider" oncommand="ouvrirClient();" />
+		</hbox>
+		<box style="height:10px" />
+		
+		<broadcasterset>
+	  	<broadcaster id="bcParticulier" collapsed="false" />
+		</broadcasterset>
+	</vbox>
+
+</window>

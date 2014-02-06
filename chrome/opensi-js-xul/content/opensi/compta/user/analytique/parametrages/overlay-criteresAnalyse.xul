@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT  ANY WARRANTY; without even the implied warranty of            -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+	id="opensi_compta_user_analytique_parametrages_overlay-criteresAnalyse"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+	
+	<script src="overlay-criteresAnalyse.js" />
+
+	<tabpanel id="tabCriteres" flex="1">
+	
+		<hbox flex="1" class="auto-overflow">
+			
+			<hbox flex="1">
+				<tree id="oca-treeCriteres"
+		 				flex="1"
+		 				hidecolumnpicker="true"
+						flags="dont-build-content"
+						datasources="rdf:null"
+						ref="http://www.opensi.org/compta/analytique/parametrages"
+						onselect="oca_selectOnTreeCriteres()"
+						seltype="single">
+					<treecols>
+						<treecol id="oca-colIntitule" label="Critère d'analyse" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oca-colFormatCode" label="Codification" flex="1" />
+						<splitter class="tree-splitter" />
+						<treecol id="oca-colCritereId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+						<treechildren>
+							<treeitem uri="rdf:*">
+								<treerow>
+									<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Intitule" />
+									<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Format_Code" />
+									<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Critere_Id" />
+								</treerow>
+							</treeitem>
+						</treechildren>
+					</template>
+				</tree>
+			</hbox>
+			
+			<groupbox flex="1">
+				<caption label="Critère d'analyse" />
+				<vbox flex="1">
+					<hbox pack="center">
+						<grid>
+							<columns>
+								<column flex="1" />
+								<column flex="1" />
+							</columns>
+							<rows>
+						 		<row align="center">
+							 		<label class="label" value="*Intitulé : " />
+							 		<hbox>
+							 			<textbox id="oca-intitule" onkeypress="oca_keyPressOnIntitule(event);" size="50" maxlength="30" />
+							 		</hbox>
+							 	</row>
+							 	<row align="center">
+							 		<label class="label" value="*Codification : " />
+							 		<hbox>
+							 			<textbox id="oca-formatCode" onkeypress="oca_keyPressOnFormatCode(event);" size="6" maxlength="4" />
+							 		</hbox>
+							 	</row>
+							</rows>
+						</grid>
+						
+					</hbox>
+					
+					<box height="20px" />
+					
+					<vbox>
+			 			<hbox flex="1" pack="center">
+			 				<button id="oca-bNouveau" class="bNouveau" label="Nouveau" oncommand="oca_pressOnNouveau();" />
+			 				<button id="oca-bSupprimer" class="bSupprimer" label="Supprimer" oncommand="oca_pressOnSupprimer();" />
+			 				<button id="oca-bEnregistrer" class="bEnregistrer" label="Enregistrer" oncommand="oca_pressOnEnregistrer();" />
+			 			</hbox>
+			 		</vbox>
+			 		
+			 		<box height="10px" />
+			 		
+			 		<hbox>
+			 			<label class="label" value="Centres de profit :" />
+			 		</hbox>
+			 		
+			 		<hbox flex="1">
+				 		<tree id="oca-treeCentres"
+								flags="dont-build-content"
+								datasources="rdf:null" 
+								ref="http://www.opensi.org/compta/analytique/parametrages"
+								onselect="oca_selectOnTreeCentres();"
+				 				flex="1"
+				 				hidecolumnpicker="true"
+								seltype="single">
+							<treecols>
+								<treecol id="oca-colCode" label="Code" />
+								<splitter class="tree-splitter" />
+								<treecol id="oca-colLibelle" label="Libellé" flex="1" />
+								<treecol id="oca-colCentreId" collapsed="true" ignoreincolumnpicker="true" />
+							</treecols>
+							<template>
+							<treechildren>
+								<treeitem uri="rdf:*">
+									<treerow>
+										<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Code" />
+										<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Libelle" />
+										<treecell label="rdf:http://www.opensi.org/compta/analytique/parametrages/rdf#Centre_Id" />
+									</treerow>
+								</treeitem>
+							</treechildren>
+							</template>
+						</tree>
+					</hbox>
+					
+					
+					<box height="10px" />
+					
+					<hbox pack="center">
+						<hbox>
+							<grid>
+								<columns>
+									<column flex="1" />
+									<column flex="1" />
+									<column pack="center" />
+									<column pack="center" />
+									<column pack="center" />
+								</columns>
+								<rows>
+									<row align="center" flex="1">
+										<hbox>
+											<label class="label" value="*Code :" />
+										</hbox>
+										<hbox>
+											<label class="label" value="*Libellé :" />
+										</hbox>
+									</row>
+									<row align="center" flex="1">
+										<hbox flex="1">
+											<textbox id="oca-codeCentre" maxlength="4" size="6" />
+										</hbox>
+										<hbox flex="1">
+											<textbox id="oca-libelleCentre" maxlength="30" size="50" />
+										</hbox>
+										<button id="oca-bAnnulerCentre" class="bIcoAnnuler" tooltiptext="Annuler" oncommand="oca_pressOnAnnulerCentre();" />
+										<button id="oca-bValiderCentre" class="bIcoValider" tooltiptext="Valider" oncommand="oca_pressOnValiderCentre();" />
+										<button id="oca-bSupprimerCentre" class="bIcoSupprimer" tooltiptext="Supprimer" oncommand="oca_pressOnSupprimerCentre();" />
+									</row>
+								</rows>
+							</grid>
+						</hbox>
+					</hbox>
+				</vbox>
+			</groupbox>
+			
+		</hbox>
+		
+	</tabpanel>
+
+</overlay>

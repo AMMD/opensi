@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_tab_bord_tresorerie"
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="tresorerie.js" />
+
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<vbox flex="1" class="auto-overflow">
+		<hbox style="height: 35px" />
+  	<hbox pack="center">
+    	<label value="TABLEAU DE BORD DE TRESORERIE" class="label_16" />
+  	</hbox>
+		<hbox style="height:5px" />
+		<hbox pack="center">
+    	<label id="date_bord" class="label_16" />
+  	</hbox>
+  	<hbox style="height:40px" />
+		<hbox pack="center">
+    	<grid>
+      	<columns pack="center">
+        	<column flex="5" />
+        	<column flex="1" pack="end" />
+        	<column flex="1" pack="end" />
+        	<column flex="1" pack="end" />
+        	<column flex="1" pack="end" />
+        	<column flex="1" pack="end" />
+      	</columns>
+      	<rows flex="1" pack="center"
+            	id="grille"
+            	ref="http://www.opensi.org/compta/balance"
+            	datasources="rdf:null">
+        	<row>
+          	<label class="case_entete" value="Balance agée" style="text-align:center;font-weight:bold" />
+          	<label class="row_entete" value="+ de 90 J" style="text-align:center;font-weight:bold" />
+          	<label class="row_entete" value="60 à 90 J" style="text-align:center;font-weight:bold" />
+          	<label class="row_entete" value="30 à 60 J" style="text-align:center;font-weight:bold" />
+          	<label class="row_entete" value="0 à 30 J" style="text-align:center;font-weight:bold" />
+          	<label class="row_entete" value="Solde" style="text-align:center;font-weight:bold" />
+        	</row>
+        	<template>
+          	<row uri="rdf:*" align="center">
+            	<box class="col_entete" style="height:35px"><button flex="1" oncommand="balance(this)"	label="rdf:http://www.opensi.org/compta/balance/rdf#id" style="max-height:29px;margin:0px" /></box>
+            	<box class="case" style="height:35px" align="center" pack="end"><label value="rdf:http://www.opensi.org/compta/balance/rdf#b90" /></box>
+            	<box class="case" style="height:35px" align="center" pack="end"><label value="rdf:http://www.opensi.org/compta/balance/rdf#b60" /></box>
+            	<box class="case" style="height:35px" align="center" pack="end"><label value="rdf:http://www.opensi.org/compta/balance/rdf#b30" /></box>
+            	<box class="case" style="height:35px" align="center" pack="end"><label value="rdf:http://www.opensi.org/compta/balance/rdf#b00" /></box>
+            	<box class="case" style="height:35px" align="center" pack="end"><label value="rdf:http://www.opensi.org/compta/balance/rdf#solde" /></box>
+          	</row>
+        	</template>
+      	</rows>
+    	</grid>
+		</hbox>
+		<hbox style="height:50px" />
+		<hbox style="height:350px">
+    	<iframe flex="1" id="tresorerie" />
+		</hbox>
+		<hbox style="height:30px" />
+		<hbox pack="center">
+			<menulist id="DateArret">
+        <menupopup>
+          <menuitem label="Soldes du jour" oncommand="reloadTabTR('0')" />
+					<menuitem label="Soldes à J-30" oncommand="reloadTabTR('30')" />
+					<menuitem label="Soldes à J-29" oncommand="reloadTabTR('29')" />
+					<menuitem label="Soldes à J-28" oncommand="reloadTabTR('28')" />
+					<menuitem label="Soldes à J-27" oncommand="reloadTabTR('27')" />
+					<menuitem label="Soldes à J-26" oncommand="reloadTabTR('26')" />
+					<menuitem label="Soldes à J-25" oncommand="reloadTabTR('25')" />
+					<menuitem label="Soldes à J-24" oncommand="reloadTabTR('24')" />
+					<menuitem label="Soldes à J-23" oncommand="reloadTabTR('23')" />
+					<menuitem label="Soldes à J-22" oncommand="reloadTabTR('22')" />
+					<menuitem label="Soldes à J-21" oncommand="reloadTabTR('21')" />
+					<menuitem label="Soldes à J-20" oncommand="reloadTabTR('20')" />
+					<menuitem label="Soldes à J-19" oncommand="reloadTabTR('19')" />
+					<menuitem label="Soldes à J-18" oncommand="reloadTabTR('18')" />
+					<menuitem label="Soldes à J-17" oncommand="reloadTabTR('17')" />
+					<menuitem label="Soldes à J-16" oncommand="reloadTabTR('16')" />
+					<menuitem label="Soldes à J-15" oncommand="reloadTabTR('15')" />
+					<menuitem label="Soldes à J-14" oncommand="reloadTabTR('14')" />
+					<menuitem label="Soldes à J-13" oncommand="reloadTabTR('13')" />
+					<menuitem label="Soldes à J-12" oncommand="reloadTabTR('12')" />
+					<menuitem label="Soldes à J-11" oncommand="reloadTabTR('11')" />
+					<menuitem label="Soldes à J-10" oncommand="reloadTabTR('10')" />
+					<menuitem label="Soldes à J-9" oncommand="reloadTabTR('9')" />
+					<menuitem label="Soldes à J-8" oncommand="reloadTabTR('8')" />
+					<menuitem label="Soldes à J-7" oncommand="reloadTabTR('7')" />
+					<menuitem label="Soldes à J-6" oncommand="reloadTabTR('6')" />
+					<menuitem label="Soldes à J-5" oncommand="reloadTabTR('5')" />
+					<menuitem label="Soldes à J-4" oncommand="reloadTabTR('4')" />
+					<menuitem label="Soldes à J-3" oncommand="reloadTabTR('3')" />
+					<menuitem label="Soldes à J-2" oncommand="reloadTabTR('2')" />
+					<menuitem label="Soldes à J-1" oncommand="reloadTabTR('1')" />
+        </menupopup>
+    	</menulist>
+		</hbox>
+		<hbox style="height:5px" />
+		<hbox style="height:500px">
+    	<iframe flex="1" id="tab_tr" />
+		</hbox>
+		<hbox style="height:40px" />
+	</vbox>
+
+</window>

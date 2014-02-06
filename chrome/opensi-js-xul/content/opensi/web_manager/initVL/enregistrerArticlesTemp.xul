@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_webmanager_attribution_carac" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="enregistrerArticlesTemp.js" />
+  
+  <hbox class="bar_menu_conf" align="center">
+		<button class="bouton_menu" id="bMenuPrincipal" oncommand="menuWebManager()"/>
+		<hbox pack="end" flex="1" class="bar_menu_conf_right">
+			<button class="bouton_menu" id="bAideConf" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bDeconnexionConf" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+	</hbox>
+
+	<vbox flex="1">
+
+
+		<!-- Titre -->
+
+		<vbox>
+			<hbox class="bar_titre_etape" align="right">
+				<box flex="1" pack="end">
+					<label id="lb_nom_site" value="" align="end"/>
+					<label value="Etape 3" align="end" class="etape" />
+				</box>
+			</hbox>
+			<box flex="15" pack="center"><label value="Enregistrement des articles" class="label_14"/></box>
+		</vbox>
+
+		<!-- FIN Titre -->
+		
+		
+		  
+		 <vbox flex="500">
+		
+		
+			<vbox flex="18000" align="center">
+				<hbox flex="1" align="center">
+					<vbox  width="300px" align="center">
+						<label flex="1" value="Enregistrement des articles en cours" id="info"/>
+						<progressmeter flex="1" id="barre_progression" mode="undetermined"/>
+					 </vbox>
+				</hbox>
+			</vbox>
+		
+		
+		</vbox>
+	
+		
+		 <box height="20px"/>
+		 
+		<hbox flex="1">
+		 
+		 <vbox flex="1">
+			<hbox>
+				<box width="10px" />
+				<button id="etape_precedente" label="Etape précédente" class="bIcoRetour" oncommand="etape_precedente()"/>
+			</hbox>
+		  </vbox> 
+		 
+		 
+		  <vbox align="end" flex="1">
+			<hbox align="end">
+				
+				<label id="conclusion_test" value=""/>
+				<button id="etape_suivante" label="Etape suivante" class="bIcoAvance" oncommand="etape_suivante()" disabled="true"/>
+				<box width="10px" />
+			</hbox>
+		  </vbox>
+		  
+		 </hbox>
+		<box height="20px" />
+		
+	</vbox>
+
+		
+</window>

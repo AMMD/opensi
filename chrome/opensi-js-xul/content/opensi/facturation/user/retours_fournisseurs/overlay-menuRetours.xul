@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay
+  id="opensi_facturation_user_retoursFournisseurs_overlayMenuRetours"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="overlay-menuRetours.js" />
+
+	<vbox id="menuRetours" flex="1">
+		<hbox>
+			<label class="label_16" value="Gestion des retours fournisseurs" />
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<groupbox>
+				<caption label="Recherche" />
+				
+				<grid>
+					<columns>
+						<column />
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row align="center">
+							<vbox>
+								<label value="N° Retour :" />
+								<textbox id="omr-numRetour" width="120px" onkeypress="omr_onKeyPress(event);" />
+							</vbox>
+							<vbox>
+								<label value="N° Fournisseur :" />
+								<textbox id="omr-numFournisseur" width="120px" onkeypress="omr_onKeyPress(event);" />
+							</vbox>
+							<vbox>
+								<label value="Fournisseur :" />
+								<textbox id="omr-nomFournisseur" width="120px" onkeypress="omr_onKeyPress(event);" />
+							</vbox>
+						</row>
+						<row style="height:10px" />
+						<row align="center">
+							<vbox>
+								<label value="Date de retour :" />
+								<hbox align="center">
+									<label value="Du" />
+									<textbox id="omr-dateBonDebut" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="omr_onKeyPress(event);" />
+								</hbox>
+							</vbox>
+							<vbox>
+								<label value="" />
+								<hbox align="center">
+									<label value="au" />
+									<textbox id="omr-dateBonFin" size="10" maxlength="10" tooltiptext="format de saisie : jj/mm/aaaa" onkeypress="omr_onKeyPress(event);" />
+								</hbox>
+							</vbox>
+							<vbox>
+								<label value="Réf. Article :" />
+								<textbox id="omr-refArticle" width="120px" onkeypress="omr_onKeyPress(event);" />
+							</vbox>
+						</row>
+						<row style="height:10px" />
+						<row align="center">
+							<vbox>
+								<label value="Etat :" />
+								<menulist id="omr-etatRetour" oncommand="omr_listerRetours();" sizetopopup="none" style="width:120px">
+									<menupopup>
+										<menuitem label="[Tous]" value="TS" />
+										<menuitem label="Non validé" value="N" />
+										<menuitem label="En attente" value="E" />
+										<menuitem label="Validé" value="V" />
+										<menuitem label="Annulé" value="A" />
+									</menupopup>
+								</menulist>
+							</vbox>
+							<vbox>
+								<label value="Type :" />
+								<menulist id="omr-typeRetour" oncommand="omr_listerRetours();" sizetopopup="none" style="width:120px">
+									<menupopup>
+										<menuitem label="[Tous]" value="TS" />
+										<menuitem label="Echange de marchandises" value="E" />
+										<menuitem label="Reprise de marchandises" value="R" />
+									</menupopup>
+								</menulist>
+							</vbox>
+							<vbox>
+								<label value="" />
+								<hbox pack="end">
+									<vbox><button class="bIcoActualiser" tooltiptext="actualiser" oncommand="omr_listerRetours();" /></vbox>
+									<vbox><button class="bIcoReinitialiser" tooltiptext="réinitialiser" oncommand="omr_initCriteres();" /></vbox>
+								</hbox>
+							</vbox>
+						</row>
+					</rows>
+				</grid>
+			</groupbox>
+			
+			<vbox flex="1">
+				<hbox pack="end" id="omr-boxNouveauRetour" collapsed="true">
+					<button label="Nouveau retour" class="bNouveau" oncommand="omr_pressOnNouveauRetour();"/>
+				</hbox>
+				<vbox flex="1">
+					<hbox align="center">
+						<label id="omr-numRetourSelect" />
+					</hbox>
+					<tree
+						id="omr-apercuRetour"
+		      	flex="1"
+		      	hidecolumnpicker="true"
+		      	seltype="single"
+		      	ref="http://www.opensi.org/facturation/apercu_retour"
+		      	datasources="rdf:null"
+						flags="dont-build-content"
+						enableColumnDrag="true"
+					>
+		    		<treecols>
+		      		<treecol flex="1" label="Référence" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="2" label="Désignation" />
+							<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Quantité" class="nombre" />
+		      		<splitter class="tree-splitter" />
+		      		<treecol flex="1" label="Reliquat" class="nombre" />
+		    		</treecols>
+		    		<template>
+		      		<treechildren>
+		        		<treeitem uri="rdf:*">
+		          		<treerow>
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_retour/rdf#Reference" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_retour/rdf#Designation" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_retour/rdf#Quantite" />
+		            		<treecell label="rdf:http://www.opensi.org/facturation/apercu_retour/rdf#Reliquat" />
+		          		</treerow>
+		        		</treeitem>
+		      		</treechildren>
+		    		</template>
+		  		</tree>
+				</vbox>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+
+		<hbox flex="1">
+			<vbox flex="1">
+				<hbox>
+					<hbox flex="1" pack="center">
+						<button class="bIcoRetour" style="margin-right:0px" id="omr-bPrec" oncommand="omr_pressOnPagePrec();" tooltiptext="page précédente" disabled="true" />
+						<vbox pack="center">
+							<hbox>
+								<label value="Page" />
+								<label id="omr-pageDeb" />
+								<label value="/" />
+								<label id="omr-pageFin" />
+							</hbox>
+						</vbox>
+						<button class="bIcoAvance" id="omr-bSuiv" oncommand="omr_pressOnPageSuiv();" tooltiptext="page suivante" disabled="true" />
+					</hbox>
+					
+					<hbox align="center" pack="end">
+						<label value="Nb de lignes par page :" />
+						<menulist id="omr-nbLignesParPage" oncommand="omr_listerRetours();" width="120px">
+							<menupopup>
+								<menuitem label="100" value="100" />
+								<menuitem label="500" value="500" />
+								<menuitem label="1000" value="1000" />
+							</menupopup>
+						</menulist>
+					</hbox>
+				</hbox>
+
+				<tree
+					id="omr-listeRetours"
+					flex="1"
+					flags="dont-build-content"
+					seltype="single"
+					ref="http://www.opensi.org/facturation/liste_retours"
+					datasources="rdf:null"
+					onselect="omr_selectOnListeRetours()"
+					ondblclick="omr_pressOnListeRetours()"
+					enableColumnDrag="true"
+				>
+					<treecols>
+						<treecol label="Date" tooltiptext="Date retour" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#triDate_Retour" />
+						<splitter class="tree-splitter" />
+						<treecol id="omr-colNumRetour" label="N° Retour" flex="1"
+	        		sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Num_Retour" />
+						<splitter class="tree-splitter" />
+						<treecol label="N° Fournisseur" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Num_Fournisseur" />
+						<splitter class="tree-splitter" />
+						<treecol label="Fournisseur" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Nom_Fournisseur" />
+						<splitter class="tree-splitter" />
+						<treecol label="Etat" tooltiptext="Etat retour" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Etat_Retour" />
+						<splitter class="tree-splitter" />
+						<treecol label="Type" tooltiptext="Type retour" flex="1"
+							sort="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Type_Retour" />
+						<treecol id="omr-colRetourId" collapsed="true" ignoreincolumnpicker="true" />
+					</treecols>
+					<template>
+	        	<treechildren>
+	            <treeitem uri="rdf:*">
+	              <treerow>
+	              	<treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Date_Retour" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Num_Retour" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Num_Fournisseur" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Nom_Fournisseur" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Etat_Retour" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Type_Retour" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#Retour_Id" />
+	                <treecell label="rdf:http://www.opensi.org/facturation/liste_retours/rdf#triDate_Retour" />
+	              </treerow>
+	            </treeitem>
+	        	</treechildren>
+	        </template>
+				</tree>
+			</vbox>
+		</hbox>
+		
+		<box height="10px" />
+		
+		<hbox>
+			<vbox><button id="omr-bEditionCsv" disabled="true" class="bCSV" label="Edition CSV" oncommand="omr_pressOnEditionCsv();" /></vbox>
+		</hbox>
+		
+		<box height="10px" />
+	</vbox>
+
+</overlay>

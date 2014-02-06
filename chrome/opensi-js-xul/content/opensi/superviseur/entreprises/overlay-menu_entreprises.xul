@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<overlay id="overlay_menu_entreprises" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  
+  <script src="overlay-menu_entreprises.js" />
+
+	<vbox id="menu_entreprises">
+		<hbox>
+			<vbox flex="1">
+		    <label value="Gestion des entreprises" class="label_16" />
+		    <hbox flex="1" align="center">
+			  	<label value="Identifiant :" />
+					<textbox id="ome-identifiant" maxlength="15" size="16" onkeypress="ome_pressOnFiltre(event);" />
+					<label value="Dénomination :" />
+					<textbox id="ome-denomination" maxlength="50" size="31" onkeypress="ome_pressOnFiltre(event);" />
+					<checkbox id="ome-chkAffTous" label="Afficher les entreprises désactivées" oncommand="ome_rechercherEntreprises();" />
+					<box flex="1" />
+				  <vbox>
+					  <button id="ome-bNouveau" class="bNouveau" label="Nouvelle entreprise" oncommand="nouvelleEntreprise()" />
+					</vbox>
+			  </hbox>
+		  </vbox>
+	  </hbox>
+		<hbox flex="1">
+	    <tree id="liste_entreprises"
+	          hidecolumnpicker="true"
+	          seltype="single"
+						flex="1"
+						onkeypress="keypress(event)"
+						ondblclick="modifEntreprise()"
+	          ref="http://www.opensi.org/Superviseur/listeEntreprises"
+	          datasources="rdf:null">
+	      <treecols>
+	        <treecol flex="1" id="ColIdentifiant" label="Identifiant" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Identifiant" />
+					<treecol flex="1" id="ColDenomination" label="Dénomination" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Denomination" />
+					<treecol flex="1" id="ColTel" label="Téléphone" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Telephone" />
+					<treecol flex="1" id="ColEmail" label="E-mail" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Email" />
+					<treecol flex="1" id="ColResponsable" label="Responsable" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Responsable" />
+					<treecol flex="1" label="Actif" sort="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Actif" />
+					<treecol id="ColEntreprise_Id" collapsed="true" />
+	      </treecols>
+	
+	      <template>
+	        <treechildren>
+	          <treeitem uri="rdf:*">
+	            <treerow>
+	              <treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Identifiant" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Denomination" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Telephone" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Email" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Responsable" />
+								<treecell src="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Picto_Actif" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Entreprise_Id" />
+								<treecell label="rdf:http://www.opensi.org/Superviseur/listeEntreprises/rdf#Actif" />
+	            </treerow>
+	          </treeitem>
+	        </treechildren>
+	      </template>
+	    </tree>
+	  </hbox>
+	</vbox>
+</overlay>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_config_comptabilite_preferences"
+  flex="1"
+  onload="init();"
+  pack="center"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="preferences.js" />
+
+	<hbox style="height:30px" />
+	<hbox pack="center">
+		
+		<groupbox style="padding:10px">
+			<caption label="Transferts en comptabilité" />
+			<checkbox id="Intitule_Ecr_Tiers" label="Reprise du libellé du tiers sur toutes les lignes de l'écriture" />
+			<checkbox id="Transfert_Enc" label="Utiliser des journaux d'encaissement" />
+			<checkbox id="Trans_Auto_Enc" label="Transfert automatique des encaissements clients" oncommand="onCheck(this.id)" />
+			<checkbox id="Trans_Auto_Rem" label="Transfert automatique des remises en banque" />
+			<checkbox id="Trans_Auto_Regul" label="Transfert automatique des pertes et profits sur ventes" oncommand="onCheck(this.id)" />
+			<checkbox id="Trans_Auto_Regul_AC" label="Transfert automatique des pertes et profits sur achats" />
+			<checkbox id="Trans_Auto_Remb" label="Transfert automatique des remboursements clients" oncommand="onCheck(this.id)" />
+			<checkbox id="Trans_Auto_Remb_AC" label="Transfert automatique des remboursements fournisseurs" />
+			<checkbox id="Trans_Auto_Reg_AC" label="Transfert automatique des règlements fournisseurs" />
+			<checkbox collapsed="true" id="Ecr_Glob_Enc" label="Ecriture groupée d'encaissement" />
+			<checkbox collapsed="true" id="Ecr_Glob_Rem" label="Ecriture groupée de remise en banque" />
+			<checkbox collapsed="true" id="Ecr_Glob_Regul" label="Ecriture groupée de régularisation" />
+			<checkbox collapsed="true" id="Ecr_Glob_Remb" label="Ecriture groupée de remboursement" />
+		</groupbox>
+		
+		<vbox pack="center">
+			<groupbox style="padding:10px" flex="1">
+				<caption label="Rapprochement bancaire" />
+				<grid>
+					<columns>
+						<column />
+						<column />
+					</columns>
+					<rows>
+						<row height="40px" align="center">
+							<label class="label" value="Type de rapprochement bancaire actuel : " />
+		      		<menulist id="Mode_Rappro">	          
+			      		<menupopup>
+			        		<menuitem value="C" label="COMPTE" />    
+			          	<menuitem value="J" label="JOURNAUX" />   
+		          	</menupopup>	          
+		        	</menulist>
+		      	</row>
+	    		</rows>
+	    	</grid>
+			</groupbox>
+			
+			<groupbox style="padding:10px" flex="1">
+				<caption label="Rappels automatiques des écritures" />
+				<checkbox id="Rappel_Auto_Saisie" label="Rappel automatique des dernières écritures saisies" />
+			</groupbox>
+			
+			<groupbox flex="1" collapsed="true">
+				<caption label="Modules complémentaires" />
+				<checkbox id="Act_Analytique" label="Activer le module de comptabilité analytique" />
+			</groupbox>
+		</vbox>
+	</hbox>
+	<hbox pack="center">
+		<vbox>
+			<box style="height:20px" />
+			<hbox pack="center"><button class="bEnregistrer" label="Enregistrer" oncommand="enregistrerParametrage();" /></hbox>
+			<box style="height:10px" />
+		</vbox>
+	</hbox>
+
+</window>

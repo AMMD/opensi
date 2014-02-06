@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_facturation_user_exportIdep_export"
+  flex="1"
+  onload="init()"
+  xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="export.js" />
+
+	<hbox class="bar_menu" align="center">
+		<hbox class="bar_menu_left" align="center">
+			<button class="bouton_menu" id="bMenuPrincipal" oncommand="retour_menu_principal();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+  
+  <vbox flex="1">
+	  <hbox style="height:60px" />
+		<hbox pack="center">
+			<label value="DECLARATION D'ECHANGES DE BIENS - EXPORT IDEP" class="label_16" />
+		</hbox>
+		<hbox style="height:40px" />
+	  
+	  <hbox pack="center">
+			<groupbox flex="1" pack="center" align="center">
+				<caption label="Période d'édition" />
+				<radiogroup id="Periode">
+					<radio value="MC" label="Mois en cours" oncommand="pressOnDates();" />
+					<radio value="MP" label="Mois précédent" oncommand="pressOnDates();" />
+					<hbox align="center">
+						<radio value="DD" label="De date à date :" oncommand="pressOnDates();" />
+						<label value="du" />
+						<textbox id="DateDebut" onkeypress="pressOnTextDate(event);" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+						<label value="au" />
+						<textbox id="DateFin" onkeypress="pressOnTextDate(event);" size="10" maxlength="10" tooltiptext="format : jj/mm/aaaa" />
+					</hbox>
+					<hbox align="center">
+						<radio value="RE" label="Réédition :" oncommand="pressOnDates();" />
+           	<menulist id="Date_Reedition" ref="http://www.opensi.org/facturation/liste_dates_editions_deb" datasources="rdf:null">
+						<menupopup>
+							<menuitem label="[Choisir]" />
+						</menupopup>
+						<template>
+            	<menupopup>
+								<menuitem uri="rdf:*" label="rdf:http://www.opensi.org/facturation/liste_dates_editions_deb/rdf#Date_Edition" value="rdf:http://www.opensi.org/facturation/liste_dates_editions_deb/rdf#Timestamp" />
+            	</menupopup>
+						</template>
+						</menulist>
+					</hbox>
+				</radiogroup>
+			</groupbox>
+			
+			<groupbox id="gExport" flex="1" pack="center" align="center">
+				<caption label="Type d'export" />
+				<radiogroup id="Type_Export" oncommand="pressOnTypeExport();">
+					<radio id="Expedition" value="E" label="Expédition" />
+					<radio id="Introduction" value="I" label="Introduction" />
+				</radiogroup>
+			</groupbox>
+			
+			<groupbox id="gFormat" flex="1" pack="center" align="center">
+				<caption label="Format de sortie" />
+				<radiogroup id="Format">					
+					<radio value="DECL" label="Déclaration complète" />
+					<radio value="INTR" label="Intracom" />
+				</radiogroup>
+			</groupbox>
+		</hbox>
+		
+		<vbox id="boxEdition">
+			<box style="height:10px" />
+			<hbox pack="center">
+				<button id="bEdition" label="Edition" oncommand="editer();" />
+			</hbox>
+		</vbox>
+		
+		<box style="height:10px" />
+	
+		<hbox flex="1">
+			<groupbox flex="1">
+				<caption label="Aperçu de l'export" />
+				<vbox flex="1">
+					<radiogroup id="Type_Apercu" oncommand="pressOnTypeApercu();">
+						<hbox pack="center">
+							<radio value="E1" label="pas encore exportés" />
+							<radio value="E2" label="déjà exportés" />
+						</hbox>
+					</radiogroup>
+
+					<hbox flex="1" pack="center">
+						<tree id="articles_idep"
+					        flex="1"
+					        hidecolumnpicker="true"
+					        seltype="single"
+					        flags="dont-build-content"
+					        ref="http://www.opensi.org/facturation/articles_idep"
+					        datasources="rdf:null">
+					
+					    <treecols>
+					      <treecol id="ColRefFacture" label="Réf. Facture" flex="2" />
+								<splitter class="tree-splitter" />
+					      <treecol id="ColPays" label="Pays" flex="1" />
+					      <splitter class="tree-splitter" />
+					      <treecol id="ColCodeNC8" label="Code NC8" flex="1" />
+					      <splitter class="tree-splitter" />
+					      <treecol id="ColValeur" label="Montant HT" style="text-align:right" flex="2" />
+					    </treecols>
+					    <template>
+					      <treechildren>
+					        <treeitem uri="rdf:*">
+					          <treerow>
+					            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Ref_Facture" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Pays" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Code_NC8" />
+					            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Valeur" />
+					          </treerow>
+					        </treeitem>
+					      </treechildren>
+					    </template>
+					  </tree>
+					</hbox>
+				</vbox>
+			</groupbox>
+		</hbox>
+	
+		<hbox pack="center" flex="1" id="boxArticlesSansNC8">		
+			<groupbox flex="1" pack="center">
+				<caption label="Liste des articles non exportés qui n'ont pas de code NC8" />
+				<hbox pack="center" flex="1">
+					<tree id="articles_idep_sans_nc8"
+				        flex="1"
+				        hidecolumnpicker="true"
+				        seltype="single"
+				        flags="dont-build-content"
+				        ref="http://www.opensi.org/facturation/articles_idep"
+								onselect="ouvrirArticle();"
+				        datasources="rdf:null">
+				
+				    <treecols>
+				      <treecol id="ColRefArticle" label="Réf. Article" flex="1" />
+							<splitter class="tree-splitter" />
+				      <treecol id="ColDesignation" label="Désignation" flex="1" />
+				    </treecols>
+				    <template>
+				      <treechildren>
+				        <treeitem uri="rdf:*">
+				          <treerow>
+				            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Ref_Article" />
+				            <treecell label="rdf:http://www.opensi.org/facturation/articles_idep/rdf#Designation" />
+				          </treerow>
+				        </treeitem>
+				      </treechildren>
+				    </template>
+				  </tree>
+				  <vbox pack="center">
+				  	<hbox pack="center" align="center">
+			      	<label class="label" value="Code NC8 :" />
+			      	<textbox id="Code_NC8" maxlength="8" size="8" />
+			      	<button id="bRechercherNC8" class="bIcoRechercher" tooltiptext="rechercher un code NC8" oncommand="choixCodeNC8();" />
+			      </hbox>
+			      <box style="height:10px" />
+			      <hbox pack="center"><button id="bValiderNC8" class="bValider" label="Valider" oncommand="validerChoixCodeNC8();" /></hbox>
+				  </vbox>
+				</hbox>
+			</groupbox>
+		</hbox>
+		
+	</vbox>	
+
+</window>

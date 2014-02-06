@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!-- ************************************************************************** -->
+<!-- OpenSi : Outils libres de gestion d'entreprise                             -->
+<!-- Copyright (C) 2003 Speedinfo.fr S.A.R.L.                                   -->
+<!-- Contact: contact@opensi.org                                                -->
+<!--                                                                            -->
+<!-- This program is free software; you can redistribute it and/or              -->
+<!-- modify it under the terms of the GNU General Public License                -->
+<!-- as published by the Free Software Foundation; either version 2             -->
+<!-- of the License, or (at your option) any later version.                     -->
+<!--                                                                            -->
+<!-- This program is distributed in the hope that it will be useful,            -->
+<!-- but WITHOUT ANY WARRANTY; without even the implied warranty of             -->
+<!-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the               -->
+<!-- GNU General Public License for more details.                               -->
+<!--                                                                            -->
+<!-- You should have received a copy of the GNU General Public License          -->
+<!-- along with this program; if not, write to the Free Software                -->
+<!-- Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA. -->
+<!-- ************************************************************************** -->
+
+<?xml-stylesheet href="chrome://opensi/content/design/opensi-global.css" type="text/css"?>
+
+<window
+  id="opensi_compta_user_creerExercice" 
+  flex="1"
+  onload="init()"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+  <script src="chrome://opensi/content/libs/util.js" />
+  <script src="creer_exercice.js" />
+
+  <hbox class="bar_menu" pack="left" align="center">
+		<hbox class="bar_menu_left" align="center">
+    	<button class="bouton_menu" id="bMenuDossiers" oncommand="retourChoixDossier();" />
+    	<button class="bouton_menu" id="bMenuExercices" oncommand="retour_exercice();" />
+		</hbox>
+		<hbox pack="end" flex="1" class="bar_menu_right">
+			<button class="bouton_menu" id="bAide" oncommand="aide()" tooltiptext="aide" />
+			<button class="bouton_menu" id="bFermerSession" oncommand="quit();" tooltiptext="fermer la session" />
+		</hbox>
+  </hbox>
+	<hbox style="height:60px" />
+	<hbox pack="center">
+    <label value="OUVERTURE D'UN NOUVEL EXERCICE" class="label_16" />
+  </hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+		<label id="Ancien_Exercice" />	
+	</hbox>
+	<hbox style="height:30px" />
+	<hbox pack="center">
+		<vbox align="right">
+			<hbox style="height:4px" />
+			<label flex="1" value="Ecriture d'A Nouveau temporaire à générer au journal :" />
+			<label flex="1" value="Date de fin d'exercice (jj/mm/aaaa) :" />
+		</vbox>
+		<vbox pack="left">
+			<menulist id="JournalAN" ref="http://www.opensi.org/compta/journaux" datasources="rdf:null"> 
+      	<template>
+        	<menupopup>
+          	<menuitem uri="rdf:*"	label="rdf:http://www.opensi.org/compta/journaux/rdf#code : rdf:http://www.opensi.org/compta/journaux/rdf#libelle" value="rdf:http://www.opensi.org/compta/journaux/rdf#code" />
+        	</menupopup>
+      	</template>
+    	</menulist>
+			<textbox id="Date_Fin" multiline="false" maxlength="10" size="11" />
+		</vbox>
+	</hbox>
+	<hbox style="height:40px" />
+	<hbox pack="center">
+    <button class="bValider" id="bOk" label="Ok" oncommand="createExercice()" />
+  </hbox>
+	<hbox style="height:60px" />
+	<vbox id="progression" align="center" collapsed="true">
+		<label value="Veuillez patienter..." />
+		<hbox style="height:30px" />
+		<progressmeter id="pm" />
+	</vbox>
+
+</window>
